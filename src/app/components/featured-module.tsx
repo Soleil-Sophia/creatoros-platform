@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 export function FeaturedModule() {
   return (
     <section className="py-32 lg:py-40 relative">
@@ -69,22 +71,22 @@ export function FeaturedModule() {
 
               {/* CTA - Primary Focal Point */}
               <div className="pt-2">
-                <a 
-                  href="/modules/content-os"
+                <Link 
+                  to="/modules/content-os"
                   className="inline-block w-full sm:w-auto px-12 py-5 transition-all hover:opacity-90 shadow-xl relative overflow-hidden text-center" 
                   style={{ 
-                    background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
-                    color: '#0E0F14',
+                    background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
                     borderRadius: '12px',
+                    color: '#0E0F14',
                     fontSize: '17px',
                     fontWeight: 600,
-                    boxShadow: '0 16px 48px rgba(255, 191, 222, 0.4)',
+                    boxShadow: '0 16px 48px rgba(255, 191, 222, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
                     textDecoration: 'none'
                   }}
                 >
                   <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
                   Launch Content OS
-                </a>
+                </Link>
               </div>
             </div>
 

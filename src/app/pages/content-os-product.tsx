@@ -1,5 +1,6 @@
 import { Navbar } from '../components/navbar';
 import { Footer } from '../components/footer';
+import { Link } from 'react-router';
 
 export function ContentOSProductPage() {
   return (
@@ -52,8 +53,8 @@ export function ContentOSProductPage() {
           </p>
           
           <div className="flex gap-4">
-            <a 
-              href="/app/content-os/generate"
+            <Link 
+              to="/app/content-os/generate"
               className="px-8 py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden"
               style={{ 
                 background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
@@ -66,7 +67,7 @@ export function ContentOSProductPage() {
               }}
             >
               Open Content OS
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -626,8 +627,8 @@ export function ContentOSProductPage() {
           >
             Ready to Build Content<br/>That Ships?
           </h2>
-          <a 
-            href="/app/content-os/generate"
+          <Link 
+            to="/app/content-os/generate"
             className="px-12 py-5 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden inline-block"
             style={{ 
               background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
@@ -639,7 +640,7 @@ export function ContentOSProductPage() {
             }}
           >
             Open Content OS
-          </a>
+          </Link>
         </div>
       </section>
       

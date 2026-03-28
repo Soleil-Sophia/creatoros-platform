@@ -1,8 +1,41 @@
 import { useState } from 'react';
+import { useNavigate, Link } from 'react-router';
 
 type ViewMode = 'grid' | 'list';
 type FilterType = 'all' | 'hooks' | 'scripts' | 'captions' | 'plans';
 type SortOption = 'recent' | 'oldest' | 'name' | 'type';
+
+// Copy to clipboard helper with fallback
+const copyToClipboard = async (text: string): Promise<boolean> => {
+  // Try modern Clipboard API first (only in secure contexts)
+  if (navigator.clipboard && window.isSecureContext) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch (err) {
+      // Silently fall through to fallback method
+    }
+  }
+  
+  // Fallback: Create temporary textarea (works in all contexts)
+  try {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.left = '-999999px';
+    textarea.style.top = '-999999px';
+    document.body.appendChild(textarea);
+    textarea.focus();
+    textarea.select();
+    const successful = document.execCommand('copy');
+    document.body.removeChild(textarea);
+    return successful;
+  } catch (err) {
+    // Only log if both methods fail
+    console.error('Copy to clipboard failed:', err);
+    return false;
+  }
+};
 
 // Mock data - in real app this would come from backend/state
 const mockAssets = [
@@ -95,11 +128,22 @@ const typeColors: Record<string, string> = {
 };
 
 export function LibraryScreen() {
+  const navigate = useNavigate();
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [sortOption, setSortOption] = useState<SortOption>('recent');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<typeof mockAssets[0] | null>(null);
+
+  // Reuse handler - navigates to Generate with asset data
+  const handleReuse = (asset: typeof mockAssets[0]) => {
+    navigate('/app/content-os/generate', {
+      state: {
+        reuseAsset: asset,
+        source: 'library'
+      }
+    });
+  };
 
   const filteredAssets = mockAssets
     .filter(asset => {
@@ -160,33 +204,22 @@ export function LibraryScreen() {
             </div>
           </div>
 
-          {/* Right: Navigation */}
+          {/* Right: View Controls + Action */}
           <div className="flex items-center gap-3">
-            <button 
+            <Link 
+              to="/app/content-os/generate"
               className="px-4 py-2 rounded-lg transition-colors"
               style={{ 
                 background: '#262A38',
                 border: '1px solid rgba(255, 191, 222, 0.2)',
                 color: '#F4F3F8',
                 fontSize: '14px',
-                fontWeight: 500
-              }}
-            >
-              Library
-            </button>
-            <a 
-              href="/app/content-os/generate"
-              className="px-4 py-2 rounded-lg transition-colors"
-              style={{ 
-                background: '#1F2230',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
-                color: '#B4B8C7',
-                fontSize: '14px',
+                fontWeight: 500,
                 textDecoration: 'none'
               }}
             >
               Generate
-            </a>
+            </Link>
           </div>
         </div>
       </div>
@@ -310,8 +343,8 @@ export function LibraryScreen() {
 
           {/* Bottom Action */}
           <div className="pt-6 border-t" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
-            <a
-              href="/app/content-os/generate"
+            <Link
+              to="/app/content-os/generate"
               className="w-full px-4 py-3 rounded-[12px] transition-all hover:opacity-90 flex items-center justify-center gap-2"
               style={{
                 background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
@@ -326,7 +359,7 @@ export function LibraryScreen() {
                 <path d="M8 3V13M3 8H13" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
               </svg>
               New Generation
-            </a>
+            </Link>
           </div>
         </div>
 
@@ -509,12 +542,12 @@ export function LibraryScreen() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigator.clipboard.writeText(asset.preview);
+                          copyToClipboard(asset.preview);
                         }}
                         className="flex-1 px-3 py-2 rounded-lg transition-all hover:opacity-80"
                         style={{
-                          background: 'rgba(255, 191, 222, 0.12)',
-                          border: '1px solid rgba(255, 191, 222, 0.2)',
+                          background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.15), rgba(255, 191, 222, 0.1))',
+                          border: '1px solid rgba(255, 191, 222, 0.25)',
                           color: '#FFBFDE',
                           fontSize: '13px',
                           fontWeight: 600
@@ -525,17 +558,21 @@ export function LibraryScreen() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+                          handleReuse(asset);
                         }}
-                        className="flex-1 px-3 py-2 rounded-lg transition-all hover:opacity-80"
+                        className="flex-1 px-3 py-2 rounded-lg transition-all hover:opacity-80 flex items-center justify-center gap-1.5"
                         style={{
-                          background: 'rgba(255, 255, 255, 0.03)',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
-                          color: '#B4B8C7',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.12)',
+                          color: '#F4F3F8',
                           fontSize: '13px',
                           fontWeight: 600
                         }}
                       >
-                        Reuse
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10 7L7 4M10 7L7 10M10 7H4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Use
                       </button>
                     </div>
                   </div>
@@ -546,8 +583,7 @@ export function LibraryScreen() {
                 {filteredAssets.map((asset) => (
                   <div
                     key={asset.id}
-                    onClick={() => setSelectedAsset(asset)}
-                    className="p-5 rounded-[12px] cursor-pointer transition-all hover:border-opacity-100 flex items-center gap-5"
+                    className="p-5 rounded-[12px] transition-all hover:border-opacity-100 flex items-center gap-5"
                     style={{
                       background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
                       border: '1px solid rgba(255, 255, 255, 0.08)'
@@ -569,8 +605,11 @@ export function LibraryScreen() {
                       {typeLabels[asset.type]}
                     </div>
 
-                    {/* Content */}
-                    <div className="flex-1 min-w-0">
+                    {/* Content - clickable area */}
+                    <div 
+                      onClick={() => setSelectedAsset(asset)}
+                      className="flex-1 min-w-0 cursor-pointer"
+                    >
                       <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#F4F3F8', marginBottom: '4px' }}>
                         {asset.title}
                       </h3>
@@ -602,12 +641,12 @@ export function LibraryScreen() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          navigator.clipboard.writeText(asset.preview);
+                          copyToClipboard(asset.preview);
                         }}
                         className="px-4 py-2 rounded-lg transition-all hover:opacity-80"
                         style={{
-                          background: 'rgba(255, 191, 222, 0.12)',
-                          border: '1px solid rgba(255, 191, 222, 0.2)',
+                          background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.15), rgba(255, 191, 222, 0.1))',
+                          border: '1px solid rgba(255, 191, 222, 0.25)',
                           color: '#FFBFDE',
                           fontSize: '13px',
                           fontWeight: 600
@@ -618,17 +657,21 @@ export function LibraryScreen() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
+                          handleReuse(asset);
                         }}
-                        className="px-4 py-2 rounded-lg transition-all hover:opacity-80"
+                        className="px-4 py-2 rounded-lg transition-all hover:opacity-80 flex items-center gap-1.5"
                         style={{
-                          background: 'rgba(255, 255, 255, 0.03)',
-                          border: '1px solid rgba(255, 255, 255, 0.08)',
-                          color: '#B4B8C7',
+                          background: 'rgba(255, 255, 255, 0.05)',
+                          border: '1px solid rgba(255, 255, 255, 0.12)',
+                          color: '#F4F3F8',
                           fontSize: '13px',
                           fontWeight: 600
                         }}
                       >
-                        Reuse
+                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                          <path d="M10 7L7 4M10 7L7 10M10 7H4" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                        Use
                       </button>
                     </div>
                   </div>
@@ -778,7 +821,7 @@ export function LibraryScreen() {
               <div className="p-6 border-t" style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}>
                 <div className="space-y-3">
                   <button
-                    onClick={() => navigator.clipboard.writeText(selectedAsset.preview)}
+                    onClick={() => copyToClipboard(selectedAsset.preview)}
                     className="w-full px-4 py-3 rounded-[12px] transition-all hover:opacity-90 flex items-center justify-center gap-2"
                     style={{
                       background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
@@ -795,36 +838,59 @@ export function LibraryScreen() {
                     Copy Content
                   </button>
                   <button
-                    className="w-full px-4 py-3 rounded-[12px] transition-all hover:opacity-80"
+                    onClick={() => handleReuse(selectedAsset)}
+                    className="w-full px-4 py-3 rounded-[12px] transition-all hover:opacity-80 flex items-center justify-center gap-2"
                     style={{
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      color: '#F4F3F8',
+                      background: 'rgba(255, 191, 222, 0.12)',
+                      border: '1px solid rgba(255, 191, 222, 0.2)',
+                      color: '#FFBFDE',
                       fontSize: '15px',
                       fontWeight: 600
                     }}
                   >
-                    Reuse in Generate
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M12 8L8 4M12 8L8 12M12 8H4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    Use in Generate
                   </button>
+                  
+                  {/* Coming Soon Actions */}
+                  <div className="relative">
+                    <button
+                      disabled
+                      className="w-full px-4 py-3 rounded-[12px] transition-all cursor-not-allowed"
+                      style={{ 
+                        background: 'rgba(255, 255, 255, 0.02)', 
+                        border: '1px solid rgba(255, 255, 255, 0.04)', 
+                        color: '#6B6F7E', 
+                        fontSize: '15px', 
+                        fontWeight: 600, 
+                        opacity: 0.5
+                      }}
+                    >
+                      Add to Planner
+                    </button>
+                    <div 
+                      className="absolute top-1/2 right-3 -translate-y-1/2 px-2 py-0.5 rounded"
+                      style={{ 
+                        background: 'rgba(255, 191, 222, 0.15)', 
+                        fontSize: '9px', 
+                        color: '#FFBFDE', 
+                        fontWeight: 600, 
+                        textTransform: 'uppercase', 
+                        letterSpacing: '0.05em'
+                      }}
+                    >
+                      Coming Soon
+                    </div>
+                  </div>
                   <button
                     className="w-full px-4 py-3 rounded-[12px] transition-all hover:opacity-80"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      color: '#F4F3F8',
-                      fontSize: '15px',
-                      fontWeight: 600
-                    }}
-                  >
-                    Add to Planner
-                  </button>
-                  <button
-                    className="w-full px-4 py-3 rounded-[12px] transition-all hover:opacity-80"
-                    style={{
-                      background: 'rgba(255, 255, 255, 0.03)',
-                      border: '1px solid rgba(255, 255, 255, 0.08)',
-                      color: '#F4F3F8',
-                      fontSize: '15px',
+                    style={{ 
+                      background: 'rgba(255, 255, 255, 0.03)', 
+                      border: '1px solid rgba(255, 255, 255, 0.08)', 
+                      color: '#F4F3F8', 
+                      fontSize: '15px', 
                       fontWeight: 600
                     }}
                   >
@@ -835,11 +901,11 @@ export function LibraryScreen() {
                 <div className="mt-4 pt-4 border-t" style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}>
                   <button
                     className="w-full px-4 py-2 rounded-lg transition-all hover:opacity-80"
-                    style={{
-                      background: 'transparent',
-                      border: '1px solid rgba(255, 255, 255, 0.06)',
-                      color: '#8B8F9E',
-                      fontSize: '13px',
+                    style={{ 
+                      background: 'transparent', 
+                      border: '1px solid rgba(255, 255, 255, 0.06)', 
+                      color: '#8B8F9E', 
+                      fontSize: '13px', 
                       fontWeight: 500
                     }}
                   >

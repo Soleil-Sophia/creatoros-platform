@@ -1,4 +1,91 @@
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate, Link } from 'react-router';
+
+type ReuseAsset = {
+  id: number;
+  type: string;
+  title: string;
+  preview: string;
+  platform: string;
+  campaign: string;
+  brandVoice: string;
+  date: string;
+  variants: number;
+  status: string;
+};
+
 export function GenerateScreen() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  
+  // Extract reused asset from location state
+  const reuseAsset = location.state?.reuseAsset as ReuseAsset | undefined;
+  const source = location.state?.source as string | undefined;
+  
+  // Smart prefill based on asset type
+  const getInitialOfferValue = () => {
+    if (!reuseAsset) return '';
+    
+    // Hook → use preview as starting point/context
+    if (reuseAsset.type === 'hook') {
+      return reuseAsset.preview;
+    }
+    
+    // Script → use preview as full draft/template
+    if (reuseAsset.type === 'script') {
+      return reuseAsset.preview;
+    }
+    
+    // Caption → shorter, use as reference
+    if (reuseAsset.type === 'caption') {
+      return reuseAsset.preview;
+    }
+    
+    // Plan → extract core concept (first sentence or main idea)
+    if (reuseAsset.type === 'plan') {
+      // For plans, we might want to extract just the main concept
+      const firstSentence = reuseAsset.preview.split('.')[0];
+      return firstSentence ? firstSentence + '.' : reuseAsset.preview;
+    }
+    
+    return reuseAsset.preview;
+  };
+  
+  // State for form inputs - prefilled if reusing
+  const [offer, setOffer] = useState(getInitialOfferValue());
+  const [audience, setAudience] = useState('');
+  const [platform, setPlatform] = useState(reuseAsset?.platform || 'LinkedIn');
+  const [goal, setGoal] = useState('');
+  const [tone, setTone] = useState('Conversational');
+  const [outputType, setOutputType] = useState('Full Content Suite');
+  
+  // State for reuse banner
+  const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
+  
+  // Clear & Start Fresh - completely reset all state
+  const handleClearAndStartFresh = () => {
+    // Clear all form inputs
+    setOffer('');
+    setAudience('');
+    setPlatform('LinkedIn');
+    setGoal('');
+    setTone('Conversational');
+    setOutputType('Full Content Suite');
+    
+    // Clear banner
+    setShowReuseBanner(false);
+    
+    // Clear location state by replacing history entry
+    navigate('/app/content-os/generate', { replace: true, state: {} });
+  };
+  
+  // Dismiss banner only (keep prefilled values for now)
+  const handleDismissReuse = () => {
+    setShowReuseBanner(false);
+    // Clear location state by replacing history entry
+    navigate('/app/content-os/generate', { replace: true, state: {} });
+  };
+
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#0E0F14' }}>
       {/* Top Bar */}
@@ -45,8 +132,8 @@ export function GenerateScreen() {
 
           {/* Right: Navigation hint */}
           <div className="flex items-center gap-3">
-            <a 
-              href="/app/content-os/library"
+            <Link 
+              to="/app/content-os/library"
               className="px-4 py-2 rounded-lg transition-colors"
               style={{ 
                 background: '#1F2230',
@@ -57,7 +144,7 @@ export function GenerateScreen() {
               }}
             >
               Library
-            </a>
+            </Link>
             <button 
               className="px-4 py-2 rounded-lg transition-colors"
               style={{ 
@@ -73,6 +160,141 @@ export function GenerateScreen() {
           </div>
         </div>
       </div>
+
+      {/* Reuse Banner - Only shown when reusing from Library */}
+      {showReuseBanner && reuseAsset && (
+        <div 
+          className="border-b"
+          style={{ 
+            background: '#171923',
+            borderColor: 'rgba(255, 255, 255, 0.08)'
+          }}
+        >
+          <div className="max-w-[1800px] mx-auto px-8 py-3.5">
+            <div 
+              className="rounded-[10px] p-4 flex items-center justify-between relative overflow-hidden"
+              style={{ 
+                background: 'rgba(255, 191, 222, 0.06)',
+                border: '1px solid rgba(255, 191, 222, 0.15)'
+              }}
+            >
+              {/* Subtle accent light */}
+              <div 
+                className="absolute inset-x-0 top-0 h-px"
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.3) 50%, transparent)' }}
+              ></div>
+
+              {/* Left: Reuse Context */}
+              <div className="flex items-center gap-3">
+                {/* Icon */}
+                <div 
+                  className="w-9 h-9 rounded-[8px] flex items-center justify-center flex-shrink-0"
+                  style={{ 
+                    background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.2), rgba(231, 198, 243, 0.15))',
+                    border: '1px solid rgba(255, 191, 222, 0.25)'
+                  }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M10 7L7 4M10 7L7 10M10 7H4" stroke="#FFBFDE" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </div>
+
+                {/* Content */}
+                <div>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span 
+                      style={{ 
+                        fontSize: '10px', 
+                        fontWeight: 600, 
+                        color: '#DABFFF',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em'
+                      }}
+                    >
+                      Reusing from Library
+                    </span>
+                    <div 
+                      className="px-2 py-0.5 rounded"
+                      style={{ 
+                        background: 'rgba(255, 191, 222, 0.12)',
+                        border: '1px solid rgba(255, 191, 222, 0.2)',
+                        fontSize: '9px',
+                        fontWeight: 600,
+                        color: '#FFBFDE',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.05em'
+                      }}
+                    >
+                      {reuseAsset.type.toUpperCase()}
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <h3 style={{ fontSize: '14px', fontWeight: 600, color: '#F4F3F8' }}>
+                      {reuseAsset.title}
+                    </h3>
+                    <span style={{ fontSize: '12px', color: '#8B8F9E' }}>·</span>
+                    <span style={{ fontSize: '12px', color: '#8B8F9E' }}>
+                      {reuseAsset.platform}
+                    </span>
+                    {reuseAsset.campaign && (
+                      <>
+                        <span style={{ fontSize: '12px', color: '#6B6E7D' }}>·</span>
+                        <span style={{ fontSize: '12px', color: '#6B6E7D' }}>
+                          {reuseAsset.campaign}
+                        </span>
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+
+              {/* Right: Actions */}
+              <div className="flex items-center gap-2.5">
+                <Link
+                  to="/app/content-os/library"
+                  className="px-3 py-1.5 rounded-[8px] transition-all hover:opacity-80"
+                  style={{ 
+                    background: 'rgba(255, 255, 255, 0.06)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    color: '#B4B8C7',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    textDecoration: 'none'
+                  }}
+                >
+                  Back to Library
+                </Link>
+                <button
+                  onClick={handleClearAndStartFresh}
+                  className="px-3 py-1.5 rounded-[8px] transition-all hover:opacity-80"
+                  style={{ 
+                    background: 'rgba(255, 191, 222, 0.12)',
+                    border: '1px solid rgba(255, 191, 222, 0.2)',
+                    color: '#FFBFDE',
+                    fontSize: '12px',
+                    fontWeight: 600
+                  }}
+                >
+                  Clear & Start Fresh
+                </button>
+                <button
+                  onClick={handleDismissReuse}
+                  className="px-2 py-1.5 rounded-[8px] transition-all hover:opacity-80"
+                  style={{ 
+                    background: 'rgba(255, 255, 255, 0.04)',
+                    border: '1px solid rgba(255, 255, 255, 0.06)',
+                    color: '#8B8F9E'
+                  }}
+                >
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 3L9 9M3 9L9 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Main Generate Workspace */}
       <div className="flex-1 overflow-hidden">
@@ -156,6 +378,8 @@ export function GenerateScreen() {
                       lineHeight: 1.6,
                       boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
                     }}
+                    value={offer}
+                    onChange={(e) => setOffer(e.target.value)}
                   />
                 </div>
 
@@ -175,6 +399,8 @@ export function GenerateScreen() {
                       fontSize: '14px',
                       boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
                     }}
+                    value={audience}
+                    onChange={(e) => setAudience(e.target.value)}
                   />
                 </div>
 
@@ -192,6 +418,8 @@ export function GenerateScreen() {
                       fontSize: '14px',
                       boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
                     }}
+                    value={platform}
+                    onChange={(e) => setPlatform(e.target.value)}
                   >
                     <option>LinkedIn</option>
                     <option>Instagram</option>
@@ -217,6 +445,8 @@ export function GenerateScreen() {
                       fontSize: '14px',
                       boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
                     }}
+                    value={goal}
+                    onChange={(e) => setGoal(e.target.value)}
                   />
                 </div>
 
@@ -233,20 +463,21 @@ export function GenerateScreen() {
                       boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.4)'
                     }}
                   >
-                    {['Professional', 'Conversational', 'Bold'].map((tone, idx) => (
+                    {['Professional', 'Conversational', 'Bold'].map((toneOption) => (
                       <button
-                        key={tone}
+                        key={toneOption}
+                        onClick={() => setTone(toneOption)}
                         className="flex-1 py-2.5 rounded-[6px] transition-all"
                         style={{ 
-                          background: idx === 1 ? 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)' : 'transparent',
-                          border: idx === 1 ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
-                          color: idx === 1 ? '#F4F3F8' : '#B4B8C7',
+                          background: tone === toneOption ? 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)' : 'transparent',
+                          border: tone === toneOption ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
+                          color: tone === toneOption ? '#F4F3F8' : '#B4B8C7',
                           fontSize: '13px',
-                          fontWeight: idx === 1 ? 600 : 500,
-                          boxShadow: idx === 1 ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none'
+                          fontWeight: tone === toneOption ? 600 : 500,
+                          boxShadow: tone === toneOption ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none'
                         }}
                       >
-                        {tone}
+                        {toneOption}
                       </button>
                     ))}
                   </div>
@@ -266,6 +497,8 @@ export function GenerateScreen() {
                       fontSize: '14px',
                       boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
                     }}
+                    value={outputType}
+                    onChange={(e) => setOutputType(e.target.value)}
                   >
                     <option>Full Content Suite</option>
                     <option>Hooks Only</option>

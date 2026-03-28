@@ -1,29 +1,19 @@
+import { Link } from 'react-router';
+
 export function Navbar() {
   return (
     <nav 
       className="fixed top-0 left-0 right-0 z-50" 
       style={{ 
-        background: 'linear-gradient(180deg, #0E0F14 0%, rgba(14, 15, 20, 0.98) 100%)',
-        backdropFilter: 'blur(20px)',
-        boxShadow: '0 1px 0 rgba(255, 255, 255, 0.04), 0 20px 40px rgba(0, 0, 0, 0.6)'
+        background: 'rgba(14, 15, 20, 0.8)', 
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
       }}
     >
-      {/* Refined top light edge - more premium */}
-      <div 
-        className="absolute top-0 left-0 right-0 h-px" 
-        style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.12) 50%, transparent)' }}
-      ></div>
-      
-      {/* Bottom structural separation */}
-      <div 
-        className="absolute bottom-0 left-0 right-0 h-px" 
-        style={{ background: 'linear-gradient(90deg, transparent 10%, rgba(255, 255, 255, 0.08) 50%, transparent 90%)' }}
-      ></div>
-
-      <div className="max-w-[1400px] mx-auto px-6 lg:px-12">
+      <div className="max-w-[1800px] mx-auto px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo - Grounded Premium Treatment */}
-          <a href="/" className="flex items-center gap-2">
+          <Link to="/" className="flex items-center gap-2">
             <div className="flex items-center gap-3">
               {/* Logo mark - more integrated depth */}
               <div 
@@ -64,7 +54,7 @@ export function Navbar() {
                 CreatorOS
               </span>
             </div>
-          </a>
+          </Link>
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-8">
