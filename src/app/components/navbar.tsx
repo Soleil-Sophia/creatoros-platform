@@ -58,26 +58,79 @@ export function Navbar() {
 
           {/* Navigation Links */}
           <div className="hidden md:flex items-center gap-8">
-            {['Platform', 'Modules', 'Pricing', 'About'].map((link) => (
-              <a 
-                key={link}
-                href={`#${link.toLowerCase()}`} 
-                className="relative transition-colors hover:opacity-100 group" 
-                style={{ 
-                  color: '#B4B8C7', 
-                  fontSize: '15px', 
-                  opacity: 0.85,
-                  fontWeight: 500
-                }}
-              >
-                {link}
-                {/* Hover underline */}
-                <div 
-                  className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
-                  style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
-                ></div>
-              </a>
-            ))}
+            <Link 
+              to="/"
+              className="relative transition-colors hover:opacity-100 group" 
+              style={{ 
+                color: '#B4B8C7', 
+                fontSize: '15px', 
+                opacity: 0.85,
+                fontWeight: 500,
+                textDecoration: 'none'
+              }}
+            >
+              Home
+              {/* Hover underline */}
+              <div 
+                className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
+              ></div>
+            </Link>
+            
+            <Link 
+              to="/modules"
+              className="relative transition-colors hover:opacity-100 group" 
+              style={{ 
+                color: '#B4B8C7', 
+                fontSize: '15px', 
+                opacity: 0.85,
+                fontWeight: 500,
+                textDecoration: 'none'
+              }}
+            >
+              Modules
+              {/* Hover underline */}
+              <div 
+                className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
+              ></div>
+            </Link>
+
+            <a 
+              href="#pricing"
+              className="relative transition-colors hover:opacity-100 group" 
+              style={{ 
+                color: '#B4B8C7', 
+                fontSize: '15px', 
+                opacity: 0.85,
+                fontWeight: 500
+              }}
+            >
+              Pricing
+              {/* Hover underline */}
+              <div 
+                className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
+              ></div>
+            </a>
+
+            <a 
+              href="#about"
+              className="relative transition-colors hover:opacity-100 group" 
+              style={{ 
+                color: '#B4B8C7', 
+                fontSize: '15px', 
+                opacity: 0.85,
+                fontWeight: 500
+              }}
+            >
+              About
+              {/* Hover underline */}
+              <div 
+                className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
+              ></div>
+            </a>
           </div>
 
           {/* CTA Group */}
@@ -95,14 +148,17 @@ export function Navbar() {
             >
               Sign In
             </button>
-            <button 
+            <Link 
+              to="/modules"
               className="px-6 py-2.5 rounded-lg transition-all hover:opacity-90 relative overflow-hidden" 
               style={{ 
                 background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
                 color: '#0E0F14',
                 fontSize: '15px',
                 fontWeight: 600,
-                boxShadow: '0 2px 12px rgba(255, 191, 222, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)'
+                boxShadow: '0 2px 12px rgba(255, 191, 222, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                textDecoration: 'none',
+                display: 'inline-block'
               }}
             >
               {/* Top highlight */}
@@ -111,7 +167,7 @@ export function Navbar() {
                 style={{ background: 'rgba(255, 255, 255, 0.5)' }}
               ></div>
               Start Creating
-            </button>
+            </Link>
           </div>
         </div>
       </div>

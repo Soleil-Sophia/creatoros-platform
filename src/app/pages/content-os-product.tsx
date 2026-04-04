@@ -10,6 +10,22 @@ export function ContentOSProductPage() {
       {/* Product Hero */}
       <section className="pt-32 pb-20 px-8">
         <div className="max-w-[1400px] mx-auto">
+          {/* Back to Modules Link */}
+          <Link
+            to="/modules"
+            className="inline-flex items-center gap-2 mb-8 transition-opacity hover:opacity-70"
+            style={{
+              fontSize: '14px',
+              color: '#8B8F9E',
+              textDecoration: 'none'
+            }}
+          >
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M10 13L5 8l5-5" stroke="#8B8F9E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+            Back to Modules
+          </Link>
+
           <div className="mb-6 flex items-center gap-3">
             <div 
               className="px-3 py-1 rounded-lg" 

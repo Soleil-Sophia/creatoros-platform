@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 export function Hero() {
   return (
     <section className="relative pt-32 pb-24 lg:pt-40 lg:pb-32 overflow-hidden">
@@ -85,7 +87,8 @@ export function Hero() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap gap-4 pt-2">
-              <button 
+              <Link
+                to="/app/content-os/generate"
                 className="px-8 py-4 transition-all hover:opacity-90 shadow-lg relative overflow-hidden" 
                 style={{ 
                   background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
@@ -93,13 +96,16 @@ export function Hero() {
                   borderRadius: '12px',
                   fontSize: '16px',
                   fontWeight: 600,
-                  boxShadow: '0 8px 24px rgba(255, 191, 222, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)'
+                  boxShadow: '0 8px 24px rgba(255, 191, 222, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
                 Start Creating
-              </button>
-              <button 
+              </Link>
+              <Link
+                to="/modules"
                 className="px-8 py-4 transition-all hover:opacity-90 relative overflow-hidden" 
                 style={{ 
                   background: '#1F2230',
@@ -108,12 +114,14 @@ export function Hero() {
                   borderRadius: '12px',
                   fontSize: '16px',
                   fontWeight: 500,
-                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3)'
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3)',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.08)' }}></div>
-                Explore Platform
-              </button>
+                Explore Modules
+              </Link>
             </div>
           </div>
 
