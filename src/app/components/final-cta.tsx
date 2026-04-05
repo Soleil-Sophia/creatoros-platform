@@ -1,11 +1,11 @@
 export function FinalCTA() {
   return (
     <section className="py-32 lg:py-40 relative overflow-hidden" style={{ background: '#171923' }}>
-      {/* Spotlight effect */}
+      {/* Subtle ambient glow (reduced) */}
       <div 
         className="absolute inset-0"
         style={{ 
-          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(255, 191, 222, 0.08) 0%, transparent 60%)'
+          background: 'radial-gradient(ellipse 50% 30% at 50% 50%, rgba(255, 191, 222, 0.03) 0%, transparent 50%)'
         }}
       ></div>
 
@@ -13,24 +13,15 @@ export function FinalCTA() {
         <div 
           className="max-w-4xl mx-auto rounded-[20px] p-16 lg:p-20 text-center relative overflow-hidden"
           style={{ 
-            background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.08)'
+            background: '#1C1F2A',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
           }}
         >
-          {/* Top glow edge */}
+          {/* Top edge highlight */}
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
-              background: 'linear-gradient(90deg, transparent, #FFBFDE 30%, #DABFFF 50%, #FFBFDE 70%, transparent)',
-              boxShadow: '0 0 20px rgba(255, 191, 222, 0.3)'
-            }}
-          ></div>
-
-          {/* Radial glow */}
-          <div 
-            className="absolute inset-0 opacity-30"
-            style={{ 
-              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.15) 0%, transparent 50%)'
+              background: 'linear-gradient(90deg, transparent 20%, rgba(255, 191, 222, 0.25) 50%, transparent 80%)'
             }}
           ></div>
 
@@ -70,7 +61,7 @@ export function FinalCTA() {
               style={{ 
                 fontSize: '17px', 
                 lineHeight: 1.7,
-                color: '#B4B8C7'
+                color: '#C4C8D7'
               }}
             >
               Join creators who are building structured systems instead of chasing random prompts. Content OS is live now.
@@ -79,26 +70,25 @@ export function FinalCTA() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
               <button 
-                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-2xl relative overflow-hidden" 
+                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90" 
                 style={{ 
-                  background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
+                  background: 'linear-gradient(135deg, #FFBFDE 0%, #F0D4E8 100%)', 
                   color: '#0E0F14',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   fontSize: '17px',
                   fontWeight: 600,
-                  boxShadow: '0 16px 40px rgba(255, 191, 222, 0.4)'
+                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
                 }}
               >
-                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
                 Start Creating Now
               </button>
               <button 
                 className="w-full sm:w-auto px-10 py-4 transition-all hover:opacity-90" 
                 style={{ 
-                  background: 'transparent',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
+                  background: '#1E2130',
+                  border: '1px solid rgba(255, 255, 255, 0.12)',
                   color: '#F4F3F8',
-                  borderRadius: '12px',
+                  borderRadius: '10px',
                   fontSize: '16px',
                   fontWeight: 500
                 }}

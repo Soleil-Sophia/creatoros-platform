@@ -5,12 +5,12 @@ export function PlatformStatement() {
         <div 
           className="rounded-[20px] p-16 lg:p-20 relative overflow-hidden"
           style={{ 
-            background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
-            border: '1px solid rgba(255, 255, 255, 0.06)'
+            background: '#1A1D27',
+            border: '1px solid rgba(255, 255, 255, 0.1)'
           }}
         >
-          {/* Top light edge */}
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.3), transparent)' }}></div>
+          {/* Top edge highlight */}
+          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.08)' }}></div>
           
           <div className="max-w-5xl mx-auto">
             {/* Header */}
@@ -57,7 +57,7 @@ export function PlatformStatement() {
                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8' }}>
                   Not a tool
                 </h3>
-                <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7' }}>
+                <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#C4C8D7' }}>
                   Active modules that solve specific workflow challenges
                 </p>
               </div>
@@ -72,7 +72,7 @@ export function PlatformStatement() {
                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8' }}>
                   Not all-in-one
                 </h3>
-                <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7' }}>
+                <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#C4C8D7' }}>
                   Modular platform built around active infrastructure
                 </p>
               </div>
@@ -88,7 +88,7 @@ export function PlatformStatement() {
                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8' }}>
                   Content OS first
                 </h3>
-                <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7' }}>
+                <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#C4C8D7' }}>
                   Transform expertise into structured, reusable content
                 </p>
               </div>

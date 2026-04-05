@@ -66,7 +66,7 @@ export function EcosystemPreview() {
             style={{ 
               fontSize: '17px', 
               lineHeight: 1.7,
-              color: '#B4B8C7'
+              color: '#C4C8D7'
             }}
           >
             Content OS is the first module. More creator infrastructure modules are coming — each designed to solve specific workflow challenges.
@@ -80,22 +80,13 @@ export function EcosystemPreview() {
               key={idx}
               className="relative rounded-[16px] p-10 group"
               style={{ 
-                background: module.available ? '#1F2230' : '#171923',
+                background: module.available ? '#1C1F2A' : '#16181F',
                 border: module.available 
-                  ? `2px solid ${module.accent}66` 
-                  : '1px solid rgba(255, 255, 255, 0.04)',
+                  ? `1px solid ${module.accent}40` 
+                  : '1px solid rgba(255, 255, 255, 0.06)',
                 opacity: module.available ? 1 : 0.7
               }}
             >
-              {/* Live indicator glow */}
-              {module.available && (
-                <div 
-                  className="absolute inset-0 rounded-[16px] opacity-20"
-                  style={{ 
-                    background: `radial-gradient(circle at 50% 0%, ${module.accent}4D 0%, transparent 60%)`
-                  }}
-                ></div>
-              )}
 
               <div className="relative space-y-6">
                 {/* Header */}
@@ -144,7 +135,7 @@ export function EcosystemPreview() {
                   style={{ 
                     fontSize: '15px', 
                     lineHeight: 1.7,
-                    color: '#B4B8C7'
+                    color: '#C4C8D7'
                   }}
                 >
                   {module.description}
@@ -155,8 +146,8 @@ export function EcosystemPreview() {
                   <button 
                     className="mt-2 px-6 py-2.5 transition-all hover:opacity-90"
                     style={{ 
-                      background: `linear-gradient(135deg, ${module.accent}33, ${module.accent}1A)`,
-                      border: `1px solid ${module.accent}66`,
+                      background: `${module.accent}1A`,
+                      border: `1px solid ${module.accent}40`,
                       color: '#F4F3F8',
                       borderRadius: '8px',
                       fontSize: '14px',
