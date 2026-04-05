@@ -1,11 +1,11 @@
 export function FinalCTA() {
   return (
     <section className="py-32 lg:py-40 relative overflow-hidden" style={{ background: '#171923' }}>
-      {/* Spotlight effect */}
+      {/* Spotlight effect - subtle */}
       <div 
         className="absolute inset-0"
         style={{ 
-          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(255, 191, 222, 0.08) 0%, transparent 60%)'
+          background: 'radial-gradient(ellipse 50% 35% at 50% 50%, rgba(255, 191, 222, 0.04) 0%, transparent 60%)'
         }}
       ></div>
 
@@ -17,20 +17,20 @@ export function FinalCTA() {
             border: '1px solid rgba(255, 255, 255, 0.08)'
           }}
         >
-          {/* Top glow edge */}
+          {/* Top glow edge - refined */}
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
               background: 'linear-gradient(90deg, transparent, #FFBFDE 30%, #DABFFF 50%, #FFBFDE 70%, transparent)',
-              boxShadow: '0 0 20px rgba(255, 191, 222, 0.3)'
+              boxShadow: '0 0 12px rgba(255, 191, 222, 0.15)'
             }}
           ></div>
 
-          {/* Radial glow */}
+          {/* Radial glow - subtle */}
           <div 
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0 opacity-15"
             style={{ 
-              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.15) 0%, transparent 50%)'
+              background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(255, 191, 222, 0.1) 0%, transparent 50%)'
             }}
           ></div>
 
@@ -79,14 +79,14 @@ export function FinalCTA() {
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
               <button 
-                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-2xl relative overflow-hidden" 
+                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-xl relative overflow-hidden" 
                 style={{ 
                   background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
                   color: '#0E0F14',
                   borderRadius: '12px',
                   fontSize: '17px',
                   fontWeight: 600,
-                  boxShadow: '0 16px 40px rgba(255, 191, 222, 0.4)'
+                  boxShadow: '0 12px 32px rgba(255, 191, 222, 0.25)'
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
