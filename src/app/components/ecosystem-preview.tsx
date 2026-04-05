@@ -90,7 +90,7 @@ export function EcosystemPreview() {
               {/* Live indicator glow */}
               {module.available && (
                 <div 
-                  className="absolute inset-0 rounded-[16px] opacity-20"
+                  className="absolute inset-0 rounded-[16px] opacity-10"
                   style={{ 
                     background: `radial-gradient(circle at 50% 0%, ${module.accent}4D 0%, transparent 60%)`
                   }}

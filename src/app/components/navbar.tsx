@@ -5,8 +5,8 @@ export function Navbar() {
     <nav 
       className="fixed top-0 left-0 right-0 z-50" 
       style={{ 
-        background: 'rgba(14, 15, 20, 0.8)', 
-        backdropFilter: 'blur(12px)',
+        background: 'rgba(14, 15, 20, 0.88)', 
+        backdropFilter: 'blur(8px)',
         borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
       }}
     >
@@ -35,7 +35,7 @@ export function Navbar() {
                     className="w-4 h-4 rounded"
                     style={{ 
                       background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)',
-                      boxShadow: '0 0 10px rgba(255, 191, 222, 0.25)'
+                      boxShadow: '0 0 6px rgba(255, 191, 222, 0.15)'
                     }}
                   ></div>
                 </div>
@@ -156,7 +156,7 @@ export function Navbar() {
                 color: '#0E0F14',
                 fontSize: '15px',
                 fontWeight: 600,
-                boxShadow: '0 2px 12px rgba(255, 191, 222, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
+                boxShadow: '0 2px 8px rgba(255, 191, 222, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.15)',
                 textDecoration: 'none',
                 display: 'inline-block'
               }}
@@ -164,7 +164,7 @@ export function Navbar() {
               {/* Top highlight */}
               <div 
                 className="absolute top-0 left-0 right-0 h-px" 
-                style={{ background: 'rgba(255, 255, 255, 0.5)' }}
+                style={{ background: 'rgba(255, 255, 255, 0.25)' }}
               ></div>
               Start Creating
             </Link>

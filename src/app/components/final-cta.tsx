@@ -5,7 +5,7 @@ export function FinalCTA() {
       <div 
         className="absolute inset-0"
         style={{ 
-          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(255, 191, 222, 0.08) 0%, transparent 60%)'
+          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(255, 191, 222, 0.04) 0%, transparent 60%)'
         }}
       ></div>
 
@@ -21,14 +21,14 @@ export function FinalCTA() {
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
-              background: 'linear-gradient(90deg, transparent, #FFBFDE 30%, #DABFFF 50%, #FFBFDE 70%, transparent)',
-              boxShadow: '0 0 20px rgba(255, 191, 222, 0.3)'
+              background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.5) 30%, rgba(218, 191, 255, 0.4) 50%, rgba(255, 191, 222, 0.5) 70%, transparent)',
+              boxShadow: '0 0 10px rgba(255, 191, 222, 0.15)'
             }}
           ></div>
 
           {/* Radial glow */}
           <div 
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0 opacity-15"
             style={{ 
               background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.15) 0%, transparent 50%)'
             }}
@@ -86,10 +86,10 @@ export function FinalCTA() {
                   borderRadius: '12px',
                   fontSize: '17px',
                   fontWeight: 600,
-                  boxShadow: '0 16px 40px rgba(255, 191, 222, 0.4)'
+                  boxShadow: '0 8px 24px rgba(255, 191, 222, 0.2)'
                 }}
               >
-                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
+                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.3)' }}></div>
                 Start Creating Now
               </button>
               <button 
