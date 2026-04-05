@@ -82,17 +82,18 @@ export function EcosystemPreview() {
               style={{ 
                 background: module.available ? '#1F2230' : '#171923',
                 border: module.available 
-                  ? `1px solid ${module.accent}4D` 
-                  : '1px solid rgba(255, 255, 255, 0.04)',
+                  ? `1px solid ${module.accent}33` 
+                  : '1px solid rgba(255, 255, 255, 0.05)',
                 opacity: module.available ? 1 : 0.7
               }}
             >
-              {/* Live indicator glow - tighter */}
+              {/* Live indicator glow - minimal */}
               {module.available && (
                 <div 
-                  className="absolute inset-0 rounded-[16px] opacity-8"
+                  className="absolute inset-0 rounded-[16px]"
                   style={{ 
-                    background: `radial-gradient(circle at 50% 0%, ${module.accent}26 0%, transparent 45%)`
+                    opacity: 0.06,
+                    background: `radial-gradient(circle at 50% 0%, ${module.accent}1A 0%, transparent 40%)`
                   }}
                 ></div>
               )}

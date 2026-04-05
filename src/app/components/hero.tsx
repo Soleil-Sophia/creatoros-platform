@@ -96,7 +96,7 @@ export function Hero() {
                   borderRadius: '12px',
                   fontSize: '16px',
                   fontWeight: 600,
-                  boxShadow: '0 8px 24px rgba(255, 191, 222, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
+                  boxShadow: '0 6px 16px rgba(255, 191, 222, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
                   textDecoration: 'none',
                   display: 'inline-block'
                 }}
@@ -128,12 +128,12 @@ export function Hero() {
           {/* Right: Premium OS Surface - Hero-Worthy Iconic Treatment */}
           <div className="relative lg:h-[700px] flex items-center justify-center">
             
-            {/* BACKGROUND - Controlled atmospheric foundation (tighter) */}
+            {/* BACKGROUND - Controlled atmospheric foundation */}
             <div 
-              className="absolute inset-0 rounded-[20px] blur-lg opacity-12"
+              className="absolute inset-0 rounded-[20px] blur-md opacity-8"
               style={{ 
                 background: 'linear-gradient(135deg, #DABFFF 0%, #FFBFDE 100%)',
-                transform: 'scale(0.8) translateY(30px)'
+                transform: 'scale(0.75) translateY(30px)'
               }}
             />
 
@@ -158,12 +158,12 @@ export function Hero() {
                 style={{ 
                   background: 'linear-gradient(180deg, rgba(31, 34, 48, 0.5) 0%, rgba(23, 25, 35, 0.6) 100%)',
                   borderColor: 'rgba(255, 255, 255, 0.08)',
-                  backdropFilter: 'blur(12px)'
+                  backdropFilter: 'blur(6px)'
                 }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#FFBFDE', boxShadow: '0 0 10px rgba(255, 191, 222, 0.7)' }}></div>
+                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#FFBFDE', boxShadow: '0 0 5px rgba(255, 191, 222, 0.4)' }}></div>
                     <span style={{ fontSize: '14px', fontWeight: 600, color: '#F4F3F8', letterSpacing: '-0.01em' }}>Content OS</span>
                     <div className="px-2 py-0.5 rounded" style={{ background: 'rgba(255, 191, 222, 0.12)', fontSize: '10px', fontWeight: 600, color: '#FFBFDE', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Live
@@ -185,8 +185,8 @@ export function Hero() {
                   className="relative rounded-[16px] overflow-hidden"
                   style={{ 
                     background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
-                    border: '1px solid rgba(255, 191, 222, 0.35)',
-                    boxShadow: '0 16px 40px rgba(255, 191, 222, 0.25), 0 6px 16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
+                    border: '1px solid rgba(255, 191, 222, 0.2)',
+                    boxShadow: '0 8px 20px rgba(255, 191, 222, 0.1), 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)',
                     transform: 'translateZ(15px)' // Stronger foreground separation
                   }}
                 >
@@ -194,7 +194,7 @@ export function Hero() {
                   <div 
                     className="absolute top-0 left-0 right-0 h-px" 
                     style={{ 
-                      background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.7) 50%, transparent)',
+                      background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.4) 50%, transparent)',
                     }}
                   ></div>
 
@@ -205,7 +205,7 @@ export function Hero() {
                         className="w-9 h-9 rounded-lg flex items-center justify-center relative overflow-hidden" 
                         style={{ 
                           background: 'linear-gradient(135deg, #FFBFDE, #DABFFF)',
-                          boxShadow: '0 8px 20px rgba(255, 191, 222, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
+                          boxShadow: '0 4px 10px rgba(255, 191, 222, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.35)'
                         }}
                       >
                         <svg width="16" height="16" fill="none" viewBox="0 0 16 16">

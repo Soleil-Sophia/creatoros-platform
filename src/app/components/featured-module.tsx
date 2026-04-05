@@ -19,24 +19,24 @@ export function FeaturedModule() {
           className="relative rounded-[20px] overflow-hidden"
           style={{ 
             background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
-            border: '2px solid rgba(255, 191, 222, 0.3)',
-            boxShadow: '0 24px 80px rgba(255, 191, 222, 0.15), 0 0 120px rgba(218, 191, 255, 0.1)'
+            border: '1px solid rgba(255, 191, 222, 0.18)',
+            boxShadow: '0 16px 48px rgba(255, 191, 222, 0.07), 0 0 60px rgba(218, 191, 255, 0.04)'
           }}
         >
           {/* Glowing top edge */}
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
-              background: 'linear-gradient(90deg, transparent, #FFBFDE 20%, #DABFFF 50%, #FFBFDE 80%, transparent)',
-              boxShadow: '0 0 20px rgba(255, 191, 222, 0.5)'
+              background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.6) 20%, rgba(218, 191, 255, 0.5) 50%, rgba(255, 191, 222, 0.6) 80%, transparent)',
+              boxShadow: '0 0 8px rgba(255, 191, 222, 0.15)'
             }}
           ></div>
 
-          {/* Background accent glow - tighter */}
+          {/* Background accent glow */}
           <div 
-            className="absolute inset-0 opacity-15"
+            className="absolute inset-0 opacity-10"
             style={{ 
-              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.1) 0%, transparent 50%)'
+              background: 'radial-gradient(ellipse 55% 40% at 50% 0%, rgba(255, 191, 222, 0.08) 0%, transparent 50%)'
             }}
           ></div>
 
@@ -80,7 +80,7 @@ export function FeaturedModule() {
                     color: '#0E0F14',
                     fontSize: '17px',
                     fontWeight: 600,
-                    boxShadow: '0 16px 48px rgba(255, 191, 222, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
+                    boxShadow: '0 6px 18px rgba(255, 191, 222, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
                     textDecoration: 'none'
                   }}
                 >
@@ -98,7 +98,7 @@ export function FeaturedModule() {
                   background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
                   border: '1px solid rgba(255, 255, 255, 0.08)',
                   minHeight: '480px',
-                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5)'
+                  boxShadow: '0 6px 20px rgba(0, 0, 0, 0.35)'
                 }}
               >
                 {/* Preview Header */}
