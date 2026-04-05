@@ -5,12 +5,12 @@ export function PlatformStatement() {
         <div 
           className="rounded-[20px] p-16 lg:p-20 relative overflow-hidden"
           style={{ 
-            background: '#1A1D27',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
+            background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+            border: '1px solid rgba(255, 255, 255, 0.06)'
           }}
         >
-          {/* Top edge highlight */}
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.08)' }}></div>
+          {/* Top light edge */}
+          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.3), transparent)' }}></div>
           
           <div className="max-w-5xl mx-auto">
             {/* Header */}

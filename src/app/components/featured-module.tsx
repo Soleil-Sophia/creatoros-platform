@@ -18,16 +18,25 @@ export function FeaturedModule() {
         <div 
           className="relative rounded-[20px] overflow-hidden"
           style={{ 
-            background: '#1E2130',
-            border: '1px solid rgba(255, 191, 222, 0.2)',
-            boxShadow: '0 16px 48px rgba(0, 0, 0, 0.5)'
+            background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
+            border: '2px solid rgba(255, 191, 222, 0.3)',
+            boxShadow: '0 24px 80px rgba(255, 191, 222, 0.15), 0 0 120px rgba(218, 191, 255, 0.1)'
           }}
         >
-          {/* Top edge highlight */}
+          {/* Glowing top edge */}
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
-              background: 'linear-gradient(90deg, transparent 15%, rgba(255, 191, 222, 0.3) 50%, transparent 85%)'
+              background: 'linear-gradient(90deg, transparent, #FFBFDE 20%, #DABFFF 50%, #FFBFDE 80%, transparent)',
+              boxShadow: '0 0 20px rgba(255, 191, 222, 0.5)'
+            }}
+          ></div>
+
+          {/* Background accent glow */}
+          <div 
+            className="absolute inset-0 opacity-30"
+            style={{ 
+              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.15) 0%, transparent 50%)'
             }}
           ></div>
 
@@ -64,17 +73,18 @@ export function FeaturedModule() {
               <div className="pt-2">
                 <Link 
                   to="/modules/content-os"
-                  className="inline-block w-full sm:w-auto px-12 py-5 transition-all hover:opacity-90 text-center" 
+                  className="inline-block w-full sm:w-auto px-12 py-5 transition-all hover:opacity-90 shadow-xl relative overflow-hidden text-center" 
                   style={{ 
-                    background: 'linear-gradient(135deg, #FFBFDE 0%, #F0D4E8 100%)',
-                    borderRadius: '10px',
+                    background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
+                    borderRadius: '12px',
                     color: '#0E0F14',
                     fontSize: '17px',
                     fontWeight: 600,
-                    boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                    boxShadow: '0 16px 48px rgba(255, 191, 222, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
                     textDecoration: 'none'
                   }}
                 >
+                  <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
                   Launch Content OS
                 </Link>
               </div>
@@ -85,9 +95,10 @@ export function FeaturedModule() {
               <div 
                 className="rounded-[16px] p-8 w-full"
                 style={{ 
-                  background: '#181A23',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  minHeight: '480px'
+                  background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+                  border: '1px solid rgba(255, 255, 255, 0.08)',
+                  minHeight: '480px',
+                  boxShadow: '0 12px 40px rgba(0, 0, 0, 0.5)'
                 }}
               >
                 {/* Preview Header */}

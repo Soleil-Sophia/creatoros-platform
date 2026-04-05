@@ -80,13 +80,22 @@ export function EcosystemPreview() {
               key={idx}
               className="relative rounded-[16px] p-10 group"
               style={{ 
-                background: module.available ? '#1C1F2A' : '#16181F',
+                background: module.available ? '#1F2230' : '#171923',
                 border: module.available 
-                  ? `1px solid ${module.accent}40` 
-                  : '1px solid rgba(255, 255, 255, 0.06)',
+                  ? `2px solid ${module.accent}66` 
+                  : '1px solid rgba(255, 255, 255, 0.04)',
                 opacity: module.available ? 1 : 0.7
               }}
             >
+              {/* Live indicator glow */}
+              {module.available && (
+                <div 
+                  className="absolute inset-0 rounded-[16px] opacity-20"
+                  style={{ 
+                    background: `radial-gradient(circle at 50% 0%, ${module.accent}4D 0%, transparent 60%)`
+                  }}
+                ></div>
+              )}
 
               <div className="relative space-y-6">
                 {/* Header */}
@@ -146,8 +155,8 @@ export function EcosystemPreview() {
                   <button 
                     className="mt-2 px-6 py-2.5 transition-all hover:opacity-90"
                     style={{ 
-                      background: `${module.accent}1A`,
-                      border: `1px solid ${module.accent}40`,
+                      background: `linear-gradient(135deg, ${module.accent}33, ${module.accent}1A)`,
+                      border: `1px solid ${module.accent}66`,
                       color: '#F4F3F8',
                       borderRadius: '8px',
                       fontSize: '14px',

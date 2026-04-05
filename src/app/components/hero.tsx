@@ -89,34 +89,37 @@ export function Hero() {
             <div className="flex flex-wrap gap-4 pt-2">
               <Link
                 to="/app/content-os/generate"
-                className="px-8 py-4 transition-all hover:opacity-90 relative overflow-hidden" 
+                className="px-8 py-4 transition-all hover:opacity-90 shadow-lg relative overflow-hidden" 
                 style={{ 
-                  background: 'linear-gradient(135deg, #FFBFDE 0%, #F0D4E8 100%)', 
+                  background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
                   color: '#0E0F14',
-                  borderRadius: '10px',
+                  borderRadius: '12px',
                   fontSize: '16px',
                   fontWeight: 600,
-                  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)',
+                  boxShadow: '0 8px 24px rgba(255, 191, 222, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
                   textDecoration: 'none',
                   display: 'inline-block'
                 }}
               >
+                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
                 Start Creating
               </Link>
               <Link
                 to="/modules"
-                className="px-8 py-4 transition-all hover:opacity-90" 
+                className="px-8 py-4 transition-all hover:opacity-90 relative overflow-hidden" 
                 style={{ 
-                  background: '#1E2130',
-                  border: '1px solid rgba(255, 255, 255, 0.12)',
+                  background: '#1F2230',
+                  border: '1px solid rgba(255, 255, 255, 0.1)',
                   color: '#F4F3F8',
-                  borderRadius: '10px',
+                  borderRadius: '12px',
                   fontSize: '16px',
                   fontWeight: 500,
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3)',
                   textDecoration: 'none',
                   display: 'inline-block'
                 }}
               >
+                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.08)' }}></div>
                 Explore Modules
               </Link>
             </div>
@@ -125,42 +128,42 @@ export function Hero() {
           {/* Right: Premium OS Surface - Hero-Worthy Iconic Treatment */}
           <div className="relative lg:h-[700px] flex items-center justify-center">
             
-            {/* BACKGROUND - Subtle accent glow (reduced by 70%) */}
+            {/* BACKGROUND - Controlled atmospheric foundation (less diffuse) */}
             <div 
-              className="absolute inset-0 rounded-[20px] blur-xl opacity-10"
+              className="absolute inset-0 rounded-[20px] blur-2xl opacity-20"
               style={{ 
                 background: 'linear-gradient(135deg, #DABFFF 0%, #FFBFDE 100%)',
-                transform: 'scale(0.75) translateY(30px)'
+                transform: 'scale(0.8) translateY(30px)'
               }}
             />
 
-            {/* MIDGROUND - Iconic OS Shell Container (sharp, defined edge) */}
+            {/* MIDGROUND - Iconic OS Shell Container (increased scale and presence) */}
             <div 
               className="relative w-full max-w-[580px] rounded-[20px] overflow-hidden"
               style={{ 
-                background: 'linear-gradient(180deg, #1A1C26 0%, #0E0F14 100%)',
-                boxShadow: '0 24px 48px rgba(0, 0, 0, 0.8)',
-                border: '1px solid rgba(255, 255, 255, 0.08)',
+                background: 'linear-gradient(135deg, #171923 0%, #0E0F14 100%)',
+                boxShadow: '0 32px 96px rgba(0, 0, 0, 0.7), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 1px rgba(255, 255, 255, 0.03)',
                 transform: 'translateZ(0)' // Create stacking context
               }}
             >
-              {/* Premium top light edge - subtle highlight */}
+              {/* Premium top light edge - more refined */}
               <div 
                 className="absolute top-0 left-0 right-0 h-px z-10" 
-                style={{ background: 'linear-gradient(90deg, transparent 20%, rgba(255, 255, 255, 0.12) 50%, transparent 80%)' }}
+                style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.3) 35%, rgba(218, 191, 255, 0.25) 65%, transparent)' }}
               ></div>
 
-              {/* OS Shell Header Bar - crisp, no blur */}
+              {/* OS Shell Header Bar - refined premium treatment */}
               <div 
                 className="relative px-6 py-4 border-b"
                 style={{ 
-                  background: '#1A1C26',
-                  borderColor: 'rgba(255, 255, 255, 0.1)'
+                  background: 'linear-gradient(180deg, rgba(31, 34, 48, 0.5) 0%, rgba(23, 25, 35, 0.6) 100%)',
+                  borderColor: 'rgba(255, 255, 255, 0.08)',
+                  backdropFilter: 'blur(12px)'
                 }}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#FFBFDE', boxShadow: '0 0 4px rgba(255, 191, 222, 0.4)' }}></div>
+                    <div className="w-2 h-2 rounded-full animate-pulse" style={{ background: '#FFBFDE', boxShadow: '0 0 10px rgba(255, 191, 222, 0.7)' }}></div>
                     <span style={{ fontSize: '14px', fontWeight: 600, color: '#F4F3F8', letterSpacing: '-0.01em' }}>Content OS</span>
                     <div className="px-2 py-0.5 rounded" style={{ background: 'rgba(255, 191, 222, 0.12)', fontSize: '10px', fontWeight: 600, color: '#FFBFDE', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
                       Live
@@ -177,21 +180,21 @@ export function Hero() {
               {/* FOREGROUND - Main Content Area with Enhanced Panel Hierarchy */}
               <div className="relative p-7 space-y-5" style={{ minHeight: '540px' }}>
                 
-                {/* FOREGROUND PANEL 1 - Input Panel (Sharp, elevated) */}
+                {/* FOREGROUND PANEL 1 - Input Panel (Highest Elevation - Strengthened) */}
                 <div 
                   className="relative rounded-[16px] overflow-hidden"
                   style={{ 
-                    background: '#242836',
-                    border: '1px solid rgba(255, 191, 222, 0.25)',
-                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.5)',
+                    background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
+                    border: '1px solid rgba(255, 191, 222, 0.35)',
+                    boxShadow: '0 16px 40px rgba(255, 191, 222, 0.25), 0 6px 16px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12)',
                     transform: 'translateZ(15px)' // Stronger foreground separation
                   }}
                 >
-                  {/* Subtle top edge highlight */}
+                  {/* Refined top light edge - less decorative */}
                   <div 
                     className="absolute top-0 left-0 right-0 h-px" 
                     style={{ 
-                      background: 'rgba(255, 191, 222, 0.2)',
+                      background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.7) 50%, transparent)',
                     }}
                   ></div>
 
@@ -201,8 +204,8 @@ export function Hero() {
                       <div 
                         className="w-9 h-9 rounded-lg flex items-center justify-center relative overflow-hidden" 
                         style={{ 
-                          background: 'linear-gradient(135deg, #FFBFDE, #E7C6F3)',
-                          boxShadow: '0 2px 8px rgba(255, 191, 222, 0.2)'
+                          background: 'linear-gradient(135deg, #FFBFDE, #DABFFF)',
+                          boxShadow: '0 8px 20px rgba(255, 191, 222, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)'
                         }}
                       >
                         <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
@@ -233,13 +236,13 @@ export function Hero() {
                   </div>
                 </div>
 
-                {/* MIDGROUND PANEL 1 - Output Panel (Sharp border separation) */}
+                {/* MIDGROUND PANEL 1 - Output Panel (Enhanced contrast) */}
                 <div 
                   className="relative rounded-[14px] overflow-hidden"
                   style={{ 
-                    background: '#1C1F2A',
-                    border: '1px solid rgba(255, 255, 255, 0.1)',
-                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)',
+                    background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.12)',
+                    boxShadow: '0 8px 24px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.06)',
                     transform: 'translateZ(8px)' // Clearer mid elevation
                   }}
                 >
@@ -251,8 +254,9 @@ export function Hero() {
                       <div 
                         className="w-9 h-9 rounded-lg flex items-center justify-center" 
                         style={{ 
-                          background: '#262A38',
-                          border: '1px solid rgba(255, 255, 255, 0.08)'
+                          background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
+                          border: '1px solid rgba(255, 255, 255, 0.12)',
+                          boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.08), 0 3px 8px rgba(0, 0, 0, 0.4)'
                         }}
                       >
                         <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
@@ -277,8 +281,9 @@ export function Hero() {
                           key={idx}
                           className="rounded-lg p-2.5"
                           style={{ 
-                            background: '#1E212B',
-                            border: '1px solid rgba(255, 255, 255, 0.06)'
+                            background: '#262A38',
+                            border: '1px solid rgba(255, 255, 255, 0.06)',
+                            boxShadow: 'inset 0 1px 2px rgba(0, 0, 0, 0.4)'
                           }}
                         >
                           <div className="h-px rounded-full" style={{ width: item.w, background: 'rgba(180, 184, 199, 0.3)' }}></div>
@@ -288,12 +293,13 @@ export function Hero() {
                   </div>
                 </div>
 
-                {/* BACKGROUND PANEL - Library Panel (Clear border separation) */}
+                {/* BACKGROUND PANEL - Library Panel (Clearer recessed depth) */}
                 <div 
                   className="relative rounded-[12px] overflow-hidden"
                   style={{ 
-                    background: '#15171F',
+                    background: '#171923',
                     border: '1px solid rgba(255, 255, 255, 0.06)',
+                    boxShadow: 'inset 0 2px 6px rgba(0, 0, 0, 0.6)',
                     transform: 'translateZ(0)' // Background elevation
                   }}
                 >

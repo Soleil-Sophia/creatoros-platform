@@ -79,16 +79,16 @@ export function WhyNotChat() {
         <div 
           className="max-w-4xl mx-auto rounded-[20px] overflow-hidden"
           style={{ 
-            background: '#1A1D27',
-            border: '1px solid rgba(255, 255, 255, 0.1)'
+            background: '#1F2230',
+            border: '1px solid rgba(255, 255, 255, 0.06)'
           }}
         >
           {/* Table Header */}
           <div 
             className="grid grid-cols-3 gap-8 px-8 py-6 border-b"
             style={{ 
-              background: '#1E212B',
-              borderColor: 'rgba(255, 255, 255, 0.08)'
+              background: '#262A38',
+              borderColor: 'rgba(255, 255, 255, 0.06)'
             }}
           >
             <div style={{ color: '#B4B8C7', fontSize: '14px', fontWeight: 600 }}>Feature</div>
@@ -149,12 +149,11 @@ export function WhyNotChat() {
           <button 
             className="px-8 py-4 transition-all hover:opacity-90" 
             style={{ 
-              background: 'linear-gradient(135deg, #FFBFDE 0%, #F0D4E8 100%)', 
+              background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
               color: '#0E0F14',
-              borderRadius: '10px',
+              borderRadius: '12px',
               fontSize: '16px',
-              fontWeight: 600,
-              boxShadow: '0 2px 8px rgba(0, 0, 0, 0.3)'
+              fontWeight: 600
             }}
           >
             See the Difference

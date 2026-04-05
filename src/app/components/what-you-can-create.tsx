@@ -104,17 +104,17 @@ export function WhatYouCanCreate() {
           {outputs.map((output, idx) => (
             <div 
               key={idx}
-              className="relative rounded-[16px] p-8 group hover:scale-[1.01] transition-transform"
+              className="relative rounded-[16px] p-8 group hover:scale-[1.02] transition-transform"
               style={{ 
-                background: '#1C1F2A',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: '#1F2230',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
-              {/* Subtle border highlight on hover */}
+              {/* Glow effect on hover */}
               <div 
-                className="absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                className="absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity"
                 style={{ 
-                  border: `1px solid ${output.accent}33`,
+                  background: `radial-gradient(circle at 50% 0%, ${output.accent}1A 0%, transparent 60%)`,
                 }}
               ></div>
 

@@ -5,9 +5,9 @@ export function Navbar() {
     <nav 
       className="fixed top-0 left-0 right-0 z-50" 
       style={{ 
-        background: 'rgba(14, 15, 20, 0.95)', 
-        backdropFilter: 'blur(4px)',
-        borderBottom: '1px solid rgba(255, 255, 255, 0.1)'
+        background: 'rgba(14, 15, 20, 0.8)', 
+        backdropFilter: 'blur(12px)',
+        borderBottom: '1px solid rgba(255, 255, 255, 0.08)'
       }}
     >
       <div className="max-w-[1800px] mx-auto px-8">
@@ -19,8 +19,8 @@ export function Navbar() {
               <div 
                 className="relative w-9 h-9 rounded-lg overflow-hidden"
                 style={{ 
-                  background: '#1A1D27',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
+                  background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 2px 8px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.03)'
                 }}
               >
                 {/* Refined top light edge on logo container */}
@@ -29,12 +29,13 @@ export function Navbar() {
                   style={{ background: 'rgba(255, 255, 255, 0.08)' }}
                 ></div>
                 
-                {/* Inner mark - crisp, no glow */}
+                {/* Inner mark with controlled glow */}
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div 
                     className="w-4 h-4 rounded"
                     style={{ 
-                      background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)'
+                      background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)',
+                      boxShadow: '0 0 10px rgba(255, 191, 222, 0.25)'
                     }}
                   ></div>
                 </div>
@@ -149,16 +150,22 @@ export function Navbar() {
             </button>
             <Link 
               to="/modules"
-              className="px-6 py-2.5 rounded-lg transition-all hover:opacity-90" 
+              className="px-6 py-2.5 rounded-lg transition-all hover:opacity-90 relative overflow-hidden" 
               style={{ 
-                background: 'linear-gradient(135deg, #FFBFDE 0%, #F0D4E8 100%)', 
+                background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
                 color: '#0E0F14',
                 fontSize: '15px',
                 fontWeight: 600,
+                boxShadow: '0 2px 12px rgba(255, 191, 222, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.2)',
                 textDecoration: 'none',
                 display: 'inline-block'
               }}
             >
+              {/* Top highlight */}
+              <div 
+                className="absolute top-0 left-0 right-0 h-px" 
+                style={{ background: 'rgba(255, 255, 255, 0.5)' }}
+              ></div>
               Start Creating
             </Link>
           </div>

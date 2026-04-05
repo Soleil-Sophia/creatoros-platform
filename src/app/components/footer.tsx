@@ -31,11 +31,12 @@ export function Footer() {
                 <div 
                   className="w-10 h-10 rounded-lg flex items-center justify-center" 
                   style={{ 
-                    background: '#1A1D27',
-                    border: '1px solid rgba(255, 255, 255, 0.1)'
+                    background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)'
                   }}
                 >
-                  <div className="w-5 h-5 rounded" style={{ background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)' }}></div>
+                  <div className="w-5 h-5 rounded" style={{ background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)' }}></div>
                 </div>
                 <span className="tracking-tight" style={{ fontSize: '20px', fontWeight: 700, color: '#F4F3F8' }}>CreatorOS</span>
               </div>
@@ -52,10 +53,10 @@ export function Footer() {
                     key={platform}
                     href="#"
                     className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:border-opacity-20"
-                    style={{ background: '#1A1D27', border: '1px solid rgba(255, 255, 255, 0.1)' }}
+                    style={{ background: '#1F2230', border: '1px solid rgba(255, 255, 255, 0.08)' }}
                     aria-label={platform}
                   >
-                    <div className="w-4 h-4 rounded-full" style={{ background: '#C4C8D7' }}></div>
+                    <div className="w-4 h-4 rounded-full" style={{ background: '#B4B8C7' }}></div>
                   </a>
                 ))}
               </div>

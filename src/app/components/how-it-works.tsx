@@ -84,14 +84,14 @@ export function HowItWorks() {
               key={idx}
               className="relative rounded-[16px] p-8 group"
               style={{ 
-                background: '#1C1F2A',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
+                background: '#1F2230',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
               }}
             >
-              {/* Top edge highlight on hover */}
+              {/* Top edge light */}
               <div 
                 className="absolute top-0 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity" 
-                style={{ background: 'rgba(255, 191, 222, 0.3)' }}
+                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
               ></div>
 
               {/* Number Badge */}
