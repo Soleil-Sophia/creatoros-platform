@@ -128,9 +128,9 @@ export function Hero() {
           {/* Right: Premium OS Surface - Hero-Worthy Iconic Treatment */}
           <div className="relative lg:h-[700px] flex items-center justify-center">
             
-            {/* BACKGROUND - Controlled atmospheric foundation (less diffuse) */}
+            {/* BACKGROUND - Controlled atmospheric foundation (tighter) */}
             <div 
-              className="absolute inset-0 rounded-[20px] blur-2xl opacity-25"
+              className="absolute inset-0 rounded-[20px] blur-lg opacity-12"
               style={{ 
                 background: 'linear-gradient(135deg, #DABFFF 0%, #FFBFDE 100%)',
                 transform: 'scale(0.8) translateY(30px)'

@@ -32,11 +32,11 @@ export function FeaturedModule() {
             }}
           ></div>
 
-          {/* Background accent glow */}
+          {/* Background accent glow - tighter */}
           <div 
-            className="absolute inset-0 opacity-30"
+            className="absolute inset-0 opacity-15"
             style={{ 
-              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.15) 0%, transparent 50%)'
+              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.1) 0%, transparent 50%)'
             }}
           ></div>
 

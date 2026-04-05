@@ -77,7 +77,7 @@ export function ContentOSProductPage() {
                 color: '#0E0F14',
                 fontSize: '16px',
                 fontWeight: 600,
-                boxShadow: '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 6px 16px rgba(255, 191, 222, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
                 textDecoration: 'none',
                 display: 'inline-block'
               }}
@@ -101,7 +101,7 @@ export function ContentOSProductPage() {
           >
             {/* Background grid subtle effect */}
             <div 
-              className="absolute inset-0 opacity-20"
+              className="absolute inset-0 opacity-12"
               style={{
                 backgroundImage: 'linear-gradient(rgba(255, 191, 222, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 191, 222, 0.03) 1px, transparent 1px)',
                 backgroundSize: '40px 40px'
