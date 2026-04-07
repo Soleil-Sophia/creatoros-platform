@@ -1,10 +1,23 @@
 import { Navbar } from '../components/navbar';
 import { Footer } from '../components/footer';
-import { Link, useNavigate } from 'react-router';
+import { Link } from 'react-router';
+import { useState } from 'react';
 
-const modules = [
+const coreModules = [
   {
     id: '01',
+    name: 'Brand OS',
+    tagline: 'Voice & Identity Foundation',
+    description: 'The strategic foundation of your workflow — defines identity, voice & messaging before content, launches, and execution. Makes your brand machine-readable and workflow-ready.',
+    status: 'active',
+    accent: '#E7C6F3',
+    route: '/modules/brand-os',
+    appRoute: '/app/brand-os/setup',
+    features: ['Voice Parameters', 'Tone Configuration', 'Messaging Framework', 'Identity Lock'],
+    category: 'core'
+  },
+  {
+    id: '02',
     name: 'Content OS',
     tagline: 'Structured Content Generation',
     description: 'Turn your offers, ideas, and expertise into structured content assets—hooks, scripts, captions, and brand voice—ready to deploy across platforms.',
@@ -12,54 +25,64 @@ const modules = [
     accent: '#FFBFDE',
     route: '/modules/content-os',
     appRoute: '/app/content-os/generate',
-    features: ['Hooks & Scripts', 'Social Captions', 'Brand Voice System', 'Asset Library']
-  },
-  {
-    id: '02',
-    name: 'Campaign OS',
-    tagline: 'Multi-Channel Campaign Planning',
-    description: 'Design complete multi-platform campaigns with synchronized messaging, timeline management, and asset coordination across all channels.',
-    status: 'coming-soon',
-    accent: '#E7C6F3',
-    route: '/modules/campaign-os',
-    appRoute: null,
-    features: ['Campaign Timeline', 'Cross-Platform Sync', 'Asset Mapping', 'Launch Scheduling']
+    features: ['Hooks & Scripts', 'Social Captions', 'Brand Voice System', 'Asset Library'],
+    category: 'core'
   },
   {
     id: '03',
+    name: 'Launch OS',
+    tagline: 'Rollout & Coordination',
+    description: 'Structure launches, coordinate rollouts, and orchestrate focused content phases across platforms with clear timing and goals.',
+    status: 'coming-soon',
+    accent: '#DABFFF',
+    route: '/modules/launch-os',
+    appRoute: null,
+    features: ['Launch Planning', 'Rollout Coordination', 'Phase Orchestration', 'Goal Tracking'],
+    visual: 'launch-flow',
+    category: 'core'
+  },
+  {
+    id: '04',
+    name: 'Management OS',
+    tagline: 'Scheduling & Execution',
+    description: 'Schedule content, manage publishing queue, and execute multi-platform posting. The operational layer between strategy and measurement.',
+    status: 'coming-soon',
+    accent: '#C4B5FD',
+    route: '/modules/management-os',
+    appRoute: null,
+    features: ['Content Calendar', 'Publishing Queue', 'Multi-Platform Scheduling', 'Post Execution'],
+    visual: 'management-flow',
+    category: 'core'
+  },
+  {
+    id: '05',
     name: 'Analytics OS',
     tagline: 'Performance Intelligence',
     description: 'Track content performance across platforms, identify top performers, and get AI-powered insights on what resonates with your audience.',
     status: 'coming-soon',
-    accent: '#DABFFF',
+    accent: '#B8A3FF',
     route: '/modules/analytics-os',
     appRoute: null,
-    features: ['Cross-Platform Analytics', 'Performance Patterns', 'Engagement Insights', 'ROI Tracking']
-  },
+    features: ['Cross-Platform Analytics', 'Performance Patterns', 'Engagement Insights', 'ROI Tracking'],
+    category: 'core'
+  }
+];
+
+const addOnModules = [
   {
-    id: '04',
+    id: '06',
     name: 'Community OS',
     tagline: 'Audience Relationship Management',
     description: 'Manage your community interactions, track conversations, automate responses, and build deeper relationships with your audience.',
     status: 'planned',
-    accent: '#FFBFDE',
+    accent: '#E7C6F3',
     route: '/modules/community-os',
     appRoute: null,
-    features: ['Interaction Tracking', 'Response Automation', 'Community Insights', 'Relationship Scoring']
+    features: ['Interaction Tracking', 'Response Automation', 'Community Insights', 'Relationship Scoring'],
+    category: 'addon'
   },
   {
-    id: '05',
-    name: 'Brand OS',
-    tagline: 'Visual & Voice Identity System',
-    description: 'Define and maintain your complete brand identity—visual guidelines, voice parameters, messaging frameworks, and brand assets in one system.',
-    status: 'planned',
-    accent: '#E7C6F3',
-    route: '/modules/brand-os',
-    appRoute: null,
-    features: ['Voice Parameters', 'Visual Guidelines', 'Messaging Framework', 'Asset Library']
-  },
-  {
-    id: '06',
+    id: '07',
     name: 'Research OS',
     tagline: 'Audience & Market Intelligence',
     description: 'Deep dive into your audience, competitors, and market trends. Extract insights, identify opportunities, and validate ideas with structured research.',
@@ -67,12 +90,23 @@ const modules = [
     accent: '#DABFFF',
     route: '/modules/research-os',
     appRoute: null,
-    features: ['Audience Analysis', 'Competitor Research', 'Trend Monitoring', 'Insight Extraction']
+    features: ['Audience Analysis', 'Competitor Research', 'Trend Monitoring', 'Insight Extraction'],
+    category: 'addon'
   }
 ];
 
+const allModules = [...coreModules, ...addOnModules];
+
+type ViewMode = 'core' | 'addons' | 'all';
+
 export function ModulesPage() {
-  const navigate = useNavigate();
+  const [viewMode, setViewMode] = useState<ViewMode>('all');
+
+  const displayModules = viewMode === 'core' 
+    ? coreModules 
+    : viewMode === 'addons' 
+    ? addOnModules 
+    : allModules;
 
   return (
     <div className="min-h-screen" style={{ background: '#0E0F14' }}>
@@ -120,16 +154,76 @@ export function ModulesPage() {
               margin: '0 auto'
             }}
           >
-            Specialized tools for every aspect of creator operations. Use individually or combine into your complete creator system.
+            Build your creator system your way. Start with the core workflow or add what you need.
           </p>
+        </div>
+      </section>
+
+      {/* View Mode Tabs */}
+      <section className="pb-12 px-8">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="flex items-center justify-center gap-3">
+            {[
+              { id: 'core' as ViewMode, label: 'Core Workflow', description: 'Recommended path' },
+              { id: 'addons' as ViewMode, label: 'Add-on Modules', description: 'Optional extensions' },
+              { id: 'all' as ViewMode, label: 'All Modules', description: 'Everything' }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setViewMode(tab.id)}
+                className="px-6 py-3 rounded-[12px] transition-all"
+                style={{
+                  background: viewMode === tab.id 
+                    ? 'linear-gradient(135deg, rgba(255, 191, 222, 0.15) 0%, rgba(231, 198, 243, 0.12) 100%)'
+                    : 'rgba(255, 255, 255, 0.03)',
+                  border: viewMode === tab.id
+                    ? '1px solid rgba(255, 191, 222, 0.3)'
+                    : '1px solid rgba(255, 255, 255, 0.06)',
+                  boxShadow: viewMode === tab.id
+                    ? '0 4px 16px rgba(255, 191, 222, 0.15)'
+                    : 'none'
+                }}
+              >
+                <div style={{ fontSize: '15px', fontWeight: 600, color: viewMode === tab.id ? '#FFBFDE' : '#B4B8C7' }}>
+                  {tab.label}
+                </div>
+                <div style={{ fontSize: '12px', color: '#8B8F9E', marginTop: '2px' }}>
+                  {tab.description}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
       </section>
 
       {/* Modules Grid */}
       <section className="pb-32 px-8">
         <div className="max-w-[1400px] mx-auto">
+          {/* Section Title */}
+          {viewMode === 'core' && (
+            <div className="mb-10">
+              <h2 style={{ fontSize: '28px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
+                Core Workflow
+              </h2>
+              <p style={{ fontSize: '15px', color: '#8B8F9E' }}>
+                The recommended path. Each module is standalone, but strongest together.
+              </p>
+            </div>
+          )}
+          
+          {viewMode === 'addons' && (
+            <div className="mb-10">
+              <h2 style={{ fontSize: '28px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
+                Add-on Modules
+              </h2>
+              <p style={{ fontSize: '15px', color: '#8B8F9E' }}>
+                Optional extensions. Not part of the core flow, but equally valuable when you need them.
+              </p>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {modules.map((module) => (
+            {displayModules.map((module) => (
               <div
                 key={module.id}
                 className="relative group"
@@ -207,18 +301,37 @@ export function ModulesPage() {
                       </div>
                     </div>
 
-                    {/* Arrow Icon - Only for active modules */}
-                    {module.status === 'active' && (
+                    {/* Category Badge */}
+                    {module.category === 'core' && (
                       <div
-                        className="w-10 h-10 rounded-lg flex items-center justify-center group-hover:translate-x-1 group-hover:translate-y-[-2px] transition-transform"
+                        className="px-2.5 py-1 rounded-lg"
                         style={{
-                          background: `linear-gradient(135deg, ${module.accent}15, ${module.accent}08)`,
-                          border: `1px solid ${module.accent}20`
+                          background: 'rgba(255, 191, 222, 0.12)',
+                          border: '1px solid rgba(255, 191, 222, 0.2)',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          color: '#FFBFDE',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em'
                         }}
                       >
-                        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                          <path d="M3 8h10M8 3l5 5-5 5" stroke={module.accent} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
+                        Core
+                      </div>
+                    )}
+                    {module.category === 'addon' && (
+                      <div
+                        className="px-2.5 py-1 rounded-lg"
+                        style={{
+                          background: 'rgba(231, 198, 243, 0.12)',
+                          border: '1px solid rgba(231, 198, 243, 0.2)',
+                          fontSize: '10px',
+                          fontWeight: 600,
+                          color: '#E7C6F3',
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.08em'
+                        }}
+                      >
+                        Add-on
                       </div>
                     )}
                   </div>
@@ -350,7 +463,7 @@ export function ModulesPage() {
                 letterSpacing: '-0.02em'
               }}
             >
-              Start with Content OS
+              Start with the Core
             </h2>
             <p
               style={{
@@ -360,21 +473,21 @@ export function ModulesPage() {
                 margin: '0 auto 32px'
               }}
             >
-              Begin your creator journey with structured content generation. More modules launching soon.
+              Begin with Brand OS, then build your content system. More modules launching soon.
             </p>
             <Link
-              to="/app/content-os/generate"
+              to="/app/brand-os/setup"
               className="inline-flex items-center gap-2 px-8 py-4 rounded-[12px] transition-all hover:opacity-90"
               style={{
-                background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
+                background: 'linear-gradient(135deg, #E7C6F3 0%, #DABFFF 100%)',
                 color: '#0E0F14',
                 fontSize: '16px',
                 fontWeight: 600,
-                boxShadow: '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+                boxShadow: '0 12px 32px rgba(231, 198, 243, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
                 textDecoration: 'none'
               }}
             >
-              Launch Content OS
+              Launch Brand OS
               <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
                 <path d="M3 8h10M8 3l5 5-5 5" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>

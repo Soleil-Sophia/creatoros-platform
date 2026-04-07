@@ -1,5 +1,5 @@
 export function WhatYouCanCreate() {
-  const outputs = [
+  const createOutputs = [
     {
       title: 'Hooks',
       description: 'Attention-grabbing opening lines tailored to your content and audience.',
@@ -31,7 +31,10 @@ export function WhatYouCanCreate() {
         </svg>
       ),
       accent: '#DABFFF'
-    },
+    }
+  ];
+
+  const systemizeOutputs = [
     {
       title: 'Content Plans',
       description: 'Strategic content calendars built around your offers, themes, and goals.',
@@ -85,7 +88,7 @@ export function WhatYouCanCreate() {
               letterSpacing: '-0.01em'
             }}
           >
-            What you can create
+            Reusable outputs, not one-off text
           </h2>
           <p 
             className="max-w-2xl mx-auto"
@@ -97,64 +100,174 @@ export function WhatYouCanCreate() {
           >
             Content OS produces structured, reusable outputs that fit directly into your creative workflow.
           </p>
+          
+          {/* Proof Layer */}
+          <div className="flex flex-wrap items-center justify-center gap-6 mt-8">
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#FFBFDE' }}></div>
+              <span style={{ fontSize: '14px', color: '#B4B8C7' }}>1 input → multiple asset types</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#E7C6F3' }}></div>
+              <span style={{ fontSize: '14px', color: '#B4B8C7' }}>Saved to your library</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#DABFFF' }}></div>
+              <span style={{ fontSize: '14px', color: '#B4B8C7' }}>Searchable by campaign, platform, or voice</span>
+            </div>
+          </div>
         </div>
 
-        {/* Outputs Grid - Balanced 5-card layout */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          {outputs.map((output, idx) => (
-            <div 
-              key={idx}
-              className="relative rounded-[16px] p-8 group hover:scale-[1.02] transition-transform"
+        {/* CREATE Group */}
+        <div className="max-w-6xl mx-auto mb-12">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="h-px flex-1" style={{ background: 'rgba(255, 191, 222, 0.15)' }}></div>
+            <span 
+              className="tracking-[0.12em] uppercase px-4 py-1.5 rounded-[6px]" 
               style={{ 
-                background: '#1F2230',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
+                fontSize: '11px', 
+                fontWeight: 600,
+                color: '#FFBFDE',
+                background: 'rgba(255, 191, 222, 0.1)',
+                border: '1px solid rgba(255, 191, 222, 0.2)'
               }}
             >
-              {/* Glow effect on hover */}
+              Create
+            </span>
+            <div className="h-px flex-1" style={{ background: 'rgba(255, 191, 222, 0.15)' }}></div>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {createOutputs.map((output, idx) => (
               <div 
-                className="absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity"
+                key={idx}
+                className="relative rounded-[16px] p-8 group hover:scale-[1.02] transition-transform"
                 style={{ 
-                  background: `radial-gradient(circle at 50% 0%, ${output.accent}1A 0%, transparent 60%)`,
+                  background: '#1F2230',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
                 }}
-              ></div>
-
-              <div className="relative space-y-5">
-                {/* Icon */}
+              >
+                {/* Glow effect on hover */}
                 <div 
-                  className="w-14 h-14 rounded-[12px] flex items-center justify-center"
+                  className="absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity"
                   style={{ 
-                    background: `${output.accent}26`,
-                    border: `1px solid ${output.accent}4D`,
-                    color: output.accent
+                    background: `radial-gradient(circle at 50% 0%, ${output.accent}1A 0%, transparent 60%)`,
                   }}
-                >
-                  {output.icon}
-                </div>
+                ></div>
 
-                {/* Content */}
-                <div className="space-y-3">
-                  <h3 
+                <div className="relative space-y-5">
+                  {/* Icon */}
+                  <div 
+                    className="w-14 h-14 rounded-[12px] flex items-center justify-center"
                     style={{ 
-                      fontSize: '22px', 
-                      fontWeight: 600,
-                      color: '#F4F3F8'
+                      background: `${output.accent}26`,
+                      border: `1px solid ${output.accent}4D`,
+                      color: output.accent
                     }}
                   >
-                    {output.title}
-                  </h3>
-                  <p 
-                    style={{ 
-                      fontSize: '15px', 
-                      lineHeight: 1.7,
-                      color: '#B4B8C7'
-                    }}
-                  >
-                    {output.description}
-                  </p>
+                    {output.icon}
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-3">
+                    <h3 
+                      style={{ 
+                        fontSize: '22px', 
+                        fontWeight: 600,
+                        color: '#F4F3F8'
+                      }}
+                    >
+                      {output.title}
+                    </h3>
+                    <p 
+                      style={{ 
+                        fontSize: '15px', 
+                        lineHeight: 1.7,
+                        color: '#B4B8C7'
+                      }}
+                    >
+                      {output.description}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
+        </div>
+
+        {/* SYSTEMIZE Group */}
+        <div className="max-w-6xl mx-auto">
+          <div className="flex items-center gap-3 mb-8">
+            <div className="h-px flex-1" style={{ background: 'rgba(218, 191, 255, 0.15)' }}></div>
+            <span 
+              className="tracking-[0.12em] uppercase px-4 py-1.5 rounded-[6px]" 
+              style={{ 
+                fontSize: '11px', 
+                fontWeight: 600,
+                color: '#DABFFF',
+                background: 'rgba(218, 191, 255, 0.1)',
+                border: '1px solid rgba(218, 191, 255, 0.2)'
+              }}
+            >
+              Systemize
+            </span>
+            <div className="h-px flex-1" style={{ background: 'rgba(218, 191, 255, 0.15)' }}></div>
+          </div>
+          <div className="grid md:grid-cols-2 gap-8">
+            {systemizeOutputs.map((output, idx) => (
+              <div 
+                key={idx}
+                className="relative rounded-[16px] p-8 group hover:scale-[1.02] transition-transform"
+                style={{ 
+                  background: '#1F2230',
+                  border: '1px solid rgba(255, 255, 255, 0.06)',
+                }}
+              >
+                {/* Glow effect on hover */}
+                <div 
+                  className="absolute inset-0 rounded-[16px] opacity-0 group-hover:opacity-100 transition-opacity"
+                  style={{ 
+                    background: `radial-gradient(circle at 50% 0%, ${output.accent}1A 0%, transparent 60%)`,
+                  }}
+                ></div>
+
+                <div className="relative space-y-5">
+                  {/* Icon */}
+                  <div 
+                    className="w-14 h-14 rounded-[12px] flex items-center justify-center"
+                    style={{ 
+                      background: `${output.accent}26`,
+                      border: `1px solid ${output.accent}4D`,
+                      color: output.accent
+                    }}
+                  >
+                    {output.icon}
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-3">
+                    <h3 
+                      style={{ 
+                        fontSize: '22px', 
+                        fontWeight: 600,
+                        color: '#F4F3F8'
+                      }}
+                    >
+                      {output.title}
+                    </h3>
+                    <p 
+                      style={{ 
+                        fontSize: '15px', 
+                        lineHeight: 1.7,
+                        color: '#B4B8C7'
+                      }}
+                    >
+                      {output.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

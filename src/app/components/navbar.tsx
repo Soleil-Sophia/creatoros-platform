@@ -78,6 +78,25 @@ export function Navbar() {
             </Link>
             
             <Link 
+              to="/dashboard"
+              className="relative transition-colors hover:opacity-100 group" 
+              style={{ 
+                color: '#B4B8C7', 
+                fontSize: '15px', 
+                opacity: 0.85,
+                fontWeight: 500,
+                textDecoration: 'none'
+              }}
+            >
+              Dashboard
+              {/* Hover underline */}
+              <div 
+                className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
+                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
+              ></div>
+            </Link>
+            
+            <Link 
               to="/modules"
               className="relative transition-colors hover:opacity-100 group" 
               style={{ 
@@ -107,24 +126,6 @@ export function Navbar() {
               }}
             >
               Pricing
-              {/* Hover underline */}
-              <div 
-                className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"
-                style={{ background: 'linear-gradient(90deg, transparent, #FFBFDE, transparent)' }}
-              ></div>
-            </a>
-
-            <a 
-              href="#about"
-              className="relative transition-colors hover:opacity-100 group" 
-              style={{ 
-                color: '#B4B8C7', 
-                fontSize: '15px', 
-                opacity: 0.85,
-                fontWeight: 500
-              }}
-            >
-              About
               {/* Hover underline */}
               <div 
                 className="absolute -bottom-1 left-0 right-0 h-px opacity-0 group-hover:opacity-100 transition-opacity"

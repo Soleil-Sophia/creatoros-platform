@@ -1,3 +1,5 @@
+import { Link } from 'react-router';
+
 export function FinalCTA() {
   return (
     <section className="py-32 lg:py-40 relative overflow-hidden" style={{ background: '#171923' }}>
@@ -5,7 +7,7 @@ export function FinalCTA() {
       <div 
         className="absolute inset-0"
         style={{ 
-          background: 'radial-gradient(ellipse 55% 35% at 50% 50%, rgba(255, 191, 222, 0.04) 0%, transparent 55%)'
+          background: 'radial-gradient(ellipse 60% 40% at 50% 50%, rgba(218, 191, 255, 0.08) 0%, transparent 60%)'
         }}
       ></div>
 
@@ -21,16 +23,16 @@ export function FinalCTA() {
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
-              background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.5) 30%, rgba(218, 191, 255, 0.45) 50%, rgba(255, 191, 222, 0.5) 70%, transparent)',
-              boxShadow: 'none'
+              background: 'linear-gradient(90deg, transparent, #DABFFF 30%, #E7C6F3 50%, #DABFFF 70%, transparent)',
+              boxShadow: '0 0 20px rgba(218, 191, 255, 0.3)'
             }}
           ></div>
 
-          {/* Radial glow - minimal */}
+          {/* Radial glow */}
           <div 
-            className="absolute inset-0 opacity-10"
+            className="absolute inset-0 opacity-30"
             style={{ 
-              background: 'radial-gradient(ellipse 55% 45% at 50% 0%, rgba(255, 191, 222, 0.08) 0%, transparent 50%)'
+              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(218, 191, 255, 0.15) 0%, transparent 50%)'
             }}
           ></div>
 
@@ -61,7 +63,7 @@ export function FinalCTA() {
                 letterSpacing: '-0.02em'
               }}
             >
-              Ready to transform your content workflow?
+              Ready to build your creator workflow?
             </h2>
 
             {/* Subheadline */}
@@ -73,55 +75,63 @@ export function FinalCTA() {
                 color: '#B4B8C7'
               }}
             >
-              Join creators who are building structured systems instead of chasing random prompts. Content OS is live now.
+              Join creators who are building systematic workflows instead of managing fragmented tools. Start with Brand OS and Content OS — both live now.
             </p>
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <button 
+              <Link
+                to="/dashboard"
                 className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-2xl relative overflow-hidden" 
                 style={{ 
-                  background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)', 
+                  background: 'linear-gradient(135deg, #DABFFF 0%, #E7C6F3 100%)', 
                   color: '#0E0F14',
                   borderRadius: '12px',
                   fontSize: '17px',
                   fontWeight: 600,
-                  boxShadow: '0 6px 16px rgba(255, 191, 222, 0.18)'
+                  boxShadow: '0 16px 40px rgba(218, 191, 255, 0.4)',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
-                Start Creating Now
-              </button>
-              <button 
-                className="w-full sm:w-auto px-10 py-4 transition-all hover:opacity-90" 
+                View Dashboard
+              </Link>
+              <Link
+                to="/modules"
+                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 relative overflow-hidden" 
                 style={{ 
-                  background: 'transparent',
+                  background: '#1F2230',
                   border: '1px solid rgba(255, 255, 255, 0.1)',
                   color: '#F4F3F8',
                   borderRadius: '12px',
-                  fontSize: '16px',
-                  fontWeight: 500
+                  fontSize: '17px',
+                  fontWeight: 500,
+                  boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.05), 0 4px 16px rgba(0, 0, 0, 0.3)',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
-                Watch Demo
-              </button>
+                <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.08)' }}></div>
+                Explore Modules
+              </Link>
             </div>
 
             {/* Trust Indicator */}
             <div className="flex items-center justify-center gap-6 pt-10">
               <div className="flex items-center gap-2">
                 <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
-                  <path d="M8 1l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5z" fill="#FFBFDE"/>
+                  <circle cx="8" cy="8" r="6" stroke="#DABFFF" strokeWidth="1.5"/>
+                  <path d="M5 8l2 2 4-4" stroke="#DABFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span style={{ fontSize: '14px', color: '#B4B8C7' }}>No credit card required</span>
+                <span style={{ fontSize: '14px', color: '#B4B8C7' }}>2 modules live</span>
               </div>
               <div className="w-px h-4" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
               <div className="flex items-center gap-2">
                 <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
-                  <circle cx="8" cy="8" r="6" stroke="#DABFFF" strokeWidth="1.5"/>
-                  <path d="M5 8l2 2 4-4" stroke="#DABFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M8 1l2 5h5l-4 3 2 5-5-3-5 3 2-5-4-3h5l2-5z" fill="#E7C6F3"/>
                 </svg>
-                <span style={{ fontSize: '14px', color: '#B4B8C7' }}>Live now</span>
+                <span style={{ fontSize: '14px', color: '#B4B8C7' }}>Start with core workflow</span>
               </div>
             </div>
           </div>

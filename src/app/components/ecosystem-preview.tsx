@@ -1,32 +1,44 @@
 export function EcosystemPreview() {
   const modules = [
     {
+      name: 'Brand OS',
+      status: 'LIVE',
+      description: 'Define voice, identity, and messaging foundation for all content.',
+      accent: '#E7C6F3',
+      available: true,
+      route: '/modules/brand-os'
+    },
+    {
       name: 'Content OS',
       status: 'LIVE',
       description: 'Transform offers and expertise into structured content workflows.',
       accent: '#FFBFDE',
-      available: true
+      available: true,
+      route: '/modules/content-os'
     },
     {
-      name: 'Brand OS',
+      name: 'Launch OS',
       status: 'PLANNED',
-      description: 'Build and manage your visual and verbal brand identity system.',
+      description: 'Structure launches, coordinate rollouts, and orchestrate content phases.',
       accent: '#DABFFF',
-      available: false
+      available: false,
+      route: '/modules/launch-os'
     },
     {
-      name: 'Strategy OS',
+      name: 'Management OS',
       status: 'PLANNED',
-      description: 'Map your creator business model, offerings, and growth strategy.',
-      accent: '#E7C6F3',
-      available: false
+      description: 'Schedule content, manage publishing queue, and execute multi-platform posting.',
+      accent: '#C4B5FD',
+      available: false,
+      route: '/modules/management-os'
     },
     {
-      name: 'Campaign OS',
+      name: 'Analytics OS',
       status: 'PLANNED',
-      description: 'Plan, execute, and track multi-platform creator campaigns.',
-      accent: '#CFFFF9',
-      available: false
+      description: 'Track performance across platforms and content types.',
+      accent: '#B8A3FF',
+      available: false,
+      route: '/modules/analytics-os'
     }
   ];
 
@@ -61,15 +73,16 @@ export function EcosystemPreview() {
           >
             The CreatorOS Ecosystem
           </h2>
-          <p 
-            className="max-w-2xl mx-auto"
-            style={{ 
-              fontSize: '17px', 
-              lineHeight: 1.7,
+          <p
+            style={{
+              fontSize: '1.125rem',
+              lineHeight: '1.75rem',
+              maxWidth: '48rem',
+              margin: '0 auto 3rem',
               color: '#B4B8C7'
             }}
           >
-            Content OS is the first module. More creator infrastructure modules are coming — each designed to solve specific workflow challenges.
+            Brand OS is the first module. More creator infrastructure modules are coming — each designed to solve specific workflow challenges.
           </p>
         </div>
 
@@ -82,18 +95,17 @@ export function EcosystemPreview() {
               style={{ 
                 background: module.available ? '#1F2230' : '#171923',
                 border: module.available 
-                  ? `1px solid ${module.accent}33` 
-                  : '1px solid rgba(255, 255, 255, 0.05)',
+                  ? `2px solid ${module.accent}66` 
+                  : '1px solid rgba(255, 255, 255, 0.04)',
                 opacity: module.available ? 1 : 0.7
               }}
             >
-              {/* Live indicator glow - minimal */}
+              {/* Live indicator glow */}
               {module.available && (
                 <div 
-                  className="absolute inset-0 rounded-[16px]"
+                  className="absolute inset-0 rounded-[16px] opacity-20"
                   style={{ 
-                    opacity: 0.06,
-                    background: `radial-gradient(circle at 50% 0%, ${module.accent}1A 0%, transparent 40%)`
+                    background: `radial-gradient(circle at 50% 0%, ${module.accent}4D 0%, transparent 60%)`
                   }}
                 ></div>
               )}
@@ -164,7 +176,7 @@ export function EcosystemPreview() {
                       fontWeight: 600
                     }}
                   >
-                    Launch Module
+                    Launch Content OS
                   </button>
                 ) : (
                   <div className="mt-2 flex items-center gap-2">
@@ -178,6 +190,13 @@ export function EcosystemPreview() {
               </div>
             </div>
           ))}
+        </div>
+
+        {/* More modules planned note */}
+        <div className="text-center mt-12">
+          <p style={{ fontSize: '15px', color: '#B4B8C7' }}>
+            More modules planned across brand, research, and creator operations.
+          </p>
         </div>
       </div>
     </section>

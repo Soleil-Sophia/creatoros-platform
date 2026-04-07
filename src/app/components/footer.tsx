@@ -6,15 +6,15 @@ export function Footer() {
     },
     {
       title: 'Modules',
-      links: ['Content OS', 'Brand OS', 'Strategy OS', 'Campaign OS']
+      links: ['Brand OS', 'Content OS', 'Launch OS', 'Management OS', 'Analytics OS']
     },
     {
       title: 'Resources',
-      links: ['Documentation', 'Guides', 'Support', 'API']
+      links: ['Documentation', 'Support']
     },
     {
       title: 'Company',
-      links: ['About', 'Blog', 'Careers', 'Contact']
+      links: ['About', 'Contact']
     }
   ];
 
@@ -43,7 +43,7 @@ export function Footer() {
 
               {/* Description */}
               <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7', maxWidth: '280px' }}>
-                Modular infrastructure for professional creators. Built to solve real workflow challenges.
+                Modular systems for creators who need structure, reuse, and operational clarity.
               </p>
 
               {/* Social Links */}
