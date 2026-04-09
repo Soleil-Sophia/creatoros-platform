@@ -5,6 +5,7 @@ import { ModuleFeatureGrid } from './ModuleFeatureGrid';
 import { ModuleWorkflow } from './ModuleWorkflow';
 import { ModuleCTA } from './ModuleCTA';
 import type { CreatorOSModule } from '../../config/modules';
+import { getDisplayMeta } from '../../config/moduleDisplay';
 
 type FeatureItem = {
   title: string;
@@ -58,6 +59,8 @@ export function ModulePageLayout({
   cta,
   children,
 }: ModulePageLayoutProps) {
+  const { accent } = getDisplayMeta(module.id);
+
   return (
     <div className="min-h-screen" style={{ background: '#0E0F14' }}>
       <Navbar />
@@ -75,7 +78,7 @@ export function ModulePageLayout({
           sectionTitle={features.sectionTitle}
           sectionSubtitle={features.sectionSubtitle}
           items={features.items}
-          accent={module.accent}
+          accent={accent}
         />
       )}
 
@@ -84,7 +87,7 @@ export function ModulePageLayout({
           title={workflow.title}
           subtitle={workflow.subtitle}
           steps={workflow.steps}
-          accent={module.accent}
+          accent={accent}
         />
       )}
 
@@ -96,7 +99,7 @@ export function ModulePageLayout({
           subtitle={cta.subtitle}
           primaryAction={cta.primaryAction}
           secondaryAction={cta.secondaryAction}
-          accent={module.accent}
+          accent={accent}
         />
       )}
 

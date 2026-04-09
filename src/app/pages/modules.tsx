@@ -2,6 +2,7 @@ import { Link } from 'react-router';
 import { Navbar } from '../components/navbar';
 import { Footer } from '../components/footer';
 import { modules, coreModules, addonModules, type CreatorOSModule } from '../../config/modules';
+import { getDisplayMeta } from '../../config/moduleDisplay';
 import { useState } from 'react';
 
 type ViewMode = 'all' | 'core' | 'addons';
@@ -9,12 +10,12 @@ type ViewMode = 'all' | 'core' | 'addons';
 const STATUS_STYLES: Record<string, { label: string; bg: string; color: string; dot?: boolean }> = {
   active: { label: 'Active', bg: 'rgba(34, 197, 94, 0.08)', color: '#22c55e', dot: true },
   beta: { label: 'Beta', bg: 'rgba(251, 191, 36, 0.08)', color: '#fbbf24', dot: true },
-  'coming-soon': { label: 'Coming Soon', bg: 'rgba(255, 255, 255, 0.04)', color: '#8B8F9E' },
   planned: { label: 'Planned', bg: 'rgba(255, 255, 255, 0.04)', color: '#8B8F9E' },
 };
 
 function ModuleCard({ module }: { module: CreatorOSModule }) {
-  const status = STATUS_STYLES[module.status];
+  const { accent, number, tagline, features } = getDisplayMeta(module.id);
+  const status = STATUS_STYLES[module.status] ?? STATUS_STYLES.planned;
   const isAvailable = module.status === 'active' || module.status === 'beta';
 
   return (
@@ -28,8 +29,8 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
       }}
       onMouseEnter={(e) => {
         if (isAvailable) {
-          (e.currentTarget as HTMLElement).style.borderColor = `${module.accent}30`;
-          (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 40px ${module.accent}10`;
+          (e.currentTarget as HTMLElement).style.borderColor = `${accent}30`;
+          (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 40px ${accent}10`;
         }
       }}
       onMouseLeave={(e) => {
@@ -42,7 +43,7 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
       {isAvailable && (
         <div
           className="absolute top-0 left-0 right-0 h-px"
-          style={{ background: `linear-gradient(90deg, transparent, ${module.accent}60, transparent)` }}
+          style={{ background: `linear-gradient(90deg, transparent, ${accent}60, transparent)` }}
         />
       )}
 
@@ -53,19 +54,19 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
             <div
               className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
               style={{
-                background: isAvailable ? `${module.accent}14` : 'rgba(255,255,255,0.04)',
-                border: `1px solid ${isAvailable ? `${module.accent}25` : 'rgba(255,255,255,0.06)'}`,
+                background: isAvailable ? `${accent}14` : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${isAvailable ? `${accent}25` : 'rgba(255,255,255,0.06)'}`,
               }}
             >
-              <span style={{ fontSize: '13px', fontWeight: 700, color: isAvailable ? module.accent : '#8B8F9E' }}>
-                {module.number}
+              <span style={{ fontSize: '13px', fontWeight: 700, color: isAvailable ? accent : '#8B8F9E' }}>
+                {number}
               </span>
             </div>
             <div>
               <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8', lineHeight: 1.2, marginBottom: '2px' }}>
                 {module.name}
               </h3>
-              <p style={{ fontSize: '13px', color: '#8B8F9E' }}>{module.tagline}</p>
+              <p style={{ fontSize: '13px', color: '#8B8F9E' }}>{tagline}</p>
             </div>
           </div>
 
@@ -90,7 +91,7 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
         </p>
 
         <div className="flex flex-wrap gap-2 mb-6">
-          {module.features.map((f) => (
+          {features.map((f) => (
             <span
               key={f}
               className="px-2.5 py-1 rounded-md"
@@ -113,9 +114,9 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
                 to={module.routes.overview}
                 className="flex-1 py-2.5 rounded-[10px] text-center transition-all hover:opacity-90"
                 style={{
-                  background: `${module.accent}18`,
-                  border: `1px solid ${module.accent}30`,
-                  color: module.accent,
+                  background: `${accent}18`,
+                  border: `1px solid ${accent}30`,
+                  color: accent,
                   fontSize: '14px',
                   fontWeight: 600,
                   textDecoration: 'none',
@@ -128,12 +129,12 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
                   to={module.routes.app}
                   className="flex-1 py-2.5 rounded-[10px] text-center transition-all hover:opacity-90"
                   style={{
-                    background: `linear-gradient(135deg, ${module.accent} 0%, ${module.accent}CC 100%)`,
+                    background: `linear-gradient(135deg, ${accent} 0%, ${accent}CC 100%)`,
                     color: '#0E0F14',
                     fontSize: '14px',
                     fontWeight: 600,
                     textDecoration: 'none',
-                    boxShadow: `0 4px 16px ${module.accent}30`,
+                    boxShadow: `0 4px 16px ${accent}30`,
                   }}
                 >
                   Open App
@@ -151,7 +152,7 @@ function ModuleCard({ module }: { module: CreatorOSModule }) {
                 fontWeight: 500,
               }}
             >
-              {module.status === 'coming-soon' ? 'Coming Soon' : 'Planned'}
+              Planned
             </div>
           )}
         </div>

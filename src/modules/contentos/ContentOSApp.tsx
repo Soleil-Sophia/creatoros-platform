@@ -3,11 +3,13 @@ import { Link } from 'react-router';
 import { GenerateScreen } from '../../app/screens/generate';
 import { LibraryScreen } from '../../app/screens/library';
 import { getModule } from '../../config/modules';
+import { getDisplayMeta } from '../../config/moduleDisplay';
 import { contentOSData } from '../../data/contentos';
 
 type Tab = 'overview' | 'generate' | 'library';
 
 const module = getModule('contentos')!;
+const { accent } = getDisplayMeta('contentos');
 
 function QuickActionCard({
   title,
@@ -99,7 +101,7 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
                 style={{
                   fontSize: '22px',
                   fontWeight: 700,
-                  color: module.accent,
+                  color: accent,
                   marginBottom: '4px',
                   letterSpacing: '-0.01em',
                 }}
@@ -129,7 +131,7 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
             <QuickActionCard
               title="Generate Content"
               description="Create hooks, scripts, captions, and plans from your offers and ideas."
-              accent={module.accent}
+              accent={accent}
               onClick={() => onTabChange('generate')}
             />
             <QuickActionCard
@@ -168,11 +170,11 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
                 <div
                   className="w-9 h-9 rounded-lg flex items-center justify-center mb-4"
                   style={{
-                    background: `${module.accent}14`,
-                    border: `1px solid ${module.accent}20`,
+                    background: `${accent}14`,
+                    border: `1px solid ${accent}20`,
                   }}
                 >
-                  <span style={{ fontSize: '13px', fontWeight: 700, color: module.accent }}>
+                  <span style={{ fontSize: '13px', fontWeight: 700, color: accent }}>
                     {step.number}
                   </span>
                 </div>
@@ -238,8 +240,8 @@ export function ContentOSApp() {
                 <div
                   className="w-2 h-2 rounded-full"
                   style={{
-                    background: module.accent,
-                    boxShadow: `0 0 6px ${module.accent}80`,
+                    background: accent,
+                    boxShadow: `0 0 6px ${accent}80`,
                   }}
                 />
                 <span style={{ fontSize: '14px', fontWeight: 600, color: '#F4F3F8' }}>
@@ -248,11 +250,11 @@ export function ContentOSApp() {
                 <div
                   className="px-2 py-0.5 rounded-md"
                   style={{
-                    background: `${module.accent}14`,
-                    border: `1px solid ${module.accent}25`,
+                    background: `${accent}14`,
+                    border: `1px solid ${accent}25`,
                     fontSize: '11px',
                     fontWeight: 600,
-                    color: module.accent,
+                    color: accent,
                   }}
                 >
                   Module 02

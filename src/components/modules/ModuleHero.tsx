@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import type { CreatorOSModule } from '../../config/modules';
+import { getDisplayMeta } from '../../config/moduleDisplay';
 
 type ActionButton = {
   label: string;
@@ -17,7 +18,6 @@ type ModuleHeroProps = {
 const STATUS_LABELS: Record<string, string> = {
   active: 'Active',
   beta: 'Beta',
-  'coming-soon': 'Coming Soon',
   planned: 'Planned',
 };
 
@@ -28,17 +28,17 @@ export function ModuleHero({
   primaryAction,
   secondaryAction,
 }: ModuleHeroProps) {
+  const { accent, number, tagline } = getDisplayMeta(module.id);
   const displayTitle = title ?? module.name;
   const displaySubtitle = subtitle ?? module.description;
   const isActive = module.status === 'active' || module.status === 'beta';
 
   return (
     <section className="relative pt-32 pb-20 overflow-hidden" style={{ background: '#0E0F14' }}>
-      {/* Background glow */}
       <div
         className="absolute inset-0 pointer-events-none"
         style={{
-          background: `radial-gradient(ellipse 60% 50% at 50% -10%, ${module.accent}12 0%, transparent 70%)`,
+          background: `radial-gradient(ellipse 60% 50% at 50% -10%, ${accent}12 0%, transparent 70%)`,
         }}
       />
 
@@ -47,21 +47,18 @@ export function ModuleHero({
         <div className="flex items-center gap-3 mb-6 flex-wrap">
           <div
             className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
-            style={{
-              background: `${module.accent}14`,
-              border: `1px solid ${module.accent}30`,
-            }}
+            style={{ background: `${accent}14`, border: `1px solid ${accent}30` }}
           >
             <span
               style={{
                 fontSize: '11px',
                 fontWeight: 700,
-                color: module.accent,
+                color: accent,
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
               }}
             >
-              Module {module.number}
+              Module {number}
             </span>
           </div>
 
@@ -87,11 +84,11 @@ export function ModuleHero({
                 letterSpacing: '0.08em',
               }}
             >
-              {STATUS_LABELS[module.status]}
+              {STATUS_LABELS[module.status] ?? module.status}
             </span>
           </div>
 
-          <span style={{ fontSize: '14px', color: '#8B8F9E' }}>{module.tagline}</span>
+          {tagline && <span style={{ fontSize: '14px', color: '#8B8F9E' }}>{tagline}</span>}
         </div>
 
         {/* Title */}
@@ -129,11 +126,11 @@ export function ModuleHero({
                 to={primaryAction.href}
                 className="inline-flex items-center gap-2 px-8 py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden"
                 style={{
-                  background: `linear-gradient(135deg, ${module.accent} 0%, ${module.accent}CC 100%)`,
+                  background: `linear-gradient(135deg, ${accent} 0%, ${accent}CC 100%)`,
                   color: '#0E0F14',
                   fontSize: '16px',
                   fontWeight: 600,
-                  boxShadow: `0 12px 32px ${module.accent}40, inset 0 1px 0 rgba(255, 255, 255, 0.3)`,
+                  boxShadow: `0 12px 32px ${accent}40, inset 0 1px 0 rgba(255, 255, 255, 0.3)`,
                   textDecoration: 'none',
                 }}
               >

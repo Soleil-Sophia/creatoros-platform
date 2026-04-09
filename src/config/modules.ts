@@ -1,19 +1,11 @@
-export type ModuleStatus = 'active' | 'beta' | 'coming-soon' | 'planned';
-export type ModuleCategory = 'core' | 'addon';
-
 export type CreatorOSModule = {
   id: string;
-  number: string;
   name: string;
-  shortName: string;
-  tagline: string;
-  description: string;
+  status: 'active' | 'planned' | 'beta';
+  category: 'core' | 'addon';
   shortDescription: string;
-  status: ModuleStatus;
-  category: ModuleCategory;
+  description: string;
   isCore: boolean;
-  accent: string;
-  features: string[];
   routes: {
     overview: string;
     app?: string;
@@ -22,129 +14,94 @@ export type CreatorOSModule = {
 
 export const modules: CreatorOSModule[] = [
   {
-    id: 'brandos',
-    number: '01',
-    name: 'Brand OS',
-    shortName: 'BrandOS',
-    tagline: 'Voice & Identity Foundation',
-    shortDescription: 'Define brand foundations, positioning and messaging.',
-    description:
-      'The strategic foundation of your workflow — defines identity, voice & messaging before content, launches, and execution. Makes your brand machine-readable and workflow-ready.',
+    id: 'contentos',
+    name: 'ContentOS',
     status: 'active',
     category: 'core',
     isCore: true,
-    accent: '#E7C6F3',
-    features: ['Voice Parameters', 'Tone Configuration', 'Messaging Framework', 'Identity Lock'],
-    routes: {
-      overview: '/modules/brandos',
-      app: '/modules/brandos/app',
-    },
-  },
-  {
-    id: 'contentos',
-    number: '02',
-    name: 'Content OS',
-    shortName: 'ContentOS',
-    tagline: 'Structured Content Generation',
     shortDescription: 'Plan, generate and manage content workflows.',
     description:
       'Turn your offers, ideas, and expertise into structured content assets — hooks, scripts, captions, and brand voice — ready to deploy across platforms.',
-    status: 'active',
-    category: 'core',
-    isCore: true,
-    accent: '#FFBFDE',
-    features: ['Hooks & Scripts', 'Social Captions', 'Brand Voice System', 'Asset Library'],
     routes: {
       overview: '/modules/contentos',
       app: '/modules/contentos/app',
     },
   },
   {
+    id: 'brandos',
+    name: 'BrandOS',
+    status: 'active',
+    category: 'core',
+    isCore: true,
+    shortDescription: 'Define brand foundations, positioning and messaging.',
+    description:
+      'The strategic foundation of your workflow — defines identity, voice and messaging before content, launches, and execution.',
+    routes: {
+      overview: '/modules/brandos',
+      app: '/modules/brandos/app',
+    },
+  },
+  {
     id: 'launchos',
-    number: '03',
-    name: 'Launch OS',
-    shortName: 'LaunchOS',
-    tagline: 'Rollout & Coordination',
+    name: 'LaunchOS',
+    status: 'planned',
+    category: 'core',
+    isCore: true,
     shortDescription: 'Structure launches, coordinate rollouts, and orchestrate content phases.',
     description:
       'Structure launches, coordinate rollouts, and orchestrate focused content phases across platforms with clear timing and goals.',
-    status: 'coming-soon',
-    category: 'core',
-    isCore: true,
-    accent: '#DABFFF',
-    features: ['Launch Planning', 'Rollout Coordination', 'Phase Orchestration', 'Goal Tracking'],
     routes: {
       overview: '/modules/launchos',
     },
   },
   {
     id: 'managementos',
-    number: '04',
-    name: 'Management OS',
-    shortName: 'ManagementOS',
-    tagline: 'Scheduling & Execution',
+    name: 'ManagementOS',
+    status: 'planned',
+    category: 'core',
+    isCore: true,
     shortDescription: 'Schedule content, manage publishing queue, and execute multi-platform posting.',
     description:
       'Schedule content, manage publishing queue, and execute multi-platform posting. The operational layer between strategy and measurement.',
-    status: 'coming-soon',
-    category: 'core',
-    isCore: true,
-    accent: '#C4B5FD',
-    features: ['Content Calendar', 'Publishing Queue', 'Multi-Platform Scheduling', 'Post Execution'],
     routes: {
       overview: '/modules/managementos',
     },
   },
   {
     id: 'analyticsos',
-    number: '05',
-    name: 'Analytics OS',
-    shortName: 'AnalyticsOS',
-    tagline: 'Performance Intelligence',
+    name: 'AnalyticsOS',
+    status: 'planned',
+    category: 'core',
+    isCore: true,
     shortDescription: 'Track performance across platforms and content types.',
     description:
       'Track content performance across platforms, identify top performers, and get insights on what resonates with your audience.',
-    status: 'coming-soon',
-    category: 'core',
-    isCore: true,
-    accent: '#B8A3FF',
-    features: ['Cross-Platform Analytics', 'Performance Patterns', 'Engagement Insights', 'ROI Tracking'],
     routes: {
       overview: '/modules/analyticsos',
     },
   },
   {
     id: 'communityos',
-    number: '06',
-    name: 'Community OS',
-    shortName: 'CommunityOS',
-    tagline: 'Audience Relationship Management',
-    shortDescription: 'Manage interactions, track relationships, and build community.',
-    description:
-      'Manage community interactions, track conversations, and build deeper relationships with your audience.',
+    name: 'CommunityOS',
     status: 'planned',
     category: 'addon',
     isCore: false,
-    accent: '#E7C6F3',
-    features: ['Interaction Tracking', 'Response Automation', 'Community Insights', 'Relationship Scoring'],
+    shortDescription: 'Manage interactions, track relationships, and build community.',
+    description:
+      'Manage community interactions, track conversations, and build deeper relationships with your audience.',
     routes: {
       overview: '/modules/communityos',
     },
   },
   {
     id: 'researchos',
-    number: '07',
-    name: 'Research OS',
-    shortName: 'ResearchOS',
-    tagline: 'Audience & Market Intelligence',
-    shortDescription: 'Deep audience analysis, competitor research, and trend monitoring.',
-    description:
-      'Deep audience analysis, competitor research, and trend monitoring in one place.',
+    name: 'ResearchOS',
     status: 'planned',
     category: 'addon',
     isCore: false,
-    accent: '#DABFFF',
-    features: ['Audience Analysis', 'Competitor Research', 'Trend Monitoring', 'Insight Extraction'],
+    shortDescription: 'Deep audience analysis, competitor research, and trend monitoring.',
+    description:
+      'Deep audience analysis, competitor research, and trend monitoring in one place.',
     routes: {
       overview: '/modules/researchos',
     },
