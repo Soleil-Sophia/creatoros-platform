@@ -1,0 +1,278 @@
+Top. Dann bekommst du jetzt die nächste Ebene wirklich operativ:
+nicht nur den großen Refactor-Prompt, sondern kleine Replit-Arbeitspakete, damit das Ding nicht ausfranst. 🔥
+
+Replit Execution Pack
+
+Ziel
+
+CreatorOS = Plattform
+ContentOS = erstes echtes Modul
+
+⸻
+
+Reihenfolge für Replit AI / Agent
+
+Nicht alles auf einmal.
+
+Mach es in 4 kleinen Sprints.
+
+⸻
+
+Sprint 1 — Modul-Registry + Datenstruktur
+
+Ziel
+
+Die Plattform bekommt eine saubere Datenbasis.
+
+Task 1
+
+Erstelle src/config/modules.ts
+
+Prompt für Replit:
+
+Create a typed module registry file at `src/config/modules.ts`.
+
+Requirements:
+- export a `CreatorOSModule` type
+- include fields:
+  - id
+  - name
+  - status ("active" | "planned" | "beta")
+  - category ("core" | "addon")
+  - shortDescription
+  - description
+  - isCore
+  - routes { overview: string; app?: string }
+- export a `modules` array
+- add entries for:
+  - ContentOS (active, core, with overview + app route)
+  - BrandOS (planned, core)
+  - LaunchOS (planned, core)
+  - ManagementOS (planned, core)
+  - AnalyticsOS (planned, core)
+  - CommunityOS (planned, addon)
+  - ResearchOS (planned, addon)
+
+Keep it clean, typed, minimal, and scalable.
+
+
+⸻
+
+Task 2
+
+Erstelle src/data/contentos.ts
+
+Prompt:
+
+Create `src/data/contentos.ts` for ContentOS-specific mock data.
+
+Include:
+- hero { title, subtitle }
+- features array
+- workflow array
+- useCases array
+- appSections array for:
+  - Overview
+  - Generate
+  - Library
+
+Use clean placeholder copy aligned with a premium creator platform.
+Do not hardcode visual components here. Data only.
+
+
+⸻
+
+Sprint 2 — Shared Module Components
+
+Ziel
+
+Alle Module sollen auf derselben UI-Logik aufbauen.
+
+Task 3
+
+Baue gemeinsame Komponenten unter src/components/modules/
+
+Prompt:
+
+Create reusable shared module UI components in `src/components/modules/`:
+
+1. ModuleHero.tsx
+2. ModuleFeatureGrid.tsx
+3. ModuleWorkflow.tsx
+4. ModuleCTA.tsx
+5. ModulePageLayout.tsx
+
+Requirements:
+- TypeScript
+- clean props
+- no backend logic
+- consistent with current design system
+- modular and reusable for future CreatorOS modules
+
+ModulePageLayout should compose the shared components and accept children for module-specific sections.
+Keep the implementation simple and scalable.
+
+
+⸻
+
+Sprint 3 — Modules Overview Page
+
+Ziel
+
+Die Plattformseite /modules soll aus der Registry leben.
+
+Task 4
+
+Refactor src/pages/Modules.tsx
+
+Prompt:
+
+Refactor `src/pages/Modules.tsx` so the module overview page renders entirely from `src/config/modules.ts`.
+
+Requirements:
+- map over the module registry
+- render a card for each module
+- show:
+  - name
+  - shortDescription
+  - status
+  - category
+- link active/planned modules to their overview route if available
+- keep the page visually aligned with the existing CreatorOS design language
+
+Do not hardcode module cards anymore.
+
+
+⸻
+
+Sprint 4 — ContentOS als echtes Modul
+
+Ziel
+
+ContentOS wird das erste Referenzmodul.
+
+Task 5
+
+Baue src/modules/contentos/ContentOSPage.tsx
+
+Prompt:
+
+Create `src/modules/contentos/ContentOSPage.tsx` as the first proper CreatorOS module detail page.
+
+Requirements:
+- use shared components from `src/components/modules/`
+- use data from `src/data/contentos.ts`
+- include:
+  - hero
+  - feature section
+  - workflow section
+  - use cases section
+  - CTA linking to `/modules/contentos/app`
+- make ContentOS feel like a real module inside the CreatorOS platform
+- keep it polished but not overbuilt
+
+
+⸻
+
+Task 6
+
+Baue src/modules/contentos/ContentOSApp.tsx
+
+Prompt:
+
+Create `src/modules/contentos/ContentOSApp.tsx`.
+
+Requirements:
+- this is the app entry screen for the ContentOS module
+- include a clean internal structure for:
+  - Overview
+  - Generate
+  - Library
+- use simple local state or tabs
+- no backend logic
+- use mock data only
+- keep the UI consistent with the current premium design system
+- make it feel like the first real working module area inside CreatorOS
+
+
+⸻
+
+Task 7
+
+Routing einbauen
+
+Prompt:
+
+Wire the following routes into the app router:
+
+- /modules
+- /modules/contentos
+- /modules/contentos/app
+
+Use the existing routing setup and keep the implementation minimal and clean.
+Do not introduce unnecessary architecture changes beyond route wiring.
+
+
+⸻
+
+Was du nach jedem Sprint prüfen solltest
+
+Nach Sprint 1
+	•	Gibt es eine saubere Registry?
+	•	Ist ContentOS-Content aus Components rausgelöst?
+
+Nach Sprint 2
+	•	Sind die Komponenten wirklich wiederverwendbar?
+	•	Oder wurde nur Copy in hübsche Boxen gepackt?
+
+Nach Sprint 3
+	•	Kommt /modules wirklich aus modules.ts?
+	•	Oder ist noch irgendwo alter Hardcode drin?
+
+Nach Sprint 4
+	•	Fühlt sich ContentOS wie ein Modul in einer Plattform an?
+	•	Oder immer noch wie eine einzelne Spezialseite?
+
+⸻
+
+Was ich an deiner Stelle in Replit schreiben würde
+
+Nicht einen Mega-Prompt.
+Sondern nacheinander:
+
+Reihenfolge
+	1.	Task 1
+	2.	Task 2
+	3.	Task 3
+	4.	Task 4
+	5.	Task 5
+	6.	Task 6
+	7.	Task 7
+
+Das ist viel kontrollierbarer.
+
+⸻
+
+Wenn Replit anfängt zu halluzinieren
+
+Dann sag das hier:
+
+Do not redesign the product concept.
+Do not introduce backend, billing, auth, or database logic.
+Do not treat ContentOS as a separate product.
+CreatorOS is the platform. ContentOS is the first module.
+Stay within the existing design system and refactor only what is needed for modular architecture.
+
+
+⸻
+
+Meine ehrliche Empfehlung
+
+Wenn du gleich den ersten Replit-Output bekommst, schick mir am besten:
+	•	die neue modules.ts
+	•	die neue Modules.tsx
+	•	und ContentOSPage.tsx
+
+Das sind die drei Dateien, an denen man sofort sieht, ob die Richtung stimmt oder ob der Agent wieder kreativ Unsinn baut 😌
+
+Wenn du willst, mache ich dir jetzt noch eine Soll-Struktur für modules.ts und ContentOSPage.tsx, damit du sofort erkennst, ob Replit es richtig gebaut hat.
