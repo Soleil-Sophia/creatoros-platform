@@ -1,496 +1,335 @@
+import { Link } from 'react-router';
 import { Navbar } from '../components/navbar';
 import { Footer } from '../components/footer';
-import { Link } from 'react-router';
+import { modules, coreModules, addonModules, type CreatorOSModule } from '../../config/modules';
 import { useState } from 'react';
 
-const coreModules = [
-  {
-    id: '01',
-    name: 'Brand OS',
-    tagline: 'Voice & Identity Foundation',
-    description: 'The strategic foundation of your workflow — defines identity, voice & messaging before content, launches, and execution. Makes your brand machine-readable and workflow-ready.',
-    status: 'active',
-    accent: '#E7C6F3',
-    route: '/modules/brand-os',
-    appRoute: '/app/brand-os/setup',
-    features: ['Voice Parameters', 'Tone Configuration', 'Messaging Framework', 'Identity Lock'],
-    category: 'core'
-  },
-  {
-    id: '02',
-    name: 'Content OS',
-    tagline: 'Structured Content Generation',
-    description: 'Turn your offers, ideas, and expertise into structured content assets—hooks, scripts, captions, and brand voice—ready to deploy across platforms.',
-    status: 'active',
-    accent: '#FFBFDE',
-    route: '/modules/content-os',
-    appRoute: '/app/content-os/generate',
-    features: ['Hooks & Scripts', 'Social Captions', 'Brand Voice System', 'Asset Library'],
-    category: 'core'
-  },
-  {
-    id: '03',
-    name: 'Launch OS',
-    tagline: 'Rollout & Coordination',
-    description: 'Structure launches, coordinate rollouts, and orchestrate focused content phases across platforms with clear timing and goals.',
-    status: 'coming-soon',
-    accent: '#DABFFF',
-    route: '/modules/launch-os',
-    appRoute: null,
-    features: ['Launch Planning', 'Rollout Coordination', 'Phase Orchestration', 'Goal Tracking'],
-    visual: 'launch-flow',
-    category: 'core'
-  },
-  {
-    id: '04',
-    name: 'Management OS',
-    tagline: 'Scheduling & Execution',
-    description: 'Schedule content, manage publishing queue, and execute multi-platform posting. The operational layer between strategy and measurement.',
-    status: 'coming-soon',
-    accent: '#C4B5FD',
-    route: '/modules/management-os',
-    appRoute: null,
-    features: ['Content Calendar', 'Publishing Queue', 'Multi-Platform Scheduling', 'Post Execution'],
-    visual: 'management-flow',
-    category: 'core'
-  },
-  {
-    id: '05',
-    name: 'Analytics OS',
-    tagline: 'Performance Intelligence',
-    description: 'Track content performance across platforms, identify top performers, and get AI-powered insights on what resonates with your audience.',
-    status: 'coming-soon',
-    accent: '#B8A3FF',
-    route: '/modules/analytics-os',
-    appRoute: null,
-    features: ['Cross-Platform Analytics', 'Performance Patterns', 'Engagement Insights', 'ROI Tracking'],
-    category: 'core'
-  }
-];
+type ViewMode = 'all' | 'core' | 'addons';
 
-const addOnModules = [
-  {
-    id: '06',
-    name: 'Community OS',
-    tagline: 'Audience Relationship Management',
-    description: 'Manage your community interactions, track conversations, automate responses, and build deeper relationships with your audience.',
-    status: 'planned',
-    accent: '#E7C6F3',
-    route: '/modules/community-os',
-    appRoute: null,
-    features: ['Interaction Tracking', 'Response Automation', 'Community Insights', 'Relationship Scoring'],
-    category: 'addon'
-  },
-  {
-    id: '07',
-    name: 'Research OS',
-    tagline: 'Audience & Market Intelligence',
-    description: 'Deep dive into your audience, competitors, and market trends. Extract insights, identify opportunities, and validate ideas with structured research.',
-    status: 'planned',
-    accent: '#DABFFF',
-    route: '/modules/research-os',
-    appRoute: null,
-    features: ['Audience Analysis', 'Competitor Research', 'Trend Monitoring', 'Insight Extraction'],
-    category: 'addon'
-  }
-];
+const STATUS_STYLES: Record<string, { label: string; bg: string; color: string; dot?: boolean }> = {
+  active: { label: 'Active', bg: 'rgba(34, 197, 94, 0.08)', color: '#22c55e', dot: true },
+  beta: { label: 'Beta', bg: 'rgba(251, 191, 36, 0.08)', color: '#fbbf24', dot: true },
+  'coming-soon': { label: 'Coming Soon', bg: 'rgba(255, 255, 255, 0.04)', color: '#8B8F9E' },
+  planned: { label: 'Planned', bg: 'rgba(255, 255, 255, 0.04)', color: '#8B8F9E' },
+};
 
-const allModules = [...coreModules, ...addOnModules];
+function ModuleCard({ module }: { module: CreatorOSModule }) {
+  const status = STATUS_STYLES[module.status];
+  const isAvailable = module.status === 'active' || module.status === 'beta';
 
-type ViewMode = 'core' | 'addons' | 'all';
+  return (
+    <div
+      className="relative rounded-[20px] overflow-hidden"
+      style={{
+        background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+        border: `1px solid ${isAvailable ? 'rgba(255,255,255,0.1)' : 'rgba(255,255,255,0.05)'}`,
+        opacity: isAvailable ? 1 : 0.65,
+        transition: 'border-color 0.2s, box-shadow 0.2s',
+      }}
+      onMouseEnter={(e) => {
+        if (isAvailable) {
+          (e.currentTarget as HTMLElement).style.borderColor = `${module.accent}30`;
+          (e.currentTarget as HTMLElement).style.boxShadow = `0 12px 40px ${module.accent}10`;
+        }
+      }}
+      onMouseLeave={(e) => {
+        (e.currentTarget as HTMLElement).style.borderColor = isAvailable
+          ? 'rgba(255,255,255,0.1)'
+          : 'rgba(255,255,255,0.05)';
+        (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+      }}
+    >
+      {isAvailable && (
+        <div
+          className="absolute top-0 left-0 right-0 h-px"
+          style={{ background: `linear-gradient(90deg, transparent, ${module.accent}60, transparent)` }}
+        />
+      )}
+
+      <div className="p-6 lg:p-7">
+        {/* Header */}
+        <div className="flex items-start justify-between gap-3 mb-5">
+          <div className="flex items-center gap-3">
+            <div
+              className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+              style={{
+                background: isAvailable ? `${module.accent}14` : 'rgba(255,255,255,0.04)',
+                border: `1px solid ${isAvailable ? `${module.accent}25` : 'rgba(255,255,255,0.06)'}`,
+              }}
+            >
+              <span style={{ fontSize: '13px', fontWeight: 700, color: isAvailable ? module.accent : '#8B8F9E' }}>
+                {module.number}
+              </span>
+            </div>
+            <div>
+              <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8', lineHeight: 1.2, marginBottom: '2px' }}>
+                {module.name}
+              </h3>
+              <p style={{ fontSize: '13px', color: '#8B8F9E' }}>{module.tagline}</p>
+            </div>
+          </div>
+
+          <div
+            className="flex items-center gap-1.5 px-2.5 py-1 rounded-full flex-shrink-0"
+            style={{ background: status.bg, border: `1px solid ${status.color}20` }}
+          >
+            {status.dot && (
+              <div
+                className="w-1.5 h-1.5 rounded-full"
+                style={{ background: status.color, boxShadow: `0 0 6px ${status.color}80` }}
+              />
+            )}
+            <span style={{ fontSize: '11px', fontWeight: 600, color: status.color, letterSpacing: '0.06em' }}>
+              {status.label}
+            </span>
+          </div>
+        </div>
+
+        <p style={{ fontSize: '14px', color: '#B4B8C7', lineHeight: 1.6, marginBottom: '18px' }}>
+          {module.shortDescription}
+        </p>
+
+        <div className="flex flex-wrap gap-2 mb-6">
+          {module.features.map((f) => (
+            <span
+              key={f}
+              className="px-2.5 py-1 rounded-md"
+              style={{
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                fontSize: '12px',
+                color: '#8B8F9E',
+              }}
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center gap-3">
+          {isAvailable ? (
+            <>
+              <Link
+                to={module.routes.overview}
+                className="flex-1 py-2.5 rounded-[10px] text-center transition-all hover:opacity-90"
+                style={{
+                  background: `${module.accent}18`,
+                  border: `1px solid ${module.accent}30`,
+                  color: module.accent,
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  textDecoration: 'none',
+                }}
+              >
+                Learn More
+              </Link>
+              {module.routes.app && (
+                <Link
+                  to={module.routes.app}
+                  className="flex-1 py-2.5 rounded-[10px] text-center transition-all hover:opacity-90"
+                  style={{
+                    background: `linear-gradient(135deg, ${module.accent} 0%, ${module.accent}CC 100%)`,
+                    color: '#0E0F14',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    textDecoration: 'none',
+                    boxShadow: `0 4px 16px ${module.accent}30`,
+                  }}
+                >
+                  Open App
+                </Link>
+              )}
+            </>
+          ) : (
+            <div
+              className="w-full py-2.5 rounded-[10px] text-center"
+              style={{
+                background: 'rgba(255, 255, 255, 0.03)',
+                border: '1px solid rgba(255, 255, 255, 0.05)',
+                color: '#4A4F62',
+                fontSize: '14px',
+                fontWeight: 500,
+              }}
+            >
+              {module.status === 'coming-soon' ? 'Coming Soon' : 'Planned'}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 export function ModulesPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('all');
 
-  const displayModules = viewMode === 'core' 
-    ? coreModules 
-    : viewMode === 'addons' 
-    ? addOnModules 
-    : allModules;
+  const coreDisplay = viewMode !== 'addons' ? coreModules : [];
+  const addonDisplay = viewMode !== 'core' ? addonModules : [];
+  const activeCount = modules.filter((m) => m.status === 'active').length;
 
   return (
     <div className="min-h-screen" style={{ background: '#0E0F14' }}>
       <Navbar />
 
-      {/* Hero Section */}
-      <section className="pt-32 pb-20 px-8">
-        <div className="max-w-[1400px] mx-auto text-center">
-          <div className="mb-6 flex justify-center">
-            <div 
-              className="px-3 py-1 rounded-lg" 
-              style={{ 
-                background: 'rgba(255, 191, 222, 0.12)', 
-                border: '1px solid rgba(255, 191, 222, 0.2)',
-                fontSize: '11px', 
-                fontWeight: 600, 
-                color: '#FFBFDE', 
-                textTransform: 'uppercase', 
-                letterSpacing: '0.1em' 
-              }}
-            >
-              Modular Creator System
-            </div>
+      {/* Hero */}
+      <section className="pt-32 pb-16 relative overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 60% 40% at 50% 0%, rgba(218, 191, 255, 0.07) 0%, transparent 70%)' }}
+        />
+        <div className="relative max-w-[1200px] mx-auto px-6 lg:px-12 text-center">
+          <div className="flex items-center justify-center gap-2 mb-6">
+            <div className="h-px w-8" style={{ background: 'rgba(218, 191, 255, 0.4)' }} />
+            <span style={{ fontSize: '12px', fontWeight: 600, color: '#DABFFF', textTransform: 'uppercase', letterSpacing: '0.15em' }}>
+              Platform Modules
+            </span>
+            <div className="h-px w-8" style={{ background: 'rgba(218, 191, 255, 0.4)' }} />
           </div>
-          
-          <h1 
-            style={{ 
-              fontSize: '72px', 
-              fontWeight: 700, 
-              color: '#F4F3F8',
-              letterSpacing: '-0.03em',
-              marginBottom: '24px',
-              lineHeight: 1.1
-            }}
+
+          <h1
+            className="mb-5"
+            style={{ fontSize: 'clamp(40px, 6vw, 60px)', fontWeight: 700, color: '#F4F3F8', letterSpacing: '-0.03em', lineHeight: 1.1 }}
           >
             CreatorOS Modules
           </h1>
-          
-          <p 
-            style={{ 
-              fontSize: '24px', 
-              color: '#B4B8C7', 
-              maxWidth: '800px',
-              lineHeight: 1.6,
-              margin: '0 auto'
-            }}
+
+          <p
+            style={{ fontSize: 'clamp(17px, 2.5vw, 20px)', color: '#B4B8C7', maxWidth: '640px', margin: '0 auto', lineHeight: 1.6 }}
           >
-            Build your creator system your way. Start with the core workflow or add what you need.
+            A connected system of standalone tools. Each module works independently — together they form
+            your creator operating system.
           </p>
+
+          <div className="flex items-center justify-center gap-3 mt-8">
+            <div
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full"
+              style={{ background: 'rgba(34, 197, 94, 0.08)', border: '1px solid rgba(34, 197, 94, 0.2)' }}
+            >
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: '#22c55e', boxShadow: '0 0 6px rgba(34, 197, 94, 0.6)' }} />
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#22c55e' }}>{activeCount} modules live</span>
+            </div>
+            <span
+              className="px-3 py-1.5 rounded-full"
+              style={{ background: 'rgba(255, 255, 255, 0.04)', border: '1px solid rgba(255, 255, 255, 0.06)', fontSize: '12px', color: '#8B8F9E' }}
+            >
+              {modules.length - activeCount} in roadmap
+            </span>
+          </div>
         </div>
       </section>
 
-      {/* View Mode Tabs */}
-      <section className="pb-12 px-8">
-        <div className="max-w-[1400px] mx-auto">
-          <div className="flex items-center justify-center gap-3">
-            {[
-              { id: 'core' as ViewMode, label: 'Core Workflow', description: 'Recommended path' },
-              { id: 'addons' as ViewMode, label: 'Add-on Modules', description: 'Optional extensions' },
-              { id: 'all' as ViewMode, label: 'All Modules', description: 'Everything' }
-            ].map((tab) => (
+      {/* Filters + Grid */}
+      <div className="max-w-[1200px] mx-auto px-6 lg:px-12 pb-24">
+        <div className="flex items-center justify-between mb-10 flex-wrap gap-4">
+          <div
+            className="inline-flex items-center gap-1 p-1 rounded-[12px]"
+            style={{ background: '#1F2230', border: '1px solid rgba(255,255,255,0.06)' }}
+          >
+            {(['all', 'core', 'addons'] as ViewMode[]).map((mode) => (
               <button
-                key={tab.id}
-                onClick={() => setViewMode(tab.id)}
-                className="px-6 py-3 rounded-[12px] transition-all"
+                key={mode}
+                onClick={() => setViewMode(mode)}
+                className="px-5 py-2 rounded-[10px] transition-all"
                 style={{
-                  background: viewMode === tab.id 
-                    ? 'linear-gradient(135deg, rgba(255, 191, 222, 0.15) 0%, rgba(231, 198, 243, 0.12) 100%)'
-                    : 'rgba(255, 255, 255, 0.03)',
-                  border: viewMode === tab.id
-                    ? '1px solid rgba(255, 191, 222, 0.3)'
-                    : '1px solid rgba(255, 255, 255, 0.06)',
-                  boxShadow: viewMode === tab.id
-                    ? '0 4px 16px rgba(255, 191, 222, 0.15)'
-                    : 'none'
+                  background: viewMode === mode ? 'rgba(255,255,255,0.08)' : 'transparent',
+                  border: viewMode === mode ? '1px solid rgba(255,255,255,0.1)' : '1px solid transparent',
+                  color: viewMode === mode ? '#F4F3F8' : '#8B8F9E',
+                  fontSize: '14px',
+                  fontWeight: viewMode === mode ? 600 : 400,
+                  cursor: 'pointer',
                 }}
               >
-                <div style={{ fontSize: '15px', fontWeight: 600, color: viewMode === tab.id ? '#FFBFDE' : '#B4B8C7' }}>
-                  {tab.label}
-                </div>
-                <div style={{ fontSize: '12px', color: '#8B8F9E', marginTop: '2px' }}>
-                  {tab.description}
-                </div>
+                {mode === 'all' ? 'All Modules' : mode === 'core' ? 'Core Workflow' : 'Add-ons'}
               </button>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* Modules Grid */}
-      <section className="pb-32 px-8">
-        <div className="max-w-[1400px] mx-auto">
-          {/* Section Title */}
-          {viewMode === 'core' && (
-            <div className="mb-10">
-              <h2 style={{ fontSize: '28px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
-                Core Workflow
-              </h2>
-              <p style={{ fontSize: '15px', color: '#8B8F9E' }}>
-                The recommended path. Each module is standalone, but strongest together.
-              </p>
-            </div>
-          )}
-          
-          {viewMode === 'addons' && (
-            <div className="mb-10">
-              <h2 style={{ fontSize: '28px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
-                Add-on Modules
-              </h2>
-              <p style={{ fontSize: '15px', color: '#8B8F9E' }}>
-                Optional extensions. Not part of the core flow, but equally valuable when you need them.
-              </p>
-            </div>
-          )}
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {displayModules.map((module) => (
+        {/* Core modules */}
+        {coreDisplay.length > 0 && (
+          <div className="mb-12">
+            <div className="flex items-center gap-3 mb-6">
               <div
-                key={module.id}
-                className="relative group"
+                className="px-3 py-1.5 rounded-lg"
+                style={{ background: 'linear-gradient(135deg, #E7C6F3 0%, #FFBFDE 100%)', boxShadow: '0 4px 12px rgba(231, 198, 243, 0.25)' }}
               >
-                <div
-                  className="p-8 rounded-[20px] transition-all duration-300 relative overflow-hidden"
-                  style={{
-                    background: module.status === 'active' 
-                      ? `linear-gradient(135deg, ${module.accent}08 0%, ${module.accent}04 100%)`
-                      : 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
-                    border: module.status === 'active'
-                      ? `1px solid ${module.accent}30`
-                      : '1px solid rgba(255, 255, 255, 0.06)',
-                    boxShadow: module.status === 'active'
-                      ? `0 8px 24px ${module.accent}15, inset 0 1px 0 rgba(255, 255, 255, 0.05)`
-                      : '0 4px 12px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.02)',
-                    opacity: module.status === 'planned' ? 0.5 : 1
-                  }}
-                >
-                  {/* Top edge light */}
-                  <div 
-                    className="absolute top-0 left-0 right-0 h-px"
-                    style={{ 
-                      background: module.status === 'active'
-                        ? `linear-gradient(90deg, transparent, ${module.accent}40, transparent)`
-                        : 'linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent)'
-                    }}
-                  />
-
-                  {/* Header */}
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-center gap-4">
-                      {/* Module Number */}
-                      <div 
-                        className="w-12 h-12 rounded-[12px] flex items-center justify-center"
-                        style={{ 
-                          background: module.status === 'active'
-                            ? `linear-gradient(135deg, ${module.accent}, ${module.accent}CC)`
-                            : 'rgba(255, 255, 255, 0.05)',
-                          border: `1px solid ${module.status === 'active' ? module.accent : 'rgba(255, 255, 255, 0.1)'}`,
-                          boxShadow: module.status === 'active' ? `0 4px 12px ${module.accent}30` : 'none'
-                        }}
-                      >
-                        <span 
-                          style={{ 
-                            fontSize: '18px', 
-                            fontWeight: 700, 
-                            color: module.status === 'active' ? '#0E0F14' : '#8B8F9E'
-                          }}
-                        >
-                          {module.id}
-                        </span>
-                      </div>
-
-                      {/* Status Badge */}
-                      <div
-                        className="px-3 py-1 rounded-lg"
-                        style={{
-                          background: module.status === 'active'
-                            ? `${module.accent}20`
-                            : 'rgba(255, 255, 255, 0.05)',
-                          border: module.status === 'active'
-                            ? `1px solid ${module.accent}30`
-                            : '1px solid rgba(255, 255, 255, 0.1)',
-                          fontSize: '10px',
-                          fontWeight: 600,
-                          color: module.status === 'active' ? module.accent : '#8B8F9E',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em'
-                        }}
-                      >
-                        {module.status === 'active' && 'Active'}
-                        {module.status === 'coming-soon' && 'Coming Soon'}
-                        {module.status === 'planned' && 'Planned'}
-                      </div>
-                    </div>
-
-                    {/* Category Badge */}
-                    {module.category === 'core' && (
-                      <div
-                        className="px-2.5 py-1 rounded-lg"
-                        style={{
-                          background: 'rgba(255, 191, 222, 0.12)',
-                          border: '1px solid rgba(255, 191, 222, 0.2)',
-                          fontSize: '10px',
-                          fontWeight: 600,
-                          color: '#FFBFDE',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em'
-                        }}
-                      >
-                        Core
-                      </div>
-                    )}
-                    {module.category === 'addon' && (
-                      <div
-                        className="px-2.5 py-1 rounded-lg"
-                        style={{
-                          background: 'rgba(231, 198, 243, 0.12)',
-                          border: '1px solid rgba(231, 198, 243, 0.2)',
-                          fontSize: '10px',
-                          fontWeight: 600,
-                          color: '#E7C6F3',
-                          textTransform: 'uppercase',
-                          letterSpacing: '0.08em'
-                        }}
-                      >
-                        Add-on
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Content */}
-                  <div className="mb-6">
-                    <h3 
-                      style={{ 
-                        fontSize: '28px', 
-                        fontWeight: 700, 
-                        color: '#F4F3F8',
-                        marginBottom: '8px',
-                        letterSpacing: '-0.02em'
-                      }}
-                    >
-                      {module.name}
-                    </h3>
-                    <div 
-                      style={{ 
-                        fontSize: '14px', 
-                        color: module.status === 'active' ? module.accent : '#8B8F9E',
-                        fontWeight: 600,
-                        marginBottom: '16px',
-                        textTransform: 'uppercase',
-                        letterSpacing: '0.06em'
-                      }}
-                    >
-                      {module.tagline}
-                    </div>
-                    <p 
-                      style={{ 
-                        fontSize: '16px', 
-                        color: '#B4B8C7', 
-                        lineHeight: 1.6
-                      }}
-                    >
-                      {module.description}
-                    </p>
-                  </div>
-
-                  {/* Features Grid */}
-                  <div className="grid grid-cols-2 gap-3 mb-6">
-                    {module.features.map((feature, idx) => (
-                      <div
-                        key={idx}
-                        className="flex items-center gap-2"
-                      >
-                        <div
-                          className="w-1.5 h-1.5 rounded-full"
-                          style={{ background: module.status === 'active' ? module.accent : '#8B8F9E' }}
-                        />
-                        <span style={{ fontSize: '13px', color: '#B4B8C7' }}>
-                          {feature}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Action Buttons */}
-                  <div className="flex gap-3">
-                    {/* Learn More Button - Only for active modules */}
-                    {module.status === 'active' && (
-                      <Link
-                        to={module.route}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] transition-all hover:opacity-90"
-                        style={{
-                          background: 'rgba(255, 255, 255, 0.05)',
-                          border: `1px solid ${module.accent}30`,
-                          color: module.accent,
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          textDecoration: 'none'
-                        }}
-                      >
-                        Learn More
-                      </Link>
-                    )}
-                    
-                    {/* Launch Button - Only for active modules with appRoute */}
-                    {module.status === 'active' && module.appRoute && (
-                      <Link
-                        to={module.appRoute}
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-[10px] transition-all hover:opacity-90"
-                        style={{
-                          background: `linear-gradient(135deg, ${module.accent}, ${module.accent}CC)`,
-                          color: '#0E0F14',
-                          fontSize: '14px',
-                          fontWeight: 600,
-                          boxShadow: `0 4px 16px ${module.accent}30, inset 0 1px 0 rgba(255, 255, 255, 0.3)`,
-                          textDecoration: 'none'
-                        }}
-                      >
-                        Launch {module.name}
-                        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-                          <path d="M2 7h10M7 2l5 5-5 5" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      </Link>
-                    )}
-                  </div>
-                </div>
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#0E0F14', letterSpacing: '0.05em' }}>CORE WORKFLOW</span>
               </div>
-            ))}
+              <span style={{ fontSize: '14px', color: '#8B8F9E' }}>Recommended path</span>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {coreDisplay.map((module) => (
+                <ModuleCard key={module.id} module={module} />
+              ))}
+            </div>
           </div>
-        </div>
-      </section>
+        )}
+
+        {/* Add-on modules */}
+        {addonDisplay.length > 0 && (
+          <div>
+            <div className="flex items-center gap-3 mb-6">
+              <div
+                className="px-3 py-1.5 rounded-lg"
+                style={{ background: 'linear-gradient(135deg, #DABFFF 0%, #B8A3FF 100%)', boxShadow: '0 4px 12px rgba(218, 191, 255, 0.25)' }}
+              >
+                <span style={{ fontSize: '12px', fontWeight: 700, color: '#0E0F14', letterSpacing: '0.05em' }}>ADD-ONS</span>
+              </div>
+              <span style={{ fontSize: '14px', color: '#8B8F9E' }}>Optional extensions</span>
+            </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {addonDisplay.map((module) => (
+                <ModuleCard key={module.id} module={module} />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Bottom CTA */}
-      <section className="pb-32 px-8">
-        <div className="max-w-[1400px] mx-auto">
-          <div
-            className="p-12 rounded-[20px] text-center relative overflow-hidden"
-            style={{
-              background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.08) 0%, rgba(218, 191, 255, 0.06) 100%)',
-              border: '1px solid rgba(255, 191, 222, 0.2)',
-              boxShadow: '0 16px 48px rgba(255, 191, 222, 0.15)'
-            }}
-          >
-            <div 
-              className="absolute top-0 left-0 right-0 h-px"
-              style={{ background: 'linear-gradient(90deg, transparent, rgba(255, 191, 222, 0.4), transparent)' }}
-            />
-
-            <h2
-              style={{
-                fontSize: '42px',
-                fontWeight: 700,
-                color: '#F4F3F8',
-                marginBottom: '16px',
-                letterSpacing: '-0.02em'
-              }}
-            >
-              Start with the Core
-            </h2>
-            <p
-              style={{
-                fontSize: '18px',
-                color: '#B4B8C7',
-                maxWidth: '600px',
-                margin: '0 auto 32px'
-              }}
-            >
-              Begin with Brand OS, then build your content system. More modules launching soon.
-            </p>
+      <section className="py-20 relative" style={{ background: '#171923' }}>
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'radial-gradient(ellipse 50% 40% at 50% 50%, rgba(231, 198, 243, 0.05) 0%, transparent 60%)' }}
+        />
+        <div className="relative max-w-[640px] mx-auto px-6 text-center">
+          <h2 className="mb-4" style={{ fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, color: '#F4F3F8', letterSpacing: '-0.02em' }}>
+            Start with the core workflow
+          </h2>
+          <p className="mb-8" style={{ fontSize: '17px', color: '#B4B8C7', lineHeight: 1.6 }}>
+            Begin with Brand OS to define your foundation. Then Content OS to build your system.
+          </p>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="/app/brand-os/setup"
-              className="inline-flex items-center gap-2 px-8 py-4 rounded-[12px] transition-all hover:opacity-90"
+              to="/modules/brandos"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 rounded-[12px] transition-all hover:opacity-90"
               style={{
                 background: 'linear-gradient(135deg, #E7C6F3 0%, #DABFFF 100%)',
                 color: '#0E0F14',
-                fontSize: '16px',
+                fontSize: '15px',
                 fontWeight: 600,
-                boxShadow: '0 12px 32px rgba(231, 198, 243, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
-                textDecoration: 'none'
+                boxShadow: '0 12px 32px rgba(231, 198, 243, 0.3), inset 0 1px 0 rgba(255,255,255,0.4)',
+                textDecoration: 'none',
               }}
             >
-              Launch Brand OS
-              <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                <path d="M3 8h10M8 3l5 5-5 5" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+              Start with Brand OS
+              <svg width="14" height="14" fill="none" viewBox="0 0 16 16">
+                <path d="M3 8h10M8 3l5 5-5 5" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
+            </Link>
+            <Link
+              to="/modules/contentos"
+              className="w-full sm:w-auto inline-flex items-center justify-center px-6 py-4 rounded-[12px] transition-all hover:opacity-90"
+              style={{
+                background: 'rgba(255, 255, 255, 0.04)',
+                border: '1px solid rgba(255, 255, 255, 0.08)',
+                color: '#B4B8C7',
+                fontSize: '15px',
+                fontWeight: 500,
+                textDecoration: 'none',
+              }}
+            >
+              Explore Content OS
             </Link>
           </div>
         </div>

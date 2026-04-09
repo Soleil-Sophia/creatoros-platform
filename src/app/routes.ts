@@ -7,6 +7,8 @@ import { BrandOSAppPage } from './pages/brand-os-app';
 import { ContentOSProductPage } from './pages/content-os-product';
 import { ContentOSAppPage } from './pages/content-os-app';
 import { ContentOSLibraryPage } from './pages/content-os-library';
+import { ContentOSPage } from '../modules/contentos/ContentOSPage';
+import { ContentOSApp } from '../modules/contentos/ContentOSApp';
 import { NotFoundPage } from './pages/not-found';
 import UserTest from './pages/user-test';
 
@@ -24,6 +26,28 @@ export const router = createBrowserRouter([
     path: '/modules',
     Component: ModulesPage,
   },
+
+  // --- New clean routes ---
+  {
+    path: '/modules/contentos',
+    Component: ContentOSPage,
+  },
+  {
+    path: '/modules/contentos/app',
+    Component: ContentOSApp,
+  },
+
+  // BrandOS — new slug (maps to existing page for now)
+  {
+    path: '/modules/brandos',
+    Component: BrandOSProductPage,
+  },
+  {
+    path: '/modules/brandos/app',
+    Component: BrandOSAppPage,
+  },
+
+  // --- Legacy routes (preserved for backwards compat) ---
   {
     path: '/modules/brand-os',
     Component: BrandOSProductPage,
@@ -44,6 +68,7 @@ export const router = createBrowserRouter([
     path: '/app/content-os/library',
     Component: ContentOSLibraryPage,
   },
+
   {
     path: '/test',
     Component: UserTest,

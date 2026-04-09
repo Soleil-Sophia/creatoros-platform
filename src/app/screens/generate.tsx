@@ -19,7 +19,7 @@ type ReuseAsset = {
   status: string;
 };
 
-export function GenerateScreen() {
+export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } = {}) {
   const location = useLocation();
   const navigate = useNavigate();
   
@@ -94,8 +94,7 @@ export function GenerateScreen() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#0E0F14' }}>
-      {/* Topbar */}
-      <Topbar />
+      {showTopbar && <Topbar />}
 
       {/* Reuse Banner (Conditional) */}
       {showReuseBanner && reuseAsset && (

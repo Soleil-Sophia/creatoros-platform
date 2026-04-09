@@ -130,7 +130,7 @@ const mockAssets: Asset[] = [
   }
 ];
 
-export function LibraryScreen() {
+export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = {}) {
   const navigate = useNavigate();
   
   // UI State
@@ -177,8 +177,7 @@ export function LibraryScreen() {
 
   return (
     <div className="min-h-screen flex flex-col" style={{ background: '#0E0F14' }}>
-      {/* Topbar */}
-      <LibraryTopbar />
+      {showTopbar && <LibraryTopbar />}
 
       {/* Library Main - 2-Column Layout */}
       <div className="flex-1 flex">
