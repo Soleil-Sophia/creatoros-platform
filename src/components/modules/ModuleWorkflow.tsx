@@ -1,5 +1,5 @@
 type WorkflowStep = {
-  number: string;
+  step: string;
   title: string;
   description: string;
 };
@@ -87,7 +87,7 @@ export function ModuleWorkflow({
                         fontFamily: 'var(--font-heading, "Manrope", sans-serif)',
                       }}
                     >
-                      {step.number}
+                      {step.step}
                     </span>
                   </div>
                 </div>

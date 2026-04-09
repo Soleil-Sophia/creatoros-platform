@@ -158,7 +158,7 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
             How Content OS Works
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {contentOSData.workflow.steps.map((step, idx) => (
+            {contentOSData.workflow.map((step, idx) => (
               <div
                 key={idx}
                 className="rounded-[14px] p-5"
@@ -175,7 +175,7 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
                   }}
                 >
                   <span style={{ fontSize: '13px', fontWeight: 700, color: accent }}>
-                    {step.number}
+                    {step.step}
                   </span>
                 </div>
                 <h4

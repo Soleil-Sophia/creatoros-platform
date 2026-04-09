@@ -11,8 +11,8 @@ export function ContentOSPage() {
       hero={{
         title: contentOSData.hero.title,
         subtitle: contentOSData.hero.subtitle,
-        primaryAction: contentOSData.hero.primaryCTA,
-        secondaryAction: contentOSData.hero.secondaryCTA,
+        primaryAction: { label: 'Open ContentOS', href: '/modules/contentos/app' },
+        secondaryAction: { label: 'View all modules', href: '/modules' },
       }}
       features={{
         sectionTitle: 'Everything you need to create consistently',
@@ -20,15 +20,14 @@ export function ContentOSPage() {
         items: contentOSData.features,
       }}
       workflow={{
-        title: contentOSData.workflow.title,
-        subtitle: contentOSData.workflow.subtitle,
-        steps: contentOSData.workflow.steps,
+        title: 'From goal to ready content',
+        subtitle: 'Define your input — ContentOS structures your output into ready-to-ship formats.',
+        steps: contentOSData.workflow,
       }}
       cta={{
         title: 'Ready to build content that ships?',
-        subtitle:
-          'Stop treating AI like a chat. Use it like a production system built around your offer.',
-        primaryAction: { label: 'Open Content OS', href: '/modules/contentos/app' },
+        subtitle: 'Stop treating AI like a chat. Use it like a production system built around your offer.',
+        primaryAction: { label: 'Open ContentOS', href: '/modules/contentos/app' },
         secondaryAction: { label: 'View all modules', href: '/modules' },
       }}
     />
