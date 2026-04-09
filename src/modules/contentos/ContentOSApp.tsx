@@ -4,7 +4,7 @@ import { GenerateScreen } from '../../app/screens/generate';
 import { LibraryScreen } from '../../app/screens/library';
 import { getModule } from '../../config/modules';
 import { getDisplayMeta } from '../../config/moduleDisplay';
-import { contentOSData } from '../../data/contentos';
+import { contentOSData, OUTPUT_TYPES } from '../../data/contentos';
 
 type Tab = 'overview' | 'generate' | 'library';
 
@@ -143,6 +143,58 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
           </div>
         </div>
 
+        {/* Output Types */}
+        <div className="mb-10">
+          <h3
+            style={{
+              fontSize: '13px',
+              fontWeight: 600,
+              color: '#8B8F9E',
+              letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+              marginBottom: '16px',
+            }}
+          >
+            What ContentOS Produces
+          </h3>
+          <div className="grid md:grid-cols-3 lg:grid-cols-5 gap-3">
+            {OUTPUT_TYPES.map((ot, idx) => (
+              <button
+                key={ot.id}
+                onClick={() => {}}
+                className="rounded-[12px] p-4 text-left transition-all"
+                style={{
+                  background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+                  border: `1px solid ${accent}18`,
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = `${accent}35`;
+                  (e.currentTarget as HTMLElement).style.boxShadow = `0 4px 16px ${accent}0C`;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = `${accent}18`;
+                  (e.currentTarget as HTMLElement).style.boxShadow = 'none';
+                }}
+              >
+                <div
+                  className="w-7 h-7 rounded-md flex items-center justify-center mb-3"
+                  style={{ background: `${accent}14`, border: `1px solid ${accent}20` }}
+                >
+                  <span style={{ fontSize: '11px', fontWeight: 700, color: accent }}>
+                    0{idx + 1}
+                  </span>
+                </div>
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', marginBottom: '4px' }}>
+                  {ot.label}
+                </div>
+                <div style={{ fontSize: '11px', color: '#8B8F9E', lineHeight: 1.5 }}>
+                  {ot.description}
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+
         {/* Workflow Steps */}
         <div>
           <h3
@@ -155,7 +207,7 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
               marginBottom: '16px',
             }}
           >
-            How Content OS Works
+            How ContentOS Works
           </h3>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
             {contentOSData.workflow.map((step, idx) => (

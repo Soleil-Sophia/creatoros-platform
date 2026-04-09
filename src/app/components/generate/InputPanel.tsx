@@ -210,11 +210,11 @@ export function InputPanel({
             value={outputType}
             onChange={(e) => onOutputTypeChange(e.target.value)}
           >
-            <option>Full Content Suite</option>
-            <option>Hooks Only</option>
-            <option>Scripts Only</option>
-            <option>Captions Only</option>
-            <option>Content Plan Only</option>
+            <option value="hook-pack">Hook Pack</option>
+            <option value="short-script">Short Script</option>
+            <option value="caption-draft">Caption Draft</option>
+            <option value="content-brief">Content Brief</option>
+            <option value="repurposing-plan">Repurposing Plan</option>
           </select>
         </div>
       </div>

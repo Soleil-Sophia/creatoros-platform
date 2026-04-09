@@ -2,17 +2,18 @@ import { Link } from 'react-router';
 import { PageHeader } from './PageHeader';
 import { FilterGroup } from './FilterGroup';
 
-type FilterType = 'all' | 'hooks' | 'scripts' | 'captions' | 'plans';
+type FilterType = 'all' | 'hook-pack' | 'short-script' | 'caption-draft' | 'content-brief' | 'repurposing-plan';
 
 type OrganizationRailProps = {
   filterType: FilterType;
   onFilterChange: (filter: FilterType) => void;
   assetCounts: {
     all: number;
-    hooks: number;
-    scripts: number;
-    captions: number;
-    plans: number;
+    'hook-pack': number;
+    'short-script': number;
+    'caption-draft': number;
+    'content-brief': number;
+    'repurposing-plan': number;
   };
 };
 
@@ -37,11 +38,12 @@ export function OrganizationRail({ filterType, onFilterChange, assetCounts }: Or
         <FilterGroup
           title="Content Type"
           options={[
-            { value: 'all', label: 'All Assets', count: assetCounts.all },
-            { value: 'hooks', label: 'Hooks', count: assetCounts.hooks },
-            { value: 'scripts', label: 'Scripts', count: assetCounts.scripts },
-            { value: 'captions', label: 'Captions', count: assetCounts.captions },
-            { value: 'plans', label: 'Content Plans', count: assetCounts.plans }
+            { value: 'all', label: 'All Outputs', count: assetCounts.all },
+            { value: 'hook-pack', label: 'Hook Pack', count: assetCounts['hook-pack'] },
+            { value: 'short-script', label: 'Short Script', count: assetCounts['short-script'] },
+            { value: 'caption-draft', label: 'Caption Draft', count: assetCounts['caption-draft'] },
+            { value: 'content-brief', label: 'Content Brief', count: assetCounts['content-brief'] },
+            { value: 'repurposing-plan', label: 'Repurposing Plan', count: assetCounts['repurposing-plan'] },
           ]}
           activeValue={filterType}
           onFilterChange={(value) => onFilterChange(value as FilterType)}

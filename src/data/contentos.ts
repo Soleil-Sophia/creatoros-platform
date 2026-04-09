@@ -21,10 +21,50 @@ export type AppSection = {
   description: string;
 };
 
+export type OutputType = {
+  id: string;
+  label: string;
+  description: string;
+  icon: string;
+};
+
 export type Stat = {
   value: string;
   label: string;
 };
+
+export const OUTPUT_TYPES: OutputType[] = [
+  {
+    id: 'hook-pack',
+    label: 'Hook Pack',
+    description: '5 attention-grabbing hooks calibrated to your offer and platform.',
+    icon: 'hook',
+  },
+  {
+    id: 'short-script',
+    label: 'Short Script',
+    description: 'A 60-second structured script — opening, tension, resolution, CTA.',
+    icon: 'script',
+  },
+  {
+    id: 'caption-draft',
+    label: 'Caption Draft',
+    description: 'Platform-native captions with clear positioning and a direct CTA.',
+    icon: 'caption',
+  },
+  {
+    id: 'content-brief',
+    label: 'Content Brief',
+    description: 'A structured brief defining goal, angle, key points, and format.',
+    icon: 'brief',
+  },
+  {
+    id: 'repurposing-plan',
+    label: 'Repurposing Plan',
+    description: 'A multi-platform plan for getting maximum reach from one core asset.',
+    icon: 'repurpose',
+  },
+];
 
 export const contentOSData: {
   hero: { title: string; subtitle: string };
@@ -33,6 +73,7 @@ export const contentOSData: {
   useCases: UseCase[];
   appSections: AppSection[];
   stats: Stat[];
+  outputTypes: OutputType[];
 } = {
   hero: {
     title: 'ContentOS',
@@ -144,8 +185,10 @@ export const contentOSData: {
 
   stats: [
     { value: 'Active', label: 'Module Status' },
-    { value: '4+', label: 'Output Types' },
+    { value: '5', label: 'Output Types' },
     { value: '5+', label: 'Platforms' },
     { value: 'Brand-Aware', label: 'AI Mode' },
   ],
+
+  outputTypes: OUTPUT_TYPES,
 };
