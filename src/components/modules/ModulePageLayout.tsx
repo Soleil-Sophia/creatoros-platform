@@ -14,7 +14,7 @@ type FeatureItem = {
 };
 
 type WorkflowStep = {
-  number: string;
+  step: string;
   title: string;
   description: string;
 };
