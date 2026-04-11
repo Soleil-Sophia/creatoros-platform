@@ -137,7 +137,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   };
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#0E0F14' }}>
+    <div className={`${showTopbar ? 'min-h-screen' : 'h-full'} flex flex-col`} style={{ background: '#0E0F14' }}>
       {showTopbar && <Topbar />}
 
       {/* Reuse Banner (Conditional) */}

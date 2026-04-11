@@ -66,7 +66,7 @@ function QuickActionCard({
 
 function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
   return (
-    <div className="flex-1 overflow-auto p-6 lg:p-10" style={{ background: '#0E0F14' }}>
+    <div className="flex-1 min-h-0 overflow-auto p-6 lg:p-10" style={{ background: '#0E0F14' }}>
       <div className="max-w-[1200px] mx-auto">
         {/* Welcome header */}
         <div className="mb-10">
@@ -382,7 +382,7 @@ export function ContentOSApp() {
       </header>
 
       {/* Tab Content */}
-      <div className="flex-1 overflow-hidden">
+      <div className="flex-1 min-h-0 flex flex-col">
         {activeTab === 'overview' && <OverviewTab onTabChange={setActiveTab} />}
         {activeTab === 'generate' && <GenerateScreen showTopbar={false} />}
         {activeTab === 'library' && <LibraryScreen showTopbar={false} />}

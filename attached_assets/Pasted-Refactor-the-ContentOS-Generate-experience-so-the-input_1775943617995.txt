@@ -1,0 +1,61 @@
+Refactor the ContentOS Generate experience so the input side becomes output-type-aware.
+
+Current state:
+- ContentOS already has 5 output types as a single source of truth:
+  - Hook Pack
+  - Short Script
+  - Caption Draft
+  - Content Brief
+  - Repurposing Plan
+- The output workspace already reacts to the selected output type.
+- Library filters and Overview are already aligned to the same taxonomy.
+
+Goal:
+Make the Generate input experience feel smarter and more productized by adapting helper copy, field emphasis, placeholders, and framing based on the selected output type.
+
+Implement the following:
+
+1. Add output-type-aware input metadata
+- Extend the ContentOS data layer with per-output-type input guidance.
+- For each output type, define:
+  - helperTitle
+  - helperDescription
+  - recommendedInputs
+  - fieldLabels (where relevant)
+  - fieldPlaceholders
+  - optional example prompt / example context
+
+2. Refactor the Generate input panel
+- Keep the existing structure lightweight.
+- Do not build 5 completely different forms.
+- Instead, make the current form adapt based on selected output type:
+  - update helper text
+  - update placeholder text
+  - update field labels where useful
+  - visually emphasize the most relevant fields for that output type
+
+3. Add type-specific framing
+For example:
+- Hook Pack → topic, audience, angle, tone
+- Short Script → topic, format, audience, CTA
+- Caption Draft → platform, topic, tone, CTA
+- Content Brief → goal, audience, angle, structure
+- Repurposing Plan → source asset, original format, target platforms, goal
+
+4. Keep the implementation clean
+- TypeScript
+- no backend
+- no AI integration yet
+- no over-engineered form system
+- use local mock data only
+- stay aligned with current design system
+
+5. Preserve current behavior
+- selected output type should still drive the output workspace
+- Generate should remain consistent with Overview and Library
+- do not break existing tabs or shell structure
+
+Definition of done:
+- selecting a different output type changes the input guidance, field framing, and placeholders
+- the Generate experience feels more specific and product-like
+- the current clean ContentOS architecture remains intact
