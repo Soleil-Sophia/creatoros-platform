@@ -1,7 +1,7 @@
 import { useMeta } from '../hooks/useMeta';
 
 export default function Terms() {
-  useMeta('Terms — CreatorOS');
+  useMeta('Terms — CreatorOS', 'Terms of use for CreatorOS digital products. All sales are final. Questions? Email hello@creatoros.co.');
 
   return (
     <div>
@@ -87,7 +87,7 @@ export default function Terms() {
           </div>
 
           <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '40px' }}>
-            Last updated: 2026. Full legal information will be added before public launch.
+            Last updated: April 2025. Full legal information will be added before public launch.
           </p>
         </div>
       </section>

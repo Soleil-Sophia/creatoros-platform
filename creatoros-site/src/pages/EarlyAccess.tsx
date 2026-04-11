@@ -5,7 +5,7 @@ const perks = [
   { label: 'First access to ContentOS', description: 'Be among the first to use the full platform before public launch.' },
   { label: 'Founding member pricing', description: 'Lock in early pricing that will never be offered again after launch.' },
   { label: 'Shape what gets built', description: 'Your feedback directly influences which modules we build and when.' },
-  { label: 'Exclusive early access content', description: 'Get the Creator Clarity Kit framework and early system guides before they\'re public.' },
+  { label: 'Early access to what comes next', description: 'Get access to new modules, platform tools, and early guides before public release.' },
 ];
 
 export default function EarlyAccess() {
@@ -33,7 +33,7 @@ export default function EarlyAccess() {
         }} />
 
         <div className="container" style={{ position: 'relative' }}>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-2">
 
             {/* Left */}
             <div>
@@ -224,7 +224,7 @@ export default function EarlyAccess() {
               </div>
 
               <p style={{ fontSize: '13px', color: 'var(--text-3)', textAlign: 'center', marginTop: '20px' }}>
-                Spots are limited. We review applications personally.
+                We review applications personally.
               </p>
             </div>
           </div>

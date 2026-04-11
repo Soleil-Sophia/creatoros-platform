@@ -1,7 +1,7 @@
 import { useMeta } from '../hooks/useMeta';
 
 export default function Privacy() {
-  useMeta('Privacy — CreatorOS');
+  useMeta('Privacy — CreatorOS', 'Our approach to data, what we collect, and how to reach us with any privacy-related questions.');
 
   return (
     <div>
@@ -87,7 +87,7 @@ export default function Privacy() {
           </div>
 
           <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '40px' }}>
-            Last updated: 2026. Full legal information will be added before public launch.
+            Last updated: April 2025. Full legal information will be added before public launch.
           </p>
         </div>
       </section>

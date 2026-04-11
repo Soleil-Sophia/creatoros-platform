@@ -111,7 +111,7 @@ export default function Success() {
       {/* ── What to do first ── */}
       <section style={{ padding: '80px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.8fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-asym">
 
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>
@@ -183,7 +183,7 @@ export default function Success() {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+          <div className="col-2-sm">
             {kitItems.map(({ label, detail }) => (
               <div key={label} style={{
                 padding: '32px',
@@ -219,7 +219,7 @@ export default function Success() {
       {/* ── Support ── */}
       <section style={{ padding: '80px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.8fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-asym">
 
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '24px' }}>

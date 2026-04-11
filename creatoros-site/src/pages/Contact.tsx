@@ -1,7 +1,7 @@
 import { useMeta } from '../hooks/useMeta';
 
 export default function Contact() {
-  useMeta('Contact — CreatorOS');
+  useMeta('Contact — CreatorOS', 'Reach out with product questions, partnerships, or general inquiries. We respond personally to every message.');
 
   return (
     <div>
@@ -28,7 +28,7 @@ export default function Contact() {
             letterSpacing: '-0.03em', lineHeight: 1.1,
             marginBottom: '28px',
           }}>
-            Contact
+            Get in touch
           </h1>
 
           <p style={{ fontSize: '18px', color: 'var(--text-2)', lineHeight: 1.75, marginBottom: '48px' }}>

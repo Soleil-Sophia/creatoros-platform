@@ -63,7 +63,7 @@ export default function About() {
       {/* Story */}
       <section style={{ padding: '60px 0 100px', background: '#0A0B10' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.2fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-2">
             <div>
               <h2 style={{
                 fontFamily: 'var(--font-heading)',
@@ -79,7 +79,7 @@ export default function About() {
                   'AI made it easier to produce. But it didn\'t make it easier to position, to be clear, or to build a system that compounds.',
                   'We saw creators produce more and convert less. Post constantly and build nothing lasting. Hustle without infrastructure.',
                   'CreatorOS was built to solve the system problem — not the output problem.',
-                  'We started with ContentOS, the first module: a structured content production system built around output types, positioning, and reuse.',
+                  'We started with the Creator Clarity Kit — a focused toolkit for solo creators and brands who need to find clarity before they build anything else.',
                   'The rest of the ecosystem is being built with our early community. If you\'re a creator who thinks in systems, you\'re the right person to join.',
                 ].map((para, i) => (
                   <p key={i} style={{ fontSize: '16px', color: i < 2 ? 'var(--text-2)' : 'var(--text-3)', lineHeight: 1.8 }}>

@@ -17,7 +17,7 @@ export function FeaturedProduct() {
     <section className="section" style={{ background: '#0A0B10' }}>
       <div className="container">
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center' }}>
+        <div className="col-2" style={{ alignItems: 'center' }}>
 
           {/* Left — product visual */}
           <div style={{ position: 'relative' }}>
@@ -82,7 +82,7 @@ export function FeaturedProduct() {
                 }}>
                   {PRICE}
                 </span>
-                <span style={{ fontSize: '14px', color: 'var(--text-3)' }}>one-time · digital download</span>
+                <span style={{ fontSize: '14px', color: 'var(--text-3)' }}>one-time · instant access</span>
               </div>
 
               <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{

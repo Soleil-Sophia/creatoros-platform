@@ -51,7 +51,7 @@ button {
   background: none;
 }
 
-input, textarea {
+input, textarea, select {
   font-family: var(--font-body);
   outline: none;
 }
@@ -64,7 +64,7 @@ img {
 .container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 32px;
 }
 
 .section {
@@ -75,11 +75,114 @@ img {
   padding: 80px 0;
 }
 
+/* ── Responsive grid utilities ───────────────────── */
+
+.col-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.col-asym {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.col-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.col-2-sm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.offer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 280px;
+  gap: 48px;
+  align-items: start;
+}
+
+/* ── Navbar responsive ───────────────────────────── */
+
+.nav-desktop {
+  display: flex;
+}
+
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-left: auto;
+  flex-direction: column;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.nav-hamburger:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Responsive breakpoints ──────────────────────── */
+
 @media (max-width: 768px) {
-  .section {
-    padding: 80px 0;
+  .container {
+    padding: 0 20px;
   }
+
+  .section {
+    padding: 72px 0;
+  }
+
   .section-sm {
-    padding: 60px 0;
+    padding: 52px 0;
+  }
+
+  .col-2 {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .col-asym {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .col-3 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .col-2-sm {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .offer-cols {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .nav-desktop {
+    display: none !important;
+  }
+
+  .nav-hamburger {
+    display: flex;
   }
 }

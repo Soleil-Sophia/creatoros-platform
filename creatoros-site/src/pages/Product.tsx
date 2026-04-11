@@ -231,7 +231,7 @@ export default function Product() {
       {/* ── 2. What it is ─────────────────────────────── */}
       <section style={{ padding: '80px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-2">
 
             <div>
               <Eyebrow label="What it is" />
@@ -293,7 +293,7 @@ export default function Product() {
       {/* ── 3. Who it's for ───────────────────────────── */}
       <section style={{ padding: '80px 0', background: '#0A0B10' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-2">
 
             <div>
               <Eyebrow label="Who it's for" color="var(--lilac)" />
@@ -372,7 +372,7 @@ export default function Product() {
       {/* ── 4. Outcome ────────────────────────────────── */}
       <section style={{ padding: '80px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-2">
 
             <div>
               <Eyebrow label="What you walk away with" />
@@ -493,7 +493,7 @@ export default function Product() {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '20px' }}>
+          <div className="col-2-sm">
             {kitItems.map(({ number, title, description }) => (
               <div key={number} style={{
                 padding: '36px',
@@ -545,7 +545,7 @@ export default function Product() {
             </h2>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px', marginBottom: '40px' }}>
+          <div className="col-3" style={{ marginBottom: '40px' }}>
             {steps.map(({ number, title, body }, i) => (
               <div key={number} style={{
                 padding: '36px',
@@ -640,7 +640,7 @@ export default function Product() {
       {/* ── 8. FAQ ────────────────────────────────────── */}
       <section style={{ padding: '80px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-asym">
 
             <div>
               <Eyebrow label="FAQ" color="var(--lilac)" />
@@ -669,7 +669,7 @@ export default function Product() {
       {/* ── 9. What happens after purchase ────────────── */}
       <section style={{ padding: '80px 0' }}>
         <div className="container">
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '80px', alignItems: 'start' }}>
+          <div className="col-asym">
 
             <div>
               <Eyebrow label="After purchase" color="var(--lilac)" />
@@ -691,7 +691,7 @@ export default function Product() {
                 {[
                   { label: 'Instant access', detail: 'Everything arrives immediately after checkout.' },
                   { label: 'One-time purchase', detail: 'No subscription. No renewal. Yours to keep.' },
-                  { label: 'No subscription', detail: 'Pay once. Use it at your own pace.' },
+                  { label: 'No expiry', detail: 'Take as long as you need. There is no deadline.' },
                   { label: 'Built for fast clarity', detail: 'Most people complete the first pass in 60–90 minutes.' },
                 ].map(({ label, detail }) => (
                   <div key={label} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
