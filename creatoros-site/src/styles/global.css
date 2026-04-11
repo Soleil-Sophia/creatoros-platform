@@ -140,6 +140,66 @@ img {
 
 /* ── Responsive breakpoints ──────────────────────── */
 
+/* ── Card padding (responsive) ────────────────────── */
+
+.card-pad {
+  padding: 52px;
+}
+
+.card-pad-lg {
+  padding: 72px 60px;
+}
+
+/* ── Footer layout ───────────────────────────────── */
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+}
+
+.footer-nav {
+  gap: 32px;
+}
+
+/* ── Custom select ───────────────────────────────── */
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 14px 44px 14px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #262A38;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.select-wrapper select:focus {
+  border-color: rgba(255, 191, 222, 0.35);
+}
+
+.select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+/* ─────────────────────────────────────────────────── */
+
 @media (max-width: 768px) {
   .container {
     padding: 0 20px;
@@ -184,5 +244,23 @@ img {
 
   .nav-hamburger {
     display: flex;
+  }
+
+  .card-pad {
+    padding: 28px 24px;
+  }
+
+  .card-pad-lg {
+    padding: 40px 24px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-nav {
+    flex-wrap: wrap;
+    gap: 10px 20px;
   }
 }

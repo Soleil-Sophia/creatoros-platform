@@ -1,6 +1,10 @@
 import { useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
+import { SITE_URL } from '../config/site';
 
 export function useMeta(title: string, description?: string, ogImage?: string) {
+  const { pathname } = useLocation();
+
   useEffect(() => {
     document.title = title;
 
@@ -22,5 +26,19 @@ export function useMeta(title: string, description?: string, ogImage?: string) {
       set('meta[property="og:image"]', ogImage);
       set('meta[name="twitter:image"]', ogImage);
     }
-  }, [title, description, ogImage]);
+
+    // Canonical URL and og:url — updated per page
+    const pageUrl = `${SITE_URL}${pathname}`;
+    set('meta[property="og:url"]', pageUrl);
+
+    const canonical = document.querySelector('link[rel="canonical"]') as HTMLLinkElement | null;
+    if (canonical) {
+      canonical.href = pageUrl;
+    } else {
+      const link = document.createElement('link') as HTMLLinkElement;
+      link.rel = 'canonical';
+      link.href = pageUrl;
+      document.head.appendChild(link);
+    }
+  }, [title, description, ogImage, pathname]);
 }

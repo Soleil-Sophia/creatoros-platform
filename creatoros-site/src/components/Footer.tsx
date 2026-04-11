@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import { SUPPORT_EMAIL } from '../config/site';
 
 const navLinks = [
   { href: '/', label: 'Home' },
@@ -29,13 +30,7 @@ export function Footer() {
       <div className="container" style={{ padding: '60px 24px 40px' }}>
 
         {/* Main row */}
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: '1fr auto',
-          gap: '48px',
-          alignItems: 'start',
-          marginBottom: '48px',
-        }}>
+        <div className="footer-grid" style={{ marginBottom: '48px' }}>
 
           {/* Brand */}
           <div>
@@ -58,20 +53,22 @@ export function Footer() {
             <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '240px' }}>
               Clarity-first tools for creators and solo brands.
             </p>
-            <a href="mailto:hello@creatoros.co" style={{
-              display: 'inline-block', marginTop: '14px',
-              fontSize: '12px', color: 'var(--text-3)',
-              transition: 'color 0.15s',
-            }}
+            <a
+              href={`mailto:${SUPPORT_EMAIL}`}
+              style={{
+                display: 'inline-block', marginTop: '14px',
+                fontSize: '12px', color: 'var(--text-3)',
+                transition: 'color 0.15s',
+              }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
             >
-              hello@creatoros.co
+              {SUPPORT_EMAIL}
             </a>
           </div>
 
           {/* Nav links */}
-          <nav style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
+          <nav className="footer-nav" style={{ display: 'flex', alignItems: 'flex-start' }}>
             {navLinks.map(({ href, label }) => (
               <Link
                 key={href}
@@ -97,7 +94,7 @@ export function Footer() {
           <p style={{ fontSize: '12px', color: 'var(--text-3)' }}>
             © {new Date().getFullYear()} CreatorOS. All rights reserved.
           </p>
-          <div style={{ display: 'flex', gap: '20px' }}>
+          <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
             {legalLinks.map(({ href, label }) => (
               <Link
                 key={href}

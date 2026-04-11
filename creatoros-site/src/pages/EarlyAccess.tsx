@@ -89,8 +89,7 @@ export default function EarlyAccess() {
 
             {/* Right — form */}
             <div>
-              <div style={{
-                padding: '52px',
+              <div className="card-pad" style={{
                 borderRadius: '24px',
                 background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
                 border: '1px solid rgba(255,191,222,0.15)',
@@ -162,22 +161,20 @@ export default function EarlyAccess() {
                         <label style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', display: 'block', marginBottom: '8px' }}>
                           What best describes you?
                         </label>
-                        <select
-                          style={{
-                            width: '100%', padding: '14px 16px',
-                            borderRadius: '10px', fontSize: '15px',
-                            background: '#262A38',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            color: 'var(--text)',
-                            appearance: 'none',
-                          }}
-                        >
-                          <option>Content Creator</option>
-                          <option>Consultant or Coach</option>
-                          <option>Service Provider</option>
-                          <option>Founder / Entrepreneur</option>
-                          <option>Other</option>
-                        </select>
+                        <div className="select-wrapper">
+                          <select>
+                            <option>Content Creator</option>
+                            <option>Consultant or Coach</option>
+                            <option>Service Provider</option>
+                            <option>Founder / Entrepreneur</option>
+                            <option>Other</option>
+                          </select>
+                          <span className="select-chevron">
+                            <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
+                              <path d="M3 5l4 4 4-4" stroke="var(--text-3)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </span>
+                        </div>
                       </div>
 
                       <button

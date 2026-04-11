@@ -595,8 +595,7 @@ export default function Product() {
       {/* ── 7. Mid-page CTA ───────────────────────────── */}
       <section id="get" style={{ padding: '80px 0', background: '#0A0B10' }}>
         <div className="container">
-          <div style={{
-            padding: '72px 60px',
+          <div className="card-pad-lg" style={{
             borderRadius: '24px',
             background: 'linear-gradient(135deg, #1A1D2A 0%, #0E0F14 60%, #141620 100%)',
             border: '1px solid rgba(255,255,255,0.07)',

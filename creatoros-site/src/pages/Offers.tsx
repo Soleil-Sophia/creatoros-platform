@@ -79,8 +79,7 @@ export default function Offers() {
               </span>
             </div>
             {offers.filter(o => o.status === 'Available Now').map(({ status, statusColor, name, tagline, description, price, priceNote, includes, cta }) => (
-              <div key={name} className="offer-cols" style={{
-                padding: '52px',
+              <div key={name} className="offer-cols card-pad" style={{
                 borderRadius: '24px',
                 background: 'linear-gradient(135deg, #1E2030 0%, #15172A 100%)',
                 border: '1px solid rgba(255,191,222,0.22)',
@@ -177,8 +176,7 @@ export default function Offers() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
               {offers.filter(o => o.status !== 'Available Now').map(({ status, statusColor, name, tagline, description, price, priceNote, includes, cta }) => (
-                <div key={name} className="offer-cols" style={{
-                  padding: '48px 52px',
+                <div key={name} className="offer-cols card-pad" style={{
                   borderRadius: '24px',
                   background: 'linear-gradient(135deg, #141620 0%, #111318 100%)',
                   border: `1px solid ${statusColor}14`,
