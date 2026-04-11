@@ -1,0 +1,14 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "Da77hYffLarYBWyUkGrzh"
+uri = "file://creatoros-site/public/og/og-default.png"
+type = "image"
+title = "Default OG Card — creatoros.co"
+
+[[outputs]]
+id = "odYx8eU9Q0E8FFWNYCYXd"
+uri = "file://creatoros-site/public/og/og-product-creator-clarity-kit.png"
+type = "image"
+title = "Product OG Card — Creator Clarity Kit"

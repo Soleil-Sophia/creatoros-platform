@@ -170,7 +170,11 @@ function FAQ({ q, a }: { q: string; a: string }) {
 }
 
 export default function Product() {
-  useMeta('Creator Clarity Kit — CreatorOS', 'A clarity-first starter system for creators and solo brands who need one clear, testable offer.');
+  useMeta(
+    'Creator Clarity Kit — CreatorOS',
+    'A clarity-first starter system for creators and solo brands who need one clear, testable offer.',
+    '/og/og-product-creator-clarity-kit.png'
+  );
   return (
     <div>
 

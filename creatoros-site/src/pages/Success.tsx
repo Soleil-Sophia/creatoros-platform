@@ -25,7 +25,10 @@ function Divider() {
 }
 
 export default function Success() {
-  useMeta("You're in — CreatorOS", 'Your Creator Clarity Kit is ready. Here is how to get started.');
+  useMeta(
+    "Success — CreatorOS",
+    "You're in. Start with clarity. Creator Clarity Kit is designed to help you move from idea overload to one clear, testable direction."
+  );
 
   return (
     <div>
