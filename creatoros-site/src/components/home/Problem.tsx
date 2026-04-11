@@ -30,8 +30,17 @@ export function Problem() {
 
           <div>
             <p style={{
-              fontSize: '19px',
-              color: 'var(--text-2)',
+              fontSize: '20px',
+              fontWeight: 600,
+              color: 'var(--text)',
+              lineHeight: 1.6,
+              marginBottom: '20px',
+            }}>
+              {p.hook}
+            </p>
+            <p style={{
+              fontSize: '18px',
+              color: 'var(--text-3)',
               lineHeight: 1.8,
             }}>
               {p.body}

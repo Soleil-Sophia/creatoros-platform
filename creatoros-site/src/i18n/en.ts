@@ -11,13 +11,14 @@ export const en = {
     hero: {
       headline: 'Turn idea chaos into a clear, sellable offer.',
       subheadline:
-        'CreatorOS helps creators and solo brands structure their ideas, sharpen their direction, and build offers people actually understand.',
+        'CreatorOS turns scattered thinking into clear direction — so your offers make sense, your positioning sharpens, and your next move becomes obvious.',
       primaryCta: 'Get the Kit',
       secondaryCta: 'Explore CreatorOS',
     },
     problem: {
       eyebrow: 'Why most ideas stall',
       headline: "The problem usually isn't creativity. It's clarity.",
+      hook: "The hardest part isn't building. It's choosing what to build first.",
       body: "Too many directions. Too many unfinished concepts. Too much input, not enough structure. That's how good ideas turn into messy offers, inconsistent content, and slow decisions.",
     },
     outcome: {
@@ -29,7 +30,7 @@ export const en = {
       eyebrow: 'Start here',
       headline: 'Begin with Creator Clarity Kit',
       body: 'A focused starter system designed to help you define one real direction, shape one testable offer, and move from mental clutter to structured action.',
-      cta: 'View Product',
+      cta: 'Get the Kit',
     },
     howItWorks: {
       eyebrow: 'How it works',

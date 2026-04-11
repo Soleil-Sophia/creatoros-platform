@@ -1,0 +1,134 @@
+Refine the /product page for Creator Clarity Kit so it feels conversion-ready, premium, and clearly purchasable.
+
+Product model:
+- This is a paid digital product
+- Use a fixed one-time price: €24
+- This is not a subscription
+- Include instant access messaging after purchase
+
+Update the /product page with this structure and copy direction:
+
+1. Product Hero
+Product name:
+Creator Clarity Kit
+
+Headline:
+Turn too many ideas into one clear, testable offer.
+
+Subheadline:
+A clarity-first starter system that turns scattered thinking into a clear direction — so you can build one offer that actually makes sense.
+
+Primary CTA:
+Get the Kit
+
+Optional secondary CTA:
+Join Early Access
+
+Optional micro-trust line:
+Built for creators and solo brands who are tired of vague advice and messy starts.
+
+2. What it is
+Headline:
+What it is
+
+Body:
+A focused kit to help you choose your first real offer, sharpen your positioning, and move from idea overload to structured action.
+
+Add a short “What it’s not” block:
+- Not a motivation download
+- Not a random template dump
+- Not a “build everything at once” system
+
+3. Who it’s for
+Headline:
+Who it’s for
+
+Bullets:
+- You have too many directions and keep restarting
+- You’re building a personal brand or solo business and need one clear offer
+- You want structure without turning your work into corporate process
+
+Add a short “Not for you (yet)” block:
+- You already have one offer that’s converting consistently
+- You mainly want social media content ideas without offer work
+
+4. The outcome
+Headline:
+What you walk away with
+
+Bullets:
+- One clearer direction
+- One offer you can explain in a sentence
+- Cleaner positioning and decision-making
+- Less mental clutter, more momentum
+
+Add this mechanism sentence:
+The kit works because it forces selection, not expansion — clarity through constraints.
+
+5. What’s inside
+Headline:
+What’s inside
+
+Items:
+- Notion Template — structure your thinking and turn ideas into decisions
+- Workbook — define your offer, audience, and angle without fluff
+- Prompt Assist — guided prompts for clearer, sharper thinking
+- Start Here Guide — a simple path so you don’t stall or overbuild
+
+6. How to use it
+Headline:
+How to use it
+
+Steps:
+1. Clarify — choose the direction worth building first
+2. Structure — turn loose thoughts into a clear offer and message
+3. Move — make the next decisions fast and build with focus
+
+Add this optional expectation line:
+Most people finish the first pass in 60–90 minutes.
+
+7. Mid-page CTA block
+Headline:
+Start building with clarity.
+Primary CTA:
+Get the Kit
+Secondary:
+Join Early Access
+
+8. FAQ
+Add these FAQs:
+- Is this a course?
+  No. It’s a focused kit (template + guide + prompts) designed to create clarity fast.
+- Do I need Notion?
+  The Notion template is part of the kit. If you don’t use Notion yet, you can still use the workbook and prompts — but Notion gives you the best experience.
+- Is this for beginners or advanced creators?
+  Both — as long as the problem is too many ideas and no clear offer.
+- Will this build my whole business for me?
+  No. It helps you choose the right first direction and offer — the part most people skip.
+- How much is it?
+  The Creator Clarity Kit is €24 and includes instant access to the full kit.
+- Is this a subscription?
+  No. It’s a one-time purchase.
+- How do I get it after buying?
+  You get instant access after checkout.
+- What if I’m not ready yet?
+  Join Early Access to hear about future CreatorOS drops and updates.
+
+9. Final CTA
+Headline:
+Start with clarity. Build with direction.
+Primary CTA:
+Get the Kit
+Secondary:
+Join Early Access
+
+Pricing microcopy:
+- €24 — instant access
+- One-time purchase
+- Includes Notion Template, Workbook, Prompt Assist, and Start Here Guide
+
+Important:
+- Keep the page premium, minimal, and editorial
+- Make it feel like a real paid product, not a placeholder
+- Do not add fake testimonials or fake proof
+- Do not introduce new modules or unrelated offers

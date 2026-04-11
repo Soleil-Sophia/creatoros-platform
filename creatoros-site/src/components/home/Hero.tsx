@@ -54,12 +54,17 @@ export function Hero() {
             </svg>
           </Link>
           <Link to="/offers" style={{
-            padding: '16px 32px', borderRadius: '12px',
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.12)',
-            color: 'var(--text)', fontSize: '16px', fontWeight: 500,
-            transition: 'all 0.15s',
-          }}>
+            padding: '16px 24px', borderRadius: '12px',
+            background: 'transparent',
+            color: 'var(--text-3)', fontSize: '15px', fontWeight: 400,
+            transition: 'color 0.15s',
+            textDecoration: 'underline',
+            textDecorationColor: 'rgba(255,255,255,0.15)',
+            textUnderlineOffset: '3px',
+          }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+          >
             {h.secondaryCta}
           </Link>
         </div>

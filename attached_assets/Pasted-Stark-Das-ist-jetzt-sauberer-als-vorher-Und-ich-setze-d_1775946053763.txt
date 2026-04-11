@@ -1,0 +1,161 @@
+Stark. Das ist jetzt sauberer als vorher. 🔥
+
+Und ich setze die Regel jetzt hart:
+
+Entscheidung: 1
+
+Überall „Get the Kit“
+
+Warum?
+	•	klarer
+	•	weniger Reibung
+	•	besser für Conversion
+	•	keine unnötige Mikro-Verwirrung zwischen „View“, „Explore“ und „Get“
+
+„Explore the Kit“ klingt hübsch, aber für dein erstes Kernprodukt ist „Get the Kit“ einfach stärker.
+
+⸻
+
+Was ich an deinem Update gut finde
+
+Sehr gut:
+	•	i18n jetzt schon vorbereitet
+	•	Text zentralisiert
+	•	Nav sauber
+	•	Primary CTA direkt auf /product
+	•	Editorial statt SaaS-Feature-Grid
+	•	Homepage deutlich fokussierter
+
+Das ist genau die Richtung:
+weniger App-Gefühl, mehr Marke + Klarheit + Verkauf
+
+⸻
+
+Was ich jetzt sofort noch anpassen würde
+
+1. Featured Product CTA angleichen
+
+Du schreibst noch:
+CTA “View Product”
+
+Das würde ich ändern zu:
+Get the Kit
+
+Konsequenz schlägt Varianz.
+
+⸻
+
+2. Secondary Hero CTA bewusst schwächer halten
+
+Aktuell:
+Explore CreatorOS
+
+Das ist okay.
+Aber dieser Button darf optisch nicht fast so stark aussehen wie der Haupt-CTA.
+
+Also:
+	•	Primary = gefüllt / stärker
+	•	Secondary = ghost / outline / subtiler
+
+Sonst klaut er Fokus.
+
+⸻
+
+3. Problem Section noch 1 Hook-Satz geben
+
+Den würde ich wirklich reinnehmen, weil er den Einstieg schärft:
+
+The hardest part isn’t building. It’s choosing what to build first.
+
+Dann erst der Rest.
+
+Das ist präziser und trifft das Problem direkt ins Gesicht.
+
+⸻
+
+4. Hero-Subheadline: nimm die härtere Version
+
+Die ist besser als die weichere Version.
+
+Also:
+
+CreatorOS turns scattered thinking into clear direction — so your offers make sense, your positioning sharpens, and your next move becomes obvious.
+
+Die ist stärker, erwachsener und weniger „tool hilft dir bei…“.
+
+⸻
+
+Meine klare Bewertung vom jetzigen Stand
+
+Architektur:
+
+sauber
+
+Markenlogik:
+
+sauber
+
+Conversion-Richtung:
+
+gut
+
+Wahrscheinlich noch offen:
+	•	Button-Hierarchie
+	•	letzte Copy-Schärfung
+	•	Footer / Trust-Layer
+	•	Product Page Feinschliff
+	•	Offer-Page Priorisierung
+
+Also:
+nicht neu bauen
+sondern
+jetzt veredeln
+
+⸻
+
+Meine nächste Priorität für dich
+
+Reihenfolge:
+
+1. CTA-Konsistenz final überall setzen
+
+Nur:
+	•	Get the Kit
+	•	Explore CreatorOS
+	•	Join Early Access
+
+Keine weiteren CTA-Varianten.
+
+2. Product Page schärfen
+
+Da entscheidet sich, ob das Produkt wirklich kaufbar wirkt.
+
+3. Footer + Meta + Trust-Layer
+
+Damit es nicht wie ein schönes Mockup wirkt, sondern wie eine echte Marke.
+
+⸻
+
+Konkrete Regel, die ich jetzt setzen würde
+
+CTA System
+
+Primary product CTA: Get the Kit
+Secondary brand CTA: Explore CreatorOS
+Lead capture CTA: Join Early Access
+
+Und sonst nichts.
+
+⸻
+
+Nächster Schritt
+
+Ich mache dir jetzt am besten den Product Page Feinschliff 1.0:
+	•	bessere Hero-Copy
+	•	„What’s inside“
+	•	Ergebnis-Sektion
+	•	FAQ
+	•	CTA-Blöcke
+	•	Trust-Formulierungen
+
+Dann wird aus „Seite ist da“ langsam „Produktseite verkauft“.
