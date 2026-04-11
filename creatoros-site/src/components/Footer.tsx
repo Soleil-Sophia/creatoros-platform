@@ -58,6 +58,16 @@ export function Footer() {
             <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '240px' }}>
               Clarity-first tools for creators and solo brands.
             </p>
+            <a href="mailto:hello@creatoros.co" style={{
+              display: 'inline-block', marginTop: '14px',
+              fontSize: '12px', color: 'var(--text-3)',
+              transition: 'color 0.15s',
+            }}
+              onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'}
+              onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+            >
+              hello@creatoros.co
+            </a>
           </div>
 
           {/* Nav links */}

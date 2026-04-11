@@ -1,0 +1,101 @@
+Refine the creatoros-site marketing app with a lightweight post-purchase and delivery-ready experience for Creator Clarity Kit.
+
+Goal:
+Create a clean, premium "what happens after purchase" support layer so the product experience does not feel like it ends at checkout.
+
+Constraints:
+- Do not build a full account system
+- Do not add complex backend logic
+- Do not fake delivery states
+- Keep the site minimal, calm, and premium
+- This is a UX/content refinement pass only
+
+Implement the following:
+
+1. Add a lightweight success / thank-you page
+Create a new route:
+/success
+
+Purpose:
+This page should act as a post-purchase orientation page that can be linked from checkout later or used as a branded fallback.
+
+Suggested structure:
+
+Headline:
+You’re in. Start with clarity.
+
+Subheadline:
+Your Creator Clarity Kit is designed to help you move from idea overload to one clear, testable direction.
+
+Primary section:
+What to do first
+
+Steps:
+1. Open the kit
+2. Start with the Start Here Guide
+3. Work through the first clarity pass
+4. Use the Notion Template to turn ideas into decisions
+
+Secondary section:
+What’s included
+- Notion Template
+- Workbook
+- Prompt Assist
+- Start Here Guide
+
+Support section:
+Need help?
+If you have a delivery issue or product question, contact:
+hello@creatoros.co
+
+Optional microcopy:
+Built for fast clarity — not overwhelm.
+
+2. Add a simple delivery expectations block
+On the /success page, include a short reassurance note:
+
+After purchase, you should receive access to the full kit right away. If anything looks off, reach out and we’ll help you sort it out.
+
+3. Add a “Start Here” guidance block on the product page
+On /product, add a small section or callout that explains how to begin once the customer has the kit.
+
+Suggested structure:
+
+Headline:
+How to start
+
+Body:
+Start with the Start Here Guide, then complete your first clarity pass before customizing anything. The goal is to make one strong decision first — not build everything at once.
+
+Optional bullets:
+- Start simple
+- Don’t overbuild
+- Focus on one offer first
+
+4. Add support clarity in footer or contact touchpoints
+Where appropriate, make it easy to understand where someone can go if they have:
+- a purchase issue
+- a delivery issue
+- a product question
+
+Do this subtly. No big support center needed.
+
+5. Keep tone aligned
+The success/delivery experience should feel:
+- calm
+- premium
+- direct
+- reassuring
+- not overly cheerful
+- not generic SaaS onboarding
+
+6. Optional future-proofing
+Structure the /success page so it can later support:
+- a real checkout redirect
+- a real download/access button
+- a more advanced onboarding flow
+
+But do not build these now.
+
+Goal:
+Make CreatorOS feel like a real product brand that knows what happens after purchase, not just before it.

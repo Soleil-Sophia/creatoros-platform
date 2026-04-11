@@ -709,6 +709,26 @@ export default function Product() {
                   </div>
                 ))}
               </div>
+
+              <div style={{
+                marginTop: '40px', padding: '28px 32px',
+                borderRadius: '16px',
+                background: 'rgba(218,191,255,0.04)',
+                border: '1px solid rgba(218,191,255,0.12)',
+              }}>
+                <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--lilac)', letterSpacing: '0.1em', textTransform: 'uppercase' as const, marginBottom: '14px' }}>
+                  How to start
+                </p>
+                <p style={{ fontSize: '15px', color: 'var(--text-2)', lineHeight: 1.75, marginBottom: '20px' }}>
+                  Start with the Start Here Guide, then complete your first clarity pass before customizing anything. The goal is to make one strong decision first — not build everything at once.
+                </p>
+                {['Start simple', "Don't overbuild", 'Focus on one offer first'].map(tip => (
+                  <div key={tip} style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
+                    <div style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--lilac)', flexShrink: 0 }} />
+                    <span style={{ fontSize: '13px', color: 'var(--text-3)' }}>{tip}</span>
+                  </div>
+                ))}
+              </div>
             </div>
 
           </div>
