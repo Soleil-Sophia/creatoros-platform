@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { t } from '../i18n';
 
 const links = [
-  { href: '/', label: 'Home' },
-  { href: '/product', label: 'Product' },
-  { href: '/offers', label: 'Offers' },
-  { href: '/about', label: 'About' },
+  { href: '/', label: t.nav.home },
+  { href: '/product', label: t.nav.product },
+  { href: '/offers', label: t.nav.offers },
+  { href: '/about', label: t.nav.about },
+  { href: '/early-access', label: t.nav.earlyAccess },
 ];
 
 export function Navbar() {
@@ -26,7 +28,6 @@ export function Navbar() {
       <div className="container">
         <div style={{ display: 'flex', alignItems: 'center', height: '68px', gap: '40px' }}>
 
-          {/* Logo */}
           <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '10px', flexShrink: 0 }}>
             <div style={{
               width: '32px', height: '32px', borderRadius: '8px',
@@ -44,7 +45,6 @@ export function Navbar() {
             </span>
           </Link>
 
-          {/* Desktop nav */}
           <nav style={{ display: 'flex', alignItems: 'center', gap: '4px', flex: 1 }}>
             {links.map(({ href, label }) => {
               const active = pathname === href;
@@ -68,9 +68,8 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* CTA */}
           <Link
-            to="/early-access"
+            to="/product"
             style={{
               padding: '10px 20px',
               borderRadius: '10px',
@@ -85,7 +84,7 @@ export function Navbar() {
             onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
           >
-            Get the Kit
+            {t.nav.cta}
           </Link>
         </div>
       </div>

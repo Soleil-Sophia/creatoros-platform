@@ -1,23 +1,6 @@
-const steps = [
-  {
-    number: '01',
-    title: 'Define your foundation.',
-    body: 'Start with clarity. Use the Creator Clarity Kit to define your offer, identify your exact audience, and establish your positioning before you produce anything.',
-    detail: 'Positioning → Audience → Angle',
-  },
-  {
-    number: '02',
-    title: 'Build your system.',
-    body: 'Map your content strategy to output types. Know what you\'re making, why you\'re making it, and what it should achieve — before you open a blank document.',
-    detail: 'Content Brief → Output Type → Format',
-  },
-  {
-    number: '03',
-    title: 'Generate and ship.',
-    body: 'Use ContentOS to generate structured content assets — hooks, scripts, captions, plans — that reflect your positioning. Save, reuse, and compound over time.',
-    detail: 'Create → Save → Reuse → Scale',
-  },
-];
+import { t } from '../../i18n';
+
+const hw = t.home.howItWorks;
 
 export function HowItWorks() {
   return (
@@ -28,7 +11,7 @@ export function HowItWorks() {
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
             <div style={{ width: '24px', height: '1px', background: 'rgba(218,191,255,0.5)' }} />
             <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--lilac)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              How It Works
+              {hw.eyebrow}
             </span>
             <div style={{ width: '24px', height: '1px', background: 'rgba(218,191,255,0.5)' }} />
           </div>
@@ -38,18 +21,14 @@ export function HowItWorks() {
             fontSize: 'clamp(32px, 4vw, 52px)',
             fontWeight: 800, color: 'var(--text)',
             letterSpacing: '-0.02em', lineHeight: 1.15,
-            marginBottom: '20px',
+            maxWidth: '600px', margin: '0 auto',
           }}>
-            From chaos to system<br />in three steps.
+            {hw.headline}
           </h2>
-
-          <p style={{ fontSize: '17px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '520px', margin: '0 auto' }}>
-            The CreatorOS method starts with foundation, builds a system, and then generates output that scales.
-          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>
-          {steps.map(({ number, title, body, detail }, i) => (
+          {hw.steps.map(({ number, title, body }, i) => (
             <div key={number} style={{
               padding: '40px',
               borderRadius: '20px',
@@ -58,7 +37,6 @@ export function HowItWorks() {
               position: 'relative',
               overflow: 'hidden',
             }}>
-              {/* Connecting line */}
               {i < 2 && (
                 <div style={{
                   position: 'absolute', top: '50px', right: '-12px',
@@ -92,25 +70,16 @@ export function HowItWorks() {
 
               <h3 style={{
                 fontFamily: 'var(--font-heading)',
-                fontSize: '20px', fontWeight: 700,
+                fontSize: '22px', fontWeight: 700,
                 color: 'var(--text)', lineHeight: 1.25,
                 marginBottom: '16px',
               }}>
                 {title}
               </h3>
 
-              <p style={{ fontSize: '14px', color: 'var(--text-3)', lineHeight: 1.7, marginBottom: '24px' }}>
+              <p style={{ fontSize: '15px', color: 'var(--text-3)', lineHeight: 1.7 }}>
                 {body}
               </p>
-
-              <div style={{
-                padding: '10px 14px', borderRadius: '8px',
-                background: 'rgba(255,255,255,0.04)',
-                border: '1px solid rgba(255,255,255,0.07)',
-                display: 'inline-block',
-              }}>
-                <span style={{ fontSize: '12px', color: 'var(--text-3)', fontWeight: 500 }}>{detail}</span>
-              </div>
             </div>
           ))}
         </div>

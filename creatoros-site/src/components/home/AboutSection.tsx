@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { t } from '../../i18n';
+
+const ab = t.home.about;
 
 export function AboutSection() {
   return (
@@ -12,12 +15,10 @@ export function AboutSection() {
           position: 'relative',
           overflow: 'hidden',
         }}>
-          {/* Top line */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
             background: 'linear-gradient(90deg, transparent, rgba(218,191,255,0.4) 50%, transparent)',
           }} />
-          {/* Subtle glow */}
           <div style={{
             position: 'absolute', top: '-100px', right: '-100px',
             width: '400px', height: '400px',
@@ -27,12 +28,11 @@ export function AboutSection() {
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '80px', alignItems: 'center', position: 'relative' }}>
 
-            {/* Left */}
             <div>
               <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
                 <div style={{ width: '24px', height: '1px', background: 'rgba(218,191,255,0.5)' }} />
                 <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--lilac)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                  About CreatorOS
+                  {ab.eyebrow}
                 </span>
               </div>
 
@@ -41,9 +41,9 @@ export function AboutSection() {
                 fontSize: 'clamp(28px, 3vw, 42px)',
                 fontWeight: 800, color: 'var(--text)',
                 letterSpacing: '-0.02em', lineHeight: 1.15,
-                marginBottom: '24px',
+                marginBottom: '32px',
               }}>
-                Built by creators,<br />for creators who<br />think in systems.
+                {ab.headline}
               </h2>
 
               <Link to="/about" style={{
@@ -61,16 +61,9 @@ export function AboutSection() {
               </Link>
             </div>
 
-            {/* Right */}
             <div>
-              <p style={{ fontSize: '17px', color: 'var(--text-2)', lineHeight: 1.8, marginBottom: '28px' }}>
-                CreatorOS was built because the tools for creators are scattered, generic, and built for output — not for thinking.
-              </p>
-              <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.8, marginBottom: '28px' }}>
-                We believe serious creators don't need more content tools. They need infrastructure. A system that understands positioning, supports structured output, and gets smarter over time.
-              </p>
-              <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.8 }}>
-                That's what we're building. Module by module. With the people who use it.
+              <p style={{ fontSize: '18px', color: 'var(--text-2)', lineHeight: 1.8 }}>
+                {ab.body}
               </p>
             </div>
           </div>

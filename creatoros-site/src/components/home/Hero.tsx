@@ -1,10 +1,12 @@
 import { Link } from 'react-router-dom';
+import { t } from '../../i18n';
+
+const h = t.home.hero;
 
 export function Hero() {
   return (
     <section style={{ padding: '120px 0 100px', position: 'relative', overflow: 'hidden' }}>
 
-      {/* Background glow */}
       <div style={{
         position: 'absolute', top: '-200px', left: '50%', transform: 'translateX(-50%)',
         width: '900px', height: '600px',
@@ -14,21 +16,6 @@ export function Hero() {
 
       <div className="container" style={{ position: 'relative', textAlign: 'center' }}>
 
-        {/* Eyebrow */}
-        <div style={{
-          display: 'inline-flex', alignItems: 'center', gap: '8px',
-          padding: '6px 14px', borderRadius: '100px',
-          background: 'rgba(255, 191, 222, 0.08)',
-          border: '1px solid rgba(255, 191, 222, 0.18)',
-          marginBottom: '32px',
-        }}>
-          <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#FFBFDE', boxShadow: '0 0 8px rgba(255,191,222,0.6)' }} />
-          <span style={{ fontSize: '13px', fontWeight: 600, color: 'var(--pink)', letterSpacing: '0.04em' }}>
-            Content without a system is just noise.
-          </span>
-        </div>
-
-        {/* Headline */}
         <h1 style={{
           fontFamily: 'var(--font-heading)',
           fontSize: 'clamp(44px, 7vw, 80px)',
@@ -36,33 +23,22 @@ export function Hero() {
           color: 'var(--text)',
           letterSpacing: '-0.03em',
           lineHeight: 1.1,
-          marginBottom: '24px',
           maxWidth: '840px',
-          margin: '0 auto 24px',
+          margin: '0 auto 28px',
         }}>
-          Build a content system
-          <span style={{
-            display: 'block',
-            background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-          }}>
-            that scales.
-          </span>
+          {h.headline}
         </h1>
 
-        {/* Subtitle */}
         <p style={{
-          fontSize: 'clamp(16px, 2vw, 20px)',
+          fontSize: 'clamp(17px, 2vw, 21px)',
           color: 'var(--text-2)',
           lineHeight: 1.7,
-          maxWidth: '600px',
+          maxWidth: '580px',
           margin: '0 auto 48px',
         }}>
-          CreatorOS is the operating infrastructure for creators who want to turn expertise into traction — without burning out on execution.
+          {h.subheadline}
         </p>
 
-        {/* CTAs */}
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
           <Link to="/product" style={{
             padding: '16px 32px', borderRadius: '12px',
@@ -72,25 +48,24 @@ export function Hero() {
             transition: 'opacity 0.15s',
             display: 'inline-flex', alignItems: 'center', gap: '8px',
           }}>
-            Get the Kit
+            {h.primaryCta}
             <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
               <path d="M3 8h10M9 4l4 4-4 4" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
-          <Link to="/about" style={{
+          <Link to="/offers" style={{
             padding: '16px 32px', borderRadius: '12px',
             background: 'rgba(255,255,255,0.05)',
             border: '1px solid rgba(255,255,255,0.12)',
             color: 'var(--text)', fontSize: '16px', fontWeight: 500,
             transition: 'all 0.15s',
           }}>
-            See how it works
+            {h.secondaryCta}
           </Link>
         </div>
 
-        {/* Social proof line */}
         <div style={{ marginTop: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-          <div style={{ display: 'flex', gap: '-4px' }}>
+          <div style={{ display: 'flex' }}>
             {['#FFBFDE', '#DABFFF', '#B4B8C7', '#8B8F9E'].map((c, i) => (
               <div key={i} style={{
                 width: '28px', height: '28px', borderRadius: '50%',

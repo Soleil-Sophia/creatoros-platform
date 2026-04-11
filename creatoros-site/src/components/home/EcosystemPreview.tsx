@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { t } from '../../i18n';
+
+const eco = t.home.ecosystem;
 
 const modules = [
   {
@@ -52,12 +55,11 @@ export function EcosystemPreview() {
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '80px', alignItems: 'start' }}>
 
-          {/* Left */}
           <div>
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
               <div style={{ width: '24px', height: '1px', background: 'rgba(255,191,222,0.5)' }} />
               <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--pink)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                The Ecosystem
+                {eco.eyebrow}
               </span>
             </div>
 
@@ -68,24 +70,12 @@ export function EcosystemPreview() {
               letterSpacing: '-0.02em', lineHeight: 1.15,
               marginBottom: '20px',
             }}>
-              One platform.<br />Every layer of your creative business.
+              {eco.headline}
             </h2>
 
             <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.7, marginBottom: '32px' }}>
-              CreatorOS is being built as a modular infrastructure. Start with ContentOS. The rest follows.
+              {eco.body}
             </p>
-
-            <div style={{
-              padding: '20px',
-              borderRadius: '12px',
-              background: 'rgba(255,191,222,0.05)',
-              border: '1px solid rgba(255,191,222,0.1)',
-              marginBottom: '32px',
-            }}>
-              <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7 }}>
-                We're building this in the open, module by module. Join early access to influence what gets built and when.
-              </p>
-            </div>
 
             <Link to="/early-access" style={{
               display: 'inline-flex', alignItems: 'center', gap: '8px',
@@ -102,7 +92,6 @@ export function EcosystemPreview() {
             </Link>
           </div>
 
-          {/* Right — module cards */}
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
             {modules.map(({ name, tagline, description, status, accent, number }) => {
               const isActive = status === 'active';

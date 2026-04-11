@@ -1,8 +1,11 @@
 import { Link } from 'react-router-dom';
+import { t } from '../../i18n';
+
+const fp = t.home.featuredProduct;
 
 const includes = [
   { label: 'Positioning Workbook', description: '40 guided pages to define your offer, angle, and audience with precision.' },
-  { label: 'Audience Clarity Framework', description: 'A structured framework to identify exactly who you\'re creating for — and who you\'re not.' },
+  { label: 'Audience Clarity Framework', description: "A structured framework to identify exactly who you're creating for — and who you're not." },
   { label: 'Content System Blueprint', description: 'Build your personal content operating system from scratch, step by step.' },
   { label: 'Brand Voice Guide', description: 'Define your tone, style, and non-negotiables so your content is unmistakably yours.' },
   { label: '30-Day Content Roadmap', description: 'A structured first month of content with daily prompts, formats, and output goals.' },
@@ -17,14 +20,12 @@ export function FeaturedProduct() {
 
           {/* Left — product visual */}
           <div style={{ position: 'relative' }}>
-            {/* Glow */}
             <div style={{
               position: 'absolute', inset: '-40px',
               background: 'radial-gradient(ellipse at center, rgba(255,191,222,0.1) 0%, transparent 70%)',
               pointerEvents: 'none',
             }} />
 
-            {/* Product card */}
             <div style={{
               borderRadius: '24px',
               background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
@@ -33,13 +34,11 @@ export function FeaturedProduct() {
               position: 'relative',
               overflow: 'hidden',
             }}>
-              {/* Top gradient line */}
               <div style={{
                 position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
                 background: 'linear-gradient(90deg, transparent, rgba(255,191,222,0.5) 50%, transparent)',
               }} />
 
-              {/* Badge */}
               <div style={{
                 display: 'inline-flex', alignItems: 'center', gap: '6px',
                 padding: '5px 12px', borderRadius: '100px',
@@ -74,7 +73,6 @@ export function FeaturedProduct() {
                 A structured digital kit to build clarity around your offer, audience, and content direction — before you produce a single piece.
               </p>
 
-              {/* Price */}
               <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '32px' }}>
                 <span style={{
                   fontFamily: 'var(--font-heading)',
@@ -95,7 +93,7 @@ export function FeaturedProduct() {
                 boxShadow: '0 12px 32px rgba(255,191,222,0.3)',
                 transition: 'opacity 0.15s',
               }}>
-                Get the Kit
+                {t.nav.cta}
                 <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -108,7 +106,7 @@ export function FeaturedProduct() {
             <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
               <div style={{ width: '24px', height: '1px', background: 'rgba(255,191,222,0.5)' }} />
               <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--pink)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                Featured Product
+                {fp.eyebrow}
               </span>
             </div>
 
@@ -119,11 +117,11 @@ export function FeaturedProduct() {
               letterSpacing: '-0.02em', lineHeight: 1.15,
               marginBottom: '16px',
             }}>
-              Start with clarity,<br />not content.
+              {fp.headline}
             </h2>
 
             <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.7, marginBottom: '40px' }}>
-              The Creator Clarity Kit gives you the foundational tools to define your positioning, identify your exact audience, and build a system that makes every piece of content intentional.
+              {fp.body}
             </p>
 
             <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '20px' }}>
@@ -150,6 +148,22 @@ export function FeaturedProduct() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            <div style={{ marginTop: '32px' }}>
+              <Link to="/product" style={{
+                display: 'inline-flex', alignItems: 'center', gap: '8px',
+                padding: '12px 22px', borderRadius: '10px',
+                background: 'rgba(255,191,222,0.08)',
+                border: '1px solid rgba(255,191,222,0.2)',
+                color: 'var(--pink)', fontSize: '14px', fontWeight: 600,
+                transition: 'all 0.15s',
+              }}>
+                {fp.cta}
+                <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
+                  <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </Link>
             </div>
           </div>
         </div>

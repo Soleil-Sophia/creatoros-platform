@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom';
+import { t } from '../../i18n';
+
+const fc = t.home.finalCta;
 
 export function FinalCTA() {
   return (
@@ -14,7 +17,6 @@ export function FinalCTA() {
           overflow: 'hidden',
         }}>
 
-          {/* Glows */}
           <div style={{
             position: 'absolute', top: '-80px', left: '50%', transform: 'translateX(-50%)',
             width: '700px', height: '400px',
@@ -22,20 +24,12 @@ export function FinalCTA() {
             pointerEvents: 'none',
           }} />
 
-          {/* Top line */}
           <div style={{
             position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
             background: 'linear-gradient(90deg, transparent, rgba(255,191,222,0.4) 50%, transparent)',
           }} />
 
           <div style={{ position: 'relative' }}>
-            <p style={{
-              fontSize: '13px', fontWeight: 600, color: 'var(--pink)',
-              letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '24px',
-            }}>
-              Ready when you are
-            </p>
-
             <h2 style={{
               fontFamily: 'var(--font-heading)',
               fontSize: 'clamp(36px, 5vw, 64px)',
@@ -43,14 +37,14 @@ export function FinalCTA() {
               letterSpacing: '-0.02em', lineHeight: 1.1,
               marginBottom: '24px',
             }}>
-              Ready to build your<br />content system?
+              {fc.headline}
             </h2>
 
             <p style={{
               fontSize: '18px', color: 'var(--text-3)', lineHeight: 1.7,
               maxWidth: '520px', margin: '0 auto 48px',
             }}>
-              Start with the Creator Clarity Kit — the foundation every creator needs before they produce anything else.
+              {fc.body}
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
@@ -62,7 +56,7 @@ export function FinalCTA() {
                 display: 'inline-flex', alignItems: 'center', gap: '10px',
                 transition: 'opacity 0.15s',
               }}>
-                Get the Creator Clarity Kit
+                {fc.primaryCta}
                 <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
                   <path d="M3 9h12M9 3l6 6-6 6" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
@@ -75,7 +69,7 @@ export function FinalCTA() {
                 color: 'var(--text-2)', fontSize: '16px', fontWeight: 500,
                 transition: 'all 0.15s',
               }}>
-                Join early access instead
+                {fc.secondaryCta}
               </Link>
             </div>
 
