@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { t } from '../../i18n';
 
 const fp = t.home.featuredProduct;
+const PRICE = fp.price;
 
 const includes = [
   { label: 'Positioning Workbook', description: '40 guided pages to define your offer, angle, and audience with precision.' },
@@ -79,7 +80,7 @@ export function FeaturedProduct() {
                   fontSize: '42px', fontWeight: 800,
                   color: 'var(--text)', letterSpacing: '-0.02em',
                 }}>
-                  €127
+                  {PRICE}
                 </span>
                 <span style={{ fontSize: '14px', color: 'var(--text-3)' }}>one-time · digital download</span>
               </div>

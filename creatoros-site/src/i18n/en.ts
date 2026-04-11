@@ -31,6 +31,7 @@ export const en = {
       headline: 'Begin with Creator Clarity Kit',
       body: 'A focused starter system designed to help you define one real direction, shape one testable offer, and move from mental clutter to structured action.',
       cta: 'Get the Kit',
+      price: '€24',
     },
     howItWorks: {
       eyebrow: 'How it works',
