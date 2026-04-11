@@ -1,5 +1,25 @@
 import { Link } from 'react-router-dom';
 
+const navLinks = [
+  { href: '/', label: 'Home' },
+  { href: '/product', label: 'Product' },
+  { href: '/offers', label: 'Offers' },
+  { href: '/about', label: 'About' },
+  { href: '/early-access', label: 'Early Access' },
+];
+
+const legalLinks = [
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/terms', label: 'Terms' },
+  { href: '/contact', label: 'Contact' },
+];
+
+const linkStyle: React.CSSProperties = {
+  fontSize: '14px',
+  color: 'var(--text-3)',
+  transition: 'color 0.15s',
+};
+
 export function Footer() {
   return (
     <footer style={{
@@ -7,11 +27,19 @@ export function Footer() {
       background: '#0A0B10',
     }}>
       <div className="container" style={{ padding: '60px 24px 40px' }}>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr', gap: '40px', marginBottom: '60px' }}>
+
+        {/* Main row */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr auto',
+          gap: '48px',
+          alignItems: 'start',
+          marginBottom: '48px',
+        }}>
 
           {/* Brand */}
-          <div style={{ gridColumn: '1 / 2' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
+          <div>
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
               <div style={{
                 width: '28px', height: '28px', borderRadius: '7px',
                 background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
@@ -26,78 +54,52 @@ export function Footer() {
               <span style={{ fontFamily: 'var(--font-heading)', fontSize: '15px', fontWeight: 700, color: 'var(--text)' }}>
                 CreatorOS
               </span>
-            </div>
-            <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '220px' }}>
-              The operating infrastructure for creators who think in systems.
-            </p>
-          </div>
-
-          {/* Product */}
-          <div>
-            <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '16px' }}>
-              Product
-            </p>
-            {['Creator Clarity Kit', 'ContentOS', 'Early Access'].map(label => (
-              <Link key={label} to="/" style={{ display: 'block', fontSize: '14px', color: 'var(--text-3)', marginBottom: '10px', transition: 'color 0.15s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Company */}
-          <div>
-            <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '16px' }}>
-              Company
-            </p>
-            {[{ label: 'About', href: '/about' }, { label: 'Offers', href: '/offers' }, { label: 'Early Access', href: '/early-access' }].map(({ label, href }) => (
-              <Link key={label} to={href} style={{ display: 'block', fontSize: '14px', color: 'var(--text-3)', marginBottom: '10px', transition: 'color 0.15s' }}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
-              >
-                {label}
-              </Link>
-            ))}
-          </div>
-
-          {/* Newsletter mini */}
-          <div>
-            <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '16px' }}>
-              Stay in the loop
-            </p>
-            <p style={{ fontSize: '13px', color: 'var(--text-3)', marginBottom: '16px', lineHeight: 1.6 }}>
-              Early access updates and new releases.
-            </p>
-            <Link to="/early-access" style={{
-              display: 'inline-block',
-              padding: '9px 18px',
-              borderRadius: '8px',
-              background: 'rgba(255, 191, 222, 0.1)',
-              border: '1px solid rgba(255, 191, 222, 0.2)',
-              color: 'var(--pink)',
-              fontSize: '13px',
-              fontWeight: 600,
-              transition: 'all 0.15s',
-            }}>
-              Get Early Access
             </Link>
+            <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '240px' }}>
+              Clarity-first tools for creators and solo brands.
+            </p>
           </div>
+
+          {/* Nav links */}
+          <nav style={{ display: 'flex', gap: '32px', alignItems: 'flex-start' }}>
+            {navLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                to={href}
+                style={linkStyle}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
         </div>
 
         {/* Bottom bar */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          paddingTop: '32px',
+          paddingTop: '28px',
           borderTop: '1px solid rgba(255,255,255,0.05)',
+          flexWrap: 'wrap',
+          gap: '12px',
         }}>
-          <p style={{ fontSize: '13px', color: 'var(--text-3)' }}>
-            © 2026 CreatorOS. All rights reserved.
+          <p style={{ fontSize: '12px', color: 'var(--text-3)' }}>
+            © {new Date().getFullYear()} CreatorOS. All rights reserved.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--text-3)' }}>
-            Built for creators who think in systems.
-          </p>
+          <div style={{ display: 'flex', gap: '20px' }}>
+            {legalLinks.map(({ href, label }) => (
+              <Link
+                key={href}
+                to={href}
+                style={{ fontSize: '12px', color: 'var(--text-3)', transition: 'color 0.15s' }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+              >
+                {label}
+              </Link>
+            ))}
+          </div>
         </div>
       </div>
     </footer>

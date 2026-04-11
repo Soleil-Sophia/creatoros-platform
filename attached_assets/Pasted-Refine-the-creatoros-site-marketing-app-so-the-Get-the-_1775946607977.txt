@@ -1,0 +1,95 @@
+Refine the creatoros-site marketing app so the "Get the Kit" CTA leads into a real purchase-ready flow, using a simple MVP external checkout model.
+
+Goal:
+Make the Creator Clarity Kit feel actually purchasable, with a clean CTA path and clear delivery expectations.
+
+Important:
+- Do not build a full custom checkout inside the site
+- Use a placeholder external checkout flow that can later be connected to Gumroad, Ko-fi, Lemon Squeezy, or Stripe
+- This is a launch-ready UX pass, not a full payments integration
+
+Implement the following:
+
+1. Define a single checkout destination
+Create one central constant/config value for the Creator Clarity Kit checkout URL, for example:
+- CREATOR_CLARITY_KIT_CHECKOUT_URL
+
+Use a placeholder URL for now if needed.
+All primary "Get the Kit" CTAs across the site should point to this same destination.
+
+2. Update all "Get the Kit" buttons
+Ensure every "Get the Kit" CTA on:
+- Home
+- Product page
+- Offers page
+- Final CTA sections
+links to the same checkout URL.
+
+Do not leave any "Get the Kit" button pointing nowhere or to inconsistent routes.
+
+3. Add purchase reassurance near product CTAs
+Where appropriate, add concise microcopy near the main product CTA:
+
+Suggested lines:
+- €24 — one-time purchase
+- Instant access after checkout
+- Includes Notion Template, Workbook, Prompt Assist, and Start Here Guide
+
+Keep this subtle, premium, and non-salesy.
+
+4. Product page purchase block
+On the /product page, create a stronger purchase section that clearly presents:
+- Product name
+- Price (€24)
+- One-time purchase
+- Instant access after checkout
+- What’s included
+- Primary CTA: Get the Kit
+
+Keep this section clean and premium, not ecommerce-heavy or cluttered.
+
+5. Add a lightweight post-purchase expectation section
+On the product page, add a short block such as:
+
+Headline:
+What happens after purchase
+
+Body:
+After checkout, you’ll get instant access to the full Creator Clarity Kit, including the Notion Template, Workbook, Prompt Assist, and Start Here Guide.
+
+Optional bullets:
+- Instant access
+- One-time purchase
+- No subscription
+- Built for fast clarity, not overwhelm
+
+6. Offers page clarity
+On the /offers page, make the current available offer clearly distinguishable from future offers.
+
+Structure:
+- Creator Clarity Kit → available now → Get the Kit
+- Future tools / modules → coming soon or Join Early Access
+
+Make sure the page clearly communicates what is purchasable today versus what is not yet live.
+
+7. Button behavior and external link polish
+If the checkout destination is external:
+- ensure links open cleanly and intentionally
+- optionally use a small external-link cue if it fits the design language
+- do not overdo it
+
+8. Keep CTA discipline
+Do not introduce any new CTA labels.
+Only use:
+- Get the Kit
+- Explore CreatorOS
+- Join Early Access
+
+9. Keep the page premium
+No fake urgency
+No fake discounts
+No fake stock indicators
+No fake social proof
+
+Goal:
+Make the Creator Clarity Kit feel like a real digital product with a believable path to purchase and clear delivery expectations, while keeping the experience premium and minimal.

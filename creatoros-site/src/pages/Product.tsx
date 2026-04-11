@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useMeta } from '../hooks/useMeta';
 
 const PRICE = '€24';
 
@@ -168,6 +169,7 @@ function FAQ({ q, a }: { q: string; a: string }) {
 }
 
 export default function Product() {
+  useMeta('Creator Clarity Kit — CreatorOS', 'A clarity-first starter system for creators and solo brands who need one clear, testable offer.');
   return (
     <div>
 

@@ -1,3 +1,5 @@
+import { useMeta } from '../hooks/useMeta';
+
 const values = [
   {
     title: 'System over hustle.',
@@ -22,6 +24,7 @@ const values = [
 ];
 
 export default function About() {
+  useMeta('About CreatorOS', 'Learn what CreatorOS is, why it exists, and who it is built for.');
   return (
     <div>
       {/* Hero */}

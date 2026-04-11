@@ -1,15 +1,16 @@
 import { Link } from 'react-router-dom';
+import { useMeta } from '../hooks/useMeta';
 
 const offers = [
   {
     status: 'Available Now',
     statusColor: '#FFBFDE',
     name: 'Creator Clarity Kit',
-    tagline: 'Your content foundation.',
-    description: 'A structured digital kit to define your positioning, audience, and content system — before you produce a single piece. The starting point for everything CreatorOS is building.',
-    price: '€127',
-    priceNote: 'One-time · Digital download',
-    includes: ['Positioning Workbook (40 pages)', 'Audience Clarity Framework', 'Content System Blueprint', 'Brand Voice Guide', '30-Day Content Roadmap'],
+    tagline: 'A clarity-first starter system.',
+    description: 'A focused kit to help you choose your first real offer, sharpen your positioning, and move from idea overload to structured action.',
+    price: '€24',
+    priceNote: 'One-time · Instant access',
+    includes: ['Notion Template', 'Workbook', 'Prompt Assist', 'Start Here Guide'],
     cta: { label: 'Get the Kit', href: '/product', primary: true },
   },
   {
@@ -32,11 +33,12 @@ const offers = [
     price: 'Coming Soon',
     priceNote: 'Join early access to influence what gets built',
     includes: ['Brand voice and identity system', 'Offer launch infrastructure', 'Performance analytics', 'Community management tools'],
-    cta: { label: 'Stay in the loop', href: '/early-access', primary: false },
+    cta: { label: 'Join Early Access', href: '/early-access', primary: false },
   },
 ];
 
 export default function Offers() {
+  useMeta('Offers — CreatorOS', 'Explore focused digital tools and early-access offers from CreatorOS.');
   return (
     <div>
       {/* Header */}

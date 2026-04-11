@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useMeta } from '../hooks/useMeta';
 
 const perks = [
   { label: 'First access to ContentOS', description: 'Be among the first to use the full platform before public launch.' },
@@ -8,6 +9,7 @@ const perks = [
 ];
 
 export default function EarlyAccess() {
+  useMeta('Early Access — CreatorOS', 'Join the list for future CreatorOS tools, product drops, and early platform access.');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);
