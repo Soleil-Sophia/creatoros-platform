@@ -1,15 +1,15 @@
 import { Link } from 'react-router-dom';
 import { t } from '../../i18n';
+import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../../config/checkout';
 
 const fp = t.home.featuredProduct;
 const PRICE = fp.price;
 
 const includes = [
-  { label: 'Positioning Workbook', description: '40 guided pages to define your offer, angle, and audience with precision.' },
-  { label: 'Audience Clarity Framework', description: "A structured framework to identify exactly who you're creating for — and who you're not." },
-  { label: 'Content System Blueprint', description: 'Build your personal content operating system from scratch, step by step.' },
-  { label: 'Brand Voice Guide', description: 'Define your tone, style, and non-negotiables so your content is unmistakably yours.' },
-  { label: '30-Day Content Roadmap', description: 'A structured first month of content with daily prompts, formats, and output goals.' },
+  { label: 'Notion Template', description: 'Structure your thinking and turn ideas into decisions — a clean workspace built for the clarity process.' },
+  { label: 'Workbook', description: 'Define your offer, audience, and angle without fluff. Guided exercises that force useful output.' },
+  { label: 'Prompt Assist', description: 'Guided prompts for clearer, sharper thinking. Not AI filler — structured questions that cut to the real answer.' },
+  { label: 'Start Here Guide', description: 'A simple path so you don\'t stall or overbuild. Tells you exactly where to begin and what to skip.' },
 ];
 
 export function FeaturedProduct() {
@@ -85,7 +85,7 @@ export function FeaturedProduct() {
                 <span style={{ fontSize: '14px', color: 'var(--text-3)' }}>one-time · digital download</span>
               </div>
 
-              <Link to="/product" style={{
+              <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px',
                 width: '100%', padding: '16px',
                 borderRadius: '12px',
@@ -98,7 +98,7 @@ export function FeaturedProduct() {
                 <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
                   <path d="M3 8h10M9 4l4 4-4 4" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </Link>
+              </a>
             </div>
           </div>
 

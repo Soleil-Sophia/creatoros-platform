@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { t } from '../../i18n';
+import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../../config/checkout';
 
 const fc = t.home.finalCta;
 
@@ -48,7 +49,7 @@ export function FinalCTA() {
             </p>
 
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-              <Link to="/product" style={{
+              <a href={CHECKOUT_URL} target="_blank" rel="noopener noreferrer" style={{
                 padding: '18px 36px', borderRadius: '14px',
                 background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
                 color: '#0E0F14', fontSize: '17px', fontWeight: 700,
@@ -60,7 +61,7 @@ export function FinalCTA() {
                 <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
                   <path d="M3 9h12M9 3l6 6-6 6" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-              </Link>
+              </a>
 
               <Link to="/early-access" style={{
                 padding: '18px 28px', borderRadius: '14px',
@@ -74,7 +75,7 @@ export function FinalCTA() {
             </div>
 
             <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '28px' }}>
-              €127 · One-time · Instant digital download · No subscription
+              €24 · One-time purchase · Instant access after checkout
             </p>
           </div>
         </div>

@@ -1,6 +1,6 @@
-import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { t } from '../i18n';
+import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../config/checkout';
 
 const links = [
   { href: '/', label: t.nav.home },
@@ -12,7 +12,6 @@ const links = [
 
 export function Navbar() {
   const { pathname } = useLocation();
-  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
     <header
@@ -68,8 +67,10 @@ export function Navbar() {
             })}
           </nav>
 
-          <Link
-            to="/product"
+          <a
+            href={CHECKOUT_URL}
+            target="_blank"
+            rel="noopener noreferrer"
             style={{
               padding: '10px 20px',
               borderRadius: '10px',
@@ -85,7 +86,7 @@ export function Navbar() {
             onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
           >
             {t.nav.cta}
-          </Link>
+          </a>
         </div>
       </div>
     </header>

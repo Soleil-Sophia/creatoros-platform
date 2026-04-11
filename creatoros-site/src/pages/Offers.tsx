@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { useMeta } from '../hooks/useMeta';
+import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../config/checkout';
 
 const offers = [
   {
@@ -9,9 +10,9 @@ const offers = [
     tagline: 'A clarity-first starter system.',
     description: 'A focused kit to help you choose your first real offer, sharpen your positioning, and move from idea overload to structured action.',
     price: '€24',
-    priceNote: 'One-time · Instant access',
+    priceNote: 'One-time · Instant access after checkout',
     includes: ['Notion Template', 'Workbook', 'Prompt Assist', 'Start Here Guide'],
-    cta: { label: 'Get the Kit', href: '/product', primary: true },
+    cta: { label: 'Get the Kit', href: CHECKOUT_URL, external: true, primary: true },
   },
   {
     status: 'Early Access',
@@ -68,13 +69,22 @@ export default function Offers() {
       {/* Offers list */}
       <section style={{ padding: '40px 0 120px', background: '#0A0B10' }}>
         <div className="container">
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-            {offers.map(({ status, statusColor, name, tagline, description, price, priceNote, includes, cta }) => (
+
+          {/* ── Available Now ── */}
+          <div style={{ marginBottom: '60px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#FFBFDE' }} />
+              <span style={{ fontSize: '12px', fontWeight: 600, color: '#FFBFDE', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                Available now
+              </span>
+            </div>
+            {offers.filter(o => o.status === 'Available Now').map(({ status, statusColor, name, tagline, description, price, priceNote, includes, cta }) => (
               <div key={name} style={{
                 padding: '52px',
                 borderRadius: '24px',
-                background: 'linear-gradient(135deg, #1A1D2A 0%, #141620 100%)',
-                border: `1px solid ${statusColor}18`,
+                background: 'linear-gradient(135deg, #1E2030 0%, #15172A 100%)',
+                border: '1px solid rgba(255,191,222,0.22)',
+                boxShadow: '0 0 60px rgba(255,191,222,0.07)',
                 display: 'grid', gridTemplateColumns: '1fr 1fr 280px',
                 gap: '48px', alignItems: 'start',
                 position: 'relative', overflow: 'hidden',
@@ -131,21 +141,119 @@ export default function Offers() {
                     </div>
                     <p style={{ fontSize: '13px', color: 'var(--text-3)' }}>{priceNote}</p>
                   </div>
-                  <Link to={cta.href} style={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
-                    padding: '14px 20px', borderRadius: '12px',
-                    background: cta.primary ? 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)' : `${statusColor}10`,
-                    border: cta.primary ? 'none' : `1px solid ${statusColor}25`,
-                    color: cta.primary ? '#0E0F14' : statusColor,
-                    fontSize: '15px', fontWeight: 600,
-                    boxShadow: cta.primary ? '0 8px 24px rgba(255,191,222,0.3)' : 'none',
-                  }}>
-                    {cta.label}
-                  </Link>
+                  {(cta as any).external ? (
+                    <a href={cta.href} target="_blank" rel="noopener noreferrer" style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      padding: '14px 20px', borderRadius: '12px',
+                      background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
+                      color: '#0E0F14',
+                      fontSize: '15px', fontWeight: 600,
+                      boxShadow: '0 8px 24px rgba(255,191,222,0.3)',
+                    }}>
+                      {cta.label}
+                    </a>
+                  ) : (
+                    <Link to={cta.href} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      padding: '14px 20px', borderRadius: '12px',
+                      background: `${statusColor}10`,
+                      border: `1px solid ${statusColor}25`,
+                      color: statusColor,
+                      fontSize: '15px', fontWeight: 600,
+                    }}>
+                      {cta.label}
+                    </Link>
+                  )}
                 </div>
               </div>
             ))}
           </div>
+
+          {/* ── Coming Soon ── */}
+          <div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '24px' }}>
+              <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: 'rgba(255,255,255,0.25)' }} />
+              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+                Coming soon
+              </span>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+              {offers.filter(o => o.status !== 'Available Now').map(({ status, statusColor, name, tagline, description, price, priceNote, includes, cta }) => (
+                <div key={name} style={{
+                  padding: '48px 52px',
+                  borderRadius: '24px',
+                  background: 'linear-gradient(135deg, #141620 0%, #111318 100%)',
+                  border: `1px solid ${statusColor}14`,
+                  display: 'grid', gridTemplateColumns: '1fr 1fr 280px',
+                  gap: '48px', alignItems: 'start',
+                  position: 'relative', overflow: 'hidden',
+                  opacity: 0.75,
+                }}>
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+                    background: `linear-gradient(90deg, transparent, ${statusColor}25, transparent)`,
+                  }} />
+
+                  <div>
+                    <div style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '6px',
+                      padding: '4px 10px', borderRadius: '100px',
+                      background: `${statusColor}10`,
+                      border: `1px solid ${statusColor}20`,
+                      marginBottom: '20px',
+                    }}>
+                      <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: statusColor }} />
+                      <span style={{ fontSize: '11px', fontWeight: 600, color: statusColor }}>{status}</span>
+                    </div>
+                    <h2 style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 800, color: 'var(--text)', marginBottom: '6px' }}>{name}</h2>
+                    <p style={{ fontSize: '14px', color: statusColor, fontWeight: 500, marginBottom: '16px' }}>{tagline}</p>
+                    <p style={{ fontSize: '15px', color: 'var(--text-3)', lineHeight: 1.7 }}>{description}</p>
+                  </div>
+
+                  <div>
+                    <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--text-3)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '16px' }}>
+                      Includes
+                    </p>
+                    {includes.map(item => (
+                      <div key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '12px' }}>
+                        <div style={{
+                          width: '16px', height: '16px', borderRadius: '5px',
+                          background: `${statusColor}08`, border: `1px solid ${statusColor}15`,
+                          display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          flexShrink: 0, marginTop: '2px',
+                        }}>
+                          <svg width="8" height="8" fill="none" viewBox="0 0 8 8">
+                            <path d="M1.5 4l2 2 3-3" stroke={statusColor} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </div>
+                        <span style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.5 }}>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                    <div>
+                      <div style={{ fontFamily: 'var(--font-heading)', fontSize: '28px', fontWeight: 800, color: 'var(--text-2)', letterSpacing: '-0.02em', marginBottom: '4px' }}>
+                        {price}
+                      </div>
+                      <p style={{ fontSize: '13px', color: 'var(--text-3)' }}>{priceNote}</p>
+                    </div>
+                    <Link to={cta.href} style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      padding: '14px 20px', borderRadius: '12px',
+                      background: `${statusColor}10`,
+                      border: `1px solid ${statusColor}25`,
+                      color: statusColor,
+                      fontSize: '15px', fontWeight: 600,
+                    }}>
+                      {cta.label}
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
         </div>
       </section>
     </div>

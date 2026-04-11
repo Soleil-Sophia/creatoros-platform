@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useMeta } from '../hooks/useMeta';
+import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../config/checkout';
 
 const PRICE = '€24';
 
@@ -81,7 +82,7 @@ function Eyebrow({ label, color = 'var(--pink)' }: { label: string; color?: stri
 
 function PrimaryButton({ href, children, large }: { href: string; children: React.ReactNode; large?: boolean }) {
   return (
-    <a href={href} style={{
+    <a href={href} target="_blank" rel="noopener noreferrer" style={{
       display: 'inline-flex', alignItems: 'center', gap: '10px',
       padding: large ? '18px 40px' : '16px 32px',
       borderRadius: '14px',
@@ -214,7 +215,7 @@ export default function Product() {
               <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '6px' }}>One-time · Instant access</p>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <PrimaryButton href="#get" large>Get the Kit</PrimaryButton>
+              <PrimaryButton href={CHECKOUT_URL} large>Get the Kit</PrimaryButton>
               <SecondaryButton to="/early-access" />
             </div>
           </div>
@@ -450,7 +451,7 @@ export default function Product() {
                 One-time · Instant access
               </p>
 
-              <PrimaryButton href="#get" large>Get the Kit</PrimaryButton>
+              <PrimaryButton href={CHECKOUT_URL} large>Get the Kit</PrimaryButton>
 
               <div style={{ marginTop: '24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
@@ -619,7 +620,7 @@ export default function Product() {
                 Start building with clarity.
               </h2>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px', flexWrap: 'wrap' }}>
-                <PrimaryButton href="#get" large>Get the Kit</PrimaryButton>
+                <PrimaryButton href={CHECKOUT_URL} large>Get the Kit</PrimaryButton>
                 <SecondaryButton to="/early-access" />
               </div>
               <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '24px' }}>
@@ -661,7 +662,62 @@ export default function Product() {
 
       <Divider />
 
-      {/* ── 9. Final CTA ──────────────────────────────── */}
+      {/* ── 9. What happens after purchase ────────────── */}
+      <section style={{ padding: '80px 0' }}>
+        <div className="container">
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '80px', alignItems: 'start' }}>
+
+            <div>
+              <Eyebrow label="After purchase" color="var(--lilac)" />
+              <h2 style={{
+                fontFamily: 'var(--font-heading)',
+                fontSize: 'clamp(28px, 3vw, 40px)',
+                fontWeight: 800, color: 'var(--text)',
+                letterSpacing: '-0.02em', lineHeight: 1.2,
+              }}>
+                What happens next
+              </h2>
+            </div>
+
+            <div>
+              <p style={{ fontSize: '17px', color: 'var(--text-2)', lineHeight: 1.75, marginBottom: '40px' }}>
+                After checkout, you'll receive instant access to the full Creator Clarity Kit — including the Notion Template, Workbook, Prompt Assist, and Start Here Guide. No waiting, no onboarding calls, no friction.
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+                {[
+                  { label: 'Instant access', detail: 'Everything arrives immediately after checkout.' },
+                  { label: 'One-time purchase', detail: 'No subscription. No renewal. Yours to keep.' },
+                  { label: 'No subscription', detail: 'Pay once. Use it at your own pace.' },
+                  { label: 'Built for fast clarity', detail: 'Most people complete the first pass in 60–90 minutes.' },
+                ].map(({ label, detail }) => (
+                  <div key={label} style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+                    <div style={{
+                      width: '20px', height: '20px', borderRadius: '6px',
+                      background: 'rgba(218,191,255,0.1)',
+                      border: '1px solid rgba(218,191,255,0.2)',
+                      display: 'flex', alignItems: 'center', justifyContent: 'center',
+                      flexShrink: 0, marginTop: '3px',
+                    }}>
+                      <svg width="10" height="10" fill="none" viewBox="0 0 10 10">
+                        <path d="M2 5l2 2 4-4" stroke="#DABFFF" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                    </div>
+                    <div>
+                      <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{label}</p>
+                      <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.6 }}>{detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <Divider />
+
+      {/* ── 10. Final CTA ─────────────────────────────── */}
       <section style={{ padding: '80px 0', background: '#0A0B10' }}>
         <div className="container">
           <div style={{
@@ -699,7 +755,7 @@ export default function Product() {
               </p>
 
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '24px', flexWrap: 'wrap', marginBottom: '24px' }}>
-                <PrimaryButton href="#get" large>Get the Kit</PrimaryButton>
+                <PrimaryButton href={CHECKOUT_URL} large>Get the Kit</PrimaryButton>
                 <SecondaryButton to="/early-access" />
               </div>
 
