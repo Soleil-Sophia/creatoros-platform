@@ -59,7 +59,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     setPlatform('LinkedIn');
     setGoal('');
     setTone('Conversational');
-    setOutputType('Full Content Suite');
+    setOutputType('hook-pack');
     setShowReuseBanner(false);
     navigate('/app/content-os/generate', { replace: true, state: {} });
   };

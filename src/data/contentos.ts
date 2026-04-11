@@ -33,6 +33,156 @@ export type Stat = {
   label: string;
 };
 
+export type InputFieldConfig = {
+  label: string;
+  placeholder: string;
+  primary: boolean;
+};
+
+export type InputMeta = {
+  helperDescription: string;
+  showTone: boolean;
+  fields: {
+    offer: InputFieldConfig;
+    audience: InputFieldConfig;
+    platform: InputFieldConfig;
+    goal: InputFieldConfig;
+  };
+};
+
+export const INPUT_META: Record<string, InputMeta> = {
+  'hook-pack': {
+    helperDescription: '5 tested hooks built around one topic, one audience, and one angle.',
+    showTone: true,
+    fields: {
+      offer: {
+        label: 'Topic / Angle',
+        placeholder: 'e.g. Why most consultants struggle to scale — it\'s a positioning problem',
+        primary: true,
+      },
+      audience: {
+        label: 'Audience',
+        placeholder: 'e.g. Established consultants, coaches, agencies',
+        primary: true,
+      },
+      platform: {
+        label: 'Platform',
+        placeholder: 'LinkedIn',
+        primary: false,
+      },
+      goal: {
+        label: 'Angle / Framing',
+        placeholder: 'e.g. Challenge a belief they hold but shouldn\'t',
+        primary: false,
+      },
+    },
+  },
+  'short-script': {
+    helperDescription: 'A structured 60-second script with clear beats, flow, and CTA.',
+    showTone: true,
+    fields: {
+      offer: {
+        label: 'Topic',
+        placeholder: 'e.g. Why content without positioning doesn\'t convert',
+        primary: true,
+      },
+      audience: {
+        label: 'Audience',
+        placeholder: 'e.g. Creators building service-based businesses',
+        primary: false,
+      },
+      platform: {
+        label: 'Format / Platform',
+        placeholder: 'e.g. YouTube Short, Instagram Reel',
+        primary: true,
+      },
+      goal: {
+        label: 'CTA',
+        placeholder: 'e.g. Book a call / Follow for more / DM me',
+        primary: false,
+      },
+    },
+  },
+  'caption-draft': {
+    helperDescription: 'Platform-native caption options written for clarity, tone, and action.',
+    showTone: true,
+    fields: {
+      offer: {
+        label: 'Topic',
+        placeholder: 'e.g. The difference between content and positioned content',
+        primary: false,
+      },
+      audience: {
+        label: 'Audience',
+        placeholder: 'e.g. Coaches selling high-ticket services',
+        primary: false,
+      },
+      platform: {
+        label: 'Platform',
+        placeholder: 'e.g. Instagram',
+        primary: true,
+      },
+      goal: {
+        label: 'CTA',
+        placeholder: 'e.g. Save this, share with a creator who needs it',
+        primary: true,
+      },
+    },
+  },
+  'content-brief': {
+    helperDescription: 'A focused content brief with goal, audience, angle, structure, and CTA.',
+    showTone: false,
+    fields: {
+      offer: {
+        label: 'Angle',
+        placeholder: 'e.g. Positioning is the real lever — not content volume',
+        primary: true,
+      },
+      audience: {
+        label: 'Audience',
+        placeholder: 'e.g. Service providers with an audience but low inbound',
+        primary: true,
+      },
+      platform: {
+        label: 'Format',
+        placeholder: 'e.g. Long-form LinkedIn post',
+        primary: false,
+      },
+      goal: {
+        label: 'Goal',
+        placeholder: 'e.g. Generate inbound and build authority',
+        primary: true,
+      },
+    },
+  },
+  'repurposing-plan': {
+    helperDescription: 'One source asset mapped into multiple platform-specific content outputs.',
+    showTone: false,
+    fields: {
+      offer: {
+        label: 'Source Asset',
+        placeholder: 'e.g. LinkedIn post — Positioning vs. Content Volume (800 words)',
+        primary: true,
+      },
+      audience: {
+        label: 'Original Format',
+        placeholder: 'e.g. Long-form LinkedIn post',
+        primary: true,
+      },
+      platform: {
+        label: 'Target Platforms',
+        placeholder: 'e.g. Instagram, YouTube, X, Email',
+        primary: true,
+      },
+      goal: {
+        label: 'Goal',
+        placeholder: 'e.g. Maximum reach from one high-performing asset',
+        primary: false,
+      },
+    },
+  },
+};
+
 export const OUTPUT_TYPES: OutputType[] = [
   {
     id: 'hook-pack',

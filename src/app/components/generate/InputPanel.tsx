@@ -1,3 +1,4 @@
+import { INPUT_META, OUTPUT_TYPES } from '../../../data/contentos';
 import { SectionLabel } from '../shared';
 
 type InputPanelProps = {
@@ -17,6 +18,45 @@ type InputPanelProps = {
   onClearAll: () => void;
 };
 
+const fieldStyle = {
+  background: '#262A38',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  color: '#F4F3F8',
+  fontSize: '14px',
+  boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)',
+} as const;
+
+const primaryFieldStyle = {
+  background: '#262A38',
+  border: '1px solid rgba(255, 191, 222, 0.22)',
+  color: '#F4F3F8',
+  fontSize: '14px',
+  boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)',
+} as const;
+
+function FieldLabel({ label, primary }: { label: string; primary: boolean }) {
+  return (
+    <div className="flex items-center gap-2">
+      {primary && (
+        <div
+          className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+          style={{ background: '#FFBFDE', boxShadow: '0 0 4px rgba(255, 191, 222, 0.6)' }}
+        />
+      )}
+      <label
+        style={{
+          fontSize: '13px',
+          fontWeight: 600,
+          color: primary ? '#F4F3F8' : '#A0A5B8',
+          display: 'block',
+        }}
+      >
+        {label}
+      </label>
+    </div>
+  );
+}
+
 export function InputPanel({
   offer,
   audience,
@@ -31,225 +71,238 @@ export function InputPanel({
   onToneChange,
   onOutputTypeChange,
   onGenerate,
-  onClearAll
+  onClearAll,
 }: InputPanelProps) {
+  const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
+  const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
+
   return (
-    <div 
+    <div
       className="w-[36%] border-r flex flex-col relative"
-      style={{ 
+      style={{
         background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
         borderColor: 'rgba(255, 255, 255, 0.1)',
-        boxShadow: '4px 0 24px rgba(0, 0, 0, 0.4)'
+        boxShadow: '4px 0 24px rgba(0, 0, 0, 0.4)',
       }}
     >
       {/* Vertical accent light */}
-      <div 
+      <div
         className="absolute top-0 right-0 bottom-0 w-px"
-        style={{ background: 'linear-gradient(180deg, rgba(255, 191, 222, 0.2), transparent 50%, rgba(218, 191, 255, 0.2))' }}
-      ></div>
+        style={{
+          background:
+            'linear-gradient(180deg, rgba(255, 191, 222, 0.2), transparent 50%, rgba(218, 191, 255, 0.2))',
+        }}
+      />
 
       {/* Header */}
-      <div className="p-8 pb-7 border-b relative" style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}>
+      <div
+        className="p-8 pb-6 border-b relative"
+        style={{ borderColor: 'rgba(255, 255, 255, 0.08)' }}
+      >
         <div className="mb-4">
           <SectionLabel>Input Layer</SectionLabel>
         </div>
-        <h1 
-          style={{ 
-            fontSize: '32px', 
-            fontWeight: 700, 
+        <h1
+          style={{
+            fontSize: '28px',
+            fontWeight: 700,
             color: '#F4F3F8',
             letterSpacing: '-0.02em',
-            marginBottom: '10px'
+            marginBottom: '8px',
           }}
         >
           Generate Content
         </h1>
-        <p style={{ fontSize: '14px', color: '#B4B8C7', lineHeight: 1.6 }}>
-          Define your offer and audience to create structured content assets
+        <p
+          key={outputType}
+          style={{ fontSize: '13px', color: '#8B8F9E', lineHeight: 1.6, transition: 'opacity 0.2s' }}
+        >
+          {meta.helperDescription}
         </p>
       </div>
 
       {/* Form */}
-      <div className="flex-1 overflow-y-auto p-8 space-y-7">
-        {/* Offer/Topic */}
+      <div className="flex-1 overflow-y-auto p-8 space-y-6">
+
+        {/* Output Type — top of form, drives everything */}
         <div className="space-y-3">
           <label style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', display: 'block' }}>
-            Offer / Topic
+            Output Type
           </label>
+          <div className="grid grid-cols-1 gap-2">
+            {OUTPUT_TYPES.map((type) => {
+              const active = outputType === type.id;
+              return (
+                <button
+                  key={type.id}
+                  onClick={() => onOutputTypeChange(type.id)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-[10px] text-left transition-all w-full"
+                  style={{
+                    background: active
+                      ? 'linear-gradient(135deg, rgba(255, 191, 222, 0.12) 0%, rgba(218, 191, 255, 0.08) 100%)'
+                      : '#1A1D28',
+                    border: active
+                      ? '1px solid rgba(255, 191, 222, 0.3)'
+                      : '1px solid rgba(255, 255, 255, 0.07)',
+                    boxShadow: active ? '0 0 0 1px rgba(255, 191, 222, 0.08)' : 'none',
+                  }}
+                >
+                  <div
+                    className="w-2 h-2 rounded-full flex-shrink-0"
+                    style={{
+                      background: active ? '#FFBFDE' : 'rgba(255,255,255,0.2)',
+                      boxShadow: active ? '0 0 6px rgba(255, 191, 222, 0.5)' : 'none',
+                      transition: 'all 0.15s',
+                    }}
+                  />
+                  <div className="flex-1 min-w-0">
+                    <div
+                      style={{
+                        fontSize: '13px',
+                        fontWeight: active ? 600 : 500,
+                        color: active ? '#F4F3F8' : '#8B8F9E',
+                      }}
+                    >
+                      {type.label}
+                    </div>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Divider */}
+        <div style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }} />
+
+        {/* Offer / Topic — field 1 */}
+        <div className="space-y-2.5">
+          <FieldLabel label={meta.fields.offer.label} primary={meta.fields.offer.primary} />
           <textarea
-            placeholder="e.g. 6-week brand positioning intensive for service providers"
+            placeholder={meta.fields.offer.placeholder}
             rows={3}
-            className="w-full px-4 py-3.5 rounded-[12px] resize-none transition-all focus:outline-none focus:border-opacity-40"
-            style={{ 
-              background: '#262A38',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#F4F3F8',
-              fontSize: '14px',
-              lineHeight: 1.6,
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
-            }}
+            className="w-full px-4 py-3.5 rounded-[12px] resize-none transition-all focus:outline-none"
+            style={meta.fields.offer.primary ? primaryFieldStyle : fieldStyle}
             value={offer}
             onChange={(e) => onOfferChange(e.target.value)}
           />
         </div>
 
-        {/* Audience */}
-        <div className="space-y-3">
-          <label style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', display: 'block' }}>
-            Audience
-          </label>
+        {/* Audience — field 2 */}
+        <div className="space-y-2.5">
+          <FieldLabel label={meta.fields.audience.label} primary={meta.fields.audience.primary} />
           <input
             type="text"
-            placeholder="e.g. Established consultants, coaches, agencies"
-            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none focus:border-opacity-40"
-            style={{ 
-              background: '#262A38',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#F4F3F8',
-              fontSize: '14px',
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
-            }}
+            placeholder={meta.fields.audience.placeholder}
+            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none"
+            style={meta.fields.audience.primary ? primaryFieldStyle : fieldStyle}
             value={audience}
             onChange={(e) => onAudienceChange(e.target.value)}
           />
         </div>
 
-        {/* Platform */}
-        <div className="space-y-3">
-          <label style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', display: 'block' }}>
-            Platform
-          </label>
-          <select
-            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none focus:border-opacity-40 appearance-none"
-            style={{ 
-              background: '#262A38',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#F4F3F8',
-              fontSize: '14px',
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
-            }}
-            value={platform}
-            onChange={(e) => onPlatformChange(e.target.value)}
-          >
-            <option>LinkedIn</option>
-            <option>Instagram</option>
-            <option>Twitter / X</option>
-            <option>YouTube</option>
-            <option>Email</option>
-          </select>
-        </div>
-
-        {/* Goal */}
-        <div className="space-y-3">
-          <label style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', display: 'block' }}>
-            Goal
-          </label>
+        {/* Platform — field 3 */}
+        <div className="space-y-2.5">
+          <FieldLabel label={meta.fields.platform.label} primary={meta.fields.platform.primary} />
           <input
             type="text"
-            placeholder="e.g. Drive discovery call bookings"
-            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none focus:border-opacity-40"
-            style={{ 
-              background: '#262A38',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#F4F3F8',
-              fontSize: '14px',
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
-            }}
+            placeholder={meta.fields.platform.placeholder}
+            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none"
+            style={meta.fields.platform.primary ? primaryFieldStyle : fieldStyle}
+            value={platform}
+            onChange={(e) => onPlatformChange(e.target.value)}
+          />
+        </div>
+
+        {/* Goal — field 4 */}
+        <div className="space-y-2.5">
+          <FieldLabel label={meta.fields.goal.label} primary={meta.fields.goal.primary} />
+          <input
+            type="text"
+            placeholder={meta.fields.goal.placeholder}
+            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none"
+            style={meta.fields.goal.primary ? primaryFieldStyle : fieldStyle}
             value={goal}
             onChange={(e) => onGoalChange(e.target.value)}
           />
         </div>
 
-        {/* Tone */}
-        <div className="space-y-3">
-          <label style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', display: 'block' }}>
-            Tone
-          </label>
-          <div 
-            className="flex rounded-[8px] p-1.5"
-            style={{ 
-              background: '#171923',
-              border: '1px solid rgba(255, 255, 255, 0.06)',
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.4)'
-            }}
-          >
-            {['Professional', 'Conversational', 'Bold'].map((toneOption) => (
-              <button
-                key={toneOption}
-                onClick={() => onToneChange(toneOption)}
-                className="flex-1 py-2.5 rounded-[6px] transition-all"
-                style={{ 
-                  background: tone === toneOption ? 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)' : 'transparent',
-                  border: tone === toneOption ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid transparent',
-                  color: tone === toneOption ? '#F4F3F8' : '#B4B8C7',
-                  fontSize: '13px',
-                  fontWeight: tone === toneOption ? 600 : 500,
-                  boxShadow: tone === toneOption ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none'
-                }}
-              >
-                {toneOption}
-              </button>
-            ))}
+        {/* Tone — conditional per output type */}
+        {meta.showTone && (
+          <div className="space-y-2.5">
+            <FieldLabel label="Tone" primary={false} />
+            <div
+              className="flex rounded-[8px] p-1.5"
+              style={{
+                background: '#171923',
+                border: '1px solid rgba(255, 255, 255, 0.06)',
+                boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.4)',
+              }}
+            >
+              {['Professional', 'Conversational', 'Bold'].map((toneOption) => (
+                <button
+                  key={toneOption}
+                  onClick={() => onToneChange(toneOption)}
+                  className="flex-1 py-2.5 rounded-[6px] transition-all"
+                  style={{
+                    background:
+                      tone === toneOption
+                        ? 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)'
+                        : 'transparent',
+                    border:
+                      tone === toneOption
+                        ? '1px solid rgba(255, 255, 255, 0.1)'
+                        : '1px solid transparent',
+                    color: tone === toneOption ? '#F4F3F8' : '#B4B8C7',
+                    fontSize: '13px',
+                    fontWeight: tone === toneOption ? 600 : 500,
+                    boxShadow:
+                      tone === toneOption ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none',
+                  }}
+                >
+                  {toneOption}
+                </button>
+              ))}
+            </div>
           </div>
-        </div>
-
-        {/* Output Type */}
-        <div className="space-y-3">
-          <label style={{ fontSize: '13px', fontWeight: 600, color: '#F4F3F8', display: 'block' }}>
-            Output Type
-          </label>
-          <select
-            className="w-full px-4 py-3.5 rounded-[12px] transition-all focus:outline-none focus:border-opacity-40 appearance-none"
-            style={{ 
-              background: '#262A38',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#F4F3F8',
-              fontSize: '14px',
-              boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.3)'
-            }}
-            value={outputType}
-            onChange={(e) => onOutputTypeChange(e.target.value)}
-          >
-            <option value="hook-pack">Hook Pack</option>
-            <option value="short-script">Short Script</option>
-            <option value="caption-draft">Caption Draft</option>
-            <option value="content-brief">Content Brief</option>
-            <option value="repurposing-plan">Repurposing Plan</option>
-          </select>
-        </div>
+        )}
       </div>
 
       {/* Actions Footer */}
-      <div 
-        className="p-8 pt-7 border-t"
-        style={{ 
+      <div
+        className="p-8 pt-6 border-t"
+        style={{
           borderColor: 'rgba(255, 255, 255, 0.08)',
-          background: 'linear-gradient(180deg, transparent 0%, rgba(23, 25, 35, 0.5) 100%)'
+          background: 'linear-gradient(180deg, transparent 0%, rgba(23, 25, 35, 0.5) 100%)',
         }}
       >
-        <button 
+        <button
           onClick={onGenerate}
           className="w-full py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden mb-3"
-          style={{ 
+          style={{
             background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
             color: '#0E0F14',
             fontSize: '15px',
             fontWeight: 600,
-            boxShadow: '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)'
+            boxShadow:
+              '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
           }}
         >
-          <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
-          Generate Content
+          <div
+            className="absolute top-0 left-0 right-0 h-px"
+            style={{ background: 'rgba(255, 255, 255, 0.5)' }}
+          />
+          Generate {currentType?.label ?? 'Content'}
         </button>
-        <button 
+        <button
           onClick={onClearAll}
           className="w-full py-3 rounded-[8px] transition-colors hover:bg-opacity-80"
-          style={{ 
+          style={{
             background: 'transparent',
             border: '1px solid rgba(255, 255, 255, 0.1)',
             color: '#B4B8C7',
             fontSize: '14px',
-            fontWeight: 500
+            fontWeight: 500,
           }}
         >
           Clear All
