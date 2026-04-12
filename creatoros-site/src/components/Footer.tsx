@@ -1,25 +1,47 @@
 import { Link } from 'react-router-dom';
 import { SUPPORT_EMAIL } from '../config/site';
 
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/product', label: 'Product' },
-  { href: '/offers', label: 'Offers' },
-  { href: '/about', label: 'About' },
-  { href: '/early-access', label: 'Early Access' },
+const footerSections = [
+  {
+    title: 'PLATFORM',
+    links: [
+      { label: 'Platform Overview', href: '/' },
+      { label: 'All Modules', href: '/modules' },
+      { label: 'Pricing', href: '/pricing' },
+      { label: 'Roadmap', href: '/roadmap' },
+    ],
+  },
+  {
+    title: 'CORE MODULES',
+    links: [
+      { label: 'BrandOS', href: '/modules/brandos' },
+      { label: 'ContentOS', href: '/modules/contentos' },
+      { label: 'LaunchOS', href: '/modules/launchos' },
+      { label: 'ManagementOS', href: '/modules/managementos' },
+      { label: 'AnalyticsOS', href: '/modules/analyticsos' },
+    ],
+  },
+  {
+    title: 'RESOURCES',
+    links: [
+      { label: 'Documentation', href: '/docs' },
+      { label: 'Support', href: '/support' },
+    ],
+  },
+  {
+    title: 'COMPANY',
+    links: [
+      { label: 'About', href: '/about' },
+      { label: 'Contact', href: '/contact' },
+    ],
+  },
 ];
 
 const legalLinks = [
-  { href: '/privacy', label: 'Privacy' },
-  { href: '/terms', label: 'Terms' },
-  { href: '/contact', label: 'Contact' },
+  { href: '/privacy', label: 'Privacy Policy' },
+  { href: '/terms', label: 'Terms of Service' },
+  { href: '/cookies', label: 'Cookies' },
 ];
-
-const linkStyle: React.CSSProperties = {
-  fontSize: '14px',
-  color: 'var(--text-3)',
-  transition: 'color 0.15s',
-};
 
 export function Footer() {
   return (
@@ -27,14 +49,18 @@ export function Footer() {
       borderTop: '1px solid rgba(255,255,255,0.06)',
       background: '#0A0B10',
     }}>
-      <div className="container" style={{ padding: '60px 24px 40px' }}>
+      <div className="container" style={{ padding: '64px 24px 40px' }}>
 
-        {/* Main row */}
-        <div className="footer-grid" style={{ marginBottom: '48px' }}>
-
-          {/* Brand */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: '1.5fr repeat(4, 1fr)',
+          gap: '40px',
+          marginBottom: '56px',
+        }}
+          className="footer-columns"
+        >
           <div>
-            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '14px' }}>
+            <Link to="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
               <div style={{
                 width: '28px', height: '28px', borderRadius: '7px',
                 background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
@@ -51,16 +77,12 @@ export function Footer() {
                 <span style={{ fontWeight: 400, fontSize: '12px', color: 'var(--text-3)', letterSpacing: '0.04em' }}>by LXST</span>
               </span>
             </Link>
-            <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '240px' }}>
-              Clarity-first tools for creators and solo brands.
+            <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.75, maxWidth: '240px', marginBottom: '16px' }}>
+              A modular platform for creators who need clear systems, reusable workflows, and operational clarity.
             </p>
             <a
               href={`mailto:${SUPPORT_EMAIL}`}
-              style={{
-                display: 'inline-block', marginTop: '14px',
-                fontSize: '12px', color: 'var(--text-3)',
-                transition: 'color 0.15s',
-              }}
+              style={{ fontSize: '12px', color: 'var(--text-3)', transition: 'color 0.15s' }}
               onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'}
               onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
             >
@@ -68,23 +90,36 @@ export function Footer() {
             </a>
           </div>
 
-          {/* Nav links */}
-          <nav className="footer-nav" style={{ display: 'flex', alignItems: 'flex-start' }}>
-            {navLinks.map(({ href, label }) => (
-              <Link
-                key={href}
-                to={href}
-                style={linkStyle}
-                onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
-                onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
-              >
-                {label}
-              </Link>
-            ))}
-          </nav>
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h4 style={{
+                fontSize: '10px',
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                color: 'var(--text-3)',
+                marginBottom: '16px',
+              }}>
+                {section.title}
+              </h4>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {section.links.map(({ label, href }) => (
+                  <li key={label}>
+                    <Link
+                      to={href}
+                      style={{ fontSize: '13px', color: 'var(--text-3)', transition: 'color 0.15s' }}
+                      onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
+                      onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+                    >
+                      {label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
 
-        {/* Bottom bar */}
         <div style={{
           display: 'flex', alignItems: 'center', justifyContent: 'space-between',
           paddingTop: '28px',
@@ -109,7 +144,21 @@ export function Footer() {
             ))}
           </div>
         </div>
+
       </div>
+
+      <style>{`
+        @media (max-width: 800px) {
+          .footer-columns {
+            grid-template-columns: 1fr 1fr !important;
+          }
+        }
+        @media (max-width: 480px) {
+          .footer-columns {
+            grid-template-columns: 1fr !important;
+          }
+        }
+      `}</style>
     </footer>
   );
 }
