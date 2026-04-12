@@ -5,40 +5,44 @@ const eco = t.home.ecosystem;
 
 const modules = [
   {
-    id: 'contentos',
-    name: 'ContentOS',
-    tagline: 'Your content production system.',
-    description: 'Generate structured content assets. Save, organize, and reuse your best work.',
+    name: 'BrandOS',
+    tagline: 'Voice & Identity Foundation',
+    description: 'Define your brand voice, visual identity, and messaging framework — the foundation every other module builds on.',
     status: 'active',
-    accent: '#FFBFDE',
+    accent: '#E7C6F3',
     number: '01',
   },
   {
-    id: 'brandos',
-    name: 'BrandOS',
-    tagline: 'Your brand operating layer.',
-    description: 'Define and maintain your brand voice, visual identity, and messaging framework.',
-    status: 'planned',
-    accent: '#DABFFF',
+    name: 'ContentOS',
+    tagline: 'Content Production System',
+    description: 'Generate structured content assets. Save, organize, and reuse your best work across every platform.',
+    status: 'active',
+    accent: '#FFBFDE',
     number: '02',
   },
   {
-    id: 'launchos',
     name: 'LaunchOS',
-    tagline: 'Your offer launch system.',
-    description: 'Plan, build, and execute product and offer launches with structured workflows.',
+    tagline: 'Offer Launch & Rollout',
+    description: 'Plan, build, and execute product and offer launches with structured workflows and clear coordination.',
     status: 'planned',
-    accent: '#B4E4FF',
+    accent: '#DABFFF',
     number: '03',
   },
   {
-    id: 'analyticsos',
-    name: 'AnalyticsOS',
-    tagline: 'Your performance layer.',
-    description: 'Understand what works, what converts, and where your energy should go.',
+    name: 'ManagementOS',
+    tagline: 'Scheduling & Execution',
+    description: 'Schedule content, manage your publishing queue, and execute multi-platform posting without the chaos.',
     status: 'planned',
-    accent: '#BFFFDA',
+    accent: '#C4B5FD',
     number: '04',
+  },
+  {
+    name: 'AnalyticsOS',
+    tagline: 'Performance Intelligence',
+    description: 'Understand what works, what converts, and where your energy should go — backed by real data.',
+    status: 'planned',
+    accent: '#B8A3FF',
+    number: '05',
   },
 ];
 
@@ -53,103 +57,104 @@ export function EcosystemPreview() {
     <section className="section" style={{ background: '#0A0B10' }}>
       <div className="container">
 
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.6fr', gap: '80px', alignItems: 'start' }}>
-
-          <div>
-            <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
-              <div style={{ width: '24px', height: '1px', background: 'rgba(255,191,222,0.5)' }} />
-              <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--pink)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-                {eco.eyebrow}
-              </span>
-            </div>
-
-            <h2 style={{
-              fontFamily: 'var(--font-heading)',
-              fontSize: 'clamp(28px, 3vw, 42px)',
-              fontWeight: 800, color: 'var(--text)',
-              letterSpacing: '-0.02em', lineHeight: 1.15,
-              marginBottom: '20px',
-            }}>
-              {eco.headline}
-            </h2>
-
-            <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.7, marginBottom: '32px' }}>
-              {eco.body}
-            </p>
-
-            <Link to="/early-access" style={{
-              display: 'inline-flex', alignItems: 'center', gap: '8px',
-              padding: '12px 22px', borderRadius: '10px',
-              background: 'rgba(255,191,222,0.08)',
-              border: '1px solid rgba(255,191,222,0.2)',
-              color: 'var(--pink)', fontSize: '14px', fontWeight: 600,
-              transition: 'all 0.15s',
-            }}>
-              Join early access
-              <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
-                <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </Link>
+        <div style={{ textAlign: 'center', marginBottom: '56px' }}>
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', marginBottom: '20px' }}>
+            <div style={{ width: '24px', height: '1px', background: 'rgba(255,191,222,0.5)' }} />
+            <span style={{ fontSize: '12px', fontWeight: 600, color: 'var(--pink)', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              {eco.eyebrow}
+            </span>
+            <div style={{ width: '24px', height: '1px', background: 'rgba(255,191,222,0.5)' }} />
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
-            {modules.map(({ name, tagline, description, status, accent, number }) => {
-              const isActive = status === 'active';
-              return (
-                <div key={name} style={{
-                  padding: '28px',
-                  borderRadius: '16px',
-                  background: 'linear-gradient(135deg, #1A1D2A 0%, #141620 100%)',
-                  border: `1px solid ${isActive ? `${accent}25` : 'rgba(255,255,255,0.06)'}`,
-                  opacity: isActive ? 1 : 0.7,
-                  transition: 'all 0.2s',
-                  position: 'relative',
-                  overflow: 'hidden',
-                }}>
-                  {isActive && (
-                    <div style={{
-                      position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
-                      background: `linear-gradient(90deg, transparent, ${accent}50, transparent)`,
-                    }} />
-                  )}
+          <h2 style={{
+            fontFamily: 'var(--font-heading)',
+            fontSize: 'clamp(28px, 3vw, 42px)',
+            fontWeight: 800, color: 'var(--text)',
+            letterSpacing: '-0.02em', lineHeight: 1.15,
+            maxWidth: '580px', margin: '0 auto 16px',
+          }}>
+            {eco.headline}
+          </h2>
 
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
-                    <span style={{
-                      fontFamily: 'var(--font-heading)',
-                      fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em',
-                      color: isActive ? accent : 'var(--text-3)',
-                    }}>
-                      {number}
-                    </span>
-                    <span style={{
-                      fontSize: '11px', fontWeight: 600,
-                      padding: '3px 8px', borderRadius: '100px',
-                      background: isActive ? `${accent}14` : 'rgba(255,255,255,0.05)',
-                      border: isActive ? `1px solid ${accent}25` : '1px solid rgba(255,255,255,0.08)',
-                      color: isActive ? accent : 'var(--text-3)',
-                    }}>
-                      {statusLabel[status]}
-                    </span>
-                  </div>
-
-                  <h4 style={{
-                    fontFamily: 'var(--font-heading)',
-                    fontSize: '16px', fontWeight: 700,
-                    color: 'var(--text)', marginBottom: '6px',
-                  }}>
-                    {name}
-                  </h4>
-                  <p style={{ fontSize: '12px', color: accent, fontWeight: 500, marginBottom: '12px' }}>
-                    {tagline}
-                  </p>
-                  <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.6 }}>
-                    {description}
-                  </p>
-                </div>
-              );
-            })}
-          </div>
+          <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '500px', margin: '0 auto' }}>
+            {eco.body}
+          </p>
         </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', marginBottom: '40px' }}>
+          {modules.map(({ name, tagline, description, status, accent, number }) => {
+            const isActive = status === 'active';
+            return (
+              <div key={name} style={{
+                padding: '28px',
+                borderRadius: '16px',
+                background: 'linear-gradient(135deg, #1A1D2A 0%, #141620 100%)',
+                border: `1px solid ${isActive ? `${accent}28` : 'rgba(255,255,255,0.06)'}`,
+                opacity: isActive ? 1 : 0.7,
+                transition: 'all 0.2s',
+                position: 'relative',
+                overflow: 'hidden',
+              }}>
+                {isActive && (
+                  <div style={{
+                    position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
+                    background: `linear-gradient(90deg, transparent, ${accent}50, transparent)`,
+                  }} />
+                )}
+
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '16px' }}>
+                  <span style={{
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '11px', fontWeight: 700, letterSpacing: '0.08em',
+                    color: isActive ? accent : 'var(--text-3)',
+                  }}>
+                    {number}
+                  </span>
+                  <span style={{
+                    fontSize: '11px', fontWeight: 600,
+                    padding: '3px 8px', borderRadius: '100px',
+                    background: isActive ? `${accent}14` : 'rgba(255,255,255,0.05)',
+                    border: isActive ? `1px solid ${accent}25` : '1px solid rgba(255,255,255,0.08)',
+                    color: isActive ? accent : 'var(--text-3)',
+                  }}>
+                    {statusLabel[status]}
+                  </span>
+                </div>
+
+                <h4 style={{
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: '16px', fontWeight: 700,
+                  color: 'var(--text)', marginBottom: '6px',
+                }}>
+                  {name}
+                </h4>
+                <p style={{ fontSize: '12px', color: accent, fontWeight: 500, marginBottom: '12px' }}>
+                  {tagline}
+                </p>
+                <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.6 }}>
+                  {description}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        <div style={{ textAlign: 'center' }}>
+          <Link to="/early-access" style={{
+            display: 'inline-flex', alignItems: 'center', gap: '8px',
+            padding: '12px 22px', borderRadius: '10px',
+            background: 'rgba(255,191,222,0.08)',
+            border: '1px solid rgba(255,191,222,0.2)',
+            color: 'var(--pink)', fontSize: '14px', fontWeight: 600,
+            transition: 'all 0.15s',
+          }}>
+            Join early access
+            <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
+              <path d="M3 7h8M7 3l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </Link>
+        </div>
+
       </div>
     </section>
   );

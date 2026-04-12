@@ -1,0 +1,213 @@
+Ja — für das alte Replit-Projekt würde ich bei der Frage nicht „alles ersetzen“ wählen.
+Der klügste Move ist:
+
+Nimm Option 2
+
+“Only apply specific sections (e.g. the EcosystemPreview or SystemOverview) into the existing site”
+
+Warum?
+
+Weil du gerade die Plattform-Logik schärfen willst, aber nicht unnötig die ganze Homepage zerlegen solltest.
+
+Du willst:
+	•	die bestehende Seite behalten
+	•	aber die Plattform-Semantik sauberer machen
+	•	und modulare Sektionen einbauen, die CreatorOS als Plattform erklären
+
+Nicht sinnvoll gerade:
+	•	komplette Homepage ersetzen
+	•	alles wieder optisch neu aufmachen
+	•	unnötig Rework erzeugen
+
+⸻
+
+Das kannst du dem Agenten unten reinschreiben
+
+Use option 2.
+
+Please keep the existing site structure, but apply the platform-focused mockup sections that improve clarity around CreatorOS as a platform, not just a page collection.
+
+Priority sections to bring in:
+	•	SystemOverview
+	•	EcosystemPreview / Modules overview
+	•	any section that clearly explains:
+	•	CreatorOS = platform
+	•	BrandOS / ContentOS / LaunchOS / ManagementOS / AnalyticsOS = modules inside the platform
+
+Do not replace the entire homepage yet.
+Do not redesign everything from scratch.
+Keep the current site architecture and visual language, but strengthen the platform positioning and module hierarchy.—
+
+Und hier ist der fertige Footer-Code-Text für Replit
+
+Ich gebe dir direkt eine saubere React-Version, die klar trennt zwischen:
+	•	Platform
+	•	Core Modules
+	•	Resources
+	•	Company
+
+Footer Copy + Struktur
+
+const footerSections = [
+  {
+    title: "PLATFORM",
+    links: [
+      { label: "Platform Overview", href: "/" },
+      { label: "All Modules", href: "/modules" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Roadmap", href: "/roadmap" },
+    ],
+  },
+  {
+    title: "CORE MODULES",
+    links: [
+      { label: "BrandOS", href: "/modules/brandos" },
+      { label: "ContentOS", href: "/modules/contentos" },
+      { label: "LaunchOS", href: "/modules/launchos" },
+      { label: "ManagementOS", href: "/modules/managementos" },
+      { label: "AnalyticsOS", href: "/modules/analyticsos" },
+    ],
+  },
+  {
+    title: "RESOURCES",
+    links: [
+      { label: "Documentation", href: "/docs" },
+      { label: "Support", href: "/support" },
+    ],
+  },
+  {
+    title: "COMPANY",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+];
+
+Footer Component
+
+import { Link } from "react-router-dom";
+
+const footerSections = [
+  {
+    title: "PLATFORM",
+    links: [
+      { label: "Platform Overview", href: "/" },
+      { label: "All Modules", href: "/modules" },
+      { label: "Pricing", href: "/pricing" },
+      { label: "Roadmap", href: "/roadmap" },
+    ],
+  },
+  {
+    title: "CORE MODULES",
+    links: [
+      { label: "BrandOS", href: "/modules/brandos" },
+      { label: "ContentOS", href: "/modules/contentos" },
+      { label: "LaunchOS", href: "/modules/launchos" },
+      { label: "ManagementOS", href: "/modules/managementos" },
+      { label: "AnalyticsOS", href: "/modules/analyticsos" },
+    ],
+  },
+  {
+    title: "RESOURCES",
+    links: [
+      { label: "Documentation", href: "/docs" },
+      { label: "Support", href: "/support" },
+    ],
+  },
+  {
+    title: "COMPANY",
+    links: [
+      { label: "About", href: "/about" },
+      { label: "Contact", href: "/contact" },
+    ],
+  },
+];
+
+export function SiteFooter() {
+  return (
+    <footer className="border-t border-border/60 bg-background">
+      <div className="mx-auto max-w-7xl px-6 py-14">
+        <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr_1fr]">
+          <div className="max-w-sm">
+            <div className="text-lg font-semibold tracking-tight">CreatorOS</div>
+            <p className="mt-4 text-sm leading-6 text-muted-foreground">
+              A modular platform for creators who need clear systems, reusable
+              workflows, and operational clarity.
+            </p>
+          </div>
+
+          {footerSections.map((section) => (
+            <div key={section.title}>
+              <h3 className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                {section.title}
+              </h3>
+              <ul className="mt-4 space-y-3">
+                {section.links.map((link) => (
+                  <li key={link.label}>
+                    <Link
+                      to={link.href}
+                      className="text-sm text-foreground/85 transition-colors hover:text-foreground"
+                    >
+                      {link.label}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-14 flex flex-col gap-4 border-t border-border/60 pt-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
+          <p>© 2026 CreatorOS. All rights reserved.</p>
+
+          <div className="flex flex-wrap gap-4">
+            <Link to="/privacy" className="transition-colors hover:text-foreground">
+              Privacy Policy
+            </Link>
+            <Link to="/terms" className="transition-colors hover:text-foreground">
+              Terms of Service
+            </Link>
+            <Link to="/cookies" className="transition-colors hover:text-foreground">
+              Cookies
+            </Link>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+
+⸻
+
+Wenn du es dem Replit-Agent direkt geben willst, nimm das hierPlease use option 2 for the homepage update.
+
+Do not replace the entire homepage.
+Keep the existing site structure, but bring in the platform-focused sections from the mockup that improve clarity around CreatorOS as a platform and BrandOS / ContentOS / LaunchOS / ManagementOS / AnalyticsOS as modules inside the platform.
+
+Also update the footer to reflect platform architecture clearly.
+
+Use this footer structure:
+	•	PLATFORM
+	•	Platform Overview
+	•	All Modules
+	•	Pricing
+	•	Roadmap
+	•	CORE MODULES
+	•	BrandOS
+	•	ContentOS
+	•	LaunchOS
+	•	ManagementOS
+	•	AnalyticsOS
+	•	RESOURCES
+	•	Documentation
+	•	Support
+	•	COMPANY
+	•	About
+	•	Contact
+
+Intro copy:
+“CreatorOS — A modular platform for creators who need clear systems, reusable workflows, and operational clarity.”
+
+Please keep the current visual language and only improve platform clarity, module hierarchy, and footer structure.Wenn du willst, schreibe ich dir als Nächstes noch den Hero-Text + SystemOverview-Text in genau derselben Plattform-Logik für Replit.

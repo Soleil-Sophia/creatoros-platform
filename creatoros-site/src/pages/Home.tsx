@@ -4,6 +4,7 @@ import { Problem } from '../components/home/Problem';
 import { Outcome } from '../components/home/Outcome';
 import { FeaturedProduct } from '../components/home/FeaturedProduct';
 import { HowItWorks } from '../components/home/HowItWorks';
+import { SystemOverview } from '../components/home/SystemOverview';
 import { EcosystemPreview } from '../components/home/EcosystemPreview';
 import { AboutSection } from '../components/home/AboutSection';
 import { FinalCTA } from '../components/home/FinalCTA';
@@ -20,6 +21,7 @@ export default function Home() {
       <Outcome />
       <FeaturedProduct />
       <HowItWorks />
+      <SystemOverview />
       <EcosystemPreview />
       <AboutSection />
       <FinalCTA />
