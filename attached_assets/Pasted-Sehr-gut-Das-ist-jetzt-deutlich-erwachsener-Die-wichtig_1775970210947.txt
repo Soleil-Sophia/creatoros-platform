@@ -1,0 +1,121 @@
+Sehr gut. Das ist jetzt deutlich erwachsener. 🔥
+
+Die wichtigen Moves daran:
+	•	Navbar ist endlich platform-first
+	•	Pricing macht die Kauflogik klar
+	•	Roadmap baut Vertrauen auf, ohne Märchen zu erzählen
+	•	Docs ist jetzt ein sauberer Stub statt tote Ecke
+	•	Footer-Links führen nicht mehr ins Nichts
+
+Mein Urteil
+
+Das war der richtige Schritt.
+
+Vorher war die Seite eher:
+„starkes Produkt mit wachsender Vision“
+
+Jetzt ist sie mehr:
+„ehrlich gerahmte Plattform mit klarem Einstieg und sichtbarer Ausbau-Logik“
+
+Das ist besser.
+
+⸻
+
+Was das strategisch löst
+
+1. Weniger Chaos in der Navigation
+
+Offers und Early Access aus der Hauptnav rauszunehmen war richtig.
+Die Nav ist jetzt näher an echter Produktlogik:
+	•	Überblick
+	•	Module
+	•	Pricing
+	•	Product
+	•	About
+
+Das liest sich wie ein System, nicht wie ein Sammelcontainer.
+
+2. Pricing ist jetzt ein echter Decision Point
+
+Sehr gut, dass dort klar getrennt wird zwischen:
+	•	Creator Clarity Kit = live
+	•	Platform Access = coming soon
+
+Das ist genau die Ehrlichkeit, die euch vorher gefehlt hat.
+
+3. Roadmap gibt Richtung ohne Overclaim
+
+Wenn die Status wirklich ehrlich sind, ist das ein massiver Vertrauensgewinn.
+
+4. Docs-Stub verhindert Reibung
+
+Klein, aber wichtig.
+Nichts killt Premium-Gefühl so schnell wie tote Links.
+
+⸻
+
+Mein einziger Warnhinweis
+
+Jetzt nicht wieder anfangen, noch 15 Marketing-Seiten dranzuhängen.
+
+Denn jetzt habt ihr:
+	•	genug Struktur
+	•	genug Framing
+	•	genug Glaubwürdigkeit
+
+Der Engpass ist jetzt nicht mehr die Website.
+
+Der Engpass ist jetzt: Produktrealität.
+
+⸻
+
+Was ich ab jetzt machen würde
+
+Sofort einfrieren:
+	•	Navbar-Struktur
+	•	Footer-Struktur
+	•	Pricing-Grundlogik
+	•	Roadmap-Grundlogik
+
+Nur noch Kleinkram anfassen, wenn wirklich nötig.
+
+Dann Fokus auf:
+
+1. Welcher reale Nutzerpfad ist heute benutzbar?
+
+2. Welches Modul wird als Nächstes echt?
+
+3. Wie geht jemand von Kit → Platform weiter?
+
+⸻
+
+Meine klare Priorität jetzt
+
+Nächster sinnvoller Schritt:
+
+Platform Priority Map 1.0
+
+Mit genau diesen Spalten:
+	•	Modul
+	•	Status
+	•	echter Nutzen
+	•	was live ist
+	•	was MVP ist
+	•	was nur Vision ist
+	•	Abhängigkeiten
+	•	Priorität
+
+Denn sonst wird aus der sauberen Plattform-Erzählung schnell wieder Nebel.
+
+⸻
+
+Mein Klartext-Fazit
+
+Die Website ist für jetzt weit genug.
+Nicht perfekt, aber klar, ehrlich und stark genug.
+
+Ab jetzt sollte fast jede Stunde lieber in:
+Modul-Realität, Entry Flow und echte Nutzung
+gehen statt in weitere Website-Politur.
+
+Wenn du willst, machen wir jetzt direkt die Platform Priority Map 1.0 und schneiden brutal raus, was zuerst gebaut wird und was erstmal Vision bleibt.
