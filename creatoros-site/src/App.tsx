@@ -10,6 +10,9 @@ import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
 import Modules from './pages/Modules';
+import Pricing from './pages/Pricing';
+import Roadmap from './pages/Roadmap';
+import Docs from './pages/Docs';
 import Success from './pages/Success';
 
 export default function App() {
@@ -21,6 +24,9 @@ export default function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/modules" element={<Modules />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/roadmap" element={<Roadmap />} />
+            <Route path="/docs" element={<Docs />} />
             <Route path="/product" element={<Product />} />
             <Route path="/offers" element={<Offers />} />
             <Route path="/about" element={<About />} />

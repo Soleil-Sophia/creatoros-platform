@@ -5,10 +5,10 @@ import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../config/chec
 
 const links = [
   { href: '/', label: t.nav.home },
+  { href: '/modules', label: t.nav.modules },
+  { href: '/pricing', label: t.nav.pricing },
   { href: '/product', label: t.nav.product },
-  { href: '/offers', label: t.nav.offers },
   { href: '/about', label: t.nav.about },
-  { href: '/early-access', label: t.nav.earlyAccess },
 ];
 
 function HamburgerIcon({ open }: { open: boolean }) {

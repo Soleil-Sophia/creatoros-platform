@@ -1,0 +1,104 @@
+Ja — der Prompt ist gut.
+Sogar besser für einen sicheren Minimal-Pass als mein vorheriger, weil er Replit enger begrenzt und weniger Spielraum für unnötige Umbauten lässt. 🔥
+
+Mein Urteil
+
+Nimm diesen Prompt.
+
+Warum er stark ist:
+	•	kein Redesign
+	•	keine neuen Sections
+	•	keine Route-Änderungen
+	•	nur Brand-Strings / Meta / OG
+	•	schützt vor „Agent wird kreativ und baut alles um“
+
+Das ist genau das, was du gerade brauchst.
+
+⸻
+
+Meine einzige wichtige Anmerkung
+
+Es gibt einen kleinen logischen Widerspruch drin:
+
+Du schreibst:
+	•	Do NOT touch product copy außer Brand-Labels
+	•	aber auch:
+	•	OG/Meta Default auf LXST SYSTEMS by Soreya
+
+Das ist okay, solange du wirklich nur:
+	•	Header
+	•	Footer
+	•	Brand Labels
+	•	Meta/OG
+änderst
+
+und nicht wieder die komplette Produkt-Messaging-Struktur anfasst.
+
+⸻
+
+Die 2 Stellen, die ich leicht anpassen würde
+
+1. CTA-Regel
+
+Du schreibst:
+Explore CreatorOS (secondary vorerst)
+
+Das ist okay als Übergang, aber ich würde Replit klar sagen:
+do not rename CTA labels in this pass unless the label is directly tied to a visible master brand conflict
+
+Sonst fängt der Agent evtl. doch an, daran rumzudoktern.
+
+Besser als Zusatz:
+
+Do not change CTA labels in this pass except visible top-level branding labels. Keep:
+- Get the Kit
+- Explore CreatorOS
+- Join Early Access
+exactly as they are for now.
+
+
+⸻
+
+2. E-Mail-Regel
+
+Der wichtigste Schutzsatz fehlt noch etwas klarer:
+
+Du willst ja nicht, dass wieder so was wie hello@creatoros.co stehen bleibt, wenn’s markenlogisch falsch ist — aber du willst auch keine neue Fake-Mail erfinden.
+
+Deshalb würde ich ergänzen:
+
+If the current visible support email contains outdated CreatorOS domain branding, do not invent a new email address. Either keep the Contact link as the primary support path or leave the email unchanged only if no safe replacement exists in the current project.
+
+Sonst kann es sein, dass Replit hier halbsauber wird.
+
+⸻
+
+Meine Endempfehlung
+
+Nimm deinen Prompt
+
+mit diesen 2 Mini-Zusätzen:
+
+Additional constraints:
+	•	Do not change CTA labels in this pass except visible top-level branding labels. Keep exactly:
+	•	Get the Kit
+	•	Explore CreatorOS
+	•	Join Early Access
+	•	If the current visible support email contains outdated CreatorOS domain branding, do not invent a new email address. Prefer keeping the Contact link as the primary support path unless a real verified replacement email already exists in the project.—
+
+Mein Klartext
+
+Dein Prompt ist gerade der bessere Move.
+Meiner war etwas offener. Deiner ist sicherer.
+
+Also:
+
+Ja — den so reingeben.
+
+Wenn Replit damit durch ist, schick mir danach:
+	•	Header
+	•	Footer
+	•	Product Label
+	•	OG/Meta Summary
+
+Dann sage ich dir sofort, ob der Rebrand wirklich sauber sitzt oder ob noch irgendwo CreatorOS an der falschen Stelle klebt.

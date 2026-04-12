@@ -1,8 +1,9 @@
 export const en = {
   nav: {
-    home: 'Home',
+    home: 'Overview',
+    modules: 'Modules',
+    pricing: 'Pricing',
     product: 'Product',
-    offers: 'Offers',
     about: 'About',
     earlyAccess: 'Early Access',
     cta: 'Get the Kit',
