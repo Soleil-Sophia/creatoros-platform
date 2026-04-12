@@ -9,6 +9,7 @@ import EarlyAccess from './pages/EarlyAccess';
 import Contact from './pages/Contact';
 import Privacy from './pages/Privacy';
 import Terms from './pages/Terms';
+import Modules from './pages/Modules';
 import Success from './pages/Success';
 
 export default function App() {
@@ -19,6 +20,7 @@ export default function App() {
         <main style={{ flex: 1 }}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/modules" element={<Modules />} />
             <Route path="/product" element={<Product />} />
             <Route path="/offers" element={<Offers />} />
             <Route path="/about" element={<About />} />

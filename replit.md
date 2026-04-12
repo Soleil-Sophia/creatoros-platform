@@ -110,6 +110,35 @@ Module IDs (slugs): `brandos`, `contentos`, `launchos`, `managementos`, `analyti
 
 ---
 
+## creatoros-site (Live Marketing Site)
+
+The live site runs from `creatoros-site/` on port 5000 (workflow: `creatoros-site`).
+
+### Key pages
+| Route | File | Notes |
+|---|---|---|
+| `/` | `src/pages/Home.tsx` | Hero, Problem, Outcome, FeaturedProduct, HowItWorks, SystemOverview, EcosystemPreview, About, FinalCTA |
+| `/modules` | `src/pages/Modules.tsx` | Full platform module overview — all 5 modules with capabilities |
+| `/product` | `src/pages/Product.tsx` | Creator Clarity Kit (€24 one-time) |
+| `/offers` | `src/pages/Offers.tsx` | Offers page |
+| `/about` | `src/pages/About.tsx` | About page |
+| `/early-access` | `src/pages/EarlyAccess.tsx` | Early access signup |
+
+### Key components
+- `src/components/home/SystemOverview.tsx` — Platform architecture section (01–05 modules)
+- `src/components/home/EcosystemPreview.tsx` — Module grid (all 5 modules)
+- `src/components/home/Hero.tsx` — Platform-first hero (CTAs → `/modules`)
+- `src/components/Footer.tsx` — 4-column footer: PLATFORM / CORE MODULES / RESOURCES / COMPANY
+- `src/i18n/en.ts` — All copy strings (hero, ecosystem, etc.)
+- `src/config/site.ts` — SITE_URL, SUPPORT_EMAIL, BRAND_NAME
+
+### Platform positioning
+- CreatorOS = platform
+- BrandOS (01), ContentOS (02), LaunchOS (03), ManagementOS (04), AnalyticsOS (05) = modules
+- BrandOS + ContentOS = Active; LaunchOS, ManagementOS, AnalyticsOS = Planned
+
+---
+
 ## GitHub Integration
 - Connector: `@replit/connectors-sdk`
 - Connection ID: `conn_github_01KJF2JYMM87081TNRMKNJSKT2`
