@@ -68,3 +68,9 @@ externalPort = 3002
 
 [deployment]
 deploymentTarget = "cloudrun"
+
+[userenv]
+
+[userenv.shared]
+VITE_SUPABASE_PROJECT_ID = "ylulrtnvohxpriyucyqw"
+VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlsdWxydG52b2h4cHJpeXVjeXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MDU3NjMsImV4cCI6MjA5MDI4MTc2M30.nIQ8I9OBTC3QxoPeMZ9dDP9WuYDA6zgRaoM6x4BpZms"
