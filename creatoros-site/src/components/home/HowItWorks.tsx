@@ -21,10 +21,13 @@ export function HowItWorks() {
             fontSize: 'clamp(32px, 4vw, 52px)',
             fontWeight: 800, color: 'var(--text)',
             letterSpacing: '-0.02em', lineHeight: 1.15,
-            maxWidth: '600px', margin: '0 auto',
+            maxWidth: '600px', margin: '0 auto 20px',
           }}>
             {hw.headline}
           </h2>
+          <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.75, maxWidth: '560px', margin: '0 auto' }}>
+            {hw.subheadline}
+          </p>
         </div>
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '24px' }}>

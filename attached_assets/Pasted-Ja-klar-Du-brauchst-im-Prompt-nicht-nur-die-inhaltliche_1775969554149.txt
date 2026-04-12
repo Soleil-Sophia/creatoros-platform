@@ -1,0 +1,82 @@
+Ja — klar.
+Du brauchst im Prompt nicht nur die inhaltliche Änderung, sondern auch die Anweisung, danach die richtige Route im Preview zu öffnen. Sonst landet Replit gern irgendwo im alten Flow 😅
+
+Hier ist ein sauberer Prompt dafür:
+
+:::writing{variant=“chat_message” id=“64281”}
+Please make one small platform-consistency update and then open the correct preview route.
+
+Task:
+Fix the homepage hero CTA routing so it matches the current platform-first positioning.
+
+Requirements:
+	•	Keep the current homepage copy and layout
+	•	Do not redesign the page
+	•	Update the hero CTA logic so it is semantically correct
+
+Change this:
+	•	Primary CTA: “Explore the Platform” → /modules
+	•	Secondary CTA: “View Modules” → /product
+
+To this:
+	•	Primary CTA: “Explore the Platform” → /modules
+	•	Secondary CTA: “See Pricing” → /pricing
+
+Also check whether /product is still needed in the current platform-first IA. If it is a legacy route, leave it intact but do not use it in the homepage hero.
+
+After applying the change:
+	•	open the homepage preview
+	•	then also open the platform modules preview at /modules
+
+I want to review both:
+	1.	homepage with corrected CTA logic
+	2.	modules page as the platform overview
+:::
+
+Wenn du statt „See Pricing“ lieber wirklich „View Modules“ doppelt auf /modules haben willst, nimm diese Version:
+
+:::writing{variant=“chat_message” id=“64282”}
+Please make one small platform-consistency update and then open the correct preview route.
+
+Task:
+Fix the homepage hero CTA routing so it matches the current platform-first positioning.
+
+Requirements:
+	•	Keep the current homepage copy and layout
+	•	Do not redesign the page
+	•	Update the hero CTA logic so it is semantically correct
+
+Change this:
+	•	Primary CTA: “Explore the Platform” → /modules
+	•	Secondary CTA: “View Modules” → /product
+
+To this:
+	•	Primary CTA: “Explore the Platform” → /modules
+	•	Secondary CTA: “View Modules” → /modules
+
+Also check whether /product is still needed in the current platform-first IA. If it is a legacy route, leave it intact but do not use it in the homepage hero.
+
+After applying the change:
+	•	open the homepage preview
+	•	then also open the platform modules preview at /modules
+
+I want to review both:
+	1.	homepage with corrected CTA logic
+	2.	modules page as the platform overview
+:::
+
+Mein ehrlicher Call
+
+Ich würde nicht beide CTAs auf /modules schicken, außer du willst es wirklich maximal minimal halten.
+
+Die bessere Logik ist meistens:
+	•	Explore the Platform → /modules
+	•	See Pricing → /pricing
+
+Weil du dann:
+	•	einen CTA für Struktur / Produktverständnis
+	•	und einen CTA für Kauf-/Plan-Logik
+
+hast.
+
+Wenn du willst, schreibe ich dir direkt danach den Pricing-Prompt in Plattform-Logik, damit du ihn direkt als nächsten Step in Replit feuern kannst.

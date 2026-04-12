@@ -1,0 +1,171 @@
+Perfekt — dann kommt jetzt die “How It Works” Section in Plattform-Logik.
+Ziel: nicht wie Feature-Marketing, sondern wie eine klare System-Erklärung. 🔥
+
+How It Works — neue Richtung
+
+Version A — mein Favorit
+
+Eyebrow
+
+HOW THE PLATFORM WORKS
+
+Headline
+
+A connected workflow, built as a modular platform
+
+Subheadline
+
+CreatorOS is designed to support creator work in stages. Each module handles a distinct layer of the workflow — from foundations to execution and improvement — while still connecting back into one system.
+
+⸻
+
+Step 1
+
+Start with the layer you need most
+
+You do not need to adopt everything at once.
+Start with the module that solves your current bottleneck — whether that is brand clarity, content production, launch structure, operations, or analytics.
+
+Step 2
+
+Work inside a focused module
+
+Each module is built around a clear job:
+	•	BrandOS for positioning and messaging
+	•	ContentOS for structured content outputs
+	•	LaunchOS for campaigns and rollout
+	•	ManagementOS for operational clarity
+	•	AnalyticsOS for performance visibility
+
+Step 3
+
+Expand without rebuilding your system
+
+As your work grows, additional modules can be added without replacing your existing setup.
+That means less fragmentation, more reuse, and a platform that becomes stronger over time.
+
+⸻
+
+Version B — direkter und etwas klarer
+
+Eyebrow
+
+HOW IT WORKS
+
+Headline
+
+Use one module first. Grow into the system over time.
+
+Subheadline
+
+CreatorOS is not designed as one oversized tool. It is a modular platform that lets creators start with one clear workflow, then expand into a more connected operating system as their needs grow.
+
+⸻
+
+Block 1
+
+Choose your starting point
+
+Begin with the module that matches your current stage or biggest constraint.
+
+Block 2
+
+Run a clearer workflow
+
+Each module gives structure to one specific area of work instead of forcing everything into one place.
+
+Block 3
+
+Build a connected system
+
+As more modules are added, CreatorOS becomes a stronger platform — with more continuity, reuse, and operational clarity across your work.
+
+⸻
+
+Wenn du 3 kurze Cards statt langer Steps willst
+
+Das wäre für modernes UI oft sogar stärker:
+
+Eyebrow
+
+HOW THE PLATFORM WORKS
+
+Headline
+
+Structured in modules. Stronger as a system.
+
+Subheadline
+
+Each module solves a specific layer of creator work. Together, they create a more connected operating environment.
+
+Card 1
+
+Start where the friction is
+Choose the module that solves your current bottleneck first.
+
+Card 2
+
+Work in focused systems
+Each module handles a distinct part of the workflow with more clarity and less noise.
+
+Card 3
+
+Expand without fragmentation
+Add modules over time and build a stronger system without starting over.
+
+⸻
+
+Meine klare Empfehlung
+
+Für eure Seite würde ich Version A oder die 3-Card-Version nehmen.
+
+Warum?
+
+Weil sie:
+	•	klar nach Plattform klingt
+	•	nicht zu technisch ist
+	•	nicht überverspricht
+	•	gut zu SystemOverview passt
+
+⸻
+
+Fertiger Replit-Prompt für “How It Works”
+
+Update the “How It Works” section so it reflects platform logic instead of generic feature flow.
+
+Use this copy direction:
+
+Eyebrow:
+“HOW THE PLATFORM WORKS”
+
+Headline:
+“A connected workflow, built as a modular platform”
+
+Subheadline:
+“CreatorOS is designed to support creator work in stages. Each module handles a distinct layer of the workflow — from foundations to execution and improvement — while still connecting back into one system.”
+
+Step 1:
+“Start with the layer you need most”
+Body:
+“You do not need to adopt everything at once. Start with the module that solves your current bottleneck — whether that is brand clarity, content production, launch structure, operations, or analytics.”
+
+Step 2:
+“Work inside a focused module”
+Body:
+“Each module is built around a clear job:
+	•	BrandOS for positioning and messaging
+	•	ContentOS for structured content outputs
+	•	LaunchOS for campaigns and rollout
+	•	ManagementOS for operational clarity
+	•	AnalyticsOS for performance visibility”
+
+Step 3:
+“Expand without rebuilding your system”
+Body:
+“As your work grows, additional modules can be added without replacing your existing setup. That means less fragmentation, more reuse, and a platform that becomes stronger over time.”
+
+Keep the existing layout style if possible, but make the section feel clearly platform-first and modular.—
+
+Mein Call für den nächsten Schritt
+
+Danach würde ich als Nächstes Pricing sprachlich auf Plattform + Module umstellen, weil sonst die Homepage sauber wird, aber Pricing noch nach altem Produktdenken klingt.

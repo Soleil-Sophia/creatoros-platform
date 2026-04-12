@@ -13,7 +13,7 @@ export const en = {
       subheadline:
         'CreatorOS brings brand, content, launch, management, and analytics into one connected system — so creators can build with clear workflows instead of scattered tools.',
       primaryCta: 'Explore the Platform',
-      secondaryCta: 'View Modules',
+      secondaryCta: 'See Pricing',
     },
     problem: {
       eyebrow: 'Why most ideas stall',
@@ -34,12 +34,25 @@ export const en = {
       price: '€24',
     },
     howItWorks: {
-      eyebrow: 'How it works',
-      headline: 'A simple path from scattered ideas to clear action.',
+      eyebrow: 'How the platform works',
+      headline: 'A connected workflow, built as a modular platform.',
+      subheadline: 'CreatorOS is designed to support creator work in stages. Each module handles a distinct layer of the workflow — from foundations to execution and improvement — while still connecting back into one system.',
       steps: [
-        { number: '01', title: 'Clarify', body: 'Find the direction worth building first.' },
-        { number: '02', title: 'Structure', body: 'Turn loose thoughts into a clear offer and sharper message.' },
-        { number: '03', title: 'Move', body: 'Make decisions faster and build with more focus.' },
+        {
+          number: '01',
+          title: 'Start with the layer you need most',
+          body: 'You do not need to adopt everything at once. Start with the module that solves your current bottleneck — whether that is brand clarity, content production, launch structure, operations, or analytics.',
+        },
+        {
+          number: '02',
+          title: 'Work inside a focused module',
+          body: 'Each module is built around a clear job: BrandOS for positioning and messaging, ContentOS for structured content outputs, LaunchOS for campaigns and rollout, ManagementOS for operational clarity, AnalyticsOS for performance visibility.',
+        },
+        {
+          number: '03',
+          title: 'Expand without rebuilding your system',
+          body: 'As your work grows, additional modules can be added without replacing your existing setup. That means less fragmentation, more reuse, and a platform that becomes stronger over time.',
+        },
       ],
     },
     ecosystem: {

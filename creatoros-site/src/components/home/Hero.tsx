@@ -53,7 +53,7 @@ export function Hero() {
               <path d="M3 8h10M9 4l4 4-4 4" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
-          <Link to="/modules" style={{
+          <Link to="/pricing" style={{
             padding: '16px 24px', borderRadius: '12px',
             background: 'transparent',
             color: 'var(--text-3)', fontSize: '15px', fontWeight: 400,
