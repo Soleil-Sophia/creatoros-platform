@@ -171,8 +171,8 @@ function FAQ({ q, a }: { q: string; a: string }) {
 
 export default function Product() {
   useMeta(
-    'Creator Clarity Kit — CreatorOS',
-    'A clarity-first starter system for creators and solo brands who need one clear, testable offer.',
+    'Creator Clarity Kit — €24 | CreatorOS',
+    'A clarity-first starter kit by LXST to help creators and solo brands turn too many ideas into one clear, testable offer. Instant access after checkout.',
     '/og/og-product-creator-clarity-kit.png'
   );
   return (

@@ -39,7 +39,7 @@ const offers = [
 ];
 
 export default function Offers() {
-  useMeta('Offers — CreatorOS', 'Explore focused digital tools and early-access offers from CreatorOS.');
+  useMeta('Offers — CreatorOS', 'Explore clarity-first digital tools by LXST for creators and solo brands — built to sharpen offers, structure ideas, and create momentum.');
   return (
     <div>
       {/* Header */}

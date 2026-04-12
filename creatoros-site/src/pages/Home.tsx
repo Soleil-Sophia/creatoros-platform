@@ -10,8 +10,8 @@ import { FinalCTA } from '../components/home/FinalCTA';
 
 export default function Home() {
   useMeta(
-    'CreatorOS — Turn Idea Chaos into Clear, Sellable Offers',
-    'CreatorOS helps creators and solo brands turn scattered ideas into clear offers, stronger positioning, and structured momentum.'
+    'CreatorOS — Turn idea chaos into a clear, sellable offer',
+    'CreatorOS by LXST helps creators and solo brands turn scattered thinking into clear direction, stronger positioning, and structured momentum.'
   );
   return (
     <>

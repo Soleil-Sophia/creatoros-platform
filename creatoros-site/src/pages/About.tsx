@@ -24,7 +24,7 @@ const values = [
 ];
 
 export default function About() {
-  useMeta('About CreatorOS', 'Learn what CreatorOS is, why it exists, and who it is built for.');
+  useMeta('About — CreatorOS', 'CreatorOS is a product by LXST, built for creators and solo brands who need structure, clarity, and direction — not more noise.');
   return (
     <div>
       {/* Hero */}

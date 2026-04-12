@@ -1,7 +1,7 @@
 import { useMeta } from '../hooks/useMeta';
 
 export default function Terms() {
-  useMeta('Terms — CreatorOS', 'Terms of use for CreatorOS digital products. All sales are final. Questions? Email hello@creatoros.co.');
+  useMeta('Terms — CreatorOS', 'Terms and purchase information for CreatorOS by LXST.');
 
   return (
     <div>

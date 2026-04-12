@@ -9,7 +9,7 @@ const perks = [
 ];
 
 export default function EarlyAccess() {
-  useMeta('Early Access — CreatorOS', 'Join the list for future CreatorOS tools, product drops, and early platform access.');
+  useMeta('Early Access — CreatorOS', 'Join Early Access for future CreatorOS tools by LXST, new product drops, modular expansions, and early platform access.');
   const [email, setEmail] = useState('');
   const [name, setName] = useState('');
   const [submitted, setSubmitted] = useState(false);

@@ -1,7 +1,7 @@
 import { useMeta } from '../hooks/useMeta';
 
 export default function Privacy() {
-  useMeta('Privacy — CreatorOS', 'Our approach to data, what we collect, and how to reach us with any privacy-related questions.');
+  useMeta('Privacy — CreatorOS', 'Privacy information for CreatorOS by LXST.');
 
   return (
     <div>

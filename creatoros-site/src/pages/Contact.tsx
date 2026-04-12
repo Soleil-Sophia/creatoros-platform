@@ -1,7 +1,7 @@
 import { useMeta } from '../hooks/useMeta';
 
 export default function Contact() {
-  useMeta('Contact — CreatorOS', 'Reach out with product questions, partnerships, or general inquiries. We respond personally to every message.');
+  useMeta('Contact — CreatorOS', 'Get in touch with LXST about CreatorOS, product questions, partnerships, or purchase support.');
 
   return (
     <div>
