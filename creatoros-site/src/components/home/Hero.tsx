@@ -40,7 +40,7 @@ export function Hero() {
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <Link to="/product" style={{
+          <Link to="/modules" style={{
             padding: '16px 32px', borderRadius: '12px',
             background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
             color: '#0E0F14', fontSize: '16px', fontWeight: 700,
@@ -53,7 +53,7 @@ export function Hero() {
               <path d="M3 8h10M9 4l4 4-4 4" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
-          <Link to="/offers" style={{
+          <Link to="/product" style={{
             padding: '16px 24px', borderRadius: '12px',
             background: 'transparent',
             color: 'var(--text-3)', fontSize: '15px', fontWeight: 400,

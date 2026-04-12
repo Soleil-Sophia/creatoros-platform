@@ -9,11 +9,11 @@ export const en = {
   },
   home: {
     hero: {
-      headline: 'Turn idea chaos into a clear, sellable offer.',
+      headline: 'A modular platform for creators building with structure, reuse, and operational clarity.',
       subheadline:
-        'CreatorOS turns scattered thinking into clear direction — so your offers make sense, your positioning sharpens, and your next move becomes obvious.',
-      primaryCta: 'Get the Kit',
-      secondaryCta: 'Explore CreatorOS',
+        'CreatorOS brings brand, content, launch, management, and analytics into one connected system — so creators can build with clear workflows instead of scattered tools.',
+      primaryCta: 'Explore the Platform',
+      secondaryCta: 'View Modules',
     },
     problem: {
       eyebrow: 'Why most ideas stall',
@@ -43,9 +43,9 @@ export const en = {
       ],
     },
     ecosystem: {
-      eyebrow: 'Built to expand',
-      headline: 'More than one product. Built as a growing system.',
-      body: 'CreatorOS starts with focused digital tools and grows into a modular ecosystem for clarity, content, structure, and execution.',
+      eyebrow: 'Module System',
+      headline: 'Five core modules, one connected platform.',
+      body: 'Each module handles a different layer of creator work — from brand and content to launch, management, and analytics. Use them individually, or as a connected operating system.',
     },
     about: {
       eyebrow: 'Why it exists',

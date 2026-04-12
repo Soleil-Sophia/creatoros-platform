@@ -1,16 +1,16 @@
 export function SystemOverview() {
   const coreModules = [
-    { number: '01', name: 'BrandOS', desc: 'Voice & Identity Foundation', accent: '#E7C6F3', status: 'active' },
-    { number: '02', name: 'ContentOS', desc: 'Content Generation', accent: '#FFBFDE', status: 'active' },
-    { number: '03', name: 'LaunchOS', desc: 'Offer Launch & Rollout', accent: '#DABFFF', status: 'planned' },
-    { number: '04', name: 'ManagementOS', desc: 'Scheduling & Execution', accent: '#C4B5FD', status: 'planned' },
-    { number: '05', name: 'AnalyticsOS', desc: 'Performance Intelligence', accent: '#B8A3FF', status: 'planned' },
+    { number: '01', name: 'BrandOS', desc: 'Define positioning, messaging, and brand foundations before execution begins.', accent: '#E7C6F3', status: 'active' },
+    { number: '02', name: 'ContentOS', desc: 'Turn strategy into structured content outputs, reusable workflows, and content systems.', accent: '#FFBFDE', status: 'active' },
+    { number: '03', name: 'LaunchOS', desc: 'Organize campaigns, launch flows, and go-to-market execution with more clarity and less friction.', accent: '#DABFFF', status: 'planned' },
+    { number: '04', name: 'ManagementOS', desc: 'Keep internal operations, tasks, systems, and decision-making structured as the business grows.', accent: '#C4B5FD', status: 'planned' },
+    { number: '05', name: 'AnalyticsOS', desc: 'Track what performs, what compounds, and where to improve across the platform.', accent: '#B8A3FF', status: 'planned' },
   ];
 
   const valueProps = [
-    { label: 'Standalone Value', desc: 'Each module works on its own' },
-    { label: 'System Strength', desc: 'Together they form a real workflow' },
-    { label: 'Modular Growth', desc: 'Add capabilities as your needs grow' },
+    { label: 'Start with one module', desc: 'Each module delivers standalone value without requiring the rest.' },
+    { label: 'Expand without rebuilding', desc: 'Add modules as your needs grow — the system stays connected.' },
+    { label: 'Keep workflows connected', desc: 'Together, the modules form a stronger operating system.' },
   ];
 
   return (
@@ -35,10 +35,10 @@ export function SystemOverview() {
             maxWidth: '640px',
             margin: '0 auto 16px',
           }}>
-            CreatorOS is a platform.<br />These are the modules inside it.
+            CreatorOS is the platform.<br />The modules are how the system works.
           </h2>
-          <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '520px', margin: '0 auto' }}>
-            A modular system with a clear core workflow. Start with one module — or use all five together as a full operating system for your creator work.
+          <p style={{ fontSize: '16px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '560px', margin: '0 auto' }}>
+            Instead of forcing creators into one oversized tool, CreatorOS is built as a modular platform. Each module solves a distinct stage of the workflow — and becomes more powerful when used together.
           </p>
         </div>
 
@@ -139,6 +139,9 @@ export function SystemOverview() {
                 position: 'absolute', top: 0, left: 0, right: 0, height: '1px',
                 background: 'linear-gradient(90deg, transparent, rgba(218,191,255,0.4) 50%, transparent)',
               }} />
+              <p style={{ fontSize: '12px', color: 'var(--text-3)', lineHeight: 1.6, marginBottom: '16px' }}>
+                Each module has standalone value. Together, they form a stronger operating system.
+              </p>
               <h4 style={{
                 fontFamily: 'var(--font-heading)',
                 fontSize: '15px', fontWeight: 700, color: 'var(--text)',
