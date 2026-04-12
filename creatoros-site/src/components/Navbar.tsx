@@ -64,9 +64,14 @@ export function Navbar() {
                   background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)',
                 }} />
               </div>
-              <span style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>
-                CreatorOS
-              </span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
+                <span style={{ fontFamily: 'var(--font-heading)', fontSize: '16px', fontWeight: 700, color: 'var(--text)', lineHeight: 1 }}>
+                  CreatorOS
+                </span>
+                <span style={{ fontSize: '10px', fontWeight: 500, color: 'var(--text-3)', letterSpacing: '0.08em', lineHeight: 1 }}>
+                  by LXST
+                </span>
+              </div>
             </Link>
 
             <nav className="nav-desktop" style={{ alignItems: 'center', gap: '4px', flex: 1 }}>

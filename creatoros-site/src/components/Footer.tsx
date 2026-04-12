@@ -47,7 +47,8 @@ export function Footer() {
                 }} />
               </div>
               <span style={{ fontFamily: 'var(--font-heading)', fontSize: '15px', fontWeight: 700, color: 'var(--text)' }}>
-                CreatorOS
+                CreatorOS{' '}
+                <span style={{ fontWeight: 400, fontSize: '12px', color: 'var(--text-3)', letterSpacing: '0.04em' }}>by LXST</span>
               </span>
             </Link>
             <p style={{ fontSize: '13px', color: 'var(--text-3)', lineHeight: 1.7, maxWidth: '240px' }}>

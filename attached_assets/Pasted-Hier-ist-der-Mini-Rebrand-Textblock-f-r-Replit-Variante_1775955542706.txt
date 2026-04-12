@@ -1,0 +1,93 @@
+Hier ist der **Mini‑Rebrand‑Textblock für Replit** (Variante 1: **CreatorOS by LXST**) — genau so, dass du es **1:1 reinklopfen** kannst, ohne die Site neu anzufassen.
+
+---
+
+## Mini‑Rebrand Prompt — “CreatorOS by LXST” (Bridge Phase, minimal changes)
+
+Refine the existing **creatoros-site** marketing app to introduce a clean brand hierarchy using the transitional label **“CreatorOS by LXST”**.
+
+### Goal
+
+Introduce LXST as the clear sender brand without renaming the whole project or rewriting the site. Keep CreatorOS as the front-facing product/brand for now.
+
+### Constraints
+
+- Do not redesign the site.
+- Do not change routes or page structure.
+- Do not introduce new CTAs.
+- Keep the visual hierarchy calm and premium: **CreatorOS stays primary**, **by LXST stays subtle**.
+- Apply changes consistently across header, footer, about, and OG metadata.
+
+---
+
+### 1) Header (site-wide)
+
+Update the header brand mark so it reads:
+
+- Primary: **CreatorOS**
+- Secondary (small/subtle): **by LXST**
+
+Rules:
+
+- “by LXST” must be visually secondary (smaller size, lower contrast, subtle spacing).
+- Keep it inline or as a small subline—no extra clutter.
+
+---
+
+### 2) Footer (site-wide)
+
+Update the footer brand line to:
+
+**CreatorOS by LXST**  
+
+*Clarity-first tools for creators and solo brands.*
+
+Rules:
+
+- Keep the footer minimal.
+- Do not add additional brand layers or extra logos.
+- Keep link structure unchanged.
+
+---
+
+### 3) About page (top / first paragraph)
+
+Add or update the opening line on **/about** to:
+
+**CreatorOS is a product by LXST, built for creators and solo brands who need structure, clarity, and direction.**
+
+Keep the rest of the About page as-is unless small edits are needed for tone consistency.
+
+---
+
+### 4) OG / Social preview titles (brand consistency)
+
+Ensure OG and Twitter metadata stay consistent with the new hierarchy:
+
+- Site name: **CreatorOS**
+- Include “by LXST” subtly where appropriate (prefer description over title if titles get too long).
+
+Add/ensure for the default OG card composition:
+
+- Large: **CreatorOS**
+- Small: **by LXST**
+
+If a product-specific OG image exists (Creator Clarity Kit), keep:
+
+- Large: **Creator Clarity Kit**
+- Small: **CreatorOS by LXST**
+- Keep text minimal so it remains legible in small previews.
+
+---
+
+### 5) Final check
+
+- Header shows “CreatorOS” with subtle “by LXST” on every page.
+- Footer shows “CreatorOS by LXST” + tagline on every page.
+- /about starts with the new line.
+- OG previews don’t become cluttered or overly long.
+- No new CTAs introduced; no CTA labels changed.
+
+---
+
+Wenn du willst, gebe ich dir als nächstes noch **die exakt beste Microcopy für OG‑Titles/Descriptions** (damit “by LXST” konsistent reinfließt, ohne die Titles zu sprengen).

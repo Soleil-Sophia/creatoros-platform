@@ -75,6 +75,7 @@ export default function About() {
               </h2>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
                 {[
+                  'CreatorOS is a product by LXST, built for creators and solo brands who need structure, clarity, and direction.',
                   'The tools for creators are scattered, generic, and built for output — not for thinking.',
                   'AI made it easier to produce. But it didn\'t make it easier to position, to be clear, or to build a system that compounds.',
                   'We saw creators produce more and convert less. Post constantly and build nothing lasting. Hustle without infrastructure.',
@@ -82,7 +83,7 @@ export default function About() {
                   'We started with the Creator Clarity Kit — a focused toolkit for solo creators and brands who need to find clarity before they build anything else.',
                   'The rest of the ecosystem is being built with our early community. If you\'re a creator who thinks in systems, you\'re the right person to join.',
                 ].map((para, i) => (
-                  <p key={i} style={{ fontSize: '16px', color: i < 2 ? 'var(--text-2)' : 'var(--text-3)', lineHeight: 1.8 }}>
+                  <p key={i} style={{ fontSize: '16px', color: i < 3 ? 'var(--text-2)' : 'var(--text-3)', lineHeight: 1.8 }}>
                     {para}
                   </p>
                 ))}

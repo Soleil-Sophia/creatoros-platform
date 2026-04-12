@@ -45,7 +45,8 @@ function buildDefaultSVG() {
   <rect x="94" y="86" width="16" height="16" rx="4" fill="url(#logoGrad)"/>
 
   <!-- Brand name -->
-  <text x="138" y="104" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="26" fill="rgba(255,255,255,0.9)" letter-spacing="-0.3">CreatorOS</text>
+  <text x="138" y="101" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="26" fill="rgba(255,255,255,0.9)" letter-spacing="-0.3">CreatorOS</text>
+  <text x="139" y="117" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="13" fill="rgba(255,255,255,0.3)" letter-spacing="0.5">by LXST</text>
 
   <!-- Decorative dot grid — subtle -->
   <circle cx="1100" cy="120" r="2" fill="rgba(255,191,222,0.15)"/>
@@ -106,7 +107,8 @@ function buildProductSVG() {
   <!-- Logo mark -->
   <rect x="80" y="72" width="44" height="44" rx="10" fill="#1A1D2A" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
   <rect x="94" y="86" width="16" height="16" rx="4" fill="url(#logoGrad)"/>
-  <text x="138" y="104" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="26" fill="rgba(255,255,255,0.9)" letter-spacing="-0.3">CreatorOS</text>
+  <text x="138" y="101" font-family="system-ui, -apple-system, sans-serif" font-weight="700" font-size="26" fill="rgba(255,255,255,0.9)" letter-spacing="-0.3">CreatorOS</text>
+  <text x="139" y="117" font-family="system-ui, -apple-system, sans-serif" font-weight="500" font-size="13" fill="rgba(255,255,255,0.3)" letter-spacing="0.5">by LXST</text>
 
   <!-- Eyebrow label -->
   <text x="80" y="218" font-family="system-ui, -apple-system, sans-serif" font-weight="600" font-size="14" fill="#FFBFDE" letter-spacing="2">CREATOR CLARITY KIT</text>
