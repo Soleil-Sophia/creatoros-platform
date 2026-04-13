@@ -1,4 +1,5 @@
 import { useMeta } from '../hooks/useMeta';
+import { SUPPORT_EMAIL } from '../config/site';
 
 export default function Terms() {
   useMeta('Terms — CreatorOS', 'Terms and purchase information for CreatorOS by LXST.');
@@ -66,7 +67,7 @@ export default function Terms() {
               },
               {
                 title: 'Purchases',
-                body: 'All sales are final unless otherwise stated. If you have a question about your purchase, contact hello@creatoros.co.',
+                body: `All sales are final unless otherwise stated. If you have a question about your purchase, contact ${SUPPORT_EMAIL}.`,
               },
               {
                 title: 'Changes',

@@ -14,18 +14,18 @@ const footerSections = [
   {
     title: 'CORE MODULES',
     links: [
-      { label: 'BrandOS', href: '/modules/brandos' },
-      { label: 'ContentOS', href: '/modules/contentos' },
-      { label: 'LaunchOS', href: '/modules/launchos' },
-      { label: 'ManagementOS', href: '/modules/managementos' },
-      { label: 'AnalyticsOS', href: '/modules/analyticsos' },
+      { label: 'BrandOS', href: '/modules#brandos' },
+      { label: 'ContentOS', href: '/modules#contentos' },
+      { label: 'LaunchOS', href: '/modules#launchos' },
+      { label: 'ManagementOS', href: '/modules#managementos' },
+      { label: 'AnalyticsOS', href: '/modules#analyticsos' },
     ],
   },
   {
     title: 'RESOURCES',
     links: [
       { label: 'Documentation', href: '/docs' },
-      { label: 'Support', href: '/support' },
+      { label: 'Support', href: '/contact' },
     ],
   },
   {
@@ -33,6 +33,7 @@ const footerSections = [
     links: [
       { label: 'About', href: '/about' },
       { label: 'Contact', href: '/contact' },
+      { label: 'Impressum', href: '/impressum' },
     ],
   },
 ];
@@ -40,7 +41,7 @@ const footerSections = [
 const legalLinks = [
   { href: '/privacy', label: 'Privacy Policy' },
   { href: '/terms', label: 'Terms of Service' },
-  { href: '/cookies', label: 'Cookies' },
+  { href: '/impressum', label: 'Impressum' },
 ];
 
 export function Footer() {

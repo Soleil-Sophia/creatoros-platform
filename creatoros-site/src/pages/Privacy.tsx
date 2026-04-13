@@ -1,4 +1,5 @@
 import { useMeta } from '../hooks/useMeta';
+import { SUPPORT_EMAIL } from '../config/site';
 
 export default function Privacy() {
   useMeta('Privacy — CreatorOS', 'Privacy information for CreatorOS by LXST.');
@@ -66,11 +67,11 @@ export default function Privacy() {
               },
               {
                 title: 'Your rights',
-                body: 'You can request to access, update, or delete your data at any time by contacting us at hello@creatoros.co.',
+                body: `You can request to access, update, or delete your data at any time by contacting us at ${SUPPORT_EMAIL}.`,
               },
               {
                 title: 'Contact',
-                body: 'For any privacy-related questions, contact us at hello@creatoros.co.',
+                body: `For any privacy-related questions, contact us at ${SUPPORT_EMAIL}.`,
               },
             ].map(({ title, body }) => (
               <div key={title} style={{ borderBottom: '1px solid rgba(255,255,255,0.05)', paddingBottom: '28px' }}>

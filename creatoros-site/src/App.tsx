@@ -13,6 +13,7 @@ import Modules from './pages/Modules';
 import Pricing from './pages/Pricing';
 import Roadmap from './pages/Roadmap';
 import Docs from './pages/Docs';
+import Impressum from './pages/Impressum';
 import Success from './pages/Success';
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
             <Route path="/contact" element={<Contact />} />
             <Route path="/privacy" element={<Privacy />} />
             <Route path="/terms" element={<Terms />} />
+            <Route path="/impressum" element={<Impressum />} />
             <Route path="/success" element={<Success />} />
           </Routes>
         </main>
