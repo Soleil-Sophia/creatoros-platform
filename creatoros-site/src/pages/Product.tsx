@@ -218,7 +218,7 @@ export default function Product() {
               </div>
               <p style={{ fontSize: '13px', color: 'var(--text-3)', marginTop: '6px' }}>One-time · Instant access</p>
             </div>
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '14px', alignItems: 'center' }}>
               <PrimaryButton href={CHECKOUT_URL} large>Get the Kit</PrimaryButton>
               <SecondaryButton to="/early-access" />
             </div>
