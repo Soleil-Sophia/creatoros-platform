@@ -6,18 +6,27 @@ export const SITE_URL = 'https://creatoros.co';
 export const SUPPORT_EMAIL = 'hello@creatoros.co';
 export const BRAND_NAME = 'CreatorOS';
 
-// Base URL for the actual platform app where modules live.
-// Use '' for same-origin links, or set to the deployed platform URL.
-export const PLATFORM_URL = '';
-
 // Paths to each module's app entry. Used by the owner-signed-in view on /modules.
-export const MODULE_APP_PATHS: Record<string, string> = {
-  BrandOS: '/modules/brandos/app',
-  ContentOS: '/modules/contentos/app',
-  LaunchOS: '/modules/launchos/app',
-  ManagementOS: '/modules/managementos/app',
-  AnalyticsOS: '/modules/analyticsos/app',
+// `null` = no app yet (module is planned/in development) — owner sees a disabled state.
+export const MODULE_APP_PATHS: Record<string, string | null> = {
+  BrandOS: '/modules/brandos',
+  ContentOS: '/modules/contentos',
+  LaunchOS: null,
+  ManagementOS: null,
+  AnalyticsOS: null,
 };
+
+/**
+ * Resolves the URL of the actual platform app where modules live.
+ *  - In production, set `VITE_PLATFORM_URL` to the deployed platform URL (e.g. https://app.creatoros.co).
+ *  - In dev, falls back to '/platform' which is proxied by Vite to the root project on port 3000.
+ */
+export function getPlatformUrl(): string {
+  const override = (import.meta as unknown as { env: Record<string, string | undefined> }).env
+    .VITE_PLATFORM_URL;
+  if (override) return override.replace(/\/$/, '');
+  return '/platform';
+}
 
 // ─────────────────────────────────────────────────────────────────────────────
 // LAUNCH CHECKLIST

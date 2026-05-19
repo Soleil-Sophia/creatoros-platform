@@ -77,4 +77,8 @@ export const router = createBrowserRouter([
     path: '*',
     Component: NotFoundPage,
   },
-]);
+], {
+  // Must match the Vite `base` in vite.config.ts. The marketing site (creatoros-site)
+  // proxies `/platform/*` here, and in production this app is mounted at the same prefix.
+  basename: '/platform',
+});

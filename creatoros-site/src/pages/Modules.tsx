@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useMeta } from '../hooks/useMeta';
 import { useAuth } from '../contexts/AuthContext';
-import { PLATFORM_URL, MODULE_APP_PATHS } from '../config/site';
+import { getPlatformUrl, MODULE_APP_PATHS } from '../config/site';
 
 const modules = [
   {
@@ -131,7 +131,8 @@ export default function Modules() {
               const isActive = status === 'active';
               const meta = statusMeta[status];
               return (
-                <div key={name} style={{
+                <div key={name} id={name.toLowerCase()} style={{
+                  scrollMarginTop: '88px',
                   padding: '36px 40px',
                   borderRadius: '20px',
                   background: 'linear-gradient(135deg, #1A1D2A 0%, #141620 100%)',
@@ -220,25 +221,36 @@ export default function Modules() {
                       </div>
 
                       {isOwner ? (
-                        <a
-                          href={`${PLATFORM_URL}${MODULE_APP_PATHS[name] ?? '/modules'}`}
-                          style={{
+                        MODULE_APP_PATHS[name] ? (
+                          <a
+                            href={`${getPlatformUrl()}${MODULE_APP_PATHS[name]}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            style={{
+                              display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                              padding: '10px 14px', borderRadius: '10px',
+                              background: `linear-gradient(135deg, ${accent} 0%, #E7C6F3 100%)`,
+                              color: '#0E0F14',
+                              fontSize: '13px', fontWeight: 700,
+                              textDecoration: 'none',
+                            }}
+                          >
+                            Open {name}
+                            <svg width="12" height="12" fill="none" viewBox="0 0 14 14">
+                              <path d="M2.5 7h9M8 3l4 4-4 4" stroke="#0E0F14" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                          </a>
+                        ) : (
+                          <div style={{
                             display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
                             padding: '10px 14px', borderRadius: '10px',
-                            background: isActive
-                              ? `linear-gradient(135deg, ${accent} 0%, #E7C6F3 100%)`
-                              : 'rgba(255,255,255,0.06)',
-                            color: isActive ? '#0E0F14' : 'var(--text-2)',
-                            border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
-                            fontSize: '13px', fontWeight: 700,
-                            textDecoration: 'none',
-                          }}
-                        >
-                          Open {name}
-                          <svg width="12" height="12" fill="none" viewBox="0 0 14 14">
-                            <path d="M2.5 7h9M8 3l4 4-4 4" stroke={isActive ? '#0E0F14' : 'currentColor'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </a>
+                            background: 'rgba(255,255,255,0.04)',
+                            border: '1px dashed rgba(255,255,255,0.12)',
+                            color: 'var(--text-3)', fontSize: '12px', fontWeight: 600,
+                          }}>
+                            In Development
+                          </div>
+                        )
                       ) : (
                         <Link
                           to="/early-access"

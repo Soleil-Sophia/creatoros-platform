@@ -136,8 +136,16 @@ The live site runs from `creatoros-site/` on port 5000 (workflow: `creatoros-sit
 
 ### Owner auth (soft gate)
 - Navbar shows "Sign in" for public, "Owner" badge + Sign out for owner
-- `/modules` shows "Join Waitlist" for public on each module, "Open {Name}" for owner (links to `PLATFORM_URL + MODULE_APP_PATHS[name]`)
+- `/modules` shows "Join Waitlist" for public on each module, "Open {Name}" for owner (opens in new tab)
+- Each module card has `id={name.toLowerCase()}` so footer `#brandos` etc. anchors scroll correctly
 - Secret rotation: changing `VITE_OWNER_ACCESS_CODE` auto-invalidates old browser sessions on next load
+
+### Cross-app routing (platform proxy)
+- Marketing site (`creatoros-site`, port 5000) proxies `/platform/*` → root platform app (port 3000)
+- Root app's Vite has `base: '/platform/'` and React Router has `basename: '/platform'` — both must stay in sync
+- Root app imports must use `react-router` (v7), NOT `react-router-dom` (v6) — they're incompatible
+- In production, set `VITE_PLATFORM_URL` in `creatoros-site` to the deployed platform URL (overrides the `/platform` default)
+- Module → platform path mapping: `creatoros-site/src/config/site.ts` `MODULE_APP_PATHS`. Set to `null` for modules without an app yet (owner sees "In Development" badge)
 
 ### Platform positioning
 - CreatorOS = platform
@@ -157,6 +165,7 @@ The live site runs from `creatoros-site/` on port 5000 (workflow: `creatoros-sit
 - Theme: `artifacts/mockup-sandbox/src/styles/_group.css`
 
 ## Vite Config
-- Main app: port 5000
+- Marketing site (creatoros-site): port 5000, proxies `/platform/*` → localhost:3000
+- Root platform app: port 3000, `base: '/platform/'`, router `basename: '/platform'`
 - HMR uses `REPLIT_DEV_DOMAIN` env var
 - `.local/` excluded from file watcher

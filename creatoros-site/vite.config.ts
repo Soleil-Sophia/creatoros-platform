@@ -11,5 +11,15 @@ export default defineConfig({
       'X-Frame-Options': 'ALLOWALL',
       'Content-Security-Policy': "frame-ancestors *",
     },
+    // Dev proxy: forward `/platform/*` to the root platform app (Vite on port 3000).
+    // Owner "Open Module" links go through this proxy. In production, set
+    // VITE_PLATFORM_URL to the deployed platform URL instead.
+    proxy: {
+      '/platform': {
+        target: 'http://localhost:3000',
+        changeOrigin: true,
+        ws: true,
+      },
+    },
   },
 });
