@@ -1,5 +1,7 @@
 import { Link } from 'react-router-dom';
 import { useMeta } from '../hooks/useMeta';
+import { useAuth } from '../contexts/AuthContext';
+import { PLATFORM_URL, MODULE_APP_PATHS } from '../config/site';
 
 const modules = [
   {
@@ -60,6 +62,7 @@ const statusMeta: Record<string, { label: string; dot: string }> = {
 };
 
 export default function Modules() {
+  const { isOwner } = useAuth();
   useMeta(
     'Module System — CreatorOS',
     'Five core modules inside the CreatorOS platform: BrandOS, ContentOS, LaunchOS, ManagementOS, and AnalyticsOS — a connected system for creators who build with structure.'
@@ -195,23 +198,62 @@ export default function Modules() {
                       borderRadius: '14px',
                       background: 'rgba(255,255,255,0.03)',
                       border: '1px solid rgba(255,255,255,0.06)',
+                      display: 'flex', flexDirection: 'column', gap: '16px',
                     }}
                       className="module-capabilities"
                     >
-                      <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
-                        Capabilities
-                      </p>
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                        {capabilities.map(cap => (
-                          <div key={cap} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                            <div style={{
-                              width: '5px', height: '5px', borderRadius: '50%', flexShrink: 0,
-                              background: isActive ? accent : 'rgba(255,255,255,0.2)',
-                            }} />
-                            <span style={{ fontSize: '12px', color: 'var(--text-3)', lineHeight: 1.4 }}>{cap}</span>
-                          </div>
-                        ))}
+                      <div>
+                        <p style={{ fontSize: '10px', fontWeight: 700, color: 'var(--text-3)', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '12px' }}>
+                          Capabilities
+                        </p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                          {capabilities.map(cap => (
+                            <div key={cap} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                              <div style={{
+                                width: '5px', height: '5px', borderRadius: '50%', flexShrink: 0,
+                                background: isActive ? accent : 'rgba(255,255,255,0.2)',
+                              }} />
+                              <span style={{ fontSize: '12px', color: 'var(--text-3)', lineHeight: 1.4 }}>{cap}</span>
+                            </div>
+                          ))}
+                        </div>
                       </div>
+
+                      {isOwner ? (
+                        <a
+                          href={`${PLATFORM_URL}${MODULE_APP_PATHS[name] ?? '/modules'}`}
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                            padding: '10px 14px', borderRadius: '10px',
+                            background: isActive
+                              ? `linear-gradient(135deg, ${accent} 0%, #E7C6F3 100%)`
+                              : 'rgba(255,255,255,0.06)',
+                            color: isActive ? '#0E0F14' : 'var(--text-2)',
+                            border: isActive ? 'none' : '1px solid rgba(255,255,255,0.1)',
+                            fontSize: '13px', fontWeight: 700,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          Open {name}
+                          <svg width="12" height="12" fill="none" viewBox="0 0 14 14">
+                            <path d="M2.5 7h9M8 3l4 4-4 4" stroke={isActive ? '#0E0F14' : 'currentColor'} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                        </a>
+                      ) : (
+                        <Link
+                          to="/early-access"
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: '6px',
+                            padding: '10px 14px', borderRadius: '10px',
+                            background: 'rgba(255,255,255,0.04)',
+                            border: '1px solid rgba(255,255,255,0.08)',
+                            color: 'var(--text-2)', fontSize: '13px', fontWeight: 600,
+                            textDecoration: 'none',
+                          }}
+                        >
+                          Join Waitlist
+                        </Link>
+                      )}
                     </div>
                   </div>
                 </div>

@@ -130,7 +130,14 @@ The live site runs from `creatoros-site/` on port 5000 (workflow: `creatoros-sit
 - `src/components/home/Hero.tsx` — Platform-first hero (CTAs → `/modules`)
 - `src/components/Footer.tsx` — 4-column footer: PLATFORM / CORE MODULES / RESOURCES / COMPANY
 - `src/i18n/en.ts` — All copy strings (hero, ecosystem, etc.)
-- `src/config/site.ts` — SITE_URL, SUPPORT_EMAIL, BRAND_NAME
+- `src/config/site.ts` — SITE_URL, SUPPORT_EMAIL, BRAND_NAME, PLATFORM_URL, MODULE_APP_PATHS
+- `src/contexts/AuthContext.tsx` — Soft owner gate (localStorage + `VITE_OWNER_ACCESS_CODE`). Not real auth — replace with Supabase Auth before real users.
+- `src/pages/SignIn.tsx` — `/sign-in` page for owner access
+
+### Owner auth (soft gate)
+- Navbar shows "Sign in" for public, "Owner" badge + Sign out for owner
+- `/modules` shows "Join Waitlist" for public on each module, "Open {Name}" for owner (links to `PLATFORM_URL + MODULE_APP_PATHS[name]`)
+- Secret rotation: changing `VITE_OWNER_ACCESS_CODE` auto-invalidates old browser sessions on next load
 
 ### Platform positioning
 - CreatorOS = platform

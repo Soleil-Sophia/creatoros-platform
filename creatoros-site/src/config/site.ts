@@ -6,6 +6,19 @@ export const SITE_URL = 'https://creatoros.co';
 export const SUPPORT_EMAIL = 'hello@creatoros.co';
 export const BRAND_NAME = 'CreatorOS';
 
+// Base URL for the actual platform app where modules live.
+// Use '' for same-origin links, or set to the deployed platform URL.
+export const PLATFORM_URL = '';
+
+// Paths to each module's app entry. Used by the owner-signed-in view on /modules.
+export const MODULE_APP_PATHS: Record<string, string> = {
+  BrandOS: '/modules/brandos/app',
+  ContentOS: '/modules/contentos/app',
+  LaunchOS: '/modules/launchos/app',
+  ManagementOS: '/modules/managementos/app',
+  AnalyticsOS: '/modules/analyticsos/app',
+};
+
 // ─────────────────────────────────────────────────────────────────────────────
 // LAUNCH CHECKLIST
 // ─────────────────────────────────────────────────────────────────────────────

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { t } from '../i18n';
 import { CREATOR_CLARITY_KIT_CHECKOUT_URL as CHECKOUT_URL } from '../config/checkout';
+import { useAuth } from '../contexts/AuthContext';
 
 const links = [
   { href: '/', label: t.nav.home },
@@ -36,6 +37,7 @@ export function Navbar() {
   const { pathname } = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const close = () => setMenuOpen(false);
+  const { isOwner, signOut } = useAuth();
 
   return (
     <>
@@ -97,27 +99,77 @@ export function Navbar() {
               })}
             </nav>
 
-            <a
-              className="nav-desktop"
-              href={CHECKOUT_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{
-                padding: '10px 20px',
-                borderRadius: '10px',
-                background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
-                color: '#0E0F14',
-                fontSize: '14px',
-                fontWeight: 600,
-                flexShrink: 0,
-                boxShadow: '0 4px 16px rgba(255, 191, 222, 0.25)',
-                transition: 'opacity 0.15s',
-              }}
-              onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
-              onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
-            >
-              {t.nav.cta}
-            </a>
+            <div className="nav-desktop" style={{ alignItems: 'center', gap: '12px', flexShrink: 0 }}>
+              {isOwner ? (
+                <div style={{ display: 'inline-flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '6px',
+                    padding: '6px 10px', borderRadius: '8px',
+                    background: 'rgba(74, 222, 128, 0.08)',
+                    border: '1px solid rgba(74, 222, 128, 0.2)',
+                    fontSize: '12px', fontWeight: 600, color: '#4ADE80',
+                    letterSpacing: '0.04em',
+                  }}>
+                    <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#4ADE80' }} />
+                    Owner
+                  </span>
+                  <button
+                    type="button"
+                    onClick={signOut}
+                    style={{
+                      padding: '6px 12px', borderRadius: '8px',
+                      background: 'transparent', border: '1px solid rgba(255,255,255,0.1)',
+                      color: 'var(--text-3)', fontSize: '13px', fontWeight: 500,
+                      cursor: 'pointer', transition: 'color 0.15s',
+                    }}
+                    onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text)'}
+                    onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+                  >
+                    Sign out
+                  </button>
+                </div>
+              ) : (
+                <Link
+                  to="/sign-in"
+                  style={{
+                    padding: '8px 14px', borderRadius: '8px',
+                    fontSize: '13px', fontWeight: 500,
+                    color: 'var(--text-3)',
+                    border: '1px solid rgba(255,255,255,0.1)',
+                    transition: 'color 0.15s, border-color 0.15s',
+                  }}
+                  onMouseEnter={e => {
+                    (e.currentTarget as HTMLElement).style.color = 'var(--text)';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.2)';
+                  }}
+                  onMouseLeave={e => {
+                    (e.currentTarget as HTMLElement).style.color = 'var(--text-3)';
+                    (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255,255,255,0.1)';
+                  }}
+                >
+                  Sign in
+                </Link>
+              )}
+              <a
+                href={CHECKOUT_URL}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: '10px 20px',
+                  borderRadius: '10px',
+                  background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
+                  color: '#0E0F14',
+                  fontSize: '14px',
+                  fontWeight: 600,
+                  boxShadow: '0 4px 16px rgba(255, 191, 222, 0.25)',
+                  transition: 'opacity 0.15s',
+                }}
+                onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
+                onMouseLeave={e => (e.currentTarget as HTMLElement).style.opacity = '1'}
+              >
+                {t.nav.cta}
+              </a>
+            </div>
 
             <button
               className="nav-hamburger"
@@ -170,7 +222,36 @@ export function Navbar() {
             })}
           </nav>
 
-          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div style={{ marginTop: '24px', paddingTop: '24px', borderTop: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '12px' }}>
+            {isOwner ? (
+              <button
+                type="button"
+                onClick={() => { signOut(); close(); }}
+                style={{
+                  padding: '16px', borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  color: 'var(--text-3)', fontSize: '15px', fontWeight: 500,
+                  cursor: 'pointer', textAlign: 'center',
+                }}
+              >
+                Sign out (Owner)
+              </button>
+            ) : (
+              <Link
+                to="/sign-in"
+                onClick={close}
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  padding: '16px', borderRadius: '12px',
+                  background: 'rgba(255,255,255,0.04)',
+                  border: '1px solid rgba(255,255,255,0.1)',
+                  color: 'var(--text-3)', fontSize: '15px', fontWeight: 500,
+                }}
+              >
+                Sign in
+              </Link>
+            )}
             <a
               href={CHECKOUT_URL}
               target="_blank"
