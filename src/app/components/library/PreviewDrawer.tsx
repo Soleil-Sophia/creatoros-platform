@@ -32,13 +32,20 @@ export function PreviewDrawer({ asset, onClose, onCopy, onReuse, onDelete }: Pre
         onClick={onClose}
       />
       
-      {/* Drawer */}
-      <div 
-        className="fixed right-0 top-0 bottom-0 w-[480px] z-50 overflow-y-auto"
+      {/* Drawer — right sheet on small screens, centered panel on lg+ */}
+      <div
+        className="
+          fixed z-50 overflow-y-auto
+          right-0 top-0 bottom-0 w-[480px] max-w-full
+          lg:right-auto lg:left-1/2 lg:-translate-x-1/2
+          lg:top-8 lg:bottom-8
+          lg:w-[min(860px,calc(100vw-96px))]
+          lg:rounded-[16px] lg:border lg:border-white/10
+        "
         style={{
           background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
           borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '-16px 0 48px rgba(0, 0, 0, 0.6)'
+          boxShadow: '0 24px 64px rgba(0, 0, 0, 0.6)',
         }}
       >
         {/* Drawer Header */}
