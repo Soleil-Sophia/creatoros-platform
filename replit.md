@@ -114,6 +114,15 @@ Module IDs (slugs): `brandos`, `contentos`, `launchos`, `managementos`, `analyti
 
 The live site runs from `creatoros-site/` on port 5000 (workflow: `creatoros-site`).
 
+### Deployment (Option A — separate published app)
+The marketing site publishes as its **own** Replit app, separate from the platform app (this repl, live at `https://creatorospage.replit.app`). To publish the marketing site:
+- **Target:** static
+- **Build:** `cd creatoros-site && npm run build`
+- **Public dir:** `creatoros-site/dist`
+- **Env var:** `VITE_PLATFORM_URL = https://creatorospage.replit.app/platform` (set in the **production** environment; inlined at build time). Dev intentionally leaves it unset so `getPlatformUrl()` falls back to `/platform`, which Vite proxies to the local platform on port 3000.
+- After changing `VITE_PLATFORM_URL`, **rebuild** — `VITE_*` values are baked into the bundle at build time, so a rebuild/republish is required for changes to take effect.
+- Module "Open" links on `/modules` resolve to `${VITE_PLATFORM_URL}${MODULE_APP_PATHS[name]}` (e.g. `https://creatorospage.replit.app/platform/modules/contentos`).
+
 ### Key pages
 | Route | File | Notes |
 |---|---|---|

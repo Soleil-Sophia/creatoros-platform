@@ -27,6 +27,11 @@ dev proxy or the standalone build. If you touch routing, keep `basename` and
 - Marketing site links to the platform via build-time `VITE_PLATFORM_URL`
   (consumed by `getPlatformUrl()` in `creatoros-site/src/config/site.ts`).
 - `VITE_*` is inlined at build → rebuild the marketing site whenever it changes.
+- Scope `VITE_PLATFORM_URL` to the **production** environment only, NOT shared.
+  **Why:** dev must leave it unset so `getPlatformUrl()` falls back to `/platform`
+  and uses the Vite dev proxy to localhost:3000. A shared value would send dev
+  "Open Module" links to the live site and bypass the local platform.
+- Value: `https://creatorospage.replit.app/platform` (this repl = platform app).
 
 ## Deployment config
 - Root `.replit` `[deployment]`: `static`, build `npm run build`, publicDir `dist`.
