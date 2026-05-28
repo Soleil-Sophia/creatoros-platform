@@ -10,8 +10,16 @@ import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
 
+type SavedInputs = {
+  offer: string;
+  audience: string;
+  goal: string;
+  tone: string;
+  outputType: string;
+};
+
 type ReuseAsset = {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   preview: string;
@@ -21,6 +29,9 @@ type ReuseAsset = {
   date: string;
   variants: number;
   status: string;
+  source?: 'generated';
+  inputs?: SavedInputs;
+  outputType?: string;
 };
 
 export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } = {}) {
@@ -29,38 +40,47 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   
   // Extract reused asset from location state
   const reuseAsset = location.state?.reuseAsset as ReuseAsset | undefined;
-  
-  // Smart prefill based on asset type
+
+  // Detect a full saved-input restoration (saved-asset reuse with inputs blob).
+  const restoredInputs: SavedInputs | undefined =
+    reuseAsset?.source === 'generated' && reuseAsset.inputs ? reuseAsset.inputs : undefined;
+
+  // Smart prefill for assets WITHOUT a saved inputs blob (mocks / legacy saves).
   const getInitialOfferValue = () => {
     if (!reuseAsset) return '';
-    
+
     // Plan → extract core concept (first sentence)
     if (reuseAsset.type === 'plan') {
       const firstSentence = reuseAsset.preview.split('.')[0];
       return firstSentence ? firstSentence + '.' : reuseAsset.preview;
     }
-    
+
     // All other types → use full preview
     return reuseAsset.preview;
   };
-  
-  // Form state
-  const [offer, setOffer] = useState(getInitialOfferValue());
-  const [audience, setAudience] = useState('');
+
+  // Form state — when a full inputs blob is restored, every field comes from it.
+  // Otherwise we fall back to the existing partial-prefill behavior (offer + platform).
+  const [offer, setOffer] = useState(restoredInputs?.offer ?? getInitialOfferValue());
+  const [audience, setAudience] = useState(restoredInputs?.audience ?? '');
   const [platform, setPlatform] = useState(reuseAsset?.platform || 'LinkedIn');
-  const [goal, setGoal] = useState('');
-  const [tone, setTone] = useState('Conversational');
-  const [outputType, setOutputType] = useState('hook-pack');
+  const [goal, setGoal] = useState(restoredInputs?.goal ?? '');
+  const [tone, setTone] = useState(restoredInputs?.tone || 'Conversational');
+  const [outputType, setOutputType] = useState(
+    restoredInputs?.outputType || reuseAsset?.outputType || 'hook-pack'
+  );
 
   // Brand profile (read-only handoff from BrandOS)
   const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
 
   // Hydrate brand profile once on mount. Only seeds the tone default —
-  // does not override the user's tone after they change it.
+  // does not override the user's tone after they change it, and does not
+  // override a tone that was just restored from a saved Library asset.
   useEffect(() => {
     const profile = readBrandProfile();
     if (!profile) return;
     if (profile.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
+    if (restoredInputs) return; // saved-asset reuse owns the tone
     if (profile.tone && profile.tone.trim()) {
       setTone((current) => (current === 'Conversational' ? profile.tone : current));
     }

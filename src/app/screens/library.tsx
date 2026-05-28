@@ -13,6 +13,14 @@ type ViewMode = 'grid' | 'list';
 type FilterType = 'all' | 'hook-pack' | 'short-script' | 'caption-draft' | 'content-brief' | 'repurposing-plan';
 type SortOption = 'recent' | 'oldest' | 'name' | 'type';
 
+type SavedInputs = {
+  offer: string;
+  audience: string;
+  goal: string;
+  tone: string;
+  outputType: string;
+};
+
 type Asset = {
   id: number | string;
   type: string;
@@ -26,6 +34,8 @@ type Asset = {
   status: string;
   source?: 'generated';
   createdAt?: string;
+  inputs?: SavedInputs;
+  outputType?: string;
 };
 
 // Copy to clipboard helper
@@ -179,13 +189,25 @@ export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = 
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
 
-  // Reuse handler
+  // Reuse handler — for saved assets, look up the full saved record by id
+  // so we can carry the inputs blob + outputType through router state.
   const handleReuse = (asset: Asset) => {
+    let reuseAsset: Asset = asset;
+    if (asset.source === 'generated' && typeof asset.id === 'string') {
+      const saved = listSavedAssets().find((s) => s.id === asset.id);
+      if (saved) {
+        reuseAsset = {
+          ...asset,
+          inputs: saved.inputs,
+          outputType: saved.type,
+        };
+      }
+    }
     navigate('/app/content-os/generate', {
       state: {
-        reuseAsset: asset,
-        source: 'library'
-      }
+        reuseAsset,
+        source: 'library',
+      },
     });
   };
 
