@@ -6,6 +6,7 @@ type OutputWorkspaceHeaderProps = {
   title: string;
   subtitle: string;
   onSave: () => void;
+  saveStatus?: 'idle' | 'saving' | 'saved';
 };
 
 export function OutputWorkspaceHeader({
@@ -13,8 +14,10 @@ export function OutputWorkspaceHeader({
   timestamp,
   title,
   subtitle,
-  onSave
+  onSave,
+  saveStatus = 'idle',
 }: OutputWorkspaceHeaderProps) {
+  const saveDisabled = saveStatus !== 'idle';
   return (
     <div 
       className="p-8 pb-6 border-b flex items-center justify-between relative"
@@ -55,19 +58,28 @@ export function OutputWorkspaceHeader({
           {subtitle}
         </p>
       </div>
-      <button 
+      <button
+        type="button"
         onClick={onSave}
+        disabled={saveDisabled}
+        aria-disabled={saveDisabled}
         className="px-6 py-3 rounded-[12px] transition-all hover:opacity-90"
-        style={{ 
+        style={{
           background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
           border: '1px solid rgba(255, 255, 255, 0.12)',
           color: '#F4F3F8',
           fontSize: '14px',
           fontWeight: 600,
-          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06)'
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.06)',
+          cursor: saveDisabled ? 'not-allowed' : 'pointer',
+          opacity: saveDisabled ? 0.65 : 1,
         }}
       >
-        Save Suite to Library
+        {saveStatus === 'saving'
+          ? 'Saving…'
+          : saveStatus === 'saved'
+          ? 'Saved ✓'
+          : 'Save Suite to Library'}
       </button>
     </div>
   );

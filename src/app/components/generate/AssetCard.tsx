@@ -10,7 +10,7 @@ type AssetCardProps = {
   wordCount: number;
   children?: React.ReactNode;
   onSave?: () => void;
-  saveStatus?: 'idle' | 'saved';
+  saveStatus?: 'idle' | 'saving' | 'saved';
 };
 
 export function AssetCard({
@@ -169,6 +169,14 @@ export function AssetCard({
           <Badge variant="pink" size="sm">{type}</Badge>
         </div>
         <div className="flex items-center gap-3">
+          {saveStatus === 'saving' && (
+            <span
+              aria-live="polite"
+              style={{ fontSize: '12px', fontWeight: 600, color: '#B4B8C7' }}
+            >
+              Saving…
+            </span>
+          )}
           {saveStatus === 'saved' && (
             <span
               aria-live="polite"
@@ -180,7 +188,8 @@ export function AssetCard({
           <button
             type="button"
             onClick={onSave}
-            disabled={!onSave}
+            disabled={!onSave || saveStatus !== 'idle'}
+            aria-disabled={!onSave || saveStatus !== 'idle'}
             className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
             style={{
               background: 'rgba(255, 255, 255, 0.06)',
@@ -188,10 +197,15 @@ export function AssetCard({
               color: '#F4F3F8',
               fontSize: '12px',
               fontWeight: 600,
-              cursor: onSave ? 'pointer' : 'default'
+              cursor: onSave && saveStatus === 'idle' ? 'pointer' : 'not-allowed',
+              opacity: saveStatus === 'idle' ? 1 : 0.6,
             }}
           >
-            Save to Library
+            {saveStatus === 'saving'
+              ? 'Saving…'
+              : saveStatus === 'saved'
+              ? 'Saved ✓'
+              : 'Save to Library'}
           </button>
         </div>
       </div>

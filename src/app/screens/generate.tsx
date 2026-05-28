@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Topbar } from '../components/generate/Topbar';
 import { ReuseBanner } from '../components/generate/ReuseBanner';
@@ -111,7 +111,16 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       );
     }, 2500);
   };
-  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved'>('idle');
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
+  const saveResetTimerRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (saveResetTimerRef.current !== null) {
+        window.clearTimeout(saveResetTimerRef.current);
+      }
+    };
+  }, []);
   
   // Clear & Start Fresh - completely reset all state
   const handleClearAndStartFresh = () => {
@@ -140,8 +149,13 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   // Save current output to the Library with a frozen Brand Voice snapshot.
   // Reads the brand profile ONLY at save-time; the asset never re-reads it.
   const handleSaveToLibrary = () => {
+    // Guard against duplicate saves — both header and per-card buttons share
+    // this state, so a rapid double-click (or one click on each button)
+    // only writes a single asset per save cycle.
+    if (saveStatus !== 'idle') return;
     const mock = OUTPUT_MOCK[outputType];
     if (!mock) return;
+    setSaveStatus('saving');
 
     const profile = readBrandProfile();
     const nowIso = new Date().toISOString();
@@ -190,7 +204,13 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
     saveAsset(asset);
     setSaveStatus('saved');
-    window.setTimeout(() => setSaveStatus('idle'), 2200);
+    if (saveResetTimerRef.current !== null) {
+      window.clearTimeout(saveResetTimerRef.current);
+    }
+    saveResetTimerRef.current = window.setTimeout(() => {
+      setSaveStatus('idle');
+      saveResetTimerRef.current = null;
+    }, 2200);
   };
 
   // Dismiss banner only
@@ -343,11 +363,14 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                     subtitle={
                       genStatus
                         ? genStatus
+                        : saveStatus === 'saving'
+                        ? 'Saving to Library…'
                         : saveStatus === 'saved'
                         ? 'Saved to Library ✓'
                         : OUTPUT_MOCK[outputType]?.sub ?? ''
                     }
                     onSave={handleSaveToLibrary}
+                    saveStatus={saveStatus}
                   />
 
                   {/* Asset Output */}
