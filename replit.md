@@ -169,3 +169,113 @@ The live site runs from `creatoros-site/` on port 5000 (workflow: `creatoros-sit
 - Root platform app: port 3000, `base: '/platform/'`, router `basename: '/platform'`
 - HMR uses `REPLIT_DEV_DOMAIN` env var
 - `.local/` excluded from file watcher
+
+---
+
+## MVP-1 Smoke Checklist & Local State Reference
+
+Operational reference for MVP-1 alpha. Documentation only — do not infer
+behavior beyond what is listed here.
+
+### 1. MVP-1 Current Real Flows
+What actually works end-to-end today:
+- BrandOS profile persists locally (survives reload).
+- BrandOS seeds ContentOS Generate (tone, voice label).
+- Generate shows the Brand Voice chip and custom tone pill.
+- Generate button shows visible feedback (`Generated {Label} ✓` near the button).
+- Generate saves assets to the Library.
+- Saved assets include a frozen Brand Voice snapshot captured at save time.
+- Library shows saved assets above the mock seed entries.
+- Library supports deleting saved assets.
+- Library → Generate "Use in Generate" reuse restores the full saved inputs
+  (offer / audience / goal / tone / platform / outputType).
+- Dashboard reads local CreatorOS state (brand profile, library count,
+  authority runs).
+- Authority Engine Labs persists runs locally.
+
+### 2. MVP-1 Still Mock / Not Yet Built
+Be explicit about what is NOT real yet:
+- Generation content is still `OUTPUT_MOCK`, not real AI.
+- No backend, no auth, no Supabase.
+- No cross-device persistence.
+- No publishing, scheduling, or analytics.
+- Planned modules (LaunchOS, ManagementOS, AnalyticsOS, CommunityOS,
+  ResearchOS) remain docs/demo unless their status is `active` in
+  `src/config/modules.ts`.
+- localStorage only — clearing browser storage wipes all state.
+
+### 3. Local Storage Keys
+| Key | Written by | Read by | Shape (summary) | UI can clear? |
+|---|---|---|---|---|
+| `creatoros-brand-profile-v1` | BrandOS setup | Generate, Dashboard | Single object: `{ tone, complexity, formality, energy, voiceLabel, updatedAt, ... }` | Re-save in BrandOS overwrites; no in-UI delete |
+| `creatoros-content-library-v1` | Generate "Save to Library" | Library, Dashboard | Array of `SavedContentAsset` (see `src/app/lib/content-library/types.ts`) including frozen `brandVoiceSnapshot` | Yes — per-asset delete in Library |
+| `creatoros-authority-runs` | Authority Engine Labs | Authority Engine Labs, Dashboard | Array of run objects (inputs + output + timestamp) | Yes — per-run delete in Labs |
+
+To wipe everything during testing, clear these three keys in DevTools →
+Application → Local Storage.
+
+### 4. Six Key Routes Smoke Test
+Routes are served under `/platform` via the marketing-site proxy in dev, or
+direct on port 3000.
+
+- `/platform/dashboard`
+- `/platform/modules`
+- `/platform/app/brand-os/setup`
+- `/platform/app/content-os/generate`
+- `/platform/app/content-os/library`
+- `/platform/app/labs/authority-engine`
+
+Expected:
+- All return HTTP 200.
+- Direct reload on each route works (React Router `basename: '/platform'`).
+- No console errors beyond normal dev/Vite messages (HMR pings, source-map
+  notices, React DevTools hint).
+
+Quick check from shell:
+```
+for p in /platform/dashboard /platform/modules /platform/app/brand-os/setup /platform/app/content-os/generate /platform/app/content-os/library /platform/app/labs/authority-engine; do
+  printf "%s  %s\n" "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000${p})" "${p}"
+done
+```
+
+### 5. Manual Happy Path Smoke Test
+Click-through to validate the MVP-1 loop:
+1. Open BrandOS setup, save a profile with tone "Motivational & Direct".
+2. Open ContentOS Generate.
+3. Confirm the Brand Voice chip and the custom tone pill are visible.
+4. Select output type "Caption Draft".
+5. Click "Generate Caption Draft".
+6. Confirm `Generated Caption Draft ✓` appears near the Generate button.
+7. Click "Save to Library".
+8. Confirm the button shows `Saving…` then `Saved ✓`.
+9. Open Library.
+10. Confirm the saved asset appears at the top with its Brand Voice snapshot.
+11. Open the saved asset.
+12. Click "Use in Generate".
+13. Confirm offer / audience / goal / tone / platform / outputType restore
+    correctly.
+14. Delete the saved asset from the Library.
+15. Confirm it disappears and stays deleted after a full reload.
+
+### 6. Build Check
+- `npm run build` must exit 0 before pushing.
+- `dist/` is gitignored and must not be committed.
+- Build time is ~1 minute; the resulting hash in `dist/assets/` should change
+  whenever source changes.
+
+### 7. Known MVP-1 Limitations
+- localStorage only — no cross-device, no cross-browser, no cross-tab realtime sync.
+- No AI — outputs are static `OUTPUT_MOCK` fixtures.
+- No auth — owner gate on the marketing site is a soft localStorage flag, not
+  identity.
+- No backend.
+- No production-grade data migration (schema bumps require a manual key
+  rename / clear).
+- No automated tests yet — verification is manual via the smoke checklist
+  above.
+
+### 8. What Not To Build Before MVP-1 Alpha
+- Do not add AI before the local workflow is stable end-to-end.
+- Do not add new modules before MVP-1 alpha closure.
+- Do not start Supabase / auth / publishing until private-alpha feedback
+  validates the local workflow.
