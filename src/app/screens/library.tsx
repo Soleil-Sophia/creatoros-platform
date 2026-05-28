@@ -7,7 +7,7 @@ import { AssetGrid } from '../components/library/AssetGrid';
 import { AssetList } from '../components/library/AssetList';
 import { PreviewDrawer } from '../components/library/PreviewDrawer';
 import { EmptyState } from '../components/shared';
-import { listSavedAssets } from '../lib/content-library/storage';
+import { listSavedAssets, deleteSavedAsset } from '../lib/content-library/storage';
 
 type ViewMode = 'grid' | 'list';
 type FilterType = 'all' | 'hook-pack' | 'short-script' | 'caption-draft' | 'content-brief' | 'repurposing-plan';
@@ -24,6 +24,8 @@ type Asset = {
   date: string;
   variants: number;
   status: string;
+  source?: 'generated';
+  createdAt?: string;
 };
 
 // Copy to clipboard helper
@@ -187,6 +189,9 @@ export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = 
     });
   };
 
+  // Tick used to re-read localStorage after a saved-asset delete.
+  const [refreshTick, setRefreshTick] = useState(0);
+
   // Merge saved (localStorage) assets above the mocks. Saved first → newest on top.
   // listSavedAssets() is sorted desc by createdAt internally.
   const allAssets: Asset[] = useMemo(() => {
@@ -201,9 +206,20 @@ export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = 
       date: a.date,
       variants: a.variants,
       status: a.status,
+      source: 'generated',
+      createdAt: a.createdAt,
     }));
     return [...saved, ...mockAssets];
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshTick]);
+
+  // Delete handler for saved assets only. Mocks have numeric ids and no source.
+  const handleDeleteSavedAsset = (asset: Asset) => {
+    if (asset.source !== 'generated' || typeof asset.id !== 'string') return;
+    deleteSavedAsset(asset.id);
+    setSelectedAsset(null);
+    setRefreshTick((t) => t + 1);
+  };
 
   // Calculate asset counts across merged list so filters reflect saved assets too
   const assetCounts = {
@@ -224,8 +240,12 @@ export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = 
       return true;
     })
     .sort((a, b) => {
-      if (sortOption === 'recent') return new Date(b.date).getTime() - new Date(a.date).getTime();
-      if (sortOption === 'oldest') return new Date(a.date).getTime() - new Date(b.date).getTime();
+      // Prefer createdAt (ISO timestamp from saved assets) for tie-breaking,
+      // fall back to date (day-level) for mocks.
+      const aTime = new Date(a.createdAt ?? a.date).getTime();
+      const bTime = new Date(b.createdAt ?? b.date).getTime();
+      if (sortOption === 'recent') return bTime - aTime;
+      if (sortOption === 'oldest') return aTime - bTime;
       if (sortOption === 'name') return a.title.localeCompare(b.title);
       if (sortOption === 'type') return a.type.localeCompare(b.type);
       return 0;
@@ -285,6 +305,11 @@ export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = 
             onClose={() => setSelectedAsset(null)}
             onCopy={(text) => copyToClipboard(text)}
             onReuse={() => handleReuse(selectedAsset)}
+            onDelete={
+              selectedAsset.source === 'generated'
+                ? () => handleDeleteSavedAsset(selectedAsset)
+                : undefined
+            }
           />
         )}
       </div>

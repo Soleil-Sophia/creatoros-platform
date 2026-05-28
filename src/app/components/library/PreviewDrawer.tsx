@@ -20,9 +20,10 @@ type PreviewDrawerProps = {
   onClose: () => void;
   onCopy: (text: string) => void;
   onReuse: () => void;
+  onDelete?: () => void;
 };
 
-export function PreviewDrawer({ asset, onClose, onCopy, onReuse }: PreviewDrawerProps) {
+export function PreviewDrawer({ asset, onClose, onCopy, onReuse, onDelete }: PreviewDrawerProps) {
   return (
     <>
       {/* Backdrop */}
@@ -98,6 +99,29 @@ export function PreviewDrawer({ asset, onClose, onCopy, onReuse }: PreviewDrawer
           onCopy={() => onCopy(asset.preview)}
           onReuse={onReuse}
         />
+
+        {/* Delete saved asset — only rendered when wired (saved assets only). */}
+        {onDelete && (
+          <div
+            className="px-6 py-4 flex justify-end"
+            style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
+          >
+            <button
+              type="button"
+              onClick={onDelete}
+              className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
+              style={{
+                background: 'rgba(255, 99, 132, 0.08)',
+                border: '1px solid rgba(255, 99, 132, 0.3)',
+                color: '#FF8FA3',
+                fontSize: '12px',
+                fontWeight: 600
+              }}
+            >
+              Delete saved asset
+            </button>
+          </div>
+        )}
       </div>
     </>
   );

@@ -117,7 +117,16 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       : null;
 
     const brandVoice = brandVoiceSnapshot?.voiceLabel?.trim() || tone || 'Custom Voice';
-    const title = mock.header.split(' — ')[0] ?? outputType;
+
+    // Build a more useful title: "<Type Label> — <topic/offer>".
+    // Falls back to the mock header suffix, then to just the type label.
+    const headerParts = (mock.header ?? '').split(' — ');
+    const typeLabel = headerParts[0]?.trim() || outputType;
+    const offerSuffix = offer.trim();
+    const fallbackSuffix = headerParts.slice(1).join(' — ').trim();
+    const titleSuffix = offerSuffix || fallbackSuffix;
+    const rawTitle = titleSuffix ? `${typeLabel} — ${titleSuffix}` : typeLabel;
+    const title = rawTitle.length > 80 ? `${rawTitle.slice(0, 77).trimEnd()}…` : rawTitle;
 
     const asset: SavedContentAsset = {
       id: generateAssetId(),
