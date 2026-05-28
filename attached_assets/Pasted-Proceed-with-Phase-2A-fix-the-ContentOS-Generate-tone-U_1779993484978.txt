@@ -1,0 +1,65 @@
+Proceed with Phase 2A: fix the ContentOS Generate tone UI mismatch using Option D only.
+
+Scope lock:
+- Touch only src/app/components/generate/InputPanel.tsx unless build reveals a necessary import/type issue.
+- Do NOT change BrandOS.
+- Do NOT change generate.tsx.
+- Do NOT change BrandVoiceChip.
+- Do NOT change Brand Profile storage.
+- Do NOT implement Library integration.
+- Do NOT add backend, auth, Supabase, AI API, Notion, publishing, analytics, or cross-tab sync.
+- Do NOT redesign the Generate screen.
+- Do NOT map BrandOS tone to one of the existing presets.
+- Do NOT remove the existing three tone presets.
+
+Goal:
+When ContentOS Generate receives a tone value from BrandOS that does not match the existing preset values:
+- Professional
+- Conversational
+- Bold
+
+the tone selector should render that custom BrandOS tone as an additional selected pill before the preset pills.
+
+Implementation:
+In src/app/components/generate/InputPanel.tsx:
+
+1. Replace the hardcoded tone options array with logic like:
+- const tonePresets = ['Professional', 'Conversational', 'Bold'];
+- const toneOptions = tone && !tonePresets.includes(tone)
+  ? [tone, ...tonePresets]
+  : tonePresets;
+
+2. Render toneOptions instead of the hardcoded array.
+
+3. The custom BrandOS tone pill should:
+- be visually selected because tone === toneOption
+- appear before the three presets
+- be truncated safely if long
+- have a reasonable max width
+- not break the existing flex-wrap layout
+- include a subtle small lilac dot or similar marker to show it came from BrandOS
+- keep the existing click behavior: clicking any preset calls setTone(preset) and overrides for the current session
+
+4. Do not add a “reset to BrandOS” button in this phase.
+
+Expected behavior:
+- If tone is “Conversational”, the existing Conversational preset is selected.
+- If tone is “Motivational & Direct”, a selected “Motivational & Direct” custom pill appears before Professional / Conversational / Bold.
+- If the user clicks “Bold”, Bold becomes selected and the custom pill disappears for the current session.
+- On reload, Generate re-seeds from BrandOS again using the existing generate.tsx logic.
+- If tone is empty, do not render an empty custom pill.
+
+Verification:
+- Save a BrandOS tone such as “Motivational & Direct”.
+- Open /platform/app/content-os/generate.
+- Confirm the custom selected pill appears before Professional / Conversational / Bold.
+- Confirm long custom tone labels truncate without breaking layout.
+- Confirm clicking Professional / Conversational / Bold still works.
+- Confirm npm run build passes.
+- Confirm existing BrandOS, ContentOS Library, Dashboard, Modules, and Authority Engine Labs routes still work.
+
+After implementation, report:
+- Files changed
+- Build status
+- Visual behavior confirmed
+- Any remaining risks

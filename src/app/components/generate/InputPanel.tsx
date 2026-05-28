@@ -239,30 +239,56 @@ export function InputPanel({
                 boxShadow: 'inset 0 1px 3px rgba(0, 0, 0, 0.4)',
               }}
             >
-              {['Professional', 'Conversational', 'Bold'].map((toneOption) => (
-                <button
-                  key={toneOption}
-                  onClick={() => onToneChange(toneOption)}
-                  className="flex-1 py-2.5 rounded-[6px] transition-all"
-                  style={{
-                    background:
-                      tone === toneOption
-                        ? 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)'
-                        : 'transparent',
-                    border:
-                      tone === toneOption
-                        ? '1px solid rgba(255, 255, 255, 0.1)'
-                        : '1px solid transparent',
-                    color: tone === toneOption ? '#F4F3F8' : '#B4B8C7',
-                    fontSize: '13px',
-                    fontWeight: tone === toneOption ? 600 : 500,
-                    boxShadow:
-                      tone === toneOption ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none',
-                  }}
-                >
-                  {toneOption}
-                </button>
-              ))}
+              {(() => {
+                const tonePresets = ['Professional', 'Conversational', 'Bold'];
+                const hasCustomTone =
+                  !!tone && tone.trim() !== '' && !tonePresets.includes(tone);
+                const toneOptions = hasCustomTone ? [tone, ...tonePresets] : tonePresets;
+                return toneOptions.map((toneOption) => {
+                  const isCustom = hasCustomTone && toneOption === tone;
+                  const isSelected = tone === toneOption;
+                  return (
+                    <button
+                      key={toneOption}
+                      onClick={() => onToneChange(toneOption)}
+                      title={isCustom ? `From BrandOS: ${toneOption}` : toneOption}
+                      className={`${
+                        isCustom ? 'shrink-0' : 'flex-1'
+                      } py-2.5 px-3 rounded-[6px] transition-all inline-flex items-center justify-center gap-1.5 min-w-0`}
+                      style={{
+                        background: isSelected
+                          ? 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)'
+                          : 'transparent',
+                        border: isSelected
+                          ? '1px solid rgba(255, 255, 255, 0.1)'
+                          : '1px solid transparent',
+                        color: isSelected ? '#F4F3F8' : '#B4B8C7',
+                        fontSize: '13px',
+                        fontWeight: isSelected ? 600 : 500,
+                        boxShadow: isSelected ? '0 2px 6px rgba(0, 0, 0, 0.3)' : 'none',
+                        maxWidth: isCustom ? '180px' : undefined,
+                      }}
+                    >
+                      {isCustom && (
+                        <span
+                          className="shrink-0 w-1.5 h-1.5 rounded-full"
+                          style={{
+                            background: '#E7C6F3',
+                            boxShadow: '0 0 6px rgba(231, 198, 243, 0.5)',
+                          }}
+                          aria-hidden="true"
+                        />
+                      )}
+                      <span
+                        className="truncate"
+                        style={{ minWidth: 0 }}
+                      >
+                        {toneOption}
+                      </span>
+                    </button>
+                  );
+                });
+              })()}
             </div>
           </div>
         )}
