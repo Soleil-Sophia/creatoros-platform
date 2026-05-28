@@ -1,6 +1,61 @@
+import { useEffect, useState } from 'react';
 import { Navbar } from '../components/navbar';
 import { Link } from 'react-router';
 import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
+import {
+  readBrandProfile,
+  isBrandProfileMeaningful,
+} from '../lib/brand-profile/storage';
+import { listSavedAssets } from '../lib/content-library/storage';
+import { listRuns } from '../lib/authority-engine/storage';
+
+type LocalSystemState = {
+  brandConnected: boolean;
+  brandVoiceLabel: string | null;
+  brandUpdatedAt: string | null;
+  savedAssetCount: number;
+  latestAsset: { title: string; createdAt: string } | null;
+  authorityRunCount: number;
+  latestRun: { title: string; updatedAt: string } | null;
+};
+
+function readLocalSystemState(): LocalSystemState {
+  const profile = readBrandProfile();
+  const connected = isBrandProfileMeaningful(profile);
+  const assets = listSavedAssets();
+  const sortedAssets = [...assets].sort((a, b) =>
+    (a.createdAt ?? '') < (b.createdAt ?? '') ? 1 : -1
+  );
+  const runs = listRuns();
+  return {
+    brandConnected: connected,
+    brandVoiceLabel: connected ? profile?.voiceLabel ?? null : null,
+    brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
+    savedAssetCount: assets.length,
+    latestAsset: sortedAssets[0]
+      ? { title: sortedAssets[0].title, createdAt: sortedAssets[0].createdAt }
+      : null,
+    authorityRunCount: runs.length,
+    latestRun: runs[0]
+      ? { title: runs[0].source?.title ?? 'Untitled run', updatedAt: runs[0].updatedAt }
+      : null,
+  };
+}
+
+function formatDate(iso: string | null | undefined): string {
+  if (!iso) return '';
+  try {
+    const d = new Date(iso);
+    if (isNaN(d.getTime())) return '';
+    return d.toLocaleDateString(undefined, {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+    });
+  } catch {
+    return '';
+  }
+}
 
 const coreWorkflow = [
   {
@@ -77,6 +132,25 @@ const addOnModules = [
 ];
 
 export function DashboardPage() {
+  const [state, setState] = useState<LocalSystemState>(() => ({
+    brandConnected: false,
+    brandVoiceLabel: null,
+    brandUpdatedAt: null,
+    savedAssetCount: 0,
+    latestAsset: null,
+    authorityRunCount: 0,
+    latestRun: null,
+  }));
+
+  // Read once on mount (and again on window focus so a tab change in
+  // another module is reflected when the user comes back).
+  useEffect(() => {
+    const refresh = () => setState(readLocalSystemState());
+    refresh();
+    window.addEventListener('focus', refresh);
+    return () => window.removeEventListener('focus', refresh);
+  }, []);
+
   return (
     <div className="min-h-screen" style={{ background: '#0E0F14' }}>
       <Navbar />
@@ -116,6 +190,123 @@ export function DashboardPage() {
             >
               Browse All Modules
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Local System State — real localStorage-backed status */}
+      <section className="pb-12 px-6 lg:px-8">
+        <div className="max-w-[1400px] mx-auto">
+          <div className="mb-4 flex items-baseline justify-between">
+            <h2 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8' }}>
+              Local System State
+            </h2>
+            <span
+              style={{
+                fontSize: '11px',
+                fontWeight: 600,
+                color: '#8B8F9E',
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}
+            >
+              This browser · Local only
+            </span>
+          </div>
+          <div className="grid md:grid-cols-3 gap-4">
+            {/* Brand Profile */}
+            <div
+              className="p-5 rounded-[14px]"
+              style={{
+                background: '#171923',
+                border: `1px solid ${state.brandConnected ? 'rgba(231, 198, 243, 0.25)' : 'rgba(255, 255, 255, 0.06)'}`,
+              }}
+            >
+              <div style={{ fontSize: '11px', fontWeight: 600, color: '#8B8F9E', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                Brand Profile
+              </div>
+              <div className="flex items-center gap-2 mb-1">
+                {state.brandConnected ? (
+                  <>
+                    <CheckCircle2 size={14} style={{ color: '#E7C6F3' }} />
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Connected</span>
+                  </>
+                ) : (
+                  <>
+                    <Lock size={14} style={{ color: '#8B8F9E' }} />
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not connected</span>
+                  </>
+                )}
+              </div>
+              {state.brandConnected ? (
+                <>
+                  <div style={{ fontSize: '13px', color: '#B4B8C7' }}>
+                    Voice: <span style={{ color: '#F4F3F8', fontWeight: 500 }}>{state.brandVoiceLabel || '—'}</span>
+                  </div>
+                  {state.brandUpdatedAt && (
+                    <div style={{ fontSize: '12px', color: '#8B8F9E', marginTop: '4px' }}>
+                      Updated {formatDate(state.brandUpdatedAt)}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <div style={{ fontSize: '13px', color: '#8B8F9E' }}>
+                  Set tone & voice in BrandOS to unlock handoff to ContentOS.
+                </div>
+              )}
+            </div>
+
+            {/* Saved Assets */}
+            <div
+              className="p-5 rounded-[14px]"
+              style={{ background: '#171923', border: '1px solid rgba(255, 255, 255, 0.06)' }}
+            >
+              <div style={{ fontSize: '11px', fontWeight: 600, color: '#8B8F9E', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                Saved Content Assets
+              </div>
+              <div style={{ fontSize: '28px', fontWeight: 700, color: '#F4F3F8', lineHeight: 1, marginBottom: '6px' }}>
+                {state.savedAssetCount}
+              </div>
+              {state.latestAsset ? (
+                <div style={{ fontSize: '12px', color: '#8B8F9E' }}>
+                  Latest:{' '}
+                  <span style={{ color: '#B4B8C7' }}>{state.latestAsset.title}</span>
+                  {formatDate(state.latestAsset.createdAt) && (
+                    <> · {formatDate(state.latestAsset.createdAt)}</>
+                  )}
+                </div>
+              ) : (
+                <div style={{ fontSize: '12px', color: '#8B8F9E' }}>
+                  No assets saved yet.
+                </div>
+              )}
+            </div>
+
+            {/* Authority Runs */}
+            <div
+              className="p-5 rounded-[14px]"
+              style={{ background: '#171923', border: '1px solid rgba(218, 191, 255, 0.18)' }}
+            >
+              <div style={{ fontSize: '11px', fontWeight: 600, color: '#8B8F9E', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
+                Authority Engine Runs
+              </div>
+              <div style={{ fontSize: '28px', fontWeight: 700, color: '#F4F3F8', lineHeight: 1, marginBottom: '6px' }}>
+                {state.authorityRunCount}
+              </div>
+              {state.latestRun ? (
+                <div style={{ fontSize: '12px', color: '#8B8F9E' }}>
+                  Latest:{' '}
+                  <span style={{ color: '#B4B8C7' }}>{state.latestRun.title}</span>
+                  {formatDate(state.latestRun.updatedAt) && (
+                    <> · {formatDate(state.latestRun.updatedAt)}</>
+                  )}
+                </div>
+              ) : (
+                <div style={{ fontSize: '12px', color: '#8B8F9E' }}>
+                  No runs captured yet.
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </section>
