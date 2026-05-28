@@ -1,7 +1,57 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router';
-import { ArrowLeft, Lock, Save } from 'lucide-react';
+import { ArrowLeft, Lock, Save, Check } from 'lucide-react';
+import {
+  readBrandProfile,
+  writeBrandProfile,
+  createVoiceLabel,
+} from '../lib/brand-profile/storage';
+
+const inputClassName =
+  'w-full px-4 py-3 rounded-lg transition-all focus:outline-none focus:ring-2';
+const inputStyle = {
+  background: 'rgba(255, 255, 255, 0.03)',
+  border: '1px solid rgba(255, 255, 255, 0.1)',
+  color: '#F4F3F8',
+  fontSize: '15px',
+} as const;
 
 export function BrandOSAppPage() {
+  const [tone, setTone] = useState('');
+  const [complexity, setComplexity] = useState('');
+  const [formality, setFormality] = useState('');
+  const [energy, setEnergy] = useState('');
+  const [savedAt, setSavedAt] = useState<string | null>(null);
+  const [justSaved, setJustSaved] = useState(false);
+
+  // Hydrate from localStorage on mount
+  useEffect(() => {
+    const profile = readBrandProfile();
+    if (profile) {
+      setTone(profile.tone);
+      setComplexity(profile.complexity);
+      setFormality(profile.formality);
+      setEnergy(profile.energy);
+      setSavedAt(profile.updatedAt ?? null);
+    }
+  }, []);
+
+  const handleSave = () => {
+    const profile = {
+      tone: tone.trim(),
+      complexity: complexity.trim(),
+      formality: formality.trim(),
+      energy: energy.trim(),
+    };
+    const next = writeBrandProfile({
+      ...profile,
+      voiceLabel: createVoiceLabel(profile),
+    });
+    setSavedAt(next.updatedAt ?? null);
+    setJustSaved(true);
+    window.setTimeout(() => setJustSaved(false), 2000);
+  };
+
   return (
     <div className="min-h-screen" style={{ background: '#0E0F14' }}>
       {/* Top Navigation Bar */}
@@ -36,7 +86,28 @@ export function BrandOSAppPage() {
 
             {/* Right: Actions */}
             <div className="flex items-center gap-3">
+              {savedAt && !justSaved && (
+                <span style={{ fontSize: '12px', color: '#8B8F9E' }}>
+                  Saved {new Date(savedAt).toLocaleString()}
+                </span>
+              )}
+              {justSaved && (
+                <span
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md"
+                  style={{
+                    background: 'rgba(191, 255, 222, 0.1)',
+                    border: '1px solid rgba(191, 255, 222, 0.2)',
+                    color: '#BFFFDE',
+                    fontSize: '12px',
+                    fontWeight: 600,
+                  }}
+                >
+                  <Check size={12} />
+                  Saved
+                </span>
+              )}
               <button
+                onClick={handleSave}
                 className="px-4 py-2 rounded-lg transition-all hover:opacity-90 flex items-center gap-2"
                 style={{
                   background: 'rgba(255, 255, 255, 0.05)',
@@ -125,13 +196,10 @@ export function BrandOSAppPage() {
               <input
                 type="text"
                 placeholder="e.g., Motivational & Direct"
-                className="w-full px-4 py-3 rounded-lg transition-all focus:outline-none focus:ring-2"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#F4F3F8',
-                  fontSize: '15px'
-                }}
+                value={tone}
+                onChange={(e) => setTone(e.target.value)}
+                className={inputClassName}
+                style={inputStyle}
               />
             </div>
 
@@ -169,13 +237,10 @@ export function BrandOSAppPage() {
               <input
                 type="text"
                 placeholder="e.g., Clear & Accessible"
-                className="w-full px-4 py-3 rounded-lg transition-all focus:outline-none focus:ring-2"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#F4F3F8',
-                  fontSize: '15px'
-                }}
+                value={complexity}
+                onChange={(e) => setComplexity(e.target.value)}
+                className={inputClassName}
+                style={inputStyle}
               />
             </div>
 
@@ -213,13 +278,10 @@ export function BrandOSAppPage() {
               <input
                 type="text"
                 placeholder="e.g., Casual Professional"
-                className="w-full px-4 py-3 rounded-lg transition-all focus:outline-none focus:ring-2"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#F4F3F8',
-                  fontSize: '15px'
-                }}
+                value={formality}
+                onChange={(e) => setFormality(e.target.value)}
+                className={inputClassName}
+                style={inputStyle}
               />
             </div>
 
@@ -257,13 +319,10 @@ export function BrandOSAppPage() {
               <input
                 type="text"
                 placeholder="e.g., High Drive"
-                className="w-full px-4 py-3 rounded-lg transition-all focus:outline-none focus:ring-2"
-                style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)',
-                  color: '#F4F3F8',
-                  fontSize: '15px'
-                }}
+                value={energy}
+                onChange={(e) => setEnergy(e.target.value)}
+                className={inputClassName}
+                style={inputStyle}
               />
             </div>
           </div>

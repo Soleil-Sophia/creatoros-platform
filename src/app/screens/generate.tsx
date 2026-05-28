@@ -1,10 +1,12 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router';
 import { Topbar } from '../components/generate/Topbar';
 import { ReuseBanner } from '../components/generate/ReuseBanner';
 import { InputPanel } from '../components/generate/InputPanel';
 import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHeader';
 import { AssetCard } from '../components/generate/AssetCard';
+import { BrandVoiceChip } from '../components/shared';
+import { readBrandProfile } from '../lib/brand-profile/storage';
 
 type ReuseAsset = {
   id: number;
@@ -47,7 +49,21 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   const [goal, setGoal] = useState('');
   const [tone, setTone] = useState('Conversational');
   const [outputType, setOutputType] = useState('hook-pack');
-  
+
+  // Brand profile (read-only handoff from BrandOS)
+  const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
+
+  // Hydrate brand profile once on mount. Only seeds the tone default —
+  // does not override the user's tone after they change it.
+  useEffect(() => {
+    const profile = readBrandProfile();
+    if (!profile) return;
+    if (profile.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
+    if (profile.tone && profile.tone.trim()) {
+      setTone((current) => (current === 'Conversational' ? profile.tone : current));
+    }
+  }, []);
+
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
   const [hasOutput, setHasOutput] = useState(true); // TODO: Set based on actual generation state
@@ -139,6 +155,20 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   return (
     <div className={`${showTopbar ? 'min-h-screen' : 'h-full'} flex flex-col`} style={{ background: '#0E0F14' }}>
       {showTopbar && <Topbar />}
+
+      {/* Brand Voice handoff indicator — passive, read-only */}
+      <div
+        className="px-8 py-2.5 flex items-center justify-end"
+        style={{
+          background: '#0E0F14',
+          borderBottom: '1px solid rgba(255, 255, 255, 0.04)',
+        }}
+      >
+        <BrandVoiceChip
+          voiceLabel={brandVoiceLabel}
+          setupRoute="/app/brand-os/setup"
+        />
+      </div>
 
       {/* Reuse Banner (Conditional) */}
       {showReuseBanner && reuseAsset && (
