@@ -47,18 +47,19 @@ export function Topbar() {
           >
             Library
           </Link>
-          <button 
-            className="px-4 py-2 rounded-lg transition-colors"
-            style={{ 
+          <span
+            aria-current="page"
+            className="px-4 py-2 rounded-lg inline-block"
+            style={{
               background: '#262A38',
               border: '1px solid rgba(255, 191, 222, 0.2)',
               color: '#F4F3F8',
               fontSize: '14px',
-              fontWeight: 500
+              fontWeight: 500,
             }}
           >
             Generate
-          </button>
+          </span>
         </div>
       </div>
     </div>

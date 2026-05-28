@@ -38,7 +38,7 @@ export function OutputWorkspaceHeader({
           </div>
           <div className="h-px w-16" style={{ background: 'rgba(255, 255, 255, 0.08)' }}></div>
           <span style={{ fontSize: '11px', fontWeight: 500, color: '#B4B8C7' }}>
-            {sessionId} · {timestamp}
+            {timestamp ? `${sessionId} · ${timestamp}` : sessionId}
           </span>
         </div>
         <h2 

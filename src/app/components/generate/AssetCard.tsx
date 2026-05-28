@@ -65,32 +65,47 @@ export function AssetCard({
           </div>
         </div>
         <div className="flex gap-2.5">
-          <button 
+          <button
             type="button"
-            className="px-4 py-2 rounded-[8px] transition-all hover:opacity-80"
-            style={{ 
-              background: 'rgba(255, 255, 255, 0.05)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              color: '#B4B8C7',
+            disabled
+            title="Soon"
+            aria-label="Regenerate — coming soon"
+            className="px-4 py-2 rounded-[8px] flex items-center gap-1.5"
+            style={{
+              background: 'rgba(255, 255, 255, 0.03)',
+              border: '1px dashed rgba(255, 255, 255, 0.12)',
+              color: '#8B8F9E',
               fontSize: '13px',
-              fontWeight: 500
+              fontWeight: 500,
+              cursor: 'not-allowed',
+              opacity: 0.6,
             }}
           >
             Regenerate
+            <span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.06em', color: '#8B8F9E' }}>
+              SOON
+            </span>
           </button>
-          <button 
+          <button
             type="button"
-            className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
-            style={{ 
-              background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.2), rgba(255, 191, 222, 0.1))',
-              border: '1px solid rgba(255, 191, 222, 0.3)',
-              color: '#FFBFDE',
+            disabled
+            title="Soon"
+            aria-label="Copy all — coming soon"
+            className="px-4 py-2 rounded-[8px] flex items-center gap-1.5"
+            style={{
+              background: 'rgba(255, 191, 222, 0.06)',
+              border: '1px dashed rgba(255, 191, 222, 0.2)',
+              color: '#B4B8C7',
               fontSize: '13px',
               fontWeight: 600,
-              boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+              cursor: 'not-allowed',
+              opacity: 0.7,
             }}
           >
             Copy All
+            <span style={{ fontSize: '10px', fontWeight: 700, letterSpacing: '0.06em', color: '#8B8F9E' }}>
+              SOON
+            </span>
           </button>
         </div>
       </div>
@@ -131,18 +146,6 @@ export function AssetCard({
               >
                 {item}
               </p>
-              <button 
-                className="opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0 w-9 h-9 rounded-lg flex items-center justify-center"
-                style={{ 
-                  background: 'rgba(255, 255, 255, 0.06)',
-                  border: '1px solid rgba(255, 255, 255, 0.1)'
-                }}
-              >
-                <svg width="14" height="14" fill="none" viewBox="0 0 14 14">
-                  <rect x="2" y="4" width="7" height="8" rx="1" stroke="#B4B8C7" strokeWidth="1.3"/>
-                  <path d="M5 4V3a1 1 0 011-1h5a1 1 0 011 1v5a1 1 0 01-1 1h-1" stroke="#B4B8C7" strokeWidth="1.3"/>
-                </svg>
-              </button>
             </div>
           </div>
         ))}

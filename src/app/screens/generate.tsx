@@ -337,8 +337,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                 <>
                   {/* Output Header */}
                   <OutputWorkspaceHeader
-                    sessionId="Session #347"
-                    timestamp="14:32 CET"
+                    sessionId="Local session"
+                    timestamp=""
                     title={OUTPUT_MOCK[outputType]?.header ?? 'Generated Output'}
                     subtitle={
                       genStatus
