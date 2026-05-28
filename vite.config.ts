@@ -2,10 +2,14 @@ import { defineConfig } from 'vite'
 import tailwindcss from '@tailwindcss/vite'
 import react from '@vitejs/plugin-react'
 
-export default defineConfig({
-  // Served behind the creatoros-site `/platform` dev proxy so all asset URLs
-  // resolve correctly through the proxy.
-  base: '/platform/',
+export default defineConfig(({ command }) => ({
+  // In dev (`vite`), served behind the creatoros-site `/platform` dev proxy, so
+  // all asset URLs must resolve under `/platform/`. In a standalone production
+  // build (`vite build`), the platform app is deployed as its own static app at
+  // the domain root, so assets resolve under `/`. React Router's basename stays
+  // `/platform` in both cases (see src/app/routes.ts) — only the asset prefix
+  // differs between dev and build.
+  base: command === 'build' ? '/' : '/platform/',
 
   plugins: [
     // The React and Tailwind plugins are both required for Make, even if
@@ -32,4 +36,4 @@ export default defineConfig({
       ignored: ['**/.local/**', '**/node_modules/**'],
     },
   },
-})
+}))
