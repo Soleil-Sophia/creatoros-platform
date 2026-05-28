@@ -9,6 +9,8 @@ type AssetCardProps = {
   items: string[];
   wordCount: number;
   children?: React.ReactNode;
+  onSave?: () => void;
+  saveStatus?: 'idle' | 'saved';
 };
 
 export function AssetCard({
@@ -19,7 +21,9 @@ export function AssetCard({
   icon,
   items,
   wordCount,
-  children
+  children,
+  onSave,
+  saveStatus = 'idle'
 }: AssetCardProps) {
   return (
     <div 
@@ -62,6 +66,7 @@ export function AssetCard({
         </div>
         <div className="flex gap-2.5">
           <button 
+            type="button"
             className="px-4 py-2 rounded-[8px] transition-all hover:opacity-80"
             style={{ 
               background: 'rgba(255, 255, 255, 0.05)',
@@ -74,6 +79,7 @@ export function AssetCard({
             Regenerate
           </button>
           <button 
+            type="button"
             className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
             style={{ 
               background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.2), rgba(255, 191, 222, 0.1))',
@@ -159,18 +165,32 @@ export function AssetCard({
           <div className="w-px h-4" style={{ background: 'rgba(255, 255, 255, 0.1)' }}></div>
           <Badge variant="pink" size="sm">{type}</Badge>
         </div>
-        <button 
-          className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
-          style={{ 
-            background: 'rgba(255, 255, 255, 0.06)',
-            border: '1px solid rgba(255, 255, 255, 0.1)',
-            color: '#F4F3F8',
-            fontSize: '12px',
-            fontWeight: 600
-          }}
-        >
-          Save to Library
-        </button>
+        <div className="flex items-center gap-3">
+          {saveStatus === 'saved' && (
+            <span
+              aria-live="polite"
+              style={{ fontSize: '12px', fontWeight: 600, color: '#FFBFDE' }}
+            >
+              Saved to Library ✓
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={onSave}
+            disabled={!onSave}
+            className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
+            style={{
+              background: 'rgba(255, 255, 255, 0.06)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              color: '#F4F3F8',
+              fontSize: '12px',
+              fontWeight: 600,
+              cursor: onSave ? 'pointer' : 'default'
+            }}
+          >
+            Save to Library
+          </button>
+        </div>
       </div>
     </div>
   );

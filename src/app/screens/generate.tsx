@@ -311,6 +311,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                       }
                       items={OUTPUT_MOCK[outputType]?.items ?? []}
                       wordCount={OUTPUT_MOCK[outputType]?.wordCount ?? 0}
+                      onSave={handleSaveToLibrary}
+                      saveStatus={saveStatus}
                     />
                   </div>
                 </>
