@@ -11,6 +11,7 @@ import { ContentOSPage } from '../modules/contentos/ContentOSPage';
 import { ContentOSApp } from '../modules/contentos/ContentOSApp';
 import { NotFoundPage } from './pages/not-found';
 import UserTest from './pages/user-test';
+import { AuthorityEngineScreen } from './screens/authority-engine/AuthorityEngineScreen';
 
 export const router = createBrowserRouter([
   {
@@ -72,6 +73,12 @@ export const router = createBrowserRouter([
   {
     path: '/test',
     Component: UserTest,
+  },
+
+  // --- Labs (internal / experimental) ---
+  {
+    path: '/app/labs/authority-engine',
+    Component: AuthorityEngineScreen,
   },
   {
     path: '*',
