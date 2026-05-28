@@ -373,6 +373,41 @@ export function DashboardPage() {
               <ArrowRight size={16} />
             </Link>
           </div>
+
+          {/* Subtle internal Labs link — not a core module */}
+          <div className="mt-12 pt-8" style={{ borderTop: '1px solid rgba(255, 255, 255, 0.05)' }}>
+            <div className="flex items-center justify-between flex-wrap gap-3">
+              <div>
+                <div
+                  style={{
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#8B8F9E',
+                    textTransform: 'uppercase',
+                    letterSpacing: '0.1em',
+                    marginBottom: '4px'
+                  }}
+                >
+                  Internal · Labs
+                </div>
+                <p style={{ fontSize: '13px', color: '#8B8F9E' }}>
+                  Experimental modules — isolated from the core workflow.
+                </p>
+              </div>
+              <Link
+                to="/app/labs/authority-engine"
+                className="text-xs px-3 py-1.5 rounded-md transition-colors"
+                style={{
+                  background: 'rgba(218, 191, 255, 0.08)',
+                  border: '1px solid rgba(218, 191, 255, 0.2)',
+                  color: '#DABFFF',
+                  textDecoration: 'none'
+                }}
+              >
+                Authority Engine →
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </div>

@@ -20,7 +20,7 @@ import {
 } from '../../lib/authority-engine/storage';
 import { exampleAuthoritySources } from '../../data/exampleAuthoritySources';
 import { defaultAuthorityVoiceProfile } from '../../data/defaultAuthorityVoiceProfile';
-import { PageHeader, Badge } from '../../components/shared';
+import { PageHeader, Badge, HelperNote } from '../../components/shared';
 import { SourceIntakePanel } from './components/SourceIntakePanel';
 import { PositioningPanel } from './components/PositioningPanel';
 import { AnalysisPanel } from './components/AnalysisPanel';
@@ -235,6 +235,15 @@ export function AuthorityEngineScreen() {
           description="Turn technical documentation into structured authority content. Source → System Insight → Angle → Asset → Calendar → Learning Loop."
           badge="Authority Engine"
         />
+
+        <div className="mb-6">
+          <HelperNote>
+            <span style={{ color: '#DABFFF', fontWeight: 600 }}>Labs · Experimental.</span> This
+            is an isolated internal module. No backend, no live AI calls, no publishing — runs
+            entirely in your browser and saves to local storage. Not part of the core CreatorOS
+            workflow.
+          </HelperNote>
+        </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-6">
           <div className="space-y-6 min-w-0">
