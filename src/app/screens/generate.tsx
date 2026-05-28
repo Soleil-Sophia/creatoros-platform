@@ -6,7 +6,9 @@ import { InputPanel } from '../components/generate/InputPanel';
 import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHeader';
 import { AssetCard } from '../components/generate/AssetCard';
 import { BrandVoiceChip } from '../components/shared';
-import { readBrandProfile } from '../lib/brand-profile/storage';
+import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage';
+import { saveAsset } from '../lib/content-library/storage';
+import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
 
 type ReuseAsset = {
   id: number;
@@ -67,6 +69,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
   const [hasOutput, setHasOutput] = useState(true); // TODO: Set based on actual generation state
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saved'>('idle');
   
   // Clear & Start Fresh - completely reset all state
   const handleClearAndStartFresh = () => {
@@ -80,6 +83,65 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     navigate('/app/content-os/generate', { replace: true, state: {} });
   };
   
+  // Generate a stable id even in environments without crypto.randomUUID
+  const generateAssetId = (): string => {
+    try {
+      if (typeof crypto !== 'undefined' && typeof crypto.randomUUID === 'function') {
+        return crypto.randomUUID();
+      }
+    } catch {
+      // fall through
+    }
+    return `asset-${Date.now()}-${Math.random().toString(36).slice(2, 10)}`;
+  };
+
+  // Save current output to the Library with a frozen Brand Voice snapshot.
+  // Reads the brand profile ONLY at save-time; the asset never re-reads it.
+  const handleSaveToLibrary = () => {
+    const mock = OUTPUT_MOCK[outputType];
+    if (!mock) return;
+
+    const profile = readBrandProfile();
+    const nowIso = new Date().toISOString();
+
+    const brandVoiceSnapshot: BrandVoiceSnapshot | null = profile
+      ? {
+          tone: profile.tone ?? '',
+          complexity: profile.complexity ?? '',
+          formality: profile.formality ?? '',
+          energy: profile.energy ?? '',
+          voiceLabel: profile.voiceLabel?.trim() || createVoiceLabel(profile),
+          updatedAt: profile.updatedAt ?? '',
+          capturedAt: nowIso,
+        }
+      : null;
+
+    const brandVoice = brandVoiceSnapshot?.voiceLabel?.trim() || tone || 'Custom Voice';
+    const title = mock.header.split(' — ')[0] ?? outputType;
+
+    const asset: SavedContentAsset = {
+      id: generateAssetId(),
+      type: outputType,
+      title,
+      preview: mock.items[0] ?? '',
+      platform,
+      campaign: 'Generated',
+      brandVoice,
+      date: nowIso.slice(0, 10),
+      variants: mock.items.length,
+      status: 'ready',
+      source: 'generated',
+      createdAt: nowIso,
+      items: mock.items,
+      inputs: { offer, audience, goal, tone, outputType },
+      brandVoiceSnapshot,
+    };
+
+    saveAsset(asset);
+    setSaveStatus('saved');
+    window.setTimeout(() => setSaveStatus('idle'), 2200);
+  };
+
   // Dismiss banner only
   const handleDismissReuse = () => {
     setShowReuseBanner(false);
@@ -226,8 +288,12 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                     sessionId="Session #347"
                     timestamp="14:32 CET"
                     title={OUTPUT_MOCK[outputType]?.header ?? 'Generated Output'}
-                    subtitle={OUTPUT_MOCK[outputType]?.sub ?? ''}
-                    onSave={() => console.log('Save to library')}
+                    subtitle={
+                      saveStatus === 'saved'
+                        ? 'Saved to Library ✓'
+                        : OUTPUT_MOCK[outputType]?.sub ?? ''
+                    }
+                    onSave={handleSaveToLibrary}
                   />
 
                   {/* Asset Output */}

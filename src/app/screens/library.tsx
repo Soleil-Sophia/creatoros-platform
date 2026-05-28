@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { LibraryTopbar } from '../components/library/LibraryTopbar';
 import { OrganizationRail } from '../components/library/OrganizationRail';
@@ -7,13 +7,14 @@ import { AssetGrid } from '../components/library/AssetGrid';
 import { AssetList } from '../components/library/AssetList';
 import { PreviewDrawer } from '../components/library/PreviewDrawer';
 import { EmptyState } from '../components/shared';
+import { listSavedAssets } from '../lib/content-library/storage';
 
 type ViewMode = 'grid' | 'list';
 type FilterType = 'all' | 'hook-pack' | 'short-script' | 'caption-draft' | 'content-brief' | 'repurposing-plan';
 type SortOption = 'recent' | 'oldest' | 'name' | 'type';
 
 type Asset = {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   preview: string;
@@ -186,18 +187,36 @@ export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = 
     });
   };
 
-  // Calculate asset counts
+  // Merge saved (localStorage) assets above the mocks. Saved first → newest on top.
+  // listSavedAssets() is sorted desc by createdAt internally.
+  const allAssets: Asset[] = useMemo(() => {
+    const saved = listSavedAssets().map<Asset>((a) => ({
+      id: a.id,
+      type: a.type,
+      title: a.title,
+      preview: a.preview,
+      platform: a.platform,
+      campaign: a.campaign,
+      brandVoice: a.brandVoice,
+      date: a.date,
+      variants: a.variants,
+      status: a.status,
+    }));
+    return [...saved, ...mockAssets];
+  }, []);
+
+  // Calculate asset counts across merged list so filters reflect saved assets too
   const assetCounts = {
-    all: mockAssets.length,
-    'hook-pack': mockAssets.filter(a => a.type === 'hook-pack').length,
-    'short-script': mockAssets.filter(a => a.type === 'short-script').length,
-    'caption-draft': mockAssets.filter(a => a.type === 'caption-draft').length,
-    'content-brief': mockAssets.filter(a => a.type === 'content-brief').length,
-    'repurposing-plan': mockAssets.filter(a => a.type === 'repurposing-plan').length,
+    all: allAssets.length,
+    'hook-pack': allAssets.filter(a => a.type === 'hook-pack').length,
+    'short-script': allAssets.filter(a => a.type === 'short-script').length,
+    'caption-draft': allAssets.filter(a => a.type === 'caption-draft').length,
+    'content-brief': allAssets.filter(a => a.type === 'content-brief').length,
+    'repurposing-plan': allAssets.filter(a => a.type === 'repurposing-plan').length,
   };
 
   // Filter and sort assets
-  const filteredAssets = mockAssets
+  const filteredAssets = allAssets
     .filter(asset => {
       if (filterType !== 'all' && asset.type !== filterType) return false;
       if (searchQuery && !asset.title.toLowerCase().includes(searchQuery.toLowerCase()) && 

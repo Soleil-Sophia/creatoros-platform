@@ -3,7 +3,7 @@ import { DrawerMetadata } from './DrawerMetadata';
 import { DrawerActions } from './DrawerActions';
 
 type Asset = {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   preview: string;
