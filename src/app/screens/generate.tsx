@@ -7,6 +7,7 @@ import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHea
 import { AssetCard } from '../components/generate/AssetCard';
 import { BrandVoiceChip } from '../components/shared';
 import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage';
+import { OUTPUT_TYPES } from '../../data/contentos';
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
 
@@ -89,6 +90,27 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
   const [hasOutput, setHasOutput] = useState(true); // TODO: Set based on actual generation state
+  // Mocked generation feedback — shows "Generated {Label} ✓" in the output header
+  // subtitle for a few seconds after the user clicks the Generate button.
+  const [genStatus, setGenStatus] = useState<string | null>(null);
+
+  // Clear the generated banner if the user switches output type so the
+  // confirmation never refers to a type that's no longer being shown.
+  useEffect(() => {
+    setGenStatus(null);
+  }, [outputType]);
+
+  const handleGenerate = () => {
+    setHasOutput(true);
+    const label =
+      OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
+    setGenStatus(`Generated ${label} ✓`);
+    window.setTimeout(() => {
+      setGenStatus((current) =>
+        current === `Generated ${label} ✓` ? null : current
+      );
+    }, 2500);
+  };
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saved'>('idle');
   
   // Clear & Start Fresh - completely reset all state
@@ -301,7 +323,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onGoalChange={setGoal}
               onToneChange={setTone}
               onOutputTypeChange={setOutputType}
-              onGenerate={() => setHasOutput(true)}
+              onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
             />
 
@@ -318,7 +340,9 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                     timestamp="14:32 CET"
                     title={OUTPUT_MOCK[outputType]?.header ?? 'Generated Output'}
                     subtitle={
-                      saveStatus === 'saved'
+                      genStatus
+                        ? genStatus
+                        : saveStatus === 'saved'
                         ? 'Saved to Library ✓'
                         : OUTPUT_MOCK[outputType]?.sub ?? ''
                     }

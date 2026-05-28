@@ -303,6 +303,7 @@ export function InputPanel({
         }}
       >
         <button
+          type="button"
           onClick={onGenerate}
           className="w-full py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden mb-3"
           style={{
@@ -321,6 +322,7 @@ export function InputPanel({
           Generate {currentType?.label ?? 'Content'}
         </button>
         <button
+          type="button"
           onClick={onClearAll}
           className="w-full py-3 rounded-[8px] transition-colors hover:bg-opacity-80"
           style={{
