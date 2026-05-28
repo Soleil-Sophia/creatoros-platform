@@ -16,6 +16,7 @@ type InputPanelProps = {
   onOutputTypeChange: (value: string) => void;
   onGenerate: () => void;
   onClearAll: () => void;
+  generationStatus?: string | null;
 };
 
 const fieldStyle = {
@@ -72,6 +73,7 @@ export function InputPanel({
   onOutputTypeChange,
   onGenerate,
   onClearAll,
+  generationStatus,
 }: InputPanelProps) {
   const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
   const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
@@ -302,6 +304,21 @@ export function InputPanel({
           background: 'linear-gradient(180deg, transparent 0%, rgba(23, 25, 35, 0.5) 100%)',
         }}
       >
+        {/* Visible generation feedback — appears directly above the Generate
+            button after a click and auto-clears via parent state. */}
+        <div
+          aria-live="polite"
+          role="status"
+          className="mb-2 min-h-[20px] text-center transition-opacity"
+          style={{
+            fontSize: '13px',
+            fontWeight: 600,
+            color: '#E7C6F3',
+            opacity: generationStatus ? 1 : 0,
+          }}
+        >
+          {generationStatus ?? '\u00A0'}
+        </div>
         <button
           type="button"
           onClick={onGenerate}

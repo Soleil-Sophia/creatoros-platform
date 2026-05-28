@@ -325,6 +325,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onOutputTypeChange={setOutputType}
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
+              generationStatus={genStatus}
             />
 
             {/* Output Workspace (Right 64%) */}
