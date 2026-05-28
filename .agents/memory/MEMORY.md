@@ -1,0 +1,1 @@
+- [Platform static deploy (Option A)](platform-static-deploy.md) — Vite base is /platform/ in dev, / in build; React Router basename stays /platform; marketing + platform are separate Replit apps.
