@@ -115,16 +115,22 @@ Dokumentiert alle bedeutenden Änderungen:
 
 ### Core Workflow (Empfohlener Hauptpfad)
 ```
-01. Brand OS       → Voice & Identity System
-02. Content OS     → Structured Content Generation
-03. Campaign OS    → Multi-Channel Campaign Planning (Coming Soon)
-04. Analytics OS   → Performance Intelligence (Coming Soon)
+01. Brand OS        → Voice & Identity Foundation (✅ Active)
+02. Content OS      → Structured Content Generation (✅ Active)
+03. Launch OS       → Rollout & Coordination (🚧 Coming Soon, formerly Campaign OS)
+04. Management OS   → Scheduling & Execution (🚧 Coming Soon)
+05. Analytics OS    → Performance Intelligence (🚧 Coming Soon)
 ```
 
 ### Add-on Modules (Optionale Erweiterungen)
 ```
-05. Community OS   → Audience Relationship Management (Planned)
-06. Research OS    → Audience & Market Intelligence (Planned)
+06. Community OS    → Audience Relationship Management (📋 Planned)
+07. Research OS     → Audience & Market Intelligence (📋 Planned)
+```
+
+### Labs / Internal
+```
+Authority Engine    → /app/labs/authority-engine (🧪 Labs)
 ```
 
 ---
@@ -156,7 +162,9 @@ Jedes Modul muss **3 Anforderungen erfüllen:**
 /app/brand-os/setup              → Brand OS Setup Flow
 /app/content-os/generate         → Content OS Generation Interface
 /app/content-os/library          → Content OS Asset Library
-/app/campaign-os/*               → Coming Soon
+/app/labs/authority-engine       → Authority Engine (🧪 Labs)
+/app/launch-os/*                 → Coming Soon (formerly Campaign OS)
+/app/management-os/*             → Coming Soon
 /app/analytics-os/*              → Coming Soon
 ```
 
@@ -232,7 +240,8 @@ Frontend → Server (Edge Function) → Database (KV Store)
 - ✅ 3-Ebenen-Informationsarchitektur
 
 ### Phase 2 (Q2 2026)
-- Campaign OS Launch
+- Launch OS Launch (formerly Campaign OS)
+- Management OS Launch
 - Analytics OS Launch
 - Multi-Brand Profile Support
 - Cross-Module Integration vertiefen

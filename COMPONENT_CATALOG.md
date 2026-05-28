@@ -1183,13 +1183,14 @@ Located in: `/src/app/pages/`
 - CTAs (Learn More, Launch)
 - Bottom CTA section
 
-#### Module Cards
-1. Content OS (Active) - #FFBFDE
-2. Campaign OS (Coming Soon) - #E7C6F3
-3. Analytics OS (Coming Soon) - #DABFFF
-4. Community OS (Planned) - #FFBFDE
-5. Brand OS (Planned) - #E7C6F3
-6. Research OS (Planned) - #DABFFF
+#### Module Cards (matches `src/config/modules.ts`)
+1. Brand OS (✅ Active) - #E7C6F3
+2. Content OS (✅ Active) - #FFBFDE
+3. Launch OS (🚧 Coming Soon, formerly Campaign OS) - #DABFFF
+4. Management OS (🚧 Coming Soon) - #E7C6F3
+5. Analytics OS (🚧 Coming Soon) - #DABFFF
+6. Community OS (📋 Planned) - #FFBFDE
+7. Research OS (📋 Planned) - #DABFFF
 
 ---
 

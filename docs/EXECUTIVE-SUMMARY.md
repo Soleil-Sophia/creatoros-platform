@@ -44,8 +44,9 @@ The recommended creator journey. Each module standalone, strongest together.
 |--------|--------|---------|
 | **01. Brand OS** | ✅ Active | Define brand voice, tone, messaging once |
 | **02. Content OS** | ✅ Active | Generate structured content assets |
-| **03. Campaign OS** | 🚧 Coming Q2 | Plan multi-channel campaigns |
-| **04. Analytics OS** | 🚧 Coming Q2 | Track performance & insights |
+| **03. Launch OS** | 🚧 Coming Q2 | Rollout & coordination *(formerly Campaign OS)* |
+| **04. Management OS** | 🚧 Coming Q2 | Scheduling & execution |
+| **05. Analytics OS** | 🚧 Coming Q3 | Track performance & insights |
 
 ### Add-on Modules (Optional Extensions)
 Not part of core flow, but equally valuable when needed.
@@ -107,7 +108,8 @@ Dark, architectural design that feels like a **professional production tool**, n
 
 ### 🚧 In Development (Q2 2026)
 
-- Campaign OS MVP
+- Launch OS MVP (formerly Campaign OS)
+- Management OS MVP
 - Analytics OS MVP
 - Multi-brand profile support
 - Enhanced cross-module integration
@@ -197,7 +199,8 @@ Dark, architectural design that feels like a **professional production tool**, n
 ### Phase 2: Completion (Q2 2026)
 **Focus:** Complete core workflow
 
-- Campaign OS launch
+- Launch OS launch (formerly Campaign OS)
+- Management OS launch
 - Analytics OS launch
 - Multi-brand profiles
 - Export & integration features
@@ -280,7 +283,7 @@ The innovation: **Brand OS makes brand machine-readable**, allowing all other mo
 - ✅ Positive user feedback on structured outputs
 
 ### Phase 2 (Core Complete)
-- Campaign OS + Analytics OS live
+- Launch OS + Management OS + Analytics OS live
 - Multi-brand profile support
 - 80%+ core workflow completion rate
 - Integration between all core modules working
@@ -318,13 +321,13 @@ The innovation: **Brand OS makes brand machine-readable**, allowing all other mo
 - [ ] Enhance Library filtering & search
 
 ### Short-term (May-June 2026)
-- [ ] Begin Campaign OS development
+- [ ] Begin Launch OS development (formerly Campaign OS)
 - [ ] Design Analytics OS architecture
 - [ ] Implement multi-brand profile support
 - [ ] Add export features (Notion, Google Docs)
 
 ### Mid-term (Q3 2026)
-- [ ] Launch Campaign OS
+- [ ] Launch Launch OS (formerly Campaign OS)
 - [ ] Launch Analytics OS
 - [ ] Begin Community OS concept
 - [ ] Begin Research OS concept

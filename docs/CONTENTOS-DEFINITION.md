@@ -294,7 +294,7 @@ Nicht alles jetzt, aber als Roadmap:
 - Visual Preview (Mock-up wie Content aussehen würde)
 - Platform-specific Formatting (Character Limits, etc.)
 - Content Calendar Integration
-- Direct Publishing to Platforms (via Campaign OS)
+- Direct Publishing to Platforms (via Launch OS / Management OS)
 - Analytics Integration (Performance Data from Analytics OS)
 
 ---
@@ -440,7 +440,7 @@ Es ist das **strukturierte Produktionssystem für repeatable, brand-consistent C
 Wenn richtig gebaut, ist es:
 - Standalone sinnvoll (auch ohne Brand OS)
 - Mit Brand OS extrem stark (brand-consistent outputs)
-- Die perfekte Grundlage für Campaign OS (Assets für Campaigns)
+- Die perfekte Grundlage für Launch OS (Assets für strukturierte Rollouts; formerly Campaign OS)
 
 ### Die kürzeste saubere Definition:
 **Content OS verwandelt Ideen systematisch in strukturierte, verwendbare Content-Assets.**

@@ -406,13 +406,17 @@ import { Navbar } from '../components/navbar';
 
 **Zweck**: Übersicht aller 6 CreatorOS Module
 
-**Module-Liste**:
-1. **Content OS** (Active) - Structured Content Generation
-2. **Campaign OS** (Coming Soon) - Multi-Channel Campaign Planning
-3. **Analytics OS** (Coming Soon) - Performance Intelligence
-4. **Community OS** (Planned) - Audience Relationship Management
-5. **Brand OS** (Planned) - Visual & Voice Identity System
-6. **Research OS** (Planned) - Audience & Market Intelligence
+**Module-Liste** (matches `src/config/modules.ts`):
+1. **Brand OS** (✅ Active) - Voice & Identity Foundation
+2. **Content OS** (✅ Active) - Structured Content Generation
+3. **Launch OS** (🚧 Coming Soon) - Rollout & Coordination *(formerly Campaign OS)*
+4. **Management OS** (🚧 Coming Soon) - Scheduling & Execution
+5. **Analytics OS** (🚧 Coming Soon) - Performance Intelligence
+6. **Community OS** (📋 Planned) - Audience Relationship Management
+7. **Research OS** (📋 Planned) - Audience & Market Intelligence
+
+**Labs / Internal:**
+- **Authority Engine** (🧪 Labs) - `/app/labs/authority-engine`, persists runs under `creatoros-authority-runs`
 
 **Features**:
 - 2-Column Grid Layout
@@ -709,12 +713,16 @@ import { Badge } from '../shared/Badge';
 
 | Modul | Status | Route | App Route | Accent |
 |-------|--------|-------|-----------|--------|
-| Content OS | ✅ Active | `/modules/content-os` | `/app/content-os/generate` | #FFBFDE |
-| Campaign OS | 🚧 Coming Soon | `/modules/campaign-os` | - | #E7C6F3 |
+| Brand OS | ✅ Active | `/modules/brand-os` | `/app/brand-os/setup` | #E7C6F3 |
+| Content OS | ✅ Active | `/modules/content-os` | `/app/content-os/generate`, `/app/content-os/library` | #FFBFDE |
+| Launch OS | 🚧 Coming Soon | `/modules/launch-os` | - | #DABFFF |
+| Management OS | 🚧 Coming Soon | `/modules/management-os` | - | #E7C6F3 |
 | Analytics OS | 🚧 Coming Soon | `/modules/analytics-os` | - | #DABFFF |
 | Community OS | 📋 Planned | `/modules/community-os` | - | #FFBFDE |
-| Brand OS | 📋 Planned | `/modules/brand-os` | - | #E7C6F3 |
 | Research OS | 📋 Planned | `/modules/research-os` | - | #DABFFF |
+| Authority Engine | 🧪 Labs / Internal | - | `/app/labs/authority-engine` | - |
+
+> Note: **Campaign OS** has been renamed/reframed as **Launch OS** (rollout & coordination). See `docs/LAUNCHOS-DEFINITION.md` for the rationale.
 
 ### Modul-Template
 
@@ -961,13 +969,14 @@ export default defineConfig({
 - ✅ "Back to Modules" Links
 - ✅ Verschachtelte Link-Fehler behoben
 
-**Module hinzugefügt**:
-1. Content OS (Active)
-2. Campaign OS (Coming Soon)
-3. Analytics OS (Coming Soon)
-4. Community OS (Planned)
-5. Brand OS (Planned)
-6. Research OS (Planned)
+**Module hinzugefügt** (current MVP-1 status, matches `src/config/modules.ts`):
+1. Brand OS (✅ Active)
+2. Content OS (✅ Active)
+3. Launch OS (🚧 Coming Soon, formerly Campaign OS)
+4. Management OS (🚧 Coming Soon)
+5. Analytics OS (🚧 Coming Soon)
+6. Community OS (📋 Planned)
+7. Research OS (📋 Planned)
 
 **Erkenntnisse**:
 - Keine verschachtelten `<Link>`-Komponenten
@@ -984,7 +993,8 @@ export default defineConfig({
 - [ ] Asset-Speicherung in DB
 
 ### Short-term (Priorität 2)
-- [ ] Campaign OS Modul starten
+- [ ] Launch OS Modul starten (formerly Campaign OS)
+- [ ] Management OS Modul starten
 - [ ] Analytics OS Modul starten
 - [ ] Mobile Responsiveness verbessern
 

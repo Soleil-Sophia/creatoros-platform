@@ -432,7 +432,8 @@ Nutzer können systemisch von Brand Definition zu Content Generation arbeiten.
 **Focus:** Core Workflow vervollständigen
 
 **Geplant:**
-- Campaign OS Launch
+- Launch OS Launch (formerly Campaign OS)
+- Management OS Launch
 - Analytics OS Launch
 - Cross-Module Integration vertiefen
 - Multi-Brand-Profile Support
@@ -548,13 +549,14 @@ Nutzer können systemisch von Brand Definition zu Content Generation arbeiten.
 - [ ] Save to Library nach Generation
 
 ### Short-term (Mai 2026)
-- [ ] Campaign OS MVP planen
+- [ ] Launch OS MVP planen (formerly Campaign OS)
 - [ ] Analytics OS Konzept definieren
 - [ ] Multi-Brand-Profile Support
 - [ ] Export-Funktionen
 
 ### Mid-term (Juni-Juli 2026)
-- [ ] Campaign OS Launch
+- [ ] Launch OS Launch (formerly Campaign OS)
+- [ ] Management OS Launch
 - [ ] Analytics OS Launch
 - [ ] Community OS Konzept
 - [ ] Research OS Konzept

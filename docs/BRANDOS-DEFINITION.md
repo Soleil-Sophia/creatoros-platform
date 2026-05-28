@@ -311,7 +311,7 @@ Nicht alles jetzt, aber als Roadmap:
 - Team Access / Shared Brand Profile
 - Approval / Lock Settings
 - Export to Website Copy / Docs
-- Integration mit Content OS / Campaign OS fully live
+- Integration mit Content OS / Launch OS fully live (formerly Campaign OS)
 
 ---
 
