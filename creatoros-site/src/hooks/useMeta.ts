@@ -23,8 +23,12 @@ export function useMeta(title: string, description?: string, ogImage?: string) {
     }
 
     if (ogImage) {
-      set('meta[property="og:image"]', ogImage);
-      set('meta[name="twitter:image"]', ogImage);
+      // Social scrapers require absolute URLs — resolve relative paths against SITE_URL.
+      const absoluteOgImage = ogImage.startsWith('http')
+        ? ogImage
+        : `${SITE_URL}${ogImage.startsWith('/') ? '' : '/'}${ogImage}`;
+      set('meta[property="og:image"]', absoluteOgImage);
+      set('meta[name="twitter:image"]', absoluteOgImage);
     }
 
     // Canonical URL and og:url — updated per page

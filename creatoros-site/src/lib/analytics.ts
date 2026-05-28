@@ -2,8 +2,10 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Analytics — lightweight event layer
 // ─────────────────────────────────────────────────────────────────────────────
-// This file is a no-op stub. Replace the function bodies with your chosen
-// analytics provider when you are ready to enable tracking.
+// TODO (before public launch): no analytics provider is wired up yet. This file
+// is intentionally a no-op stub. Do not add Plausible/Fathom/GA4 (or any other
+// provider) without explicit confirmation. Replace the function bodies below with
+// your chosen provider when you are ready to enable tracking.
 //
 // Plausible (recommended — privacy-first, no cookies):
 //   1. Add to index.html:
