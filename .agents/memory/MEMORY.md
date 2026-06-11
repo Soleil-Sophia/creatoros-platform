@@ -1,1 +1,2 @@
 - [Platform static deploy (Option A)](platform-static-deploy.md) — Vite base is /platform/ in dev, / in build; React Router basename stays /platform; marketing + platform are separate Replit apps.
+- [Architect scope hallucination](architect-scope-quirk.md) — architect's includeGitDiff sometimes reports already-merged files as out-of-scope; always trust `git status --porcelain` over its scope complaints.
