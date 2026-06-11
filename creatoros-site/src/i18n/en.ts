@@ -75,15 +75,62 @@ export const en = {
         },
       ],
     },
-    systemOverview: {
-      eyebrow: 'Platform Architecture',
-      headline: 'CreatorOS is the platform. The modules are how the system works.',
-      explain: 'Each module has standalone value. Together, they form a stronger operating system.',
-    },
-    ecosystem: {
+    moduleSystem: {
       eyebrow: 'Module System',
-      headline: 'Five core modules, one connected platform.',
-      body: 'Each module handles a different layer of creator work — from brand and content to launch, management, and analytics. Use them individually, or as a connected operating system.',
+      headline: 'Every module has a job. Together, they run the system.',
+      subline: 'Each module owns one layer of the work — with clear inputs and outputs that feed the next stage of the system.',
+      inputsLabel: 'Inputs',
+      outputsLabel: 'Outputs',
+      modules: [
+        {
+          name: 'BrandOS',
+          purpose: 'The source of truth for brand identity, voice, audience, offers, product catalog, visual rules, assets, and approved messaging.',
+          inputs: 'Brand details, audience, tone, visual assets, products, offers, links, approved claims.',
+          outputs: 'Brand profile, voice rules, messaging guidelines, product/offer context, AI-safe brand memory.',
+        },
+        {
+          name: 'MarketingOS',
+          purpose: 'The strategic command layer for campaigns, positioning, content pillars, audience strategy, funnels, and growth direction.',
+          inputs: 'Brand profile, audience, goals, products, offers, channels, campaign objectives.',
+          outputs: 'Marketing strategy, campaign plan, content pillars, channel plan, funnel direction, next growth priority.',
+        },
+        {
+          name: 'ContentOS',
+          purpose: 'The content creation and asset engine for posts, scripts, hooks, ads, emails, landing page copy, and visual briefs.',
+          inputs: 'Brand profile, marketing strategy, campaign goals, product context, platform requirements.',
+          outputs: 'Content assets, post drafts, scripts, ad copy, emails, visual briefs, reusable content library.',
+        },
+        {
+          name: 'DistributionOS',
+          purpose: 'The publishing and channel adaptation layer for scheduling, formatting, repurposing, and cross-platform rollout.',
+          inputs: 'Content assets, channel plan, calendar, campaign timing, platform rules.',
+          outputs: 'Publishing schedule, channel-specific versions, content calendar, rollout plan.',
+        },
+        {
+          name: 'InboxOS / LeadOS',
+          purpose: 'The capture layer for messages, comments, leads, inquiries, opportunities, and contact routing.',
+          inputs: 'DMs, comments, forms, email replies, lead sources, campaign responses.',
+          outputs: 'Sorted inbox, qualified leads, follow-up tasks, CRM handoff, opportunity pipeline.',
+        },
+        {
+          name: 'SalesOS / OfferOS',
+          purpose: 'The conversion layer for offers, landing pages, CTAs, bookings, sales flows, upsells, and partnerships.',
+          inputs: 'Product data, offer structure, leads, audience intent, campaign context.',
+          outputs: 'Offer pages, CTAs, sales copy, booking flows, conversion paths, revenue actions.',
+        },
+        {
+          name: 'AnalyticsOS',
+          purpose: 'The performance intelligence layer for measuring what works, what compounds, and what should happen next.',
+          inputs: 'Content data, campaign data, sales data, audience response, lead quality.',
+          outputs: 'Performance reports, growth signals, bottlenecks, recommendations, next best action.',
+        },
+        {
+          name: 'ManagementOS',
+          purpose: 'The workflow coordination layer for tasks, approvals, team roles, updates, documentation, and operational clarity.',
+          inputs: 'Next actions, campaign tasks, approvals, team responsibilities, system updates.',
+          outputs: 'Task boards, approval flows, SOPs, execution plans, accountability structure.',
+        },
+      ],
     },
     studio: {
       eyebrow: 'Available Now',

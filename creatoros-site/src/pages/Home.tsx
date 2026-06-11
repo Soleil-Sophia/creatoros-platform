@@ -3,8 +3,7 @@ import { Hero } from '../components/home/Hero';
 import { Problem } from '../components/home/Problem';
 import { Outcome } from '../components/home/Outcome';
 import { CreatorOSWorkflow } from '../components/home/CreatorOSWorkflow';
-import { SystemOverview } from '../components/home/SystemOverview';
-import { EcosystemPreview } from '../components/home/EcosystemPreview';
+import { ModuleSystem } from '../components/home/ModuleSystem';
 import { CreatorOSStudio } from '../components/home/CreatorOSStudio';
 import { CreatorOSBusiness } from '../components/home/CreatorOSBusiness';
 import { FeaturedProduct } from '../components/home/FeaturedProduct';
@@ -21,8 +20,7 @@ export default function Home() {
       <Problem />
       <Outcome />
       <CreatorOSWorkflow />
-      <SystemOverview />
-      <EcosystemPreview />
+      <ModuleSystem />
       <CreatorOSStudio />
       <CreatorOSBusiness />
       <FeaturedProduct />
