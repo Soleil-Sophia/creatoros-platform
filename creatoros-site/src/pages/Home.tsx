@@ -2,6 +2,7 @@ import { useMeta } from '../hooks/useMeta';
 import { Hero } from '../components/home/Hero';
 import { Problem } from '../components/home/Problem';
 import { Outcome } from '../components/home/Outcome';
+import { CreatorOSWorkflow } from '../components/home/CreatorOSWorkflow';
 import { SystemOverview } from '../components/home/SystemOverview';
 import { EcosystemPreview } from '../components/home/EcosystemPreview';
 import { CreatorOSStudio } from '../components/home/CreatorOSStudio';
@@ -19,6 +20,7 @@ export default function Home() {
       <Hero />
       <Problem />
       <Outcome />
+      <CreatorOSWorkflow />
       <SystemOverview />
       <EcosystemPreview />
       <CreatorOSStudio />

@@ -28,6 +28,53 @@ export const en = {
       headline: 'Build with more focus, less friction.',
       body: 'CreatorOS turns scattered thinking into structured direction, reusable content, organized launches, clearer tasks, and better growth decisions.',
     },
+    workflow: {
+      eyebrow: 'CreatorOS Workflow',
+      headline: 'One workflow for brand, content, marketing, sales, and growth.',
+      subline: 'CreatorOS connects every stage of the work — from brand foundations to content, campaigns, leads, conversion, analytics, and next actions.',
+      steps: [
+        {
+          verb: 'Define',
+          module: 'BrandOS',
+          desc: 'Define your brand, voice, identity, audience, product catalog, offers, assets, and approved messaging.',
+        },
+        {
+          verb: 'Strategize',
+          module: 'MarketingOS',
+          desc: 'Plan your audience strategy, campaign direction, content pillars, channels, funnels, and offer positioning.',
+        },
+        {
+          verb: 'Create',
+          module: 'ContentOS',
+          desc: 'Generate posts, hooks, scripts, ads, emails, landing page copy, visual briefs, and reusable content assets.',
+        },
+        {
+          verb: 'Distribute',
+          module: 'DistributionOS',
+          desc: 'Adapt, schedule, and publish content across platforms, formats, calendars, and campaigns.',
+        },
+        {
+          verb: 'Capture',
+          module: 'InboxOS / LeadOS',
+          desc: 'Capture comments, DMs, inquiries, leads, forms, and opportunities from every channel.',
+        },
+        {
+          verb: 'Convert',
+          module: 'SalesOS / OfferOS',
+          desc: 'Turn attention into offers, landing pages, CTAs, bookings, sales, partnerships, investors, and placements.',
+        },
+        {
+          verb: 'Analyze',
+          module: 'AnalyticsOS',
+          desc: 'Track performance, growth signals, audience response, revenue impact, and bottlenecks.',
+        },
+        {
+          verb: 'Manage',
+          module: 'ManagementOS',
+          desc: 'Organize tasks, approvals, updates, workflows, responsibilities, and next best actions.',
+        },
+      ],
+    },
     systemOverview: {
       eyebrow: 'Platform Architecture',
       headline: 'CreatorOS is the platform. The modules are how the system works.',
