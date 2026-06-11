@@ -10,11 +10,24 @@ export function Hero() {
       <div style={{
         position: 'absolute', top: '-200px', left: '50%', transform: 'translateX(-50%)',
         width: '900px', height: '600px',
-        background: 'radial-gradient(ellipse at center, rgba(255, 191, 222, 0.07) 0%, rgba(218, 191, 255, 0.04) 40%, transparent 70%)',
+        background: 'radial-gradient(ellipse at center, rgba(232, 234, 237, 0.08) 0%, rgba(232, 234, 237, 0.02) 40%, transparent 70%)',
         pointerEvents: 'none',
       }} />
 
       <div className="container" style={{ position: 'relative', textAlign: 'center' }}>
+
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: '8px',
+          padding: '6px 14px', borderRadius: '100px',
+          background: 'rgba(232, 234, 237, 0.05)',
+          border: '1px solid rgba(232, 234, 237, 0.1)',
+          marginBottom: '24px',
+        }}>
+          <div style={{ width: '5px', height: '5px', borderRadius: '50%', background: 'var(--silver)' }} />
+          <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--silver)', letterSpacing: '0.12em', textTransform: 'uppercase' }}>
+            {h.eyebrow}
+          </span>
+        </div>
 
         <h1 style={{
           fontFamily: 'var(--font-heading)',
@@ -40,48 +53,45 @@ export function Hero() {
         </p>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px', flexWrap: 'wrap' }}>
-          <Link to="/modules" style={{
+          <Link to="/early-access" style={{
             padding: '16px 32px', borderRadius: '12px',
-            background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
-            color: '#0E0F14', fontSize: '16px', fontWeight: 700,
-            boxShadow: '0 8px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255,255,255,0.4)',
-            transition: 'opacity 0.15s',
+            background: 'linear-gradient(135deg, var(--silver) 0%, #B4B8C7 100%)',
+            color: '#08090C', fontSize: '16px', fontWeight: 700,
+            boxShadow: '0 8px 32px var(--silver-glow), inset 0 1px 0 rgba(255,255,255,0.6)',
+            transition: 'opacity 0.15s, transform 0.15s',
             display: 'inline-flex', alignItems: 'center', gap: '8px',
-          }}>
+          }}
+          onMouseEnter={e => (e.currentTarget.style.transform = 'translateY(-2px)')}
+          onMouseLeave={e => (e.currentTarget.style.transform = 'translateY(0)')}
+          >
             {h.primaryCta}
             <svg width="16" height="16" fill="none" viewBox="0 0 16 16">
-              <path d="M3 8h10M9 4l4 4-4 4" stroke="#0E0F14" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              <path d="M3 8h10M9 4l4 4-4 4" stroke="#08090C" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
           </Link>
-          <Link to="/pricing" style={{
+          <Link to="/modules" style={{
             padding: '16px 24px', borderRadius: '12px',
-            background: 'transparent',
-            color: 'var(--text-3)', fontSize: '15px', fontWeight: 400,
-            transition: 'color 0.15s',
-            textDecoration: 'underline',
-            textDecorationColor: 'rgba(255,255,255,0.15)',
-            textUnderlineOffset: '3px',
+            background: 'rgba(255, 255, 255, 0.05)',
+            border: '1px solid rgba(255, 255, 255, 0.1)',
+            color: 'var(--text-2)', fontSize: '15px', fontWeight: 500,
+            transition: 'all 0.15s',
           }}
-          onMouseEnter={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-2)'}
-          onMouseLeave={e => (e.currentTarget as HTMLElement).style.color = 'var(--text-3)'}
+          onMouseEnter={e => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.08)';
+            e.currentTarget.style.color = 'var(--text)';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.background = 'rgba(255, 255, 255, 0.05)';
+            e.currentTarget.style.color = 'var(--text-2)';
+          }}
           >
             {h.secondaryCta}
           </Link>
         </div>
 
-        <div style={{ marginTop: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-          <div style={{ display: 'flex' }}>
-            {['#FFBFDE', '#DABFFF', '#B4B8C7', '#8B8F9E'].map((c, i) => (
-              <div key={i} style={{
-                width: '28px', height: '28px', borderRadius: '50%',
-                background: `linear-gradient(135deg, ${c}40, ${c}20)`,
-                border: '2px solid #0E0F14',
-                marginLeft: i > 0 ? '-8px' : '0',
-              }} />
-            ))}
-          </div>
-          <p style={{ fontSize: '13px', color: 'var(--text-3)', marginLeft: '8px' }}>
-            Join early access — <span style={{ color: 'var(--text-2)' }}>limited spots available</span>
+        <div style={{ marginTop: '60px', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '16px' }}>
+          <p style={{ fontSize: '13px', color: 'var(--text-3)', fontWeight: 500, letterSpacing: '0.04em' }}>
+            {h.trust}
           </p>
         </div>
       </div>

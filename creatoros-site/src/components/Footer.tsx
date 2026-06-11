@@ -70,7 +70,8 @@ export function Footer() {
               }}>
                 <div style={{
                   width: '12px', height: '12px', borderRadius: '3px',
-                  background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)',
+                  background: 'linear-gradient(135deg, #F4F5F8 0%, #B4B8C7 100%)',
+                  boxShadow: '0 0 6px rgba(232,234,237,0.3)',
                 }} />
               </div>
               <span style={{ fontFamily: 'var(--font-heading)', fontSize: '15px', fontWeight: 700, color: 'var(--text)' }}>

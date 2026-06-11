@@ -63,7 +63,8 @@ export function Navbar() {
               }}>
                 <div style={{
                   width: '14px', height: '14px', borderRadius: '4px',
-                  background: 'linear-gradient(135deg, #FFBFDE 0%, #DABFFF 100%)',
+                  background: 'linear-gradient(135deg, #F4F5F8 0%, #B4B8C7 100%)',
+                  boxShadow: '0 0 8px rgba(232,234,237,0.35)',
                 }} />
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '2px' }}>
@@ -157,11 +158,11 @@ export function Navbar() {
                 style={{
                   padding: '10px 20px',
                   borderRadius: '10px',
-                  background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
-                  color: '#0E0F14',
+                  background: 'linear-gradient(135deg, #FFFFFF 0%, #D7DAE0 100%)',
+                  color: '#08090C',
                   fontSize: '14px',
                   fontWeight: 600,
-                  boxShadow: '0 4px 16px rgba(255, 191, 222, 0.25)',
+                  boxShadow: '0 4px 16px rgba(232, 234, 237, 0.2)',
                   transition: 'opacity 0.15s',
                 }}
                 onMouseEnter={e => (e.currentTarget as HTMLElement).style.opacity = '0.88'}
@@ -263,11 +264,11 @@ export function Navbar() {
                 justifyContent: 'center',
                 padding: '18px',
                 borderRadius: '14px',
-                background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
-                color: '#0E0F14',
+                background: 'linear-gradient(135deg, #FFFFFF 0%, #D7DAE0 100%)',
+                color: '#08090C',
                 fontSize: '17px',
                 fontWeight: 700,
-                boxShadow: '0 8px 28px rgba(255,191,222,0.3)',
+                boxShadow: '0 8px 28px rgba(232,234,237,0.25)',
               }}
             >
               Get the Kit
