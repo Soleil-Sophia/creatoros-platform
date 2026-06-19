@@ -14,14 +14,35 @@ function isBrandProfileShape(value: unknown): value is BrandProfile {
   );
 }
 
+function coerceLegacyBrandProfile(value: unknown): BrandProfile | null {
+  if (!value || typeof value !== 'object') return null;
+  const v = value as Record<string, unknown>;
+  if (
+    typeof v.voiceTone !== 'string' ||
+    typeof v.voiceComplexity !== 'string' ||
+    typeof v.voiceFormality !== 'string' ||
+    typeof v.voiceEnergy !== 'string'
+  ) {
+    return null;
+  }
+  return {
+    tone: v.voiceTone,
+    complexity: v.voiceComplexity,
+    formality: v.voiceFormality,
+    energy: v.voiceEnergy,
+    voiceLabel: typeof v.voiceLabel === 'string' ? v.voiceLabel : undefined,
+    updatedAt: typeof v.updatedAt === 'string' ? v.updatedAt : undefined,
+  };
+}
+
 export function readBrandProfile(): BrandProfile | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = window.localStorage.getItem(BRAND_PROFILE_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!isBrandProfileShape(parsed)) return null;
-    return parsed;
+    if (isBrandProfileShape(parsed)) return parsed;
+    return coerceLegacyBrandProfile(parsed);
   } catch {
     return null;
   }
