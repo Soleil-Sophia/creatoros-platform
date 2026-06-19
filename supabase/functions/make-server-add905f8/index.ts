@@ -18,6 +18,19 @@ app.use("/*", cors({
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
+  // API key auth — lightweight alternative for frontend direct access.
+  // Set FRONTEND_API_KEY in Supabase Edge Function secrets and VITE_API_KEY in the
+  // frontend environment to enable this path without Supabase user sessions.
+  const apiKey = c.req.header("x-api-key");
+  const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
+  if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
+    c.set("userId", "frontend-shared");
+    c.set("userEmail", "frontend@creatoros.internal");
+    await next();
+    return;
+  }
+
+  // JWT auth — standard Supabase user session.
   const authHeader = c.req.header("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return c.json({ error: "Unauthorized" }, 401);
