@@ -47,15 +47,36 @@ export function readBrandProfile(): BrandProfile | null {
     const parsed = JSON.parse(raw);
     if (isBrandProfileShape(parsed)) return parsed;
     return coerceLegacyBrandProfile(parsed);
+    // Coerce legacy shape (voiceTone/voiceComplexity/voiceFormality/voiceEnergy) into
+    // the current shape so existing users keep their BrandOS readiness after deploy.
+    if (isLegacyBrandProfileShape(parsed)) {
+      const legacy = parsed as Record<string, unknown>;
+      return {
+        tone: legacy.voiceTone as string,
+        complexity: legacy.voiceComplexity as string,
+        formality: legacy.voiceFormality as string,
+        energy: legacy.voiceEnergy as string,
+        ...(typeof legacy.voiceLabel === 'string' ? { voiceLabel: legacy.voiceLabel } : {}),
+        ...(typeof legacy.updatedAt === 'string' ? { updatedAt: legacy.updatedAt } : {}),
+      };
+    }
+    return null;
   } catch {
     return null;
   }
 }
 
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
-  const next: BrandProfile = {
+  const trimmed: BrandProfile = {
     ...profile,
-    voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
+    tone: profile.tone.trim(),
+    complexity: profile.complexity.trim(),
+    formality: profile.formality.trim(),
+    energy: profile.energy.trim(),
+  };
+  const next: BrandProfile = {
+    ...trimmed,
+    voiceLabel: trimmed.voiceLabel ?? createVoiceLabel(trimmed),
     updatedAt: new Date().toISOString(),
   };
   if (typeof window === 'undefined') return next;
