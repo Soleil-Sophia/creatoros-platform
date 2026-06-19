@@ -1,17 +1,15 @@
 import type { BrandProfile } from './types';
 
 export const emptyBrandProfile: BrandProfile = {
-  brandName: '',
-  voiceTone: '',
-  voiceComplexity: '',
-  voiceFormality: '',
-  voiceEnergy: '',
+  tone: '',
+  complexity: '',
+  formality: '',
+  energy: '',
 };
 
 export const exampleBrandProfile: BrandProfile = {
-  brandName: 'CreatorOS',
-  voiceTone: 'Motivational & Direct',
-  voiceComplexity: 'Clear & Accessible',
-  voiceFormality: 'Casual Professional',
-  voiceEnergy: 'High Drive',
+  tone: 'Motivational & Direct',
+  complexity: 'Clear & Accessible',
+  formality: 'Casual Professional',
+  energy: 'High Drive',
 };

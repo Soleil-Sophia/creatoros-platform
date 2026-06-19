@@ -19,24 +19,24 @@ export function FeaturedModule() {
           className="relative rounded-[20px] overflow-hidden"
           style={{ 
             background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
-            border: '2px solid rgba(255, 191, 222, 0.25)',
-            boxShadow: '0 24px 60px rgba(255, 191, 222, 0.08), 0 0 80px rgba(218, 191, 255, 0.05)'
+            border: '2px solid rgba(255, 191, 222, 0.3)',
+            boxShadow: '0 24px 80px rgba(255, 191, 222, 0.15), 0 0 120px rgba(218, 191, 255, 0.1)'
           }}
         >
-          {/* Top edge highlight - refined */}
+          {/* Glowing top edge */}
           <div 
             className="absolute top-0 left-0 right-0 h-px" 
             style={{ 
               background: 'linear-gradient(90deg, transparent, #FFBFDE 20%, #DABFFF 50%, #FFBFDE 80%, transparent)',
-              boxShadow: '0 0 10px rgba(255, 191, 222, 0.2)'
+              boxShadow: '0 0 20px rgba(255, 191, 222, 0.5)'
             }}
           ></div>
 
-          {/* Background accent glow - subtle */}
+          {/* Background accent glow */}
           <div 
-            className="absolute inset-0 opacity-15"
+            className="absolute inset-0 opacity-30"
             style={{ 
-              background: 'radial-gradient(ellipse 50% 40% at 50% 0%, rgba(255, 191, 222, 0.12) 0%, transparent 50%)'
+              background: 'radial-gradient(ellipse 60% 50% at 50% 0%, rgba(255, 191, 222, 0.15) 0%, transparent 50%)'
             }}
           ></div>
 
@@ -80,7 +80,7 @@ export function FeaturedModule() {
                     color: '#0E0F14',
                     fontSize: '17px',
                     fontWeight: 600,
-                    boxShadow: '0 12px 36px rgba(255, 191, 222, 0.25), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+                    boxShadow: '0 16px 48px rgba(255, 191, 222, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.5)',
                     textDecoration: 'none'
                   }}
                 >
