@@ -137,6 +137,7 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
     ? {
       ...brandProfile,
       brandName: brandProfile.brandName ?? requestProfile.brandName,
+      voiceLabel: brandProfile.voiceLabel ?? requestProfile.voiceLabel,
       voiceTone: brandProfile.voiceTone ?? requestProfile.voiceTone,
       voiceComplexity: brandProfile.voiceComplexity ?? requestProfile.voiceComplexity,
       voiceFormality: brandProfile.voiceFormality ?? requestProfile.voiceFormality,
