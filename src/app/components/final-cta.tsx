@@ -89,7 +89,9 @@ export function FinalCTA() {
                   borderRadius: '12px',
                   fontSize: '17px',
                   fontWeight: 600,
-                  boxShadow: '0 12px 32px rgba(255, 191, 222, 0.25)'
+                  boxShadow: '0 12px 32px rgba(255, 191, 222, 0.25)',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>

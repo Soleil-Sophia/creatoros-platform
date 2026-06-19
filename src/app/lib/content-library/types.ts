@@ -1,8 +1,8 @@
 export type BrandVoiceSnapshot = {
-  tone: string;
-  complexity: string;
-  formality: string;
-  energy: string;
+  voiceTone: string;
+  voiceComplexity: string;
+  voiceFormality: string;
+  voiceEnergy: string;
   voiceLabel: string;
   updatedAt: string;
   capturedAt: string;
