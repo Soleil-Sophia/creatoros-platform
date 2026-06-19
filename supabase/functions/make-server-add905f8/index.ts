@@ -22,7 +22,7 @@ function getString(value: unknown) {
 
 function getStringArray(value: unknown) {
   return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === "string")
+    ? value.filter((item): item is string => typeof item === "string" && item.length > 0)
     : [];
 }
 
@@ -116,7 +116,7 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
 
   const voiceDos = getStringArray(brandProfile?.voiceDos);
   const voiceDonts = getStringArray(brandProfile?.voiceDonts);
-  const messagingPillars = getStringArray(brandProfile?.messagingPillars).filter(Boolean);
+  const messagingPillars = getStringArray(brandProfile?.messagingPillars);
 
   // Build brand context block
   const brandContext = brandProfile ? `
