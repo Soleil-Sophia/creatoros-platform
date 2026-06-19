@@ -3,15 +3,43 @@ import { emptyBrandProfile } from './defaultBrandProfile';
 
 export const BRAND_PROFILE_STORAGE_KEY = 'creatoros-brand-profile-v1';
 
-function isBrandProfileShape(value: unknown): value is BrandProfile {
-  if (!value || typeof value !== 'object') return false;
-  const v = value as Record<string, unknown>;
-  return (
-    typeof v.tone === 'string' &&
-    typeof v.complexity === 'string' &&
-    typeof v.formality === 'string' &&
-    typeof v.energy === 'string'
-  );
+export const REQUIRED_BRAND_PROFILE_FIELDS = [
+  'brandName',
+  'voiceTone',
+  'voiceComplexity',
+  'voiceFormality',
+  'voiceEnergy',
+] as const;
+
+export type BrandProfileStatus = 'not_started' | 'in_progress' | 'complete';
+
+type RequiredBrandProfileField = (typeof REQUIRED_BRAND_PROFILE_FIELDS)[number];
+
+function isBrandProfileShape(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
+}
+
+function normalizeString(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function getFieldValue(profile: BrandProfile, field: RequiredBrandProfileField): string {
+  return profile[field].trim();
+}
+
+export function getBrandProfileStatus(profile: BrandProfile | null | undefined): BrandProfileStatus {
+  if (!profile) return 'not_started';
+
+  const filledCount = REQUIRED_BRAND_PROFILE_FIELDS.filter((field) => getFieldValue(profile, field)).length;
+
+  if (filledCount === 0) return 'not_started';
+  if (filledCount === REQUIRED_BRAND_PROFILE_FIELDS.length) return 'complete';
+  return 'in_progress';
+}
+
+export function getFilledBrandProfileFieldCount(profile: BrandProfile | null | undefined): number {
+  if (!profile) return 0;
+  return REQUIRED_BRAND_PROFILE_FIELDS.filter((field) => getFieldValue(profile, field)).length;
 }
 
 export function readBrandProfile(): BrandProfile | null {
@@ -21,7 +49,16 @@ export function readBrandProfile(): BrandProfile | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!isBrandProfileShape(parsed)) return null;
-    return parsed;
+    const legacy = parsed as Record<string, unknown>;
+    return {
+      brandName: normalizeString(legacy.brandName),
+      voiceTone: normalizeString(legacy.voiceTone ?? legacy.tone),
+      voiceComplexity: normalizeString(legacy.voiceComplexity ?? legacy.complexity),
+      voiceFormality: normalizeString(legacy.voiceFormality ?? legacy.formality),
+      voiceEnergy: normalizeString(legacy.voiceEnergy ?? legacy.energy),
+      voiceLabel: normalizeString(legacy.voiceLabel) || undefined,
+      updatedAt: normalizeString(legacy.updatedAt) || undefined,
+    };
   } catch {
     return null;
   }
@@ -29,7 +66,11 @@ export function readBrandProfile(): BrandProfile | null {
 
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
   const next: BrandProfile = {
-    ...profile,
+    brandName: profile.brandName.trim(),
+    voiceTone: profile.voiceTone.trim(),
+    voiceComplexity: profile.voiceComplexity.trim(),
+    voiceFormality: profile.voiceFormality.trim(),
+    voiceEnergy: profile.voiceEnergy.trim(),
     voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
     updatedAt: new Date().toISOString(),
   };
@@ -56,9 +97,9 @@ export function clearBrandProfile(): void {
  * Prefers the tone, falls back to formality/energy, then to "Custom Voice".
  */
 export function createVoiceLabel(profile: BrandProfile): string {
-  const tone = profile.tone?.trim();
-  const formality = profile.formality?.trim();
-  const energy = profile.energy?.trim();
+  const tone = profile.voiceTone?.trim();
+  const formality = profile.voiceFormality?.trim();
+  const energy = profile.voiceEnergy?.trim();
 
   if (tone) return tone;
   if (formality && energy) return `${formality} · ${energy}`;
@@ -68,13 +109,7 @@ export function createVoiceLabel(profile: BrandProfile): string {
 }
 
 export function isBrandProfileMeaningful(profile: BrandProfile | null | undefined): boolean {
-  if (!profile) return false;
-  return Boolean(
-    profile.tone.trim() ||
-      profile.complexity.trim() ||
-      profile.formality.trim() ||
-      profile.energy.trim()
-  );
+  return getBrandProfileStatus(profile) !== 'not_started';
 }
 
 // Re-export the empty shape so consumers can use a single import for initial state.

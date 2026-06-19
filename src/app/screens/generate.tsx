@@ -6,7 +6,11 @@ import { InputPanel } from '../components/generate/InputPanel';
 import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHeader';
 import { AssetCard } from '../components/generate/AssetCard';
 import { BrandVoiceChip } from '../components/shared';
-import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage';
+import {
+  readBrandProfile,
+  createVoiceLabel,
+  getBrandProfileStatus,
+} from '../lib/brand-profile/storage';
 import { OUTPUT_TYPES } from '../../data/contentos';
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
@@ -72,20 +76,30 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   );
 
   // Brand profile (read-only handoff from BrandOS)
-  const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
+  const [brandProfile, setBrandProfile] = useState(() => readBrandProfile());
+
+  const brandProfileStatus = getBrandProfileStatus(brandProfile);
+  const brandVoiceLabel =
+    brandProfileStatus === 'complete' && brandProfile
+      ? brandProfile.voiceLabel ?? createVoiceLabel(brandProfile)
+      : null;
 
   // Hydrate brand profile once on mount. Only seeds the tone default —
   // does not override the user's tone after they change it, and does not
   // override a tone that was just restored from a saved Library asset.
   useEffect(() => {
-    const profile = readBrandProfile();
-    if (!profile) return;
-    if (profile.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
-    if (restoredInputs) return; // saved-asset reuse owns the tone
-    if (profile.tone && profile.tone.trim()) {
-      setTone((current) => (current === 'Conversational' ? profile.tone : current));
-    }
+    const refresh = () => setBrandProfile(readBrandProfile());
+    refresh();
+    window.addEventListener('focus', refresh);
+    return () => window.removeEventListener('focus', refresh);
   }, []);
+
+  useEffect(() => {
+    if (restoredInputs) return; // saved-asset reuse owns the tone
+    if (brandProfile?.voiceTone && brandProfile.voiceTone.trim()) {
+      setTone((current) => (current === 'Conversational' ? brandProfile.voiceTone : current));
+    }
+  }, [brandProfile, brandProfileStatus, restoredInputs]);
 
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
@@ -162,10 +176,10 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
     const brandVoiceSnapshot: BrandVoiceSnapshot | null = profile
       ? {
-          tone: profile.tone ?? '',
-          complexity: profile.complexity ?? '',
-          formality: profile.formality ?? '',
-          energy: profile.energy ?? '',
+          tone: profile.voiceTone ?? '',
+          complexity: profile.voiceComplexity ?? '',
+          formality: profile.voiceFormality ?? '',
+          energy: profile.voiceEnergy ?? '',
           voiceLabel: profile.voiceLabel?.trim() || createVoiceLabel(profile),
           updatedAt: profile.updatedAt ?? '',
           capturedAt: nowIso,
@@ -299,6 +313,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       >
         <BrandVoiceChip
           voiceLabel={brandVoiceLabel}
+          status={brandProfileStatus}
           setupRoute="/app/brand-os/setup"
         />
       </div>
@@ -346,6 +361,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
               generationStatus={genStatus}
+              brandProfileStatus={brandProfileStatus}
+              onOpenBrandOS={() => navigate('/app/brand-os/setup')}
             />
 
             {/* Output Workspace (Right 64%) */}

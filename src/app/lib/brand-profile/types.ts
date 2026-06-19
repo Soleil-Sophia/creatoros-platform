@@ -1,8 +1,9 @@
 export type BrandProfile = {
-  tone: string;
-  complexity: string;
-  formality: string;
-  energy: string;
+  brandName: string;
+  voiceTone: string;
+  voiceComplexity: string;
+  voiceFormality: string;
+  voiceEnergy: string;
   voiceLabel?: string;
   updatedAt?: string;
 };

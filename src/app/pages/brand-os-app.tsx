@@ -17,6 +17,7 @@ const inputStyle = {
 } as const;
 
 export function BrandOSAppPage() {
+  const [brandName, setBrandName] = useState('');
   const [tone, setTone] = useState('');
   const [complexity, setComplexity] = useState('');
   const [formality, setFormality] = useState('');
@@ -28,20 +29,22 @@ export function BrandOSAppPage() {
   useEffect(() => {
     const profile = readBrandProfile();
     if (profile) {
-      setTone(profile.tone);
-      setComplexity(profile.complexity);
-      setFormality(profile.formality);
-      setEnergy(profile.energy);
+      setBrandName(profile.brandName);
+      setTone(profile.voiceTone);
+      setComplexity(profile.voiceComplexity);
+      setFormality(profile.voiceFormality);
+      setEnergy(profile.voiceEnergy);
       setSavedAt(profile.updatedAt ?? null);
     }
   }, []);
 
   const handleSave = () => {
     const profile = {
-      tone: tone.trim(),
-      complexity: complexity.trim(),
-      formality: formality.trim(),
-      energy: energy.trim(),
+      brandName: brandName.trim(),
+      voiceTone: tone.trim(),
+      voiceComplexity: complexity.trim(),
+      voiceFormality: formality.trim(),
+      voiceEnergy: energy.trim(),
     };
     const next = writeBrandProfile({
       ...profile,
@@ -55,7 +58,7 @@ export function BrandOSAppPage() {
   return (
     <div className="min-h-screen" style={{ background: '#0E0F14' }}>
       {/* Top Navigation Bar */}
-      <div 
+      <div
         className="fixed top-0 left-0 right-0 z-50"
         style={{
           background: 'rgba(14, 15, 20, 0.95)',
@@ -75,7 +78,7 @@ export function BrandOSAppPage() {
                 <ArrowLeft size={16} />
                 Back to Brand OS
               </Link>
-              <div 
+              <div
                 className="h-6 w-px"
                 style={{ background: 'rgba(255, 255, 255, 0.1)' }}
               />
@@ -130,24 +133,24 @@ export function BrandOSAppPage() {
         <div className="max-w-[1000px] mx-auto">
           {/* Page Header */}
           <div className="mb-10">
-            <div 
-              className="inline-block px-3 py-1 rounded-lg mb-4" 
-              style={{ 
-                background: 'rgba(231, 198, 243, 0.12)', 
+            <div
+              className="inline-block px-3 py-1 rounded-lg mb-4"
+              style={{
+                background: 'rgba(231, 198, 243, 0.12)',
                 border: '1px solid rgba(231, 198, 243, 0.2)',
-                fontSize: '11px', 
-                fontWeight: 600, 
-                color: '#E7C6F3', 
-                textTransform: 'uppercase', 
-                letterSpacing: '0.1em' 
+                fontSize: '11px',
+                fontWeight: 600,
+                color: '#E7C6F3',
+                textTransform: 'uppercase',
+                letterSpacing: '0.1em'
               }}
             >
               Step 1 of 3
             </div>
-            <h2 
-              style={{ 
-                fontSize: '36px', 
-                fontWeight: 700, 
+            <h2
+              style={{
+                fontSize: '36px',
+                fontWeight: 700,
                 color: '#F4F3F8',
                 marginBottom: '12px',
                 letterSpacing: '-0.02em'
@@ -162,8 +165,8 @@ export function BrandOSAppPage() {
 
           {/* Voice Parameters Form */}
           <div className="space-y-6">
-            {/* Tone */}
-            <div 
+            {/* Brand Name */}
+            <div
               className="p-6 rounded-[16px]"
               style={{
                 background: '#171923',
@@ -173,7 +176,48 @@ export function BrandOSAppPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#F4F3F8', marginBottom: '6px' }}>
-                    Tone
+                    Brand Name
+                  </h3>
+                  <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.5 }}>
+                    The primary name of the brand or creator.
+                  </p>
+                </div>
+                <button
+                  className="flex items-center gap-2 px-3 py-1.5 rounded-lg transition-all hover:opacity-80"
+                  style={{
+                    background: 'rgba(231, 198, 243, 0.12)',
+                    border: '1px solid rgba(231, 198, 243, 0.2)',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    color: '#E7C6F3'
+                  }}
+                >
+                  <Lock size={12} />
+                  Lock
+                </button>
+              </div>
+              <input
+                type="text"
+                placeholder="e.g., CreatorOS"
+                value={brandName}
+                onChange={(e) => setBrandName(e.target.value)}
+                className={inputClassName}
+                style={inputStyle}
+              />
+            </div>
+
+            {/* Tone */}
+            <div
+              className="p-6 rounded-[16px]"
+              style={{
+                background: '#171923',
+                border: '1px solid rgba(255, 255, 255, 0.08)'
+              }}
+            >
+              <div className="flex items-start justify-between mb-4">
+                <div>
+                  <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#F4F3F8', marginBottom: '6px' }}>
+                    Voice Tone
                   </h3>
                   <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.5 }}>
                     How your brand sounds—professional, casual, motivational, technical
@@ -204,7 +248,7 @@ export function BrandOSAppPage() {
             </div>
 
             {/* Complexity */}
-            <div 
+            <div
               className="p-6 rounded-[16px]"
               style={{
                 background: '#171923',
@@ -214,7 +258,7 @@ export function BrandOSAppPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#F4F3F8', marginBottom: '6px' }}>
-                    Complexity
+                    Voice Complexity
                   </h3>
                   <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.5 }}>
                     Language level—simple, accessible, technical, expert
@@ -245,7 +289,7 @@ export function BrandOSAppPage() {
             </div>
 
             {/* Formality */}
-            <div 
+            <div
               className="p-6 rounded-[16px]"
               style={{
                 background: '#171923',
@@ -255,7 +299,7 @@ export function BrandOSAppPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#F4F3F8', marginBottom: '6px' }}>
-                    Formality
+                    Voice Formality
                   </h3>
                   <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.5 }}>
                     How formal or casual—corporate, professional, friendly
@@ -286,7 +330,7 @@ export function BrandOSAppPage() {
             </div>
 
             {/* Energy */}
-            <div 
+            <div
               className="p-6 rounded-[16px]"
               style={{
                 background: '#171923',
@@ -296,7 +340,7 @@ export function BrandOSAppPage() {
               <div className="flex items-start justify-between mb-4">
                 <div>
                   <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#F4F3F8', marginBottom: '6px' }}>
-                    Energy
+                    Voice Energy
                   </h3>
                   <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.5 }}>
                     Overall energy level—high drive, calm, enthusiastic, measured
