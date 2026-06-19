@@ -10,7 +10,7 @@ const app = new Hono();
 app.use("*", logger(console.log));
 app.use("/*", cors({
   origin: "*",
-  allowHeaders: ["Content-Type", "Authorization"],
+  allowHeaders: ["Content-Type", "Authorization", "x-api-key"],
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   exposeHeaders: ["Content-Length"],
   maxAge: 600,
@@ -18,6 +18,19 @@ app.use("/*", cors({
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
+  // API key auth — lightweight alternative for frontend direct access.
+  // Set FRONTEND_API_KEY in Supabase Edge Function secrets and VITE_API_KEY in the
+  // frontend environment to enable this path without Supabase user sessions.
+  const apiKey = c.req.header("x-api-key");
+  const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
+  if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
+    c.set("userId", `api-key:${crypto.randomUUID()}`);
+    c.set("userEmail", "frontend@creatoros.internal");
+    await next();
+    return;
+  }
+
+  // JWT auth — standard Supabase user session.
   const authHeader = c.req.header("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
     return c.json({ error: "Unauthorized" }, 401);
@@ -73,13 +86,30 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 // ─── Content Generation ───────────────────────────────────────────────────────
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
-  const { offer, audience, platform, goal, tone, outputType } = await c.req.json();
+  const rawBody = await c.req.json().catch(() => null);
+  const body =
+    rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
+      ? (rawBody as Record<string, unknown>)
+      : {};
+  const { offer, audience, platform, goal, tone, outputType } = body;
 
   if (!offer) return c.json({ error: "offer is required" }, 400);
 
-  // Load brand profile if available
+  // Load brand profile if available — prefer KV-stored profile, fall back to
+  // request-supplied voice fields (for users who have only configured BrandOS locally).
   let brandProfile: any = null;
   try { brandProfile = await kv.get(`brand_profile:${userId}`); } catch { /* ok */ }
+  if (!brandProfile || typeof brandProfile !== "object") {
+    // Fall back to any brand profile fields forwarded in the request body.
+    const requestVoice: Record<string, string | undefined> = {
+      brandName: typeof body.brandName === "string" ? body.brandName.trim() || undefined : undefined,
+      voiceTone: typeof body.voiceTone === "string" ? body.voiceTone.trim() || undefined : undefined,
+      voiceComplexity: typeof body.voiceComplexity === "string" ? body.voiceComplexity.trim() || undefined : undefined,
+      voiceFormality: typeof body.voiceFormality === "string" ? body.voiceFormality.trim() || undefined : undefined,
+      voiceEnergy: typeof body.voiceEnergy === "string" ? body.voiceEnergy.trim() || undefined : undefined,
+    };
+    brandProfile = Object.values(requestVoice).some((v) => v !== undefined) ? requestVoice : null;
+  }
 
   // Build brand context block
   const brandContext = brandProfile ? `

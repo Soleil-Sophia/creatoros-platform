@@ -53,7 +53,7 @@ export function AssetCard({
           <div 
             className="w-11 h-11 rounded-[10px] flex items-center justify-center relative"
             style={{ 
-              background: accentColor === 'rgba(255, 191, 222' ? 'linear-gradient(135deg, #FFBFDE, #E7C6F3)' : 'linear-gradient(135deg, #E7C6F3, #DABFFF)',
+              background: accentColor === '#FFBFDE' ? 'linear-gradient(135deg, #FFBFDE, #E7C6F3)' : 'linear-gradient(135deg, #E7C6F3, #DABFFF)',
               boxShadow: `0 6px 20px ${accentColor}66, inset 0 1px 0 rgba(255, 255, 255, 0.5)`
             }}
           >
