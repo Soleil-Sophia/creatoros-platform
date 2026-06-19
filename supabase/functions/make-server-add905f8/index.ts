@@ -137,18 +137,20 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
     ? {
       ...brandProfile,
       brandName: brandProfile.brandName ?? requestProfile.brandName,
+      voiceLabel: brandProfile.voiceLabel ?? requestProfile.voiceLabel,
       voiceTone: brandProfile.voiceTone ?? requestProfile.voiceTone,
       voiceComplexity: brandProfile.voiceComplexity ?? requestProfile.voiceComplexity,
       voiceFormality: brandProfile.voiceFormality ?? requestProfile.voiceFormality,
       voiceEnergy: brandProfile.voiceEnergy ?? requestProfile.voiceEnergy,
     }
     : (hasRequestProfile ? requestProfile : null);
+  const brandIdentity = effectiveBrandProfile?.brandName ?? effectiveBrandProfile?.voiceLabel;
 
   // Build brand context block
   const brandContext = effectiveBrandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
-${effectiveBrandProfile.brandName ? `- Brand: ${effectiveBrandProfile.brandName}
+${brandIdentity ? `- Brand: ${brandIdentity}
 ` : ''}- Mission: ${effectiveBrandProfile.mission ?? ''}
 - Voice Tone: ${effectiveBrandProfile.voiceTone ?? ''}
 - Voice Energy: ${effectiveBrandProfile.voiceEnergy ?? ''}
@@ -189,7 +191,7 @@ Rules:
 - 5 script sections for a 60–90 sec video or long post
 - 3 platform-specific captions: Instagram (emotional), LinkedIn (professional), X (punchy ≤280 chars)
 - Everything must be specific to the offer — no generic filler
-- ${effectiveBrandProfile?.brandName ? `Mirror ${effectiveBrandProfile.brandName}'s exact voice` : "Be concrete and specific"}`;
+- ${brandIdentity ? `Mirror ${brandIdentity}'s exact voice` : "Be concrete and specific"}`;
 
   // OpenAI call
   const openaiKey = Deno.env.get("OPENAI_API_KEY");
