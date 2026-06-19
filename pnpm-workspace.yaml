@@ -1,3 +1,5 @@
 allowBuilds:
-  '@tailwindcss/oxide': true
-  esbuild: true
+  '@tailwindcss/oxide': set this to true or false
+  esbuild: set this to true or false
+overrides:
+  vite: 6.4.2
