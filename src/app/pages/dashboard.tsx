@@ -4,8 +4,7 @@ import { Link } from 'react-router';
 import { ArrowRight, Lock, CheckCircle2 } from 'lucide-react';
 import {
   readBrandProfile,
-  createVoiceLabel,
-  getBrandProfileStatus,
+  isBrandProfileComplete,
 } from '../lib/brand-profile/storage';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
@@ -23,8 +22,7 @@ type LocalSystemState = {
 
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
-  const brandStatus = getBrandProfileStatus(profile);
-  const connected = brandStatus === 'complete';
+  const connected = isBrandProfileComplete(profile);
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>
     (a.createdAt ?? '') < (b.createdAt ?? '') ? 1 : -1

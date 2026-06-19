@@ -123,5 +123,15 @@ export function isBrandProfileMeaningful(profile: BrandProfile | null | undefine
   return getBrandProfileStatus(profile) !== 'not_started';
 }
 
+export function isBrandProfileComplete(profile: BrandProfile | null | undefined): boolean {
+  if (!profile) return false;
+  return Boolean(
+    (profile.tone ?? '').trim() &&
+      (profile.complexity ?? '').trim() &&
+      (profile.formality ?? '').trim() &&
+      (profile.energy ?? '').trim()
+  );
+}
+
 // Re-export the empty shape so consumers can use a single import for initial state.
 export { emptyBrandProfile };
