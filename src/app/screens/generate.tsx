@@ -103,7 +103,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
-  const [hasOutput, setHasOutput] = useState(!!reuseAsset);
+  const [hasOutput, setHasOutput] = useState(false);
   // Mocked generation feedback — shows "Generated {Label} ✓" in the output header
   // subtitle for a few seconds after the user clicks the Generate button.
   const [genStatus, setGenStatus] = useState<string | null>(null);
@@ -394,9 +394,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                   <div className="flex-1 overflow-y-auto p-8">
                     <AssetCard
                       type={
-                        outputType === 'hook-pack' ? 'hooks'
-                        : outputType === 'caption-draft' ? 'captions'
-                        : 'script'
+                        outputType === 'hook-pack' ? 'hooks' :
+                        outputType === 'caption-draft' ? 'captions' : 'script'
                       }
                       title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
                       subtitle={`${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`}
