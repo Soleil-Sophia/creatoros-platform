@@ -79,6 +79,7 @@ function hasRequestBrandProfile(profile: ReturnType<typeof requestBrandProfile>)
 async function requireAuth(c: any, next: any) {
   const apiKey = c.req.header("x-api-key");
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
+  // Frontend API-key auth expects VITE_API_KEY -> x-api-key to match FRONTEND_API_KEY and disables persistence.
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
     c.set("userId", "api-key:frontend");
     c.set("userEmail", "frontend@creatoros.internal");
