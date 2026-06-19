@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
-  isBrandProfileMeaningful,
   getBrandOSReadinessStatus,
 } from '../lib/brand-profile/storage';
 import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
@@ -24,7 +23,8 @@ type LocalSystemState = {
 
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
-  const connected = isBrandProfileMeaningful(profile);
+  const readinessStatus = getBrandOSReadinessStatus(profile);
+  const connected = readinessStatus === 'complete';
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>
     (a.createdAt ?? '') < (b.createdAt ?? '') ? 1 : -1
@@ -32,7 +32,7 @@ function readLocalSystemState(): LocalSystemState {
   const runs = listRuns();
   return {
     brandConnected: connected,
-    brandReadinessStatus: getBrandOSReadinessStatus(profile),
+    brandReadinessStatus: readinessStatus,
     brandVoiceLabel: connected ? profile?.voiceLabel ?? null : null,
     brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
     savedAssetCount: assets.length,

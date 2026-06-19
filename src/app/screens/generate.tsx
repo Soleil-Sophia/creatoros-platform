@@ -6,10 +6,15 @@ import { InputPanel } from '../components/generate/InputPanel';
 import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHeader';
 import { AssetCard } from '../components/generate/AssetCard';
 import { BrandVoiceChip } from '../components/shared';
-import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage';
+import {
+  readBrandProfile,
+  createVoiceLabel,
+  getBrandOSReadinessStatus,
+} from '../lib/brand-profile/service';
 import { OUTPUT_TYPES } from '../../data/contentos';
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
+import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 
 type SavedInputs = {
   offer: string;
@@ -73,16 +78,18 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
   // Brand profile (read-only handoff from BrandOS)
   const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
+  const [brandReadinessStatus, setBrandReadinessStatus] = useState<BrandOSReadinessStatus>('not_started');
 
   // Hydrate brand profile once on mount. Only seeds the tone default —
   // does not override the user's tone after they change it, and does not
   // override a tone that was just restored from a saved Library asset.
   useEffect(() => {
     const profile = readBrandProfile();
-    if (!profile) return;
-    if (profile.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
+    const readiness = getBrandOSReadinessStatus(profile);
+    setBrandReadinessStatus(readiness);
+    if (readiness === 'complete' && profile?.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
     if (restoredInputs) return; // saved-asset reuse owns the tone
-    if (profile.tone && profile.tone.trim()) {
+    if (profile?.tone && profile.tone.trim()) {
       setTone((current) => (current === 'Conversational' ? profile.tone : current));
     }
   }, []);
@@ -100,7 +107,10 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     setGenStatus(null);
   }, [outputType]);
 
+  const generationBlocked = brandReadinessStatus === 'not_started';
+
   const handleGenerate = () => {
+    if (generationBlocked) return;
     setHasOutput(true);
     const label =
       OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
@@ -300,8 +310,70 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
         <BrandVoiceChip
           voiceLabel={brandVoiceLabel}
           setupRoute="/app/brand-os/setup"
+          status={brandReadinessStatus}
         />
       </div>
+
+      {brandReadinessStatus === 'in_progress' && (
+        <div className="px-8 py-3">
+          <div
+            className="px-4 py-3 rounded-[10px] flex items-center justify-between gap-4"
+            style={{
+              background: 'rgba(255, 191, 222, 0.08)',
+              border: '1px solid rgba(255, 191, 222, 0.2)',
+            }}
+          >
+            <p style={{ fontSize: '13px', color: '#F4F3F8', lineHeight: 1.5 }}>
+              BrandOS is in progress. You can still generate content, but outputs may be less brand-aligned
+              until your profile is complete.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate('/app/brand-os/setup')}
+              className="px-3 py-1.5 rounded-[8px] whitespace-nowrap"
+              style={{
+                background: 'rgba(255, 191, 222, 0.14)',
+                border: '1px solid rgba(255, 191, 222, 0.28)',
+                color: '#FFBFDE',
+                fontSize: '12px',
+                fontWeight: 600,
+              }}
+            >
+              Finish BrandOS →
+            </button>
+          </div>
+        </div>
+      )}
+
+      {generationBlocked && (
+        <div className="px-8 py-3">
+          <div
+            className="px-4 py-3 rounded-[10px] flex items-center justify-between gap-4"
+            style={{
+              background: 'rgba(255, 255, 255, 0.04)',
+              border: '1px solid rgba(255, 255, 255, 0.12)',
+            }}
+          >
+            <p style={{ fontSize: '13px', color: '#B4B8C7', lineHeight: 1.5 }}>
+              Generation is locked until BrandOS is started. Set your tone and voice in BrandOS first.
+            </p>
+            <button
+              type="button"
+              onClick={() => navigate('/app/brand-os/setup')}
+              className="px-3 py-1.5 rounded-[8px] whitespace-nowrap"
+              style={{
+                background: 'rgba(231, 198, 243, 0.12)',
+                border: '1px solid rgba(231, 198, 243, 0.25)',
+                color: '#E7C6F3',
+                fontSize: '12px',
+                fontWeight: 600,
+              }}
+            >
+              Start BrandOS →
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Reuse Banner (Conditional) */}
       {showReuseBanner && reuseAsset && (
@@ -346,6 +418,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
               generationStatus={genStatus}
+              canGenerate={!generationBlocked}
             />
 
             {/* Output Workspace (Right 64%) */}
