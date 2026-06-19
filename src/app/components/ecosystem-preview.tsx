@@ -100,12 +100,12 @@ export function EcosystemPreview() {
                 opacity: module.available ? 1 : 0.7
               }}
             >
-              {/* Live indicator glow */}
+              {/* Live indicator glow - subtle */}
               {module.available && (
                 <div 
-                  className="absolute inset-0 rounded-[16px] opacity-20"
+                  className="absolute inset-0 rounded-[16px] opacity-10"
                   style={{ 
-                    background: `radial-gradient(circle at 50% 0%, ${module.accent}4D 0%, transparent 60%)`
+                    background: `radial-gradient(circle at 50% 0%, ${module.accent}33 0%, transparent 50%)`
                   }}
                 ></div>
               )}

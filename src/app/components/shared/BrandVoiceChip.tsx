@@ -6,21 +6,26 @@ type BrandVoiceChipProps = {
   status?: BrandProfileStatus;
   /** Optional route to BrandOS setup, shown only when no voice is connected. */
   setupRoute?: string;
-  status?: 'not_started' | 'in_progress' | 'complete';
 };
 
 /**
  * Passive, display-only indicator. Shows the saved BrandOS voice if present,
  * otherwise a subtle prompt to set one up. No interaction beyond an optional link.
  */
+<<<<<<< HEAD
 export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChipProps) {
   const hasVoice = status === 'complete' && Boolean(voiceLabel && voiceLabel.trim());
   const isIncomplete = status === 'in_progress';
+=======
+export function BrandVoiceChip({ voiceLabel, setupRoute }: BrandVoiceChipProps) {
+  const hasVoice = Boolean(voiceLabel && voiceLabel.trim());
+>>>>>>> origin/main
 
   return (
     <div
       className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full"
       style={{
+<<<<<<< HEAD
         background: hasVoice
           ? 'rgba(231, 198, 243, 0.08)'
           : isIncomplete
@@ -30,6 +35,11 @@ export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChi
           ? '1px solid rgba(231, 198, 243, 0.2)'
           : isIncomplete
           ? '1px solid rgba(255, 191, 222, 0.18)'
+=======
+        background: hasVoice ? 'rgba(231, 198, 243, 0.08)' : 'rgba(255, 255, 255, 0.04)',
+        border: hasVoice
+          ? '1px solid rgba(231, 198, 243, 0.2)'
+>>>>>>> origin/main
           : '1px solid rgba(255, 255, 255, 0.08)',
         fontSize: '12px',
         lineHeight: 1,
@@ -38,7 +48,11 @@ export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChi
       <span
         className="w-1.5 h-1.5 rounded-full"
         style={{
+<<<<<<< HEAD
           background: hasVoice ? '#E7C6F3' : isIncomplete ? '#FFBFDE' : '#8B8F9E',
+=======
+          background: hasVoice ? '#E7C6F3' : '#8B8F9E',
+>>>>>>> origin/main
           boxShadow: hasVoice ? '0 0 6px rgba(231, 198, 243, 0.5)' : 'none',
         }}
       />
@@ -55,6 +69,7 @@ export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChi
       </span>
       {hasVoice ? (
         <span style={{ color: '#F4F3F8', fontWeight: 500 }}>{voiceLabel}</span>
+<<<<<<< HEAD
       ) : isIncomplete ? (
         <>
           <span style={{ color: '#B4B8C7' }}>Incomplete</span>
@@ -75,6 +90,8 @@ export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChi
             </Link>
           )}
         </>
+=======
+>>>>>>> origin/main
       ) : (
         <>
           <span style={{ color: '#B4B8C7' }}>Not connected</span>

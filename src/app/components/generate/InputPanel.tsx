@@ -18,8 +18,11 @@ type InputPanelProps = {
   onGenerate: () => void;
   onClearAll: () => void;
   generationStatus?: string | null;
+<<<<<<< HEAD
   brandProfileStatus: BrandProfileStatus;
   onOpenBrandOS: () => void;
+=======
+>>>>>>> origin/main
 };
 
 const fieldStyle = {
@@ -77,8 +80,11 @@ export function InputPanel({
   onGenerate,
   onClearAll,
   generationStatus,
+<<<<<<< HEAD
   brandProfileStatus,
   onOpenBrandOS,
+=======
+>>>>>>> origin/main
 }: InputPanelProps) {
   const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
   const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
@@ -328,6 +334,7 @@ export function InputPanel({
         <button
           type="button"
           onClick={onGenerate}
+<<<<<<< HEAD
           disabled={brandProfileStatus === 'not_started'}
           aria-describedby={helperId}
           aria-disabled={brandProfileStatus === 'not_started'}
@@ -337,17 +344,21 @@ export function InputPanel({
               : undefined
           }
           className="w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3"
+=======
+          className="w-full py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden mb-3"
+>>>>>>> origin/main
           style={{
-            background: canGenerate
-              ? 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)'
-              : 'rgba(255, 255, 255, 0.08)',
-            color: canGenerate ? '#0E0F14' : '#8B8F9E',
+            background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
+            color: '#0E0F14',
             fontSize: '15px',
             fontWeight: 600,
             boxShadow:
               '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+<<<<<<< HEAD
             opacity: brandProfileStatus === 'not_started' ? 0.55 : 1,
             cursor: brandProfileStatus === 'not_started' ? 'not-allowed' : 'pointer',
+=======
+>>>>>>> origin/main
           }}
         >
           <div
