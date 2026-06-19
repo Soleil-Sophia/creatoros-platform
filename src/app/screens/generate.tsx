@@ -396,7 +396,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                       type={outputType}
                       title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
                       subtitle={`${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`}
-                      accentColor="rgba(255, 191, 222"
+                      accentColor="rgba(255, 191, 222, 1)"
                       icon={
                         <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
                           <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>

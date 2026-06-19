@@ -15,7 +15,7 @@ export type BrandProfileStatus = 'not_started' | 'in_progress' | 'complete';
 
 type RequiredBrandProfileField = (typeof REQUIRED_BRAND_PROFILE_FIELDS)[number];
 
-function isBrandProfileShape(value: unknown): value is Record<string, unknown> {
+function isPlainObject(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === 'object' && !Array.isArray(value));
 }
 
@@ -48,7 +48,7 @@ export function readBrandProfile(): BrandProfile | null {
     const raw = window.localStorage.getItem(BRAND_PROFILE_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!isBrandProfileShape(parsed)) return null;
+    if (!isPlainObject(parsed)) return null;
     const legacy = parsed as Record<string, unknown>;
     return {
       brandName: normalizeString(legacy.brandName),

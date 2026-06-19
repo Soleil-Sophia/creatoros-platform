@@ -242,12 +242,12 @@ export function DashboardPage() {
                 ) : state.brandStatus === 'in_progress' ? (
                   <>
                     <Clock size={14} style={{ color: '#FFBFDE' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In progress</span>
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
                   </>
                 ) : (
                   <>
                     <Lock size={14} style={{ color: '#8B8F9E' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not started</span>
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not Started</span>
                   </>
                 )}
               </div>
