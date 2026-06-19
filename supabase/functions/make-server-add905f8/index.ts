@@ -83,14 +83,6 @@ async function requireAuth(c: any, next: any) {
     c.set("userId", "api-key:frontend");
     c.set("userEmail", "frontend@creatoros.internal");
     c.set("allowPersistence", false);
-  // API key auth — lightweight alternative for frontend direct access.
-  // Set FRONTEND_API_KEY in Supabase Edge Function secrets and VITE_API_KEY in the
-  // frontend environment to enable this path without Supabase user sessions.
-  const apiKey = c.req.header("x-api-key");
-  const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
-  if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
-    c.set("userId", `api-key:${crypto.randomUUID()}`);
-    c.set("userEmail", "frontend@creatoros.internal");
     await next();
     return;
   }
@@ -143,20 +135,18 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
   if (!allowPersistence) {
     return c.json({ error: "Brand profile persistence requires user session auth" }, 403);
   }
-  const rawBody = await c.req.json().catch(() => null);
-  if (!isPlainObject(rawBody)) {
   const body = await getJsonObjectBody(c);
 
   if (!body) {
     return c.json({ error: "Request body must be a JSON object" }, 400);
   }
 
-  if (!normalizeText(rawBody.brandName, 180)) {
+  if (!normalizeText(body.brandName, 180)) {
     return c.json({ error: "brandName is required" }, 400);
   }
 
   await kv.set(`brand_profile:${userId}`, {
-    ...rawBody,
+    ...body,
     updatedAt: new Date().toISOString(),
   });
 
@@ -167,46 +157,51 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
   const allowPersistence = c.get("allowPersistence") === true;
-  const rawBody = await c.req.json().catch(() => null);
-  const body =
-    rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
-      ? (rawBody as Record<string, unknown>)
-      : {};
+  const body = await getJsonObjectBody(c);
+
+  if (!body) {
+    return c.json({ error: "Request body must be a JSON object" }, 400);
+  }
+
   const { offer, audience, platform, goal, tone, outputType } = body;
 
   if (!offer) return c.json({ error: "offer is required" }, 400);
 
   // Load brand profile if available — prefer KV-stored profile, fall back to
   // request-supplied voice fields (for users who have only configured BrandOS locally).
-  let brandProfile: any = null;
-  try { brandProfile = await kv.get(`brand_profile:${userId}`); } catch { /* ok */ }
-  if (!brandProfile || typeof brandProfile !== "object") {
-    // Fall back to any brand profile fields forwarded in the request body.
-    const requestVoice: Record<string, string | undefined> = {
-      brandName: typeof body.brandName === "string" ? body.brandName.trim() || undefined : undefined,
-      voiceTone: typeof body.voiceTone === "string" ? body.voiceTone.trim() || undefined : undefined,
-      voiceComplexity: typeof body.voiceComplexity === "string" ? body.voiceComplexity.trim() || undefined : undefined,
-      voiceFormality: typeof body.voiceFormality === "string" ? body.voiceFormality.trim() || undefined : undefined,
-      voiceEnergy: typeof body.voiceEnergy === "string" ? body.voiceEnergy.trim() || undefined : undefined,
-    };
-    brandProfile = Object.values(requestVoice).some((v) => v !== undefined) ? requestVoice : null;
+  let storedBrandProfile: ReturnType<typeof requestBrandProfile> | null = null;
+  try {
+    const rawProfile = await kv.get(`brand_profile:${userId}`);
+    if (isPlainObject(rawProfile)) {
+      const normalizedProfile = requestBrandProfile(rawProfile);
+      storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
+    }
+  } catch {
+    // ignore KV failures and fall back to request-supplied brand profile data
   }
+
+  const requestProfile = requestBrandProfile(body);
+  const effectiveBrandProfile =
+    storedBrandProfile ?? (hasRequestBrandProfile(requestProfile) ? requestProfile : null);
+  const voiceDos = effectiveBrandProfile?.voiceDos ?? [];
+  const voiceDonts = effectiveBrandProfile?.voiceDonts ?? [];
+  const messagingPillars = effectiveBrandProfile?.messagingPillars ?? [];
 
   // Build brand context block
   const brandContext = effectiveBrandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
-- Brand: ${getString(brandProfile.brandName)}
-- Mission: ${getString(brandProfile.mission)}
-- Voice Tone: ${getString(brandProfile.voiceTone)}
-- Voice Energy: ${getString(brandProfile.voiceEnergy)}
-- Complexity: ${getString(brandProfile.voiceComplexity)}
-- Formality: ${getString(brandProfile.voiceFormality)}
+- Brand: ${getString(effectiveBrandProfile.brandName)}
+- Mission: ${getString(effectiveBrandProfile.mission)}
+- Voice Tone: ${getString(effectiveBrandProfile.voiceTone)}
+- Voice Energy: ${getString(effectiveBrandProfile.voiceEnergy)}
+- Complexity: ${getString(effectiveBrandProfile.voiceComplexity)}
+- Formality: ${getString(effectiveBrandProfile.voiceFormality)}
 - Do's: ${voiceDos.join(", ")}
 - Don'ts: ${voiceDonts.join(", ")}
 - Messaging Pillars: ${messagingPillars.join(", ")}
-- Target Customer: ${getString(brandProfile.targetCustomer)}
-- Transformation Promise: ${getString(brandProfile.transformation)}
+- Target Customer: ${getString(effectiveBrandProfile.targetCustomer)}
+- Transformation Promise: ${getString(effectiveBrandProfile.transformation)}
 
 Every output MUST reflect this brand identity. No generic content.` : "";
 
@@ -237,7 +232,7 @@ Rules:
 - 5 script sections for a 60–90 sec video or long post
 - 3 platform-specific captions: Instagram (emotional), LinkedIn (professional), X (punchy ≤280 chars)
 - Everything must be specific to the offer — no generic filler
-- ${brandProfile ? `Mirror ${getString(brandProfile.brandName)}'s exact voice` : "Be concrete and specific"}`;
+- ${effectiveBrandProfile ? `Mirror ${getString(effectiveBrandProfile.brandName)}'s exact voice` : "Be concrete and specific"}`;
 
   // OpenAI call
   const openaiKey = Deno.env.get("OPENAI_API_KEY");
