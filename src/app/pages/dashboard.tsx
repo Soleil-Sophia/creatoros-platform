@@ -5,6 +5,8 @@ import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
   isBrandProfileComplete,
+  createVoiceLabel,
+  getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
@@ -22,6 +24,7 @@ type LocalSystemState = {
 
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
+  const brandStatus = getBrandProfileStatus(profile);
   const connected = isBrandProfileComplete(profile);
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>

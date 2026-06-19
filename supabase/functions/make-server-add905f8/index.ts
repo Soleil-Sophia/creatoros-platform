@@ -39,12 +39,13 @@ app.use("/*", cors({
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
   // API key auth — lightweight alternative for frontend direct access.
-  // Set FRONTEND_API_KEY in Supabase Edge Function secrets and VITE_API_KEY in the
-  // frontend environment to enable this path without Supabase user sessions.
+  // Set FRONTEND_API_KEY in Supabase Edge Function secrets to enable this path
+  // without Supabase user sessions. Do NOT use a VITE_* variable for this secret
+  // on the frontend — VITE_* values are bundled into client JS and are public.
   const apiKey = c.req.header("x-api-key");
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
-    c.set("userId", `api-key:${crypto.randomUUID()}`);
+    c.set("userId", "api-key:frontend");
     c.set("userEmail", "frontend@creatoros.internal");
     await next();
     return;
