@@ -89,7 +89,7 @@ export function getBrandOSReadinessStatus(
 ): BrandOSReadinessStatus {
   if (!profile) return 'not_started';
   const fields = [profile.tone, profile.complexity, profile.formality, profile.energy];
-  const filled = fields.filter((f) => f.trim().length > 0).length;
+  const filled = fields.filter((f) => f?.trim().length > 0).length;
   if (filled === 0) return 'not_started';
   if (filled === fields.length) return 'complete';
   return 'in_progress';
