@@ -26,7 +26,6 @@ function normalizeText(value: unknown, maxLength = 1200): string | undefined {
 function requestBrandProfile(body: Record<string, unknown>) {
   return {
     brandName: normalizeText(body.brandName, 180),
-    voiceLabel: normalizeText(body.voiceLabel, 180),
     voiceTone: normalizeText(body.voiceTone, 180),
     voiceComplexity: normalizeText(body.voiceComplexity, 180),
     voiceFormality: normalizeText(body.voiceFormality, 180),
@@ -148,17 +147,17 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const brandContext = effectiveBrandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
-${effectiveBrandProfile.brandName ? `- Brand: ${effectiveBrandProfile.brandName}
-` : ''}- Mission: ${effectiveBrandProfile.mission ?? ''}
-- Voice Tone: ${effectiveBrandProfile.voiceTone ?? ''}
-- Voice Energy: ${effectiveBrandProfile.voiceEnergy ?? ''}
-- Complexity: ${effectiveBrandProfile.voiceComplexity ?? ''}
-- Formality: ${effectiveBrandProfile.voiceFormality ?? ''}
+- Brand: ${effectiveBrandProfile.brandName}
+- Mission: ${effectiveBrandProfile.mission}
+- Voice Tone: ${effectiveBrandProfile.voiceTone}
+- Voice Energy: ${effectiveBrandProfile.voiceEnergy}
+- Complexity: ${effectiveBrandProfile.voiceComplexity}
+- Formality: ${effectiveBrandProfile.voiceFormality}
 - Do's: ${(effectiveBrandProfile.voiceDos || []).join(", ")}
 - Don'ts: ${(effectiveBrandProfile.voiceDonts || []).join(", ")}
 - Messaging Pillars: ${(effectiveBrandProfile.messagingPillars || []).filter(Boolean).join(", ")}
-- Target Customer: ${effectiveBrandProfile.targetCustomer ?? ''}
-- Transformation Promise: ${effectiveBrandProfile.transformation ?? ''}
+- Target Customer: ${effectiveBrandProfile.targetCustomer}
+- Transformation Promise: ${effectiveBrandProfile.transformation}
 
 Every output MUST reflect this brand identity. No generic content.` : "";
 
@@ -189,7 +188,7 @@ Rules:
 - 5 script sections for a 60–90 sec video or long post
 - 3 platform-specific captions: Instagram (emotional), LinkedIn (professional), X (punchy ≤280 chars)
 - Everything must be specific to the offer — no generic filler
-- ${effectiveBrandProfile?.brandName ? `Mirror ${effectiveBrandProfile.brandName}'s exact voice` : "Be concrete and specific"}`;
+- ${effectiveBrandProfile ? `Mirror ${effectiveBrandProfile.brandName}'s exact voice` : "Be concrete and specific"}`;
 
   // OpenAI call
   const openaiKey = Deno.env.get("OPENAI_API_KEY");

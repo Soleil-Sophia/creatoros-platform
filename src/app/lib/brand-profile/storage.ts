@@ -14,54 +14,23 @@ function isBrandProfileShape(value: unknown): value is BrandProfile {
   );
 }
 
-function isLegacyBrandProfileShape(value: unknown): boolean {
-  if (!value || typeof value !== 'object') return false;
-  const v = value as Record<string, unknown>;
-  return (
-    typeof v.voiceTone === 'string' &&
-    typeof v.voiceComplexity === 'string' &&
-    typeof v.voiceFormality === 'string' &&
-    typeof v.voiceEnergy === 'string'
-  );
-}
-
 export function readBrandProfile(): BrandProfile | null {
   if (typeof window === 'undefined') return null;
   try {
     const raw = window.localStorage.getItem(BRAND_PROFILE_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (isBrandProfileShape(parsed)) return parsed;
-    // Coerce legacy shape (voiceTone/voiceComplexity/voiceFormality/voiceEnergy) into
-    // the current shape so existing users keep their BrandOS readiness after deploy.
-    if (isLegacyBrandProfileShape(parsed)) {
-      const legacy = parsed as Record<string, unknown>;
-      return {
-        tone: legacy.voiceTone as string,
-        complexity: legacy.voiceComplexity as string,
-        formality: legacy.voiceFormality as string,
-        energy: legacy.voiceEnergy as string,
-        ...(typeof legacy.voiceLabel === 'string' ? { voiceLabel: legacy.voiceLabel } : {}),
-        ...(typeof legacy.updatedAt === 'string' ? { updatedAt: legacy.updatedAt } : {}),
-      };
-    }
-    return null;
+    if (!isBrandProfileShape(parsed)) return null;
+    return parsed;
   } catch {
     return null;
   }
 }
 
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
-  const trimmed: BrandProfile = {
-    ...profile,
-    tone: profile.tone.trim(),
-    complexity: profile.complexity.trim(),
-    formality: profile.formality.trim(),
-    energy: profile.energy.trim(),
-  };
   const next: BrandProfile = {
-    ...trimmed,
-    voiceLabel: trimmed.voiceLabel ?? createVoiceLabel(trimmed),
+    ...profile,
+    voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
     updatedAt: new Date().toISOString(),
   };
   if (typeof window === 'undefined') return next;

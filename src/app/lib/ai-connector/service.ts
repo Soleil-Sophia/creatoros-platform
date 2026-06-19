@@ -14,7 +14,8 @@
 import type { GenerateContentParams, GenerateContentResult } from './types';
 
 const FUNCTION_URL =
-  ((import.meta as Record<string, any>).env?.VITE_SUPABASE_FUNCTION_URL ?? '') as string;
+  (import.meta as Record<string, any>).env?.VITE_SUPABASE_FUNCTION_URL ||
+  'https://ylulrtnvohxpriyucyqw.supabase.co/functions/v1/make-server-add905f8';
 
 const API_KEY = (import.meta as Record<string, any>).env?.VITE_API_KEY || '';
 
@@ -23,7 +24,7 @@ const API_KEY = (import.meta as Record<string, any>).env?.VITE_API_KEY || '';
  * When false, `generateContent` will throw an informative error.
  */
 export function isConnectorConfigured(): boolean {
-  return API_KEY.trim().length > 0 && FUNCTION_URL.trim().length > 0;
+  return API_KEY.trim().length > 0;
 }
 
 /**
@@ -40,7 +41,7 @@ export async function generateContent(
 ): Promise<GenerateContentResult> {
   if (!isConnectorConfigured()) {
     throw new Error(
-      'AI connector is not configured. Set VITE_API_KEY and VITE_SUPABASE_FUNCTION_URL in your environment to enable generation.',
+      'AI connector is not configured. Set VITE_API_KEY in your environment to enable generation.',
     );
   }
 
@@ -62,7 +63,7 @@ export async function generateContent(
     payload.voiceFormality = params.brandProfile.formality;
     payload.voiceEnergy = params.brandProfile.energy;
     if (params.brandProfile.voiceLabel) {
-      payload.voiceLabel = params.brandProfile.voiceLabel;
+      payload.brandName = params.brandProfile.voiceLabel;
     }
   }
 
