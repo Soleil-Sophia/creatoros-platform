@@ -6,18 +6,10 @@ import { InputPanel } from '../components/generate/InputPanel';
 import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHeader';
 import { AssetCard } from '../components/generate/AssetCard';
 import { BrandVoiceChip } from '../components/shared';
-import {
-  readBrandProfile,
-  createVoiceLabel,
-  getBrandOSReadinessStatus,
-} from '../lib/brand-profile/service';
+import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage';
 import { OUTPUT_TYPES } from '../../data/contentos';
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
-import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
-import { generateContent, isConnectorConfigured } from '../lib/ai-connector/service';
-import type { GenerateContentResult } from '../lib/ai-connector/types';
-import { addGenerationHistoryEntry } from '../lib/ai-connector/history';
 
 type SavedInputs = {
   offer: string;
@@ -81,56 +73,26 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
   // Brand profile (read-only handoff from BrandOS)
   const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
-  const [brandReadinessStatus, setBrandReadinessStatus] = useState<BrandOSReadinessStatus>('not_started');
 
-  const syncBrandReadiness = () => {
-    const profile = readBrandProfile();
-    const readiness = getBrandOSReadinessStatus(profile);
-    setBrandReadinessStatus(readiness);
-    if (readiness === 'complete') {
-      const nextLabel = profile?.voiceLabel?.trim() || (profile ? createVoiceLabel(profile) : '');
-      setBrandVoiceLabel(nextLabel || null);
-    } else {
-      setBrandVoiceLabel(null);
-    }
-  };
-
-  // Keep readiness and voice label in sync with the current profile state.
-  useEffect(() => {
-    syncBrandReadiness();
-  }, [location.key]);
-
-  useEffect(() => {
-    const refresh = () => syncBrandReadiness();
-    window.addEventListener('focus', refresh);
-    window.addEventListener('storage', refresh);
-    return () => {
-      window.removeEventListener('focus', refresh);
-      window.removeEventListener('storage', refresh);
-    };
-  }, []);
-
-  // Hydrate tone once on mount. Does not override restored input tone.
+  // Hydrate brand profile once on mount. Only seeds the tone default —
+  // does not override the user's tone after they change it, and does not
+  // override a tone that was just restored from a saved Library asset.
   useEffect(() => {
     const profile = readBrandProfile();
+    if (!profile) return;
+    if (profile.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
     if (restoredInputs) return; // saved-asset reuse owns the tone
-    if (profile?.tone && profile.tone.trim()) {
+    if (profile.tone && profile.tone.trim()) {
       setTone((current) => (current === 'Conversational' ? profile.tone : current));
     }
   }, []);
 
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
-  // hasOutput is true once a generation completes successfully.
-  const [hasOutput, setHasOutput] = useState(false);
-  // genStatus shows a brief "Generated X ✓" confirmation in the output header.
+  const [hasOutput, setHasOutput] = useState(true); // TODO: Set based on actual generation state
+  // Mocked generation feedback — shows "Generated {Label} ✓" in the output header
+  // subtitle for a few seconds after the user clicks the Generate button.
   const [genStatus, setGenStatus] = useState<string | null>(null);
-  // genLoading is true while the AI call is in flight.
-  const [genLoading, setGenLoading] = useState(false);
-  // genError holds the last generation error message, if any.
-  const [genError, setGenError] = useState<string | null>(null);
-  // generatedOutput holds the last successful AI response.
-  const [generatedOutput, setGeneratedOutput] = useState<GenerateContentResult | null>(null);
 
   // Clear the generated banner if the user switches output type so the
   // confirmation never refers to a type that's no longer being shown.
@@ -138,105 +100,16 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     setGenStatus(null);
   }, [outputType]);
 
-  // Derive display items from the AI response based on the selected output type.
-  // Falls back to the mock data when no real generation has occurred yet.
-  function getDisplayItems(type: string, generated: GenerateContentResult | null): string[] {
-    if (generated) {
-      switch (type) {
-        case 'hook-pack':
-          if (generated.hooks.length > 0) return generated.hooks;
-          break;
-        case 'short-script':
-          if (generated.scripts.length > 0) return generated.scripts;
-          break;
-        case 'caption-draft':
-          if (generated.captions.length > 0) return generated.captions;
-          break;
-        case 'content-brief': {
-          const items = [...generated.hooks.slice(0, 2), ...generated.scripts];
-          if (items.length > 0) return items;
-          break;
-        }
-        case 'repurposing-plan': {
-          const items = [...generated.captions, ...generated.hooks.slice(0, 2)];
-          if (items.length > 0) return items;
-          break;
-        }
-      }
-    }
-    return OUTPUT_MOCK[type]?.items ?? [];
-  }
-
-  const generationBlocked = brandReadinessStatus === 'not_started';
-
-  const handleGenerate = async () => {
-    if (generationBlocked || genLoading) return;
-
-    setGenLoading(true);
-    setGenError(null);
-    setGeneratedOutput(null);
-    setHasOutput(false);
-
-    const profile = readBrandProfile();
-    const brandProfilePayload = profile
-      ? {
-          tone: profile.tone,
-          complexity: profile.complexity,
-          formality: profile.formality,
-          energy: profile.energy,
-          voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
-        }
-      : undefined;
-
-    try {
-      const result = await generateContent({
-        offer,
-        audience,
-        platform,
-        goal,
-        tone,
-        outputType,
-        brandProfile: brandProfilePayload,
-      });
-
-      setGeneratedOutput(result);
-      setHasOutput(true);
-
-      const label = OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
-      setGenStatus(`Generated ${label} ✓`);
-      window.setTimeout(() => {
-        setGenStatus((current) =>
-          current === `Generated ${label} ✓` ? null : current,
-        );
-      }, 2500);
-
-      // Track in generation history.
-      addGenerationHistoryEntry({
-        id: generateAssetId(),
-        timestamp: new Date().toISOString(),
-        inputs: { offer, audience, platform, goal, tone, outputType },
-        itemCount:
-          result.hooks.length + result.scripts.length + result.captions.length,
-        success: true,
-      });
-    } catch (err) {
-      const message =
-        err instanceof Error ? err.message : 'Generation failed. Please try again.';
-      setGenError(message);
-      setGeneratedOutput(null);
-      setHasOutput(false);
-
-      // Track failed attempt in history too.
-      addGenerationHistoryEntry({
-        id: generateAssetId(),
-        timestamp: new Date().toISOString(),
-        inputs: { offer, audience, platform, goal, tone, outputType },
-        itemCount: 0,
-        success: false,
-      });
-    } finally {
-      setGenLoading(false);
-    }
+  const handleGenerate = () => {
+    setHasOutput(true);
+    const label =
+      OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
+    setGenStatus(`Generated ${label} ✓`);
+    window.setTimeout(() => {
+      setGenStatus((current) =>
+        current === `Generated ${label} ✓` ? null : current
+      );
+    }, 2500);
   };
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveResetTimerRef = useRef<number | null>(null);
@@ -258,9 +131,6 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     setTone('Conversational');
     setOutputType('hook-pack');
     setShowReuseBanner(false);
-    setGeneratedOutput(null);
-    setHasOutput(false);
-    setGenError(null);
     navigate('/app/content-os/generate', { replace: true, state: {} });
   };
   
@@ -283,13 +153,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     // this state, so a rapid double-click (or one click on each button)
     // only writes a single asset per save cycle.
     if (saveStatus !== 'idle') return;
-
-    // Save only real generated output items.
-    if (!generatedOutput) return;
-    const items = getDisplayItems(outputType, generatedOutput);
     const mock = OUTPUT_MOCK[outputType];
-    if (!items.length) return;
-
+    if (!mock) return;
     setSaveStatus('saving');
 
     const profile = readBrandProfile();
@@ -311,7 +176,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
     // Build a more useful title: "<Type Label> — <topic/offer>".
     // Falls back to the mock header suffix, then to just the type label.
-    const headerParts = (mock?.header ?? '').split(' — ');
+    const headerParts = (mock.header ?? '').split(' — ');
     const typeLabel = headerParts[0]?.trim() || outputType;
     const offerSuffix = offer.trim();
     const fallbackSuffix = headerParts.slice(1).join(' — ').trim();
@@ -319,22 +184,20 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     const rawTitle = titleSuffix ? `${typeLabel} — ${titleSuffix}` : typeLabel;
     const title = rawTitle.length > 80 ? `${rawTitle.slice(0, 77).trimEnd()}…` : rawTitle;
 
-    const displayItems = items;
-
     const asset: SavedContentAsset = {
       id: generateAssetId(),
       type: outputType,
       title,
-      preview: displayItems[0] ?? '',
+      preview: mock.items[0] ?? '',
       platform,
       campaign: 'Generated',
       brandVoice,
       date: nowIso.slice(0, 10),
-      variants: displayItems.length,
+      variants: mock.items.length,
       status: 'ready',
       source: 'generated',
       createdAt: nowIso,
-      items: displayItems,
+      items: mock.items,
       inputs: { offer, audience, goal, tone, outputType },
       brandVoiceSnapshot,
     };
@@ -437,70 +300,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
         <BrandVoiceChip
           voiceLabel={brandVoiceLabel}
           setupRoute="/app/brand-os/setup"
-          status={brandReadinessStatus}
         />
       </div>
-
-      {brandReadinessStatus === 'in_progress' && (
-        <div className="px-8 py-3">
-          <div
-            className="px-4 py-3 rounded-[10px] flex items-center justify-between gap-4"
-            style={{
-              background: 'rgba(255, 191, 222, 0.08)',
-              border: '1px solid rgba(255, 191, 222, 0.2)',
-            }}
-          >
-            <p style={{ fontSize: '13px', color: '#F4F3F8', lineHeight: 1.5 }}>
-              BrandOS is in progress. You can still generate content, but outputs may be less brand-aligned
-              until your profile is complete.
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate('/app/brand-os/setup')}
-              className="px-3 py-1.5 rounded-[8px] whitespace-nowrap"
-              style={{
-                background: 'rgba(255, 191, 222, 0.14)',
-                border: '1px solid rgba(255, 191, 222, 0.28)',
-                color: '#FFBFDE',
-                fontSize: '12px',
-                fontWeight: 600,
-              }}
-            >
-              Finish BrandOS →
-            </button>
-          </div>
-        </div>
-      )}
-
-      {generationBlocked && (
-        <div className="px-8 py-3">
-          <div
-            className="px-4 py-3 rounded-[10px] flex items-center justify-between gap-4"
-            style={{
-              background: 'rgba(255, 255, 255, 0.04)',
-              border: '1px solid rgba(255, 255, 255, 0.12)',
-            }}
-          >
-            <p style={{ fontSize: '13px', color: '#B4B8C7', lineHeight: 1.5 }}>
-              Generation is locked until BrandOS is started. Set your tone and voice in BrandOS first.
-            </p>
-            <button
-              type="button"
-              onClick={() => navigate('/app/brand-os/setup')}
-              className="px-3 py-1.5 rounded-[8px] whitespace-nowrap"
-              style={{
-                background: 'rgba(231, 198, 243, 0.12)',
-                border: '1px solid rgba(231, 198, 243, 0.25)',
-                color: '#E7C6F3',
-                fontSize: '12px',
-                fontWeight: 600,
-              }}
-            >
-              Start BrandOS →
-            </button>
-          </div>
-        </div>
-      )}
 
       {/* Reuse Banner (Conditional) */}
       {showReuseBanner && reuseAsset && (
@@ -544,8 +345,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onOutputTypeChange={setOutputType}
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
-              generationStatus={genLoading ? 'Generating…' : genStatus}
-              canGenerate={!generationBlocked && !genLoading}
+              generationStatus={genStatus}
             />
 
             {/* Output Workspace (Right 64%) */}
@@ -553,83 +353,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               className="flex-1 flex flex-col relative"
               style={{ background: '#0E0F14' }}
             >
-              {genLoading ? (
-                /* Loading State — shown while AI generation is in flight */
-                <div className="flex-1 flex items-center justify-center p-8">
-                  <div className="text-center max-w-md">
-                    <div
-                      className="w-20 h-20 rounded-[16px] flex items-center justify-center mx-auto mb-6"
-                      style={{
-                        background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.15), rgba(218, 191, 255, 0.1))',
-                        border: '1px solid rgba(255, 191, 222, 0.2)',
-                      }}
-                    >
-                      <svg
-                        className="animate-spin"
-                        width="32"
-                        height="32"
-                        viewBox="0 0 32 32"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <circle cx="16" cy="16" r="12" stroke="rgba(255,191,222,0.2)" strokeWidth="3" />
-                        <path
-                          d="M16 4a12 12 0 0 1 12 12"
-                          stroke="#FFBFDE"
-                          strokeWidth="3"
-                          strokeLinecap="round"
-                        />
-                      </svg>
-                    </div>
-                    <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
-                      Generating Content
-                    </h3>
-                    <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.6 }}>
-                      {brandReadinessStatus === 'complete'
-                        ? 'Applying your Brand Voice to the AI prompt…'
-                        : 'Building your content suite with AI…'}
-                    </p>
-                  </div>
-                </div>
-              ) : genError ? (
-                /* Error State */
-                <div className="flex-1 flex items-center justify-center p-8">
-                  <div className="text-center max-w-md">
-                    <div
-                      className="w-20 h-20 rounded-[16px] flex items-center justify-center mx-auto mb-6"
-                      style={{
-                        background: 'rgba(255, 100, 100, 0.08)',
-                        border: '1px solid rgba(255, 100, 100, 0.2)',
-                      }}
-                    >
-                      <svg width="32" height="32" fill="none" viewBox="0 0 32 32">
-                        <path d="M16 10v8M16 22v2" stroke="#FF8080" strokeWidth="2.5" strokeLinecap="round" />
-                        <circle cx="16" cy="16" r="12" stroke="#FF8080" strokeWidth="2" />
-                      </svg>
-                    </div>
-                    <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
-                      Generation Failed
-                    </h3>
-                    <p style={{ fontSize: '13px', color: '#8B8F9E', lineHeight: 1.6, marginBottom: '20px' }}>
-                      {genError}
-                    </p>
-                    <button
-                      type="button"
-                      onClick={handleGenerate}
-                      className="px-5 py-2 rounded-[10px] transition-all hover:opacity-90"
-                      style={{
-                        background: 'rgba(255, 191, 222, 0.12)',
-                        border: '1px solid rgba(255, 191, 222, 0.25)',
-                        color: '#FFBFDE',
-                        fontSize: '13px',
-                        fontWeight: 600,
-                      }}
-                    >
-                      Try Again
-                    </button>
-                  </div>
-                </div>
-              ) : hasOutput ? (
+              {hasOutput ? (
                 <>
                   {/* Output Header */}
                   <OutputWorkspaceHeader
@@ -651,41 +375,22 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
                   {/* Asset Output */}
                   <div className="flex-1 overflow-y-auto p-8">
-                    {(() => {
-                      const assetTypeMap: Record<string, 'hooks' | 'script' | 'captions'> = {
-                        'hook-pack': 'hooks',
-                        'short-script': 'script',
-                        'caption-draft': 'captions',
-                        'content-brief': 'hooks',
-                        'repurposing-plan': 'captions',
-                      };
-                      const cardType = assetTypeMap[outputType] ?? 'hooks';
-                      const displayItems = getDisplayItems(outputType, generatedOutput);
-                      const wordCount = displayItems.reduce((acc, s) => acc + s.split(/\s+/).filter(Boolean).length, 0);
-                      const count = displayItems.length;
-                      return (
-                        <AssetCard
-                          type={cardType}
-                          title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
-                          subtitle={
-                            count > 0
-                              ? `${count} ${count === 1 ? 'item' : 'items'} · ready to deploy`
-                              : `${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`
-                          }
-                          accentColor="#FFBFDE"
-                          icon={
-                            <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
-                              <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                              <path d="M11 3l3 3m0 0l-3 3m3-3H8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                            </svg>
-                          }
-                          items={displayItems}
-                          wordCount={wordCount}
-                          onSave={handleSaveToLibrary}
-                          saveStatus={saveStatus}
-                        />
-                      );
-                    })()}
+                    <AssetCard
+                      type={outputType}
+                      title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
+                      subtitle={`${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`}
+                      accentColor="rgba(255, 191, 222"
+                      icon={
+                        <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
+                          <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M11 3l3 3m0 0l-3 3m3-3H8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      }
+                      items={OUTPUT_MOCK[outputType]?.items ?? []}
+                      wordCount={OUTPUT_MOCK[outputType]?.wordCount ?? 0}
+                      onSave={handleSaveToLibrary}
+                      saveStatus={saveStatus}
+                    />
                   </div>
                 </>
               ) : (
@@ -709,27 +414,6 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                     <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.6, marginBottom: '24px' }}>
                       Fill in your offer, audience, and platform details, then hit Generate to create your content suite.
                     </p>
-                    {!isConnectorConfigured() && (
-                      <div
-                        className="mb-4 px-4 py-3 rounded-[10px] text-left"
-                        style={{
-                          background: 'rgba(218, 191, 255, 0.06)',
-                          border: '1px solid rgba(218, 191, 255, 0.18)',
-                        }}
-                      >
-                        <p style={{ fontSize: '12px', color: '#DABFFF', lineHeight: 1.6 }}>
-                          <strong>Configure AI Connector</strong> — Set{' '}
-                          <code style={{ fontSize: '11px', background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '4px' }}>
-                            VITE_API_KEY
-                          </code>{' '}
-                          and{' '}
-                          <code style={{ fontSize: '11px', background: 'rgba(255,255,255,0.08)', padding: '1px 4px', borderRadius: '4px' }}>
-                            VITE_SUPABASE_FUNCTION_URL
-                          </code>{' '}
-                          to enable live AI generation.
-                        </p>
-                      </div>
-                    )}
                     <div 
                       className="inline-block px-4 py-2 rounded-lg"
                       style={{ 
