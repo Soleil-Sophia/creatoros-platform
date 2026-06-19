@@ -186,10 +186,10 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     const profile = readBrandProfile();
     const brandProfilePayload = profile
       ? {
-          tone: profile.tone,
-          complexity: profile.complexity,
-          formality: profile.formality,
-          energy: profile.energy,
+          tone: profile.voiceTone,
+          complexity: profile.voiceComplexity,
+          formality: profile.voiceFormality,
+          energy: profile.voiceEnergy,
           voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
         }
       : undefined;
