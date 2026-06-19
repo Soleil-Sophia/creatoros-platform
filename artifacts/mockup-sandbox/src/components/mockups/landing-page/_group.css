@@ -1,0 +1,38 @@
+/* CreatorOS theme tokens — scoped to this mockup group */
+/* Fonts loaded non-blocking for this group */
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  --deep-bg: #0E0F14;
+  --mid-bg: #171923;
+  --elevated-surface: #1F2230;
+  --soft-elevated: #262A38;
+  --primary-text: #F4F3F8;
+  --secondary-text: #B4B8C7;
+
+  --pastel-pink: #FFBFDE;
+  --soft-lilac: #DABFFF;
+  --pink-lilac-blend: #E7C6F3;
+  --accent-graphite: #3A4054;
+
+  --font-heading: 'Manrope', sans-serif;
+  --font-body: 'Inter', sans-serif;
+
+  --radius-hero: 20px;
+  --radius-card: 16px;
+  --radius-inner: 12px;
+  --radius-mini: 8px;
+
+  --background: var(--deep-bg);
+  --foreground: var(--primary-text);
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--deep-bg);
+  color: var(--primary-text);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+}

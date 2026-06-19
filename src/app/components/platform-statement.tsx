@@ -39,7 +39,7 @@ export function PlatformStatement() {
                   letterSpacing: '-0.01em'
                 }}
               >
-                CreatorOS is modular infrastructure for professional creators
+                CreatorOS is a modular system for creators who need structure, reuse, and operational clarity.
               </h2>
             </div>
 
@@ -70,26 +70,29 @@ export function PlatformStatement() {
                   </svg>
                 </div>
                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8' }}>
-                  Not all-in-one
+                  Modular by design
                 </h3>
                 <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7' }}>
-                  Modular platform built around active infrastructure
+                  CreatorOS is built as a modular system — each module solves a specific workflow challenge.
                 </p>
               </div>
 
               <div className="text-center space-y-4">
-                <div className="w-12 h-12 rounded-lg mx-auto flex items-center justify-center" style={{ background: 'rgba(218, 191, 255, 0.1)', border: '1px solid rgba(218, 191, 255, 0.2)' }}>
-                  <svg width="24" height="24" fill="none" viewBox="0 0 24 24">
-                    <circle cx="12" cy="12" r="3" stroke="#DABFFF" strokeWidth="2"/>
-                    <path d="M12 1v4m0 14v4M23 12h-4M5 12H1" stroke="#DABFFF" strokeWidth="2" strokeLinecap="round"/>
-                    <path d="M20.49 4.93l-2.83 2.83m-11.32 11.31L3.51 21.9M20.49 21.9l-2.83-2.83M6.34 7.76L3.51 4.93" stroke="#DABFFF" strokeWidth="2" strokeLinecap="round"/>
-                  </svg>
+                <div 
+                  className="w-12 h-12 rounded-lg flex items-center justify-center mx-auto" 
+                  style={{ 
+                    background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
+                    border: '1px solid rgba(255, 255, 255, 0.08)',
+                    boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)'
+                  }}
+                >
+                  <div className="w-3 h-3 rounded" style={{ border: '2px solid #DABFFF' }}></div>
                 </div>
                 <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8' }}>
                   Content OS first
                 </h3>
                 <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7' }}>
-                  Transform expertise into structured, reusable content
+                  Start with reusable content systems, then expand over time.
                 </p>
               </div>
             </div>

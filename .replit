@@ -1,0 +1,97 @@
+modules = ["nodejs-20", "web", "python-3.11"]
+[agent]
+expertMode = true
+integrations = ["github:1.0.0"]
+
+[nix]
+channel = "stable-25_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Start application"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "creatoros-site"
+
+[[workflows.workflow]]
+name = "Start application"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "console"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 3000
+
+[[workflows.workflow]]
+name = "creatoros-site"
+author = "agent"
+
+[workflows.workflow.metadata]
+outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "cd creatoros-site && npm run dev"
+waitForPort = 5000
+
+[[ports]]
+localPort = 3000
+externalPort = 3003
+
+[[ports]]
+localPort = 4173
+externalPort = 5000
+
+[[ports]]
+localPort = 5000
+externalPort = 80
+
+[[ports]]
+localPort = 5001
+externalPort = 3000
+
+[[ports]]
+localPort = 5002
+externalPort = 3001
+
+[[ports]]
+localPort = 8099
+externalPort = 8099
+
+[[ports]]
+localPort = 23636
+externalPort = 3002
+
+[[ports]]
+localPort = 23637
+externalPort = 4200
+
+[[ports]]
+localPort = 23638
+externalPort = 5173
+
+[deployment]
+deploymentTarget = "static"
+build = ["npm", "run", "build"]
+publicDir = "dist"
+
+[userenv]
+
+[userenv.shared]
+VITE_SUPABASE_PROJECT_ID = "ylulrtnvohxpriyucyqw"
+VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlsdWxydG52b2h4cHJpeXVjeXF3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQ3MDU3NjMsImV4cCI6MjA5MDI4MTc2M30.nIQ8I9OBTC3QxoPeMZ9dDP9WuYDA6zgRaoM6x4BpZms"
+
+[userenv.production]
+VITE_PLATFORM_URL = "https://creatorospage.replit.app/platform"

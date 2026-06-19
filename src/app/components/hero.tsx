@@ -55,7 +55,7 @@ export function Hero() {
                   letterSpacing: '0.15em'
                 }}
               >
-                Creator Infrastructure / Module 01
+                Modular Creator Platform
               </span>
             </div>
 
@@ -70,19 +70,20 @@ export function Hero() {
                 letterSpacing: '-0.02em'
               }}
             >
-              From offer to output — without the content chaos.
+              Build your creator workflow from standalone modules.
             </h1>
 
             {/* Subheadline */}
-            <p 
-              className="max-w-xl" 
-              style={{ 
-                fontSize: '18px', 
-                lineHeight: 1.6,
+            <p
+              style={{
+                fontSize: '1.125rem',
+                lineHeight: '1.75rem',
+                maxWidth: '42rem',
+                margin: '0 auto',
                 color: '#B4B8C7'
               }}
             >
-              Content OS is the first module inside CreatorOS — a structured system for turning ideas, offers and expertise into reusable content workflows.
+              Brand OS is the first module inside CreatorOS — defining voice, identity, and messaging foundation before any content is created.
             </p>
 
             {/* CTA Buttons */}

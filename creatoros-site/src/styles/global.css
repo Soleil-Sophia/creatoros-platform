@@ -1,0 +1,291 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #08090C;
+  --bg-2: #101116;
+  --bg-3: #161821;
+  --bg-4: #1F2230;
+  --text: #F4F5F8;
+  --text-2: #B4B8C7;
+  --text-3: #8A8F9E;
+  --silver: #E8EAED;
+  --graphite: #2A2D3C;
+  --silver-glow: rgba(232, 234, 237, 0.15);
+  --pink: #FFBFDE;
+  --lilac: #DABFFF;
+  --border: rgba(255, 255, 255, 0.08);
+  --border-2: rgba(255, 255, 255, 0.15);
+  --font-heading: 'Manrope', system-ui, sans-serif;
+  --font-body: 'Inter', system-ui, sans-serif;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5 {
+  font-family: var(--font-heading);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  font-family: var(--font-body);
+  border: none;
+  background: none;
+}
+
+input, textarea, select {
+  font-family: var(--font-body);
+  outline: none;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 32px;
+}
+
+.section {
+  padding: 120px 0;
+}
+
+.section-sm {
+  padding: 80px 0;
+}
+
+/* ── Responsive grid utilities ───────────────────── */
+
+.col-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.col-asym {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 80px;
+  align-items: start;
+}
+
+.col-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.col-2-sm {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+}
+
+.offer-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr 280px;
+  gap: 48px;
+  align-items: start;
+}
+
+.col-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+@media (max-width: 1024px) {
+  .col-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .flow-arrow {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .col-4 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ── Navbar responsive ───────────────────────────── */
+
+.nav-desktop {
+  display: flex;
+}
+
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  margin-left: auto;
+  flex-direction: column;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  transition: background 0.15s;
+}
+
+.nav-hamburger:hover {
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* ── Responsive breakpoints ──────────────────────── */
+
+/* ── Card padding (responsive) ────────────────────── */
+
+.card-pad {
+  padding: 52px;
+}
+
+.card-pad-lg {
+  padding: 72px 60px;
+}
+
+/* ── Footer layout ───────────────────────────────── */
+
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 48px;
+  align-items: start;
+}
+
+.footer-nav {
+  gap: 32px;
+}
+
+/* ── Custom select ───────────────────────────────── */
+
+.select-wrapper {
+  position: relative;
+}
+
+.select-wrapper select {
+  width: 100%;
+  padding: 14px 44px 14px 16px;
+  border-radius: 10px;
+  font-size: 15px;
+  background: #262A38;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text);
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  font-family: var(--font-body);
+  outline: none;
+}
+
+.select-wrapper select:focus {
+  border-color: rgba(255, 191, 222, 0.35);
+}
+
+.select-chevron {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+}
+
+/* ─────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 20px;
+  }
+
+  .section {
+    padding: 72px 0;
+  }
+
+  .section-sm {
+    padding: 52px 0;
+  }
+
+  .col-2 {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .col-asym {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .col-3 {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .col-2-sm {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .offer-cols {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .nav-desktop {
+    display: none !important;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .card-pad {
+    padding: 28px 24px;
+  }
+
+  .card-pad-lg {
+    padding: 40px 24px;
+  }
+
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .footer-nav {
+    flex-wrap: wrap;
+    gap: 10px 20px;
+  }
+}

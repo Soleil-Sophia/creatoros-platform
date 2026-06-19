@@ -1,20 +1,39 @@
+import { Link } from 'react-router';
+
 export function Footer() {
   const sections = [
     {
       title: 'Platform',
-      links: ['Overview', 'Modules', 'Pricing', 'Roadmap']
+      links: [
+        { label: 'Platform Overview', to: '/' },
+        { label: 'All Modules', to: '/modules' },
+        { label: 'Pricing', to: '/pricing' },
+        { label: 'Roadmap', to: '/roadmap' },
+      ]
     },
     {
-      title: 'Modules',
-      links: ['Content OS', 'Brand OS', 'Strategy OS', 'Campaign OS']
+      title: 'Core Modules',
+      links: [
+        { label: 'BrandOS', to: '/modules/brandos' },
+        { label: 'ContentOS', to: '/modules/contentos' },
+        { label: 'LaunchOS', to: '/modules/launchos' },
+        { label: 'ManagementOS', to: '/modules/managementos' },
+        { label: 'AnalyticsOS', to: '/modules/analyticsos' },
+      ]
     },
     {
       title: 'Resources',
-      links: ['Documentation', 'Guides', 'Support', 'API']
+      links: [
+        { label: 'Documentation', to: '/docs' },
+        { label: 'Support', to: '/support' },
+      ]
     },
     {
       title: 'Company',
-      links: ['About', 'Blog', 'Careers', 'Contact']
+      links: [
+        { label: 'About', to: '/about' },
+        { label: 'Contact', to: '/contact' },
+      ]
     }
   ];
 
@@ -28,9 +47,9 @@ export function Footer() {
             <div className="lg:col-span-2 space-y-6">
               {/* Logo */}
               <div className="flex items-center gap-2.5">
-                <div 
-                  className="w-10 h-10 rounded-lg flex items-center justify-center" 
-                  style={{ 
+                <div
+                  className="w-10 h-10 rounded-lg flex items-center justify-center"
+                  style={{
                     background: 'linear-gradient(135deg, #262A38 0%, #1F2230 100%)',
                     border: '1px solid rgba(255, 255, 255, 0.08)',
                     boxShadow: 'inset 0 1px 0 rgba(255, 255, 255, 0.04)'
@@ -43,13 +62,13 @@ export function Footer() {
 
               {/* Description */}
               <p style={{ fontSize: '15px', lineHeight: 1.7, color: '#B4B8C7', maxWidth: '280px' }}>
-                Modular infrastructure for professional creators. Built to solve real workflow challenges.
+                A modular platform for creators who need clear systems, reusable workflows, and operational clarity.
               </p>
 
               {/* Social Links */}
               <div className="flex items-center gap-3 pt-2">
                 {['Twitter', 'LinkedIn', 'GitHub'].map((platform) => (
-                  <a 
+                  <a
                     key={platform}
                     href="#"
                     className="w-10 h-10 rounded-lg flex items-center justify-center transition-all hover:border-opacity-20"
@@ -70,14 +89,14 @@ export function Footer() {
                 </h4>
                 <ul className="space-y-3.5">
                   {section.links.map((link) => (
-                    <li key={link}>
-                      <a 
-                        href="#"
+                    <li key={link.label}>
+                      <Link
+                        to={link.to}
                         className="transition-colors hover:text-white"
                         style={{ fontSize: '15px', color: '#B4B8C7' }}
                       >
-                        {link}
-                      </a>
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -87,7 +106,7 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar */}
-        <div 
+        <div
           className="py-8 border-t flex flex-col sm:flex-row items-center justify-between gap-6"
           style={{ borderColor: 'rgba(255, 255, 255, 0.06)' }}
         >

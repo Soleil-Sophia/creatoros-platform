@@ -73,7 +73,7 @@ export function HowItWorks() {
               letterSpacing: '-0.01em'
             }}
           >
-            A workflow built for creators
+            A content system built for reuse
           </h2>
         </div>
 

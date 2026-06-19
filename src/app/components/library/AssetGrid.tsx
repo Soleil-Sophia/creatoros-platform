@@ -1,7 +1,7 @@
 import { AssetCardGrid } from './AssetCardGrid';
 
 type Asset = {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   preview: string;

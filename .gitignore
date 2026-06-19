@@ -1,0 +1,13 @@
+# Build output
+dist/
+
+# Replit chat attachments (not used by app)
+attached_assets/Pasted-*.txt
+
+# Standard hygiene
+node_modules/
+.DS_Store
+*.log
+.env
+.env.local
+.env.*.local

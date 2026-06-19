@@ -7,3 +7,4 @@ export { EmptyState } from './EmptyState';
 export { PageHeader } from './PageHeader';
 export { PanelShell } from './PanelShell';
 export { HelperNote } from './HelperNote';
+export { BrandVoiceChip } from './BrandVoiceChip';

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { LibraryTopbar } from '../components/library/LibraryTopbar';
 import { OrganizationRail } from '../components/library/OrganizationRail';
@@ -7,13 +7,22 @@ import { AssetGrid } from '../components/library/AssetGrid';
 import { AssetList } from '../components/library/AssetList';
 import { PreviewDrawer } from '../components/library/PreviewDrawer';
 import { EmptyState } from '../components/shared';
+import { listSavedAssets, deleteSavedAsset } from '../lib/content-library/storage';
 
 type ViewMode = 'grid' | 'list';
-type FilterType = 'all' | 'hooks' | 'scripts' | 'captions' | 'plans';
+type FilterType = 'all' | 'hook-pack' | 'short-script' | 'caption-draft' | 'content-brief' | 'repurposing-plan';
 type SortOption = 'recent' | 'oldest' | 'name' | 'type';
 
+type SavedInputs = {
+  offer: string;
+  audience: string;
+  goal: string;
+  tone: string;
+  outputType: string;
+};
+
 type Asset = {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   preview: string;
@@ -23,6 +32,10 @@ type Asset = {
   date: string;
   variants: number;
   status: string;
+  source?: 'generated';
+  createdAt?: string;
+  inputs?: SavedInputs;
+  outputType?: string;
 };
 
 // Copy to clipboard helper
@@ -58,79 +71,115 @@ const copyToClipboard = async (text: string): Promise<boolean> => {
 const mockAssets: Asset[] = [
   {
     id: 1,
-    type: 'hook',
-    title: 'Problem-Solution Hook',
+    type: 'hook-pack',
+    title: 'Positioning Hook Pack',
     preview: '"You don\'t need more ideas. You need a system that turns the ideas you have into content that actually ships."',
-    platform: 'Instagram',
+    platform: 'LinkedIn',
     campaign: 'Launch Campaign Q1',
     brandVoice: 'Motivational & Direct',
     date: '2026-03-25',
-    variants: 8,
-    status: 'ready'
+    variants: 5,
+    status: 'ready',
   },
   {
     id: 2,
-    type: 'script',
-    title: 'Short-Form Script (60s)',
-    preview: 'POV: You realize chat isn\'t a content system...',
+    type: 'short-script',
+    title: 'ChatGPT vs System (60s)',
+    preview: 'POV: You realize chat isn\'t a content system. You\'ve been treating a tool like a strategy...',
     platform: 'YouTube',
     campaign: 'Educational Series',
     brandVoice: 'Motivational & Direct',
     date: '2026-03-24',
-    variants: 3,
-    status: 'ready'
+    variants: 2,
+    status: 'ready',
   },
   {
     id: 3,
-    type: 'caption',
-    title: 'Educational Caption',
-    preview: 'Here\'s what I learned after generating 500+ pieces of content with structured systems...',
+    type: 'caption-draft',
+    title: 'Thought Leadership Caption',
+    preview: 'Here\'s what I learned after building 500+ structured content systems. The output isn\'t the hard part...',
     platform: 'Instagram',
     campaign: 'Launch Campaign Q1',
     brandVoice: 'Motivational & Direct',
     date: '2026-03-23',
-    variants: 12,
-    status: 'ready'
+    variants: 3,
+    status: 'ready',
   },
   {
     id: 4,
-    type: 'plan',
-    title: '30-Day Content Plan',
-    preview: 'Week 1: Awareness — Problem definition hooks',
+    type: 'content-brief',
+    title: 'Positioning Series Brief',
+    preview: 'Goal: Drive authority. Angle: Content without positioning is noise. Format: Long-form post + caption thread.',
     platform: 'Multi-Platform',
     campaign: 'Launch Campaign Q1',
     brandVoice: 'Motivational & Direct',
     date: '2026-03-22',
     variants: 1,
-    status: 'ready'
+    status: 'ready',
   },
   {
     id: 5,
-    type: 'hook',
-    title: 'Authority Hook',
-    preview: '"After helping 1000+ creators build content systems, I\'ve seen the same mistake kill momentum..."',
+    type: 'hook-pack',
+    title: 'Authority Hook Pack',
+    preview: '"After working with 1,000+ creators, I\'ve seen the same positioning mistake kill every content strategy."',
     platform: 'LinkedIn',
-    campaign: 'Batch Content — Instagram',
+    campaign: 'Batch Content — April',
     brandVoice: 'Professional & Clear',
     date: '2026-03-20',
-    variants: 6,
-    status: 'ready'
+    variants: 5,
+    status: 'ready',
   },
   {
     id: 6,
-    type: 'script',
-    title: 'Long-Form Script (3min)',
-    preview: 'The difference between content creators who scale and those who burn out...',
+    type: 'short-script',
+    title: 'Creator Burnout Script (3min)',
+    preview: 'The difference between creators who scale and those who burn out isn\'t talent. It\'s systems...',
     platform: 'YouTube',
     campaign: 'Educational Series',
     brandVoice: 'Motivational & Direct',
     date: '2026-03-18',
+    variants: 1,
+    status: 'ready',
+  },
+  {
+    id: 7,
+    type: 'repurposing-plan',
+    title: 'LinkedIn → Multi-Platform Plan',
+    preview: 'Source: Long-form LinkedIn post. → Instagram: 3 carousel slides. → YouTube Short: 60s script. → Email: Newsletter section.',
+    platform: 'Multi-Platform',
+    campaign: 'Batch Content — April',
+    brandVoice: 'Professional & Clear',
+    date: '2026-03-17',
+    variants: 1,
+    status: 'ready',
+  },
+  {
+    id: 8,
+    type: 'caption-draft',
+    title: 'Conversion Caption',
+    preview: 'Content without positioning is noise. Content with positioning is demand generation. Here\'s the difference...',
+    platform: 'Instagram',
+    campaign: 'Launch Campaign Q1',
+    brandVoice: 'Motivational & Direct',
+    date: '2026-03-15',
     variants: 2,
-    status: 'ready'
-  }
+    status: 'ready',
+  },
+  {
+    id: 9,
+    type: 'content-brief',
+    title: 'Community Building Brief',
+    preview: 'Goal: Build trust and audience. Angle: What creators get wrong about engagement. Format: Carousel + caption.',
+    platform: 'Instagram',
+    campaign: 'Educational Series',
+    brandVoice: 'Conversational & Warm',
+    date: '2026-03-14',
+    variants: 1,
+    status: 'ready',
+  },
 ];
 
-export function LibraryScreen() {
+export function LibraryScreen({ showTopbar = true }: { showTopbar?: boolean } = {}) {
   const navigate = useNavigate();
   
   // UI State
@@ -140,27 +189,72 @@ export function LibraryScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedAsset, setSelectedAsset] = useState<Asset | null>(null);
 
-  // Reuse handler
+  // Reuse handler — for saved assets, look up the full saved record by id
+  // so we can carry the inputs blob + outputType through router state.
   const handleReuse = (asset: Asset) => {
+    let reuseAsset: Asset = asset;
+    if (asset.source === 'generated' && typeof asset.id === 'string') {
+      const saved = listSavedAssets().find((s) => s.id === asset.id);
+      if (saved) {
+        reuseAsset = {
+          ...asset,
+          inputs: saved.inputs,
+          outputType: saved.type,
+        };
+      }
+    }
     navigate('/app/content-os/generate', {
       state: {
-        reuseAsset: asset,
-        source: 'library'
-      }
+        reuseAsset,
+        source: 'library',
+      },
     });
   };
 
-  // Calculate asset counts
+  // Tick used to re-read localStorage after a saved-asset delete.
+  const [refreshTick, setRefreshTick] = useState(0);
+
+  // Merge saved (localStorage) assets above the mocks. Saved first → newest on top.
+  // listSavedAssets() is sorted desc by createdAt internally.
+  const allAssets: Asset[] = useMemo(() => {
+    const saved = listSavedAssets().map<Asset>((a) => ({
+      id: a.id,
+      type: a.type,
+      title: a.title,
+      preview: a.preview,
+      platform: a.platform,
+      campaign: a.campaign,
+      brandVoice: a.brandVoice,
+      date: a.date,
+      variants: a.variants,
+      status: a.status,
+      source: 'generated',
+      createdAt: a.createdAt,
+    }));
+    return [...saved, ...mockAssets];
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshTick]);
+
+  // Delete handler for saved assets only. Mocks have numeric ids and no source.
+  const handleDeleteSavedAsset = (asset: Asset) => {
+    if (asset.source !== 'generated' || typeof asset.id !== 'string') return;
+    deleteSavedAsset(asset.id);
+    setSelectedAsset(null);
+    setRefreshTick((t) => t + 1);
+  };
+
+  // Calculate asset counts across merged list so filters reflect saved assets too
   const assetCounts = {
-    all: mockAssets.length,
-    hooks: mockAssets.filter(a => a.type === 'hook').length,
-    scripts: mockAssets.filter(a => a.type === 'script').length,
-    captions: mockAssets.filter(a => a.type === 'caption').length,
-    plans: mockAssets.filter(a => a.type === 'plan').length
+    all: allAssets.length,
+    'hook-pack': allAssets.filter(a => a.type === 'hook-pack').length,
+    'short-script': allAssets.filter(a => a.type === 'short-script').length,
+    'caption-draft': allAssets.filter(a => a.type === 'caption-draft').length,
+    'content-brief': allAssets.filter(a => a.type === 'content-brief').length,
+    'repurposing-plan': allAssets.filter(a => a.type === 'repurposing-plan').length,
   };
 
   // Filter and sort assets
-  const filteredAssets = mockAssets
+  const filteredAssets = allAssets
     .filter(asset => {
       if (filterType !== 'all' && asset.type !== filterType) return false;
       if (searchQuery && !asset.title.toLowerCase().includes(searchQuery.toLowerCase()) && 
@@ -168,17 +262,20 @@ export function LibraryScreen() {
       return true;
     })
     .sort((a, b) => {
-      if (sortOption === 'recent') return new Date(b.date).getTime() - new Date(a.date).getTime();
-      if (sortOption === 'oldest') return new Date(a.date).getTime() - new Date(b.date).getTime();
+      // Prefer createdAt (ISO timestamp from saved assets) for tie-breaking,
+      // fall back to date (day-level) for mocks.
+      const aTime = new Date(a.createdAt ?? a.date).getTime();
+      const bTime = new Date(b.createdAt ?? b.date).getTime();
+      if (sortOption === 'recent') return bTime - aTime;
+      if (sortOption === 'oldest') return aTime - bTime;
       if (sortOption === 'name') return a.title.localeCompare(b.title);
       if (sortOption === 'type') return a.type.localeCompare(b.type);
       return 0;
     });
 
   return (
-    <div className="min-h-screen flex flex-col" style={{ background: '#0E0F14' }}>
-      {/* Topbar */}
-      <LibraryTopbar />
+    <div className={`${showTopbar ? 'min-h-screen' : 'h-full'} flex flex-col`} style={{ background: '#0E0F14' }}>
+      {showTopbar && <LibraryTopbar />}
 
       {/* Library Main - 2-Column Layout */}
       <div className="flex-1 flex">
@@ -230,6 +327,11 @@ export function LibraryScreen() {
             onClose={() => setSelectedAsset(null)}
             onCopy={(text) => copyToClipboard(text)}
             onReuse={() => handleReuse(selectedAsset)}
+            onDelete={
+              selectedAsset.source === 'generated'
+                ? () => handleDeleteSavedAsset(selectedAsset)
+                : undefined
+            }
           />
         )}
       </div>

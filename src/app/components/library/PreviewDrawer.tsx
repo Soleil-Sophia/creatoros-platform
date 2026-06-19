@@ -3,7 +3,7 @@ import { DrawerMetadata } from './DrawerMetadata';
 import { DrawerActions } from './DrawerActions';
 
 type Asset = {
-  id: number;
+  id: number | string;
   type: string;
   title: string;
   preview: string;
@@ -20,9 +20,10 @@ type PreviewDrawerProps = {
   onClose: () => void;
   onCopy: (text: string) => void;
   onReuse: () => void;
+  onDelete?: () => void;
 };
 
-export function PreviewDrawer({ asset, onClose, onCopy, onReuse }: PreviewDrawerProps) {
+export function PreviewDrawer({ asset, onClose, onCopy, onReuse, onDelete }: PreviewDrawerProps) {
   return (
     <>
       {/* Backdrop */}
@@ -31,13 +32,20 @@ export function PreviewDrawer({ asset, onClose, onCopy, onReuse }: PreviewDrawer
         onClick={onClose}
       />
       
-      {/* Drawer */}
-      <div 
-        className="fixed right-0 top-0 bottom-0 w-[480px] z-50 overflow-y-auto"
+      {/* Drawer — right sheet on small screens, centered panel on lg+ */}
+      <div
+        className="
+          fixed z-50 overflow-y-auto
+          right-0 top-0 bottom-0 w-[480px] max-w-full
+          lg:right-auto lg:left-1/2 lg:-translate-x-1/2
+          lg:top-8 lg:bottom-8
+          lg:w-[min(860px,calc(100vw-96px))]
+          lg:rounded-[16px] lg:border lg:border-white/10
+        "
         style={{
           background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
           borderLeft: '1px solid rgba(255, 255, 255, 0.1)',
-          boxShadow: '-16px 0 48px rgba(0, 0, 0, 0.6)'
+          boxShadow: '0 24px 64px rgba(0, 0, 0, 0.6)',
         }}
       >
         {/* Drawer Header */}
@@ -98,6 +106,29 @@ export function PreviewDrawer({ asset, onClose, onCopy, onReuse }: PreviewDrawer
           onCopy={() => onCopy(asset.preview)}
           onReuse={onReuse}
         />
+
+        {/* Delete saved asset — only rendered when wired (saved assets only). */}
+        {onDelete && (
+          <div
+            className="px-6 py-4 flex justify-end"
+            style={{ borderTop: '1px solid rgba(255, 255, 255, 0.06)' }}
+          >
+            <button
+              type="button"
+              onClick={onDelete}
+              className="px-4 py-2 rounded-[8px] transition-all hover:opacity-90"
+              style={{
+                background: 'rgba(255, 99, 132, 0.08)',
+                border: '1px solid rgba(255, 99, 132, 0.3)',
+                color: '#FF8FA3',
+                fontSize: '12px',
+                fontWeight: 600
+              }}
+            >
+              Delete saved asset
+            </button>
+          </div>
+        )}
       </div>
     </>
   );
