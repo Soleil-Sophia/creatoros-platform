@@ -29,6 +29,7 @@ type LocalSystemState = {
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
   const brandStatus = getBrandProfileStatus(profile);
+  const brandReadinessStatus = brandStatus;
   const connected = brandStatus === 'complete';
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>
@@ -37,6 +38,8 @@ function readLocalSystemState(): LocalSystemState {
   const runs = listRuns();
   return {
     brandStatus,
+    brandConnected: connected,
+    brandReadinessStatus,
     brandVoiceLabel: connected && profile ? profile.voiceLabel ?? createVoiceLabel(profile) : null,
     brandUpdatedAt: profile?.updatedAt ?? null,
     savedAssetCount: assets.length,
@@ -142,6 +145,8 @@ const addOnModules = [
 export function DashboardPage() {
   const [state, setState] = useState<LocalSystemState>(() => ({
     brandStatus: 'not_started',
+    brandConnected: false,
+    brandReadinessStatus: 'not_started',
     brandVoiceLabel: null,
     brandUpdatedAt: null,
     savedAssetCount: 0,
@@ -240,15 +245,6 @@ export function DashboardPage() {
                 Brand Profile
               </div>
               <div className="flex items-center gap-2 mb-1">
-                {state.brandStatus === 'complete' ? (
-                  <>
-                    <CheckCircle2 size={14} style={{ color: '#E7C6F3' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Complete</span>
-                  </>
-                ) : state.brandStatus === 'in_progress' ? (
-                  <>
-                    <Clock size={14} style={{ color: '#FFBFDE' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
                 {state.brandReadinessStatus === 'complete' && (
                   <>
                     <CheckCircle2 size={14} style={{ color: '#BFFFDE' }} />

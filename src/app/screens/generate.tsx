@@ -11,6 +11,7 @@ import {
   createVoiceLabel,
   getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
+import {
   getBrandOSReadinessStatus,
 } from '../lib/brand-profile/service';
 import { OUTPUT_TYPES } from '../../data/contentos';
@@ -83,12 +84,10 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
   // Brand profile (read-only handoff from BrandOS)
   const [brandProfile, setBrandProfile] = useState(() => readBrandProfile());
+  const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
+  const [brandReadinessStatus, setBrandReadinessStatus] = useState<BrandOSReadinessStatus>('not_started');
 
   const brandProfileStatus = getBrandProfileStatus(brandProfile);
-  const brandVoiceLabel =
-    brandProfileStatus === 'complete' && brandProfile
-      ? brandProfile.voiceLabel ?? createVoiceLabel(brandProfile)
-      : null;
 
   const syncBrandReadiness = () => {
     const profile = readBrandProfile();
@@ -449,7 +448,6 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       >
         <BrandVoiceChip
           voiceLabel={brandVoiceLabel}
-          status={brandProfileStatus}
           setupRoute="/app/brand-os/setup"
           status={brandReadinessStatus}
         />
@@ -558,10 +556,9 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onOutputTypeChange={setOutputType}
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
-              generationStatus={genStatus}
+              generationStatus={genLoading ? 'Generating…' : genStatus}
               brandProfileStatus={brandProfileStatus}
               onOpenBrandOS={() => navigate('/app/brand-os/setup')}
-              generationStatus={genLoading ? 'Generating…' : genStatus}
               canGenerate={!generationBlocked && !genLoading}
             />
 
