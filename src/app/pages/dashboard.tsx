@@ -4,15 +4,13 @@ import { Link } from 'react-router';
 import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
-  getBrandOSReadinessStatus,
-} from '../lib/brand-profile/service';
-import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
+  isBrandProfileMeaningful,
+} from '../lib/brand-profile/storage';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
 
 type LocalSystemState = {
   brandConnected: boolean;
-  brandReadinessStatus: BrandOSReadinessStatus;
   brandVoiceLabel: string | null;
   brandUpdatedAt: string | null;
   savedAssetCount: number;
@@ -23,8 +21,7 @@ type LocalSystemState = {
 
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
-  const readinessStatus = getBrandOSReadinessStatus(profile);
-  const connected = readinessStatus === 'complete';
+  const connected = isBrandProfileMeaningful(profile);
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>
     (a.createdAt ?? '') < (b.createdAt ?? '') ? 1 : -1
@@ -32,7 +29,6 @@ function readLocalSystemState(): LocalSystemState {
   const runs = listRuns();
   return {
     brandConnected: connected,
-    brandReadinessStatus: readinessStatus,
     brandVoiceLabel: connected ? profile?.voiceLabel ?? null : null,
     brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
     savedAssetCount: assets.length,
@@ -138,7 +134,6 @@ const addOnModules = [
 export function DashboardPage() {
   const [state, setState] = useState<LocalSystemState>(() => ({
     brandConnected: false,
-    brandReadinessStatus: 'not_started',
     brandVoiceLabel: null,
     brandUpdatedAt: null,
     savedAssetCount: 0,
@@ -224,39 +219,26 @@ export function DashboardPage() {
               className="p-5 rounded-[14px]"
               style={{
                 background: '#171923',
-                border: `1px solid ${
-                  state.brandReadinessStatus === 'complete'
-                    ? 'rgba(191, 255, 222, 0.25)'
-                    : state.brandReadinessStatus === 'in_progress'
-                      ? 'rgba(231, 198, 243, 0.25)'
-                      : 'rgba(255, 255, 255, 0.06)'
-                }`,
+                border: `1px solid ${state.brandConnected ? 'rgba(231, 198, 243, 0.25)' : 'rgba(255, 255, 255, 0.06)'}`,
               }}
             >
               <div style={{ fontSize: '11px', fontWeight: 600, color: '#8B8F9E', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
                 Brand Profile
               </div>
               <div className="flex items-center gap-2 mb-1">
-                {state.brandReadinessStatus === 'complete' && (
+                {state.brandConnected ? (
                   <>
-                    <CheckCircle2 size={14} style={{ color: '#BFFFDE' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Complete</span>
+                    <CheckCircle2 size={14} style={{ color: '#E7C6F3' }} />
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Connected</span>
                   </>
-                )}
-                {state.brandReadinessStatus === 'in_progress' && (
-                  <>
-                    <Clock size={14} style={{ color: '#E7C6F3' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
-                  </>
-                )}
-                {state.brandReadinessStatus === 'not_started' && (
+                ) : (
                   <>
                     <Lock size={14} style={{ color: '#8B8F9E' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not Started</span>
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not connected</span>
                   </>
                 )}
               </div>
-              {state.brandReadinessStatus !== 'not_started' ? (
+              {state.brandConnected ? (
                 <>
                   <div style={{ fontSize: '13px', color: '#B4B8C7' }}>
                     Voice: <span style={{ color: '#F4F3F8', fontWeight: 500 }}>{state.brandVoiceLabel || '—'}</span>
