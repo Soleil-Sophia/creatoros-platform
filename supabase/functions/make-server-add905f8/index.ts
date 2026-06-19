@@ -36,8 +36,53 @@ app.use("/*", cors({
   maxAge: 600,
 }));
 
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === "object" && !Array.isArray(value));
+}
+
+function normalizeText(value: unknown, maxLength = 1200): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed;
+}
+
+function normalizeStringArray(value: unknown, maxItems = 10, maxLength = 180): string[] {
+  if (!Array.isArray(value)) return [];
+  return value
+    .map((entry) => normalizeText(entry, maxLength))
+    .filter((entry): entry is string => typeof entry === "string")
+    .slice(0, maxItems);
+}
+
+function requestBrandProfile(body: Record<string, unknown>) {
+  return {
+    brandName: normalizeText(body.brandName, 180),
+    mission: normalizeText(body.mission, 500),
+    voiceTone: normalizeText(body.voiceTone, 180),
+    voiceComplexity: normalizeText(body.voiceComplexity, 180),
+    voiceFormality: normalizeText(body.voiceFormality, 180),
+    voiceEnergy: normalizeText(body.voiceEnergy, 180),
+    voiceDos: normalizeStringArray(body.voiceDos),
+    voiceDonts: normalizeStringArray(body.voiceDonts),
+    messagingPillars: normalizeStringArray(body.messagingPillars),
+    targetCustomer: normalizeText(body.targetCustomer, 500),
+    transformation: normalizeText(body.transformation, 500),
+  };
+}
+
+function hasRequestBrandProfile(profile: ReturnType<typeof requestBrandProfile>): boolean {
+  return Object.values(profile).some((value) => Array.isArray(value) ? value.length > 0 : typeof value === "string");
+}
+
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
+  const apiKey = c.req.header("x-api-key");
+  const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
+  if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
+    c.set("userId", "api-key:frontend");
+    c.set("userEmail", "frontend@creatoros.internal");
+    c.set("allowPersistence", false);
   // API key auth — lightweight alternative for frontend direct access.
   // Set FRONTEND_API_KEY in Supabase Edge Function secrets and VITE_API_KEY in the
   // frontend environment to enable this path without Supabase user sessions.
@@ -70,6 +115,7 @@ async function requireAuth(c: any, next: any) {
 
   c.set("userId", user.id);
   c.set("userEmail", user.email);
+  c.set("allowPersistence", true);
   await next();
 }
 
@@ -79,6 +125,10 @@ app.get("/make-server-add905f8/health", (c) => c.json({ status: "ok", version: "
 // ─── Brand Profile ────────────────────────────────────────────────────────────
 app.get("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json({ profile: null });
+  }
   try {
     const profile = await kv.get(`brand_profile:${userId}`);
     return c.json({ profile: profile ?? null });
@@ -89,18 +139,24 @@ app.get("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 
 app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json({ error: "Brand profile persistence requires user session auth" }, 403);
+  }
+  const rawBody = await c.req.json().catch(() => null);
+  if (!isPlainObject(rawBody)) {
   const body = await getJsonObjectBody(c);
 
   if (!body) {
     return c.json({ error: "Request body must be a JSON object" }, 400);
   }
 
-  if (!body.brandName) {
+  if (!normalizeText(rawBody.brandName, 180)) {
     return c.json({ error: "brandName is required" }, 400);
   }
 
   await kv.set(`brand_profile:${userId}`, {
-    ...body,
+    ...rawBody,
     updatedAt: new Date().toISOString(),
   });
 
@@ -110,6 +166,7 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 // ─── Content Generation ───────────────────────────────────────────────────────
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
   const rawBody = await c.req.json().catch(() => null);
   const body =
     rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
@@ -136,7 +193,7 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   }
 
   // Build brand context block
-  const brandContext = brandProfile ? `
+  const brandContext = effectiveBrandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
 - Brand: ${getString(brandProfile.brandName)}
@@ -232,17 +289,23 @@ Rules:
     hooks: parsed.hooks || [],
     scripts: parsed.scripts || [],
     captions: parsed.captions || [],
-    brandName: brandProfile?.brandName ?? null,
+    brandName: normalizeText(effectiveBrandProfile?.brandName, 180) ?? null,
     createdAt: new Date().toISOString(),
   };
 
-  await kv.set(`content:${userId}:${assetId}`, asset);
+  if (allowPersistence) {
+    await kv.set(`content:${userId}:${assetId}`, asset);
+  }
   return c.json(asset);
 });
 
 // ─── Content Library ──────────────────────────────────────────────────────────
 app.get("/make-server-add905f8/content/library", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json([]);
+  }
   try {
     const assets = await kv.getByPrefix(`content:${userId}:`);
     return c.json(
@@ -257,6 +320,10 @@ app.get("/make-server-add905f8/content/library", requireAuth, async (c) => {
 
 app.delete("/make-server-add905f8/content/:id", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json({ error: "Content deletion requires user session auth" }, 403);
+  }
   const id = c.req.param("id");
   await kv.del(`content:${userId}:${id}`);
   return c.json({ success: true });
