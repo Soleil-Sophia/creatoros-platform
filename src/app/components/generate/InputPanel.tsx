@@ -20,7 +20,6 @@ type InputPanelProps = {
   generationStatus?: string | null;
   brandProfileStatus: BrandProfileStatus;
   onOpenBrandOS: () => void;
-  canGenerate: boolean;
 };
 
 const fieldStyle = {
@@ -80,7 +79,6 @@ export function InputPanel({
   generationStatus,
   brandProfileStatus,
   onOpenBrandOS,
-  canGenerate,
 }: InputPanelProps) {
   const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
   const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
