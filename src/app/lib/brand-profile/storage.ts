@@ -28,9 +28,16 @@ export function readBrandProfile(): BrandProfile | null {
 }
 
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
-  const next: BrandProfile = {
+  const normalizedProfile: BrandProfile = {
     ...profile,
-    voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
+    tone: profile.tone.trim(),
+    complexity: profile.complexity.trim(),
+    formality: profile.formality.trim(),
+    energy: profile.energy.trim(),
+  };
+  const next: BrandProfile = {
+    ...normalizedProfile,
+    voiceLabel: profile.voiceLabel ?? createVoiceLabel(normalizedProfile),
     updatedAt: new Date().toISOString(),
   };
   if (typeof window === 'undefined') return next;
