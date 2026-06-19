@@ -1,5 +1,6 @@
 import { INPUT_META, OUTPUT_TYPES } from '../../../data/contentos';
-import { SectionLabel } from '../shared';
+import { HelperNote, SectionLabel } from '../shared';
+import type { BrandProfileStatus } from '../../lib/brand-profile/storage';
 
 type InputPanelProps = {
   offer: string;
@@ -17,6 +18,8 @@ type InputPanelProps = {
   onGenerate: () => void;
   onClearAll: () => void;
   generationStatus?: string | null;
+  brandProfileStatus: BrandProfileStatus;
+  onOpenBrandOS: () => void;
 };
 
 const fieldStyle = {
@@ -74,9 +77,12 @@ export function InputPanel({
   onGenerate,
   onClearAll,
   generationStatus,
+  brandProfileStatus,
+  onOpenBrandOS,
 }: InputPanelProps) {
   const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
   const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
+  const helperId = `brand-profile-helper-${brandProfileStatus}`;
 
   return (
     <div
@@ -322,7 +328,10 @@ export function InputPanel({
         <button
           type="button"
           onClick={onGenerate}
-          className="w-full py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden mb-3"
+          disabled={brandProfileStatus === 'not_started'}
+          aria-describedby={helperId}
+          aria-disabled={brandProfileStatus === 'not_started'}
+          className="w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3"
           style={{
             background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
             color: '#0E0F14',
@@ -330,6 +339,8 @@ export function InputPanel({
             fontWeight: 600,
             boxShadow:
               '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+            opacity: brandProfileStatus === 'not_started' ? 0.55 : 1,
+            cursor: brandProfileStatus === 'not_started' ? 'not-allowed' : 'pointer',
           }}
         >
           <div
@@ -338,6 +349,57 @@ export function InputPanel({
           />
           Generate {currentType?.label ?? 'Content'}
         </button>
+        <div id={helperId} className="mb-3">
+          {brandProfileStatus === 'complete' ? (
+            <HelperNote variant="success">Brand Profile Connected ✓</HelperNote>
+          ) : brandProfileStatus === 'in_progress' ? (
+            <HelperNote variant="warning">
+              <div className="space-y-2">
+                <div>Your Brand Profile is incomplete.</div>
+                <div className="flex items-center gap-2">
+                  <span>Generated content may not fully reflect your brand voice.</span>
+                  <button
+                    type="button"
+                    onClick={onOpenBrandOS}
+                    className="shrink-0"
+                    style={{
+                      color: '#FFBFDE',
+                      textDecoration: 'none',
+                      fontWeight: 600,
+                      background: 'transparent',
+                      border: 'none',
+                      padding: 0,
+                      cursor: 'pointer',
+                    }}
+                  >
+                    Open BrandOS →
+                  </button>
+                </div>
+              </div>
+            </HelperNote>
+          ) : (
+            <HelperNote variant="info">
+              <div className="space-y-2">
+                <div>Complete BrandOS to unlock brand-aware content generation.</div>
+                <button
+                  type="button"
+                  onClick={onOpenBrandOS}
+                  style={{
+                    color: '#FFBFDE',
+                    textDecoration: 'none',
+                    fontWeight: 600,
+                    background: 'transparent',
+                    border: 'none',
+                    padding: 0,
+                    cursor: 'pointer',
+                  }}
+                >
+                  Open BrandOS →
+                </button>
+              </div>
+            </HelperNote>
+          )}
+        </div>
         <button
           type="button"
           onClick={onClearAll}
