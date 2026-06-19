@@ -79,6 +79,8 @@ function hasRequestBrandProfile(profile: ReturnType<typeof requestBrandProfile>)
 async function requireAuth(c: any, next: any) {
   const apiKey = c.req.header("x-api-key");
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
+  // FRONTEND_API_KEY (server secret) must match the value of VITE_API_KEY used by the
+  // frontend connector. API-key auth disables brand-profile persistence (allowPersistence=false).
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
     c.set("userId", "api-key:frontend");
     c.set("userEmail", "frontend@creatoros.internal");
@@ -169,15 +171,19 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
 
   // Load brand profile if available — prefer KV-stored profile, fall back to
   // request-supplied voice fields (for users who have only configured BrandOS locally).
+  // Skip KV lookup for API-key auth (allowPersistence=false): those requests cannot
+  // write a persisted brand profile, so the read would be unnecessary work.
   let storedBrandProfile: ReturnType<typeof requestBrandProfile> | null = null;
-  try {
-    const rawProfile = await kv.get(`brand_profile:${userId}`);
-    if (isPlainObject(rawProfile)) {
-      const normalizedProfile = requestBrandProfile(rawProfile);
-      storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
+  if (allowPersistence) {
+    try {
+      const rawProfile = await kv.get(`brand_profile:${userId}`);
+      if (isPlainObject(rawProfile)) {
+        const normalizedProfile = requestBrandProfile(rawProfile);
+        storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
+      }
+    } catch {
+      // ignore KV failures and fall back to request-supplied brand profile data
     }
-  } catch {
-    // ignore KV failures and fall back to request-supplied brand profile data
   }
 
   const requestProfile = requestBrandProfile(body);
