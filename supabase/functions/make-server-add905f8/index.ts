@@ -169,19 +169,15 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
 
   // Load brand profile if available — prefer KV-stored profile, fall back to
   // request-supplied voice fields (for users who have only configured BrandOS locally).
-  // Skip the KV lookup entirely when persistence is disabled (API-key auth) since
-  // those callers can never write a persisted profile, making the read unnecessary.
   let storedBrandProfile: ReturnType<typeof requestBrandProfile> | null = null;
-  if (allowPersistence) {
-    try {
-      const rawProfile = await kv.get(`brand_profile:${userId}`);
-      if (isPlainObject(rawProfile)) {
-        const normalizedProfile = requestBrandProfile(rawProfile);
-        storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
-      }
-    } catch {
-      // ignore KV failures and fall back to request-supplied brand profile data
+  try {
+    const rawProfile = await kv.get(`brand_profile:${userId}`);
+    if (isPlainObject(rawProfile)) {
+      const normalizedProfile = requestBrandProfile(rawProfile);
+      storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
     }
+  } catch {
+    // ignore KV failures and fall back to request-supplied brand profile data
   }
 
   const requestProfile = requestBrandProfile(body);
