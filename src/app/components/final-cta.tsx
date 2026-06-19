@@ -85,11 +85,6 @@ export function FinalCTA() {
                 className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-xl relative overflow-hidden"
                 style={{
                   background: 'linear-gradient(135deg, #DABFFF 0%, #E7C6F3 100%)',
-              <Link 
-                to="/dashboard"
-                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-xl relative overflow-hidden" 
-                style={{ 
-                  background: 'linear-gradient(135deg, #DABFFF 0%, #E7C6F3 100%)', 
                   color: '#0E0F14',
                   borderRadius: '12px',
                   fontSize: '17px',
