@@ -5,6 +5,7 @@ import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
   getBrandOSReadinessStatus,
+  createVoiceLabel,
 } from '../lib/brand-profile/service';
 import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 import { listSavedAssets } from '../lib/content-library/storage';
@@ -33,7 +34,7 @@ function readLocalSystemState(): LocalSystemState {
   return {
     brandConnected: connected,
     brandReadinessStatus: readinessStatus,
-    brandVoiceLabel: connected ? profile?.voiceLabel ?? null : null,
+    brandVoiceLabel: connected ? (profile?.voiceLabel ?? (profile ? createVoiceLabel(profile) : null)) : null,
     brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
     savedAssetCount: assets.length,
     latestAsset: sortedAssets[0]
