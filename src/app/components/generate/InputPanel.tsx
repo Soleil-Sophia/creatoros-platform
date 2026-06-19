@@ -330,6 +330,12 @@ export function InputPanel({
           onClick={onGenerate}
           disabled={brandProfileStatus === 'not_started'}
           aria-describedby={helperId}
+          aria-disabled={brandProfileStatus === 'not_started'}
+          aria-label={
+            brandProfileStatus === 'not_started'
+              ? 'Generate Content is disabled until BrandOS is complete'
+              : undefined
+          }
           className="w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3"
           style={{
             background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',

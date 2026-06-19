@@ -176,10 +176,10 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
     const brandVoiceSnapshot: BrandVoiceSnapshot | null = profile
       ? {
-          tone: profile.voiceTone ?? '',
-          complexity: profile.voiceComplexity ?? '',
-          formality: profile.voiceFormality ?? '',
-          energy: profile.voiceEnergy ?? '',
+          voiceTone: profile.voiceTone ?? '',
+          voiceComplexity: profile.voiceComplexity ?? '',
+          voiceFormality: profile.voiceFormality ?? '',
+          voiceEnergy: profile.voiceEnergy ?? '',
           voiceLabel: profile.voiceLabel?.trim() || createVoiceLabel(profile),
           updatedAt: profile.updatedAt ?? '',
           capturedAt: nowIso,

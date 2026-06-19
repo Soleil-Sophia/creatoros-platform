@@ -28,9 +28,7 @@ function getFieldValue(profile: BrandProfile, field: RequiredBrandProfileField):
 }
 
 export function getBrandProfileStatus(profile: BrandProfile | null | undefined): BrandProfileStatus {
-  if (!profile) return 'not_started';
-
-  const filledCount = REQUIRED_BRAND_PROFILE_FIELDS.filter((field) => getFieldValue(profile, field)).length;
+  const filledCount = getFilledBrandProfileFieldCount(profile);
 
   if (filledCount === 0) return 'not_started';
   if (filledCount === REQUIRED_BRAND_PROFILE_FIELDS.length) return 'complete';
