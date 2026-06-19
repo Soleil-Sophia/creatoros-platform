@@ -17,19 +17,23 @@ function isBrandProfileShape(value: unknown): value is BrandProfile {
 function coerceLegacyBrandProfile(value: unknown): BrandProfile | null {
   if (!value || typeof value !== 'object') return null;
   const v = value as Record<string, unknown>;
+  const tone = v.voiceTone;
+  const complexity = v.voiceComplexity;
+  const formality = v.voiceFormality;
+  const energy = v.voiceEnergy;
   if (
-    typeof v.voiceTone !== 'string' ||
-    typeof v.voiceComplexity !== 'string' ||
-    typeof v.voiceFormality !== 'string' ||
-    typeof v.voiceEnergy !== 'string'
+    typeof tone !== 'string' ||
+    typeof complexity !== 'string' ||
+    typeof formality !== 'string' ||
+    typeof energy !== 'string'
   ) {
     return null;
   }
   return {
-    tone: v.voiceTone as string,
-    complexity: v.voiceComplexity as string,
-    formality: v.voiceFormality as string,
-    energy: v.voiceEnergy as string,
+    tone,
+    complexity,
+    formality,
+    energy,
     voiceLabel: typeof v.voiceLabel === 'string' ? v.voiceLabel : undefined,
     updatedAt: typeof v.updatedAt === 'string' ? v.updatedAt : undefined,
   };
