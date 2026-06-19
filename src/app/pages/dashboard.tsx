@@ -7,11 +7,16 @@ import {
   createVoiceLabel,
   getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
+  getBrandOSReadinessStatus,
+} from '../lib/brand-profile/service';
+import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
 
 type LocalSystemState = {
   brandStatus: 'not_started' | 'in_progress' | 'complete';
+  brandConnected: boolean;
+  brandReadinessStatus: BrandOSReadinessStatus;
   brandVoiceLabel: string | null;
   brandUpdatedAt: string | null;
   savedAssetCount: number;
@@ -243,8 +248,19 @@ export function DashboardPage() {
                   <>
                     <Clock size={14} style={{ color: '#FFBFDE' }} />
                     <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
+                {state.brandReadinessStatus === 'complete' && (
+                  <>
+                    <CheckCircle2 size={14} style={{ color: '#BFFFDE' }} />
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Complete</span>
                   </>
-                ) : (
+                )}
+                {state.brandReadinessStatus === 'in_progress' && (
+                  <>
+                    <Clock size={14} style={{ color: '#E7C6F3' }} />
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
+                  </>
+                )}
+                {state.brandReadinessStatus === 'not_started' && (
                   <>
                     <Lock size={14} style={{ color: '#8B8F9E' }} />
                     <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not Started</span>

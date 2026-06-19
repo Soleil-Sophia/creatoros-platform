@@ -338,8 +338,10 @@ export function InputPanel({
           }
           className="w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3"
           style={{
-            background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
-            color: '#0E0F14',
+            background: canGenerate
+              ? 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)'
+              : 'rgba(255, 255, 255, 0.08)',
+            color: canGenerate ? '#0E0F14' : '#8B8F9E',
             fontSize: '15px',
             fontWeight: 600,
             boxShadow:

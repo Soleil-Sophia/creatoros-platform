@@ -6,6 +6,7 @@ type BrandVoiceChipProps = {
   status?: BrandProfileStatus;
   /** Optional route to BrandOS setup, shown only when no voice is connected. */
   setupRoute?: string;
+  status?: 'not_started' | 'in_progress' | 'complete';
 };
 
 /**
@@ -57,6 +58,9 @@ export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChi
       ) : isIncomplete ? (
         <>
           <span style={{ color: '#B4B8C7' }}>Incomplete</span>
+      ) : isInProgress ? (
+        <>
+          <span style={{ color: '#F4F3F8', fontWeight: 500 }}>In progress</span>
           {setupRoute && (
             <Link
               to={setupRoute}
@@ -67,6 +71,7 @@ export function BrandVoiceChip({ voiceLabel, status, setupRoute }: BrandVoiceChi
               }}
             >
               Open BrandOS →
+              Finish setup →
             </Link>
           )}
         </>
