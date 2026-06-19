@@ -123,5 +123,9 @@ export function isBrandProfileMeaningful(profile: BrandProfile | null | undefine
   return getBrandProfileStatus(profile) !== 'not_started';
 }
 
+export function isBrandProfileComplete(profile: BrandProfile | null | undefined): boolean {
+  return getBrandProfileStatus(profile) === 'complete';
+}
+
 // Re-export the empty shape so consumers can use a single import for initial state.
 export { emptyBrandProfile };
