@@ -1,4 +1,4 @@
-import { Hono } from "npm:hono";
+import { Context, Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
 import { logger } from "npm:hono/logger";
 import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
@@ -11,7 +11,7 @@ function isJsonObject(value: unknown): value is JsonObject {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
-async function getJsonObjectBody(c: any) {
+async function getJsonObjectBody(c: Context) {
   const body = await c.req.json().catch(() => null);
   return isJsonObject(body) ? body : null;
 }
@@ -106,7 +106,7 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   if (!offer) return c.json({ error: "offer is required" }, 400);
 
   // Load brand profile if available
-  let brandProfile: any = null;
+  let brandProfile: JsonObject | null = null;
   try {
     const storedBrandProfile = await kv.get(`brand_profile:${userId}`);
     brandProfile = isJsonObject(storedBrandProfile) ? storedBrandProfile : null;
