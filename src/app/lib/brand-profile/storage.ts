@@ -48,13 +48,26 @@ export function readBrandProfile(): BrandProfile | null {
     const parsed = JSON.parse(raw);
     if (!isPlainObject(parsed)) return null;
     const legacy = parsed as Record<string, unknown>;
+    const voiceTone = normalizeString(legacy.voiceTone ?? legacy.tone);
+    const voiceComplexity = normalizeString(legacy.voiceComplexity ?? legacy.complexity);
+    const voiceFormality = normalizeString(legacy.voiceFormality ?? legacy.formality);
+    const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy);
+    const voiceLabel = normalizeString(legacy.voiceLabel) || undefined;
+    let brandName = normalizeString(legacy.brandName);
+    // Legacy v1 profiles have no brandName. If the profile was otherwise fully
+    // configured (all four voice fields present), backfill brandName from the
+    // stored voiceLabel (falling back to voiceTone) so that migrated voices
+    // keep their 'complete' status.
+    if (!brandName && voiceTone && voiceComplexity && voiceFormality && voiceEnergy) {
+      brandName = voiceLabel ?? voiceTone;
+    }
     return {
-      brandName: normalizeString(legacy.brandName),
-      voiceTone: normalizeString(legacy.voiceTone ?? legacy.tone),
-      voiceComplexity: normalizeString(legacy.voiceComplexity ?? legacy.complexity),
-      voiceFormality: normalizeString(legacy.voiceFormality ?? legacy.formality),
-      voiceEnergy: normalizeString(legacy.voiceEnergy ?? legacy.energy),
-      voiceLabel: normalizeString(legacy.voiceLabel) || undefined,
+      brandName,
+      voiceTone,
+      voiceComplexity,
+      voiceFormality,
+      voiceEnergy,
+      voiceLabel,
       updatedAt: normalizeString(legacy.updatedAt) || undefined,
     };
   } catch {

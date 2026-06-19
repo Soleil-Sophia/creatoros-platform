@@ -80,11 +80,11 @@ export function FinalCTA() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <Link 
+              <Link
                 to="/dashboard"
-                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-xl relative overflow-hidden" 
-                style={{ 
-                  background: 'linear-gradient(135deg, #DABFFF 0%, #E7C6F3 100%)', 
+                className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-xl relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #DABFFF 0%, #E7C6F3 100%)',
                   color: '#0E0F14',
                   borderRadius: '12px',
                   fontSize: '17px',
