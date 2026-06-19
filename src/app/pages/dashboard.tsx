@@ -7,6 +7,7 @@ import {
   createVoiceLabel,
   getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
+import {
   getBrandOSReadinessStatus,
 } from '../lib/brand-profile/service';
 import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
