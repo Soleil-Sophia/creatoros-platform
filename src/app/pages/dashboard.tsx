@@ -34,7 +34,7 @@ function readLocalSystemState(): LocalSystemState {
   return {
     brandConnected: connected,
     brandReadinessStatus: readinessStatus,
-    brandVoiceLabel: connected ? (profile?.voiceLabel ?? (profile ? createVoiceLabel(profile) : null)) : null,
+    brandVoiceLabel: connected && profile ? (profile.voiceLabel ?? createVoiceLabel(profile)) : null,
     brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
     savedAssetCount: assets.length,
     latestAsset: sortedAssets[0]
