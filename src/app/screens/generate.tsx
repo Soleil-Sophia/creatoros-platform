@@ -83,14 +83,36 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
   const [brandReadinessStatus, setBrandReadinessStatus] = useState<BrandOSReadinessStatus>('not_started');
 
-  // Hydrate brand profile once on mount. Only seeds the tone default —
-  // does not override the user's tone after they change it, and does not
-  // override a tone that was just restored from a saved Library asset.
-  useEffect(() => {
+  const syncBrandReadiness = () => {
     const profile = readBrandProfile();
     const readiness = getBrandOSReadinessStatus(profile);
     setBrandReadinessStatus(readiness);
-    if (readiness === 'complete' && profile?.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
+    if (readiness === 'complete') {
+      const nextLabel = profile?.voiceLabel?.trim() || (profile ? createVoiceLabel(profile) : '');
+      setBrandVoiceLabel(nextLabel || null);
+    } else {
+      setBrandVoiceLabel(null);
+    }
+  };
+
+  // Keep readiness and voice label in sync with the current profile state.
+  useEffect(() => {
+    syncBrandReadiness();
+  }, [location.key]);
+
+  useEffect(() => {
+    const refresh = () => syncBrandReadiness();
+    window.addEventListener('focus', refresh);
+    window.addEventListener('storage', refresh);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener('storage', refresh);
+    };
+  }, []);
+
+  // Hydrate tone once on mount. Does not override restored input tone.
+  useEffect(() => {
+    const profile = readBrandProfile();
     if (restoredInputs) return; // saved-asset reuse owns the tone
     if (profile?.tone && profile.tone.trim()) {
       setTone((current) => (current === 'Conversational' ? profile.tone : current));
@@ -152,6 +174,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
     setGenLoading(true);
     setGenError(null);
+    setGeneratedOutput(null);
     setHasOutput(false);
 
     const profile = readBrandProfile();
@@ -200,6 +223,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       const message =
         err instanceof Error ? err.message : 'Generation failed. Please try again.';
       setGenError(message);
+      setGeneratedOutput(null);
+      setHasOutput(false);
 
       // Track failed attempt in history too.
       addGenerationHistoryEntry({

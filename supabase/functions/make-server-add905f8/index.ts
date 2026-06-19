@@ -10,11 +10,28 @@ const app = new Hono();
 app.use("*", logger(console.log));
 app.use("/*", cors({
   origin: "*",
-  allowHeaders: ["Content-Type", "Authorization"],
+  allowHeaders: ["Content-Type", "Authorization", "x-api-key"],
   allowMethods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   exposeHeaders: ["Content-Length"],
   maxAge: 600,
 }));
+
+function normalizeText(value: unknown, maxLength = 1200): string | undefined {
+  if (typeof value !== "string") return undefined;
+  const trimmed = value.trim();
+  if (!trimmed) return undefined;
+  return trimmed.length > maxLength ? trimmed.slice(0, maxLength) : trimmed;
+}
+
+function requestBrandProfile(body: Record<string, unknown>) {
+  return {
+    brandName: normalizeText(body.brandName, 180),
+    voiceTone: normalizeText(body.voiceTone, 180),
+    voiceComplexity: normalizeText(body.voiceComplexity, 180),
+    voiceFormality: normalizeText(body.voiceFormality, 180),
+    voiceEnergy: normalizeText(body.voiceEnergy, 180),
+  };
+}
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
@@ -26,6 +43,7 @@ async function requireAuth(c: any, next: any) {
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
     c.set("userId", "frontend-shared");
     c.set("userEmail", "frontend@creatoros.internal");
+    c.set("allowPersistence", false);
     await next();
     return;
   }
@@ -50,6 +68,7 @@ async function requireAuth(c: any, next: any) {
 
   c.set("userId", user.id);
   c.set("userEmail", user.email);
+  c.set("allowPersistence", true);
   await next();
 }
 
@@ -59,6 +78,10 @@ app.get("/make-server-add905f8/health", (c) => c.json({ status: "ok", version: "
 // ─── Brand Profile ────────────────────────────────────────────────────────────
 app.get("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json({ profile: null });
+  }
   try {
     const profile = await kv.get(`brand_profile:${userId}`);
     return c.json({ profile: profile ?? null });
@@ -69,6 +92,10 @@ app.get("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 
 app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json({ error: "Brand profile persistence requires user session auth" }, 403);
+  }
   const body = await c.req.json();
 
   if (!body.brandName) {
@@ -86,29 +113,47 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 // ─── Content Generation ───────────────────────────────────────────────────────
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
-  const { offer, audience, platform, goal, tone, outputType } = await c.req.json();
+  const allowPersistence = c.get("allowPersistence") === true;
+  const body = await c.req.json();
+  const { offer, audience, platform, goal, tone, outputType } = body;
 
   if (!offer) return c.json({ error: "offer is required" }, 400);
 
   // Load brand profile if available
   let brandProfile: any = null;
-  try { brandProfile = await kv.get(`brand_profile:${userId}`); } catch { /* ok */ }
+  if (allowPersistence) {
+    try { brandProfile = await kv.get(`brand_profile:${userId}`); } catch { /* ok */ }
+  }
+
+  const requestProfile = requestBrandProfile(body);
+  const hasStoredProfile = !!(brandProfile && typeof brandProfile === "object");
+  const hasRequestProfile = Object.values(requestProfile).some((v) => typeof v === "string");
+  const effectiveBrandProfile = hasStoredProfile
+    ? {
+      ...brandProfile,
+      brandName: brandProfile.brandName ?? requestProfile.brandName,
+      voiceTone: brandProfile.voiceTone ?? requestProfile.voiceTone,
+      voiceComplexity: brandProfile.voiceComplexity ?? requestProfile.voiceComplexity,
+      voiceFormality: brandProfile.voiceFormality ?? requestProfile.voiceFormality,
+      voiceEnergy: brandProfile.voiceEnergy ?? requestProfile.voiceEnergy,
+    }
+    : (hasRequestProfile ? requestProfile : null);
 
   // Build brand context block
-  const brandContext = brandProfile ? `
+  const brandContext = effectiveBrandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
-- Brand: ${brandProfile.brandName}
-- Mission: ${brandProfile.mission}
-- Voice Tone: ${brandProfile.voiceTone}
-- Voice Energy: ${brandProfile.voiceEnergy}
-- Complexity: ${brandProfile.voiceComplexity}
-- Formality: ${brandProfile.voiceFormality}
-- Do's: ${(brandProfile.voiceDos || []).join(", ")}
-- Don'ts: ${(brandProfile.voiceDonts || []).join(", ")}
-- Messaging Pillars: ${(brandProfile.messagingPillars || []).filter(Boolean).join(", ")}
-- Target Customer: ${brandProfile.targetCustomer}
-- Transformation Promise: ${brandProfile.transformation}
+- Brand: ${effectiveBrandProfile.brandName}
+- Mission: ${effectiveBrandProfile.mission}
+- Voice Tone: ${effectiveBrandProfile.voiceTone}
+- Voice Energy: ${effectiveBrandProfile.voiceEnergy}
+- Complexity: ${effectiveBrandProfile.voiceComplexity}
+- Formality: ${effectiveBrandProfile.voiceFormality}
+- Do's: ${(effectiveBrandProfile.voiceDos || []).join(", ")}
+- Don'ts: ${(effectiveBrandProfile.voiceDonts || []).join(", ")}
+- Messaging Pillars: ${(effectiveBrandProfile.messagingPillars || []).filter(Boolean).join(", ")}
+- Target Customer: ${effectiveBrandProfile.targetCustomer}
+- Transformation Promise: ${effectiveBrandProfile.transformation}
 
 Every output MUST reflect this brand identity. No generic content.` : "";
 
@@ -139,7 +184,7 @@ Rules:
 - 5 script sections for a 60–90 sec video or long post
 - 3 platform-specific captions: Instagram (emotional), LinkedIn (professional), X (punchy ≤280 chars)
 - Everything must be specific to the offer — no generic filler
-- ${brandProfile ? `Mirror ${brandProfile.brandName}'s exact voice` : "Be concrete and specific"}`;
+- ${effectiveBrandProfile ? `Mirror ${effectiveBrandProfile.brandName}'s exact voice` : "Be concrete and specific"}`;
 
   // OpenAI call
   const openaiKey = Deno.env.get("OPENAI_API_KEY");
@@ -191,17 +236,23 @@ Rules:
     hooks: parsed.hooks || [],
     scripts: parsed.scripts || [],
     captions: parsed.captions || [],
-    brandName: brandProfile?.brandName ?? null,
+    brandName: effectiveBrandProfile?.brandName ?? null,
     createdAt: new Date().toISOString(),
   };
 
-  await kv.set(`content:${userId}:${assetId}`, asset);
+  if (allowPersistence) {
+    await kv.set(`content:${userId}:${assetId}`, asset);
+  }
   return c.json(asset);
 });
 
 // ─── Content Library ──────────────────────────────────────────────────────────
 app.get("/make-server-add905f8/content/library", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json([]);
+  }
   try {
     const assets = await kv.getByPrefix(`content:${userId}:`);
     return c.json(
@@ -216,6 +267,10 @@ app.get("/make-server-add905f8/content/library", requireAuth, async (c) => {
 
 app.delete("/make-server-add905f8/content/:id", requireAuth, async (c) => {
   const userId = c.get("userId");
+  const allowPersistence = c.get("allowPersistence") === true;
+  if (!allowPersistence) {
+    return c.json({ error: "Content deletion requires user session auth" }, 403);
+  }
   const id = c.req.param("id");
   await kv.del(`content:${userId}:${id}`);
   return c.json({ success: true });
