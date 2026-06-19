@@ -1,10 +1,3 @@
 packages:
   - '.'
   - 'creatoros-site'
-
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - esbuild
-
-overrides:
-  vite: 6.4.2
