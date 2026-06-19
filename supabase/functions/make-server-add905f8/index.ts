@@ -106,17 +106,13 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   if (!offer) return c.json({ error: "offer is required" }, 400);
 
   // Load brand profile if available
-  let brandProfile: JsonObject | null = null;
+  let brandProfile: Record<string, any> | null = null;
   try {
     const storedBrandProfile = await kv.get(`brand_profile:${userId}`);
-    brandProfile = isJsonObject(storedBrandProfile) ? storedBrandProfile : null;
-  } catch {
-    /* ok */
-  }
-
-  const voiceDos = getStringArray(brandProfile?.voiceDos);
-  const voiceDonts = getStringArray(brandProfile?.voiceDonts);
-  const messagingPillars = getStringArray(brandProfile?.messagingPillars);
+    if (storedBrandProfile && typeof storedBrandProfile === "object" && !Array.isArray(storedBrandProfile)) {
+      brandProfile = storedBrandProfile as Record<string, any>;
+    }
+  } catch { /* ok */ }
 
   // Build brand context block
   const brandContext = brandProfile ? `
