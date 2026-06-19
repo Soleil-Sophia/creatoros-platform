@@ -13,8 +13,11 @@
 
 import type { GenerateContentParams, GenerateContentResult } from './types';
 
-const FUNCTION_URL =
-  ((import.meta as Record<string, any>).env?.VITE_SUPABASE_FUNCTION_URL ?? '') as string;
+const FUNCTION_URL = (
+  ((import.meta as Record<string, any>).env?.VITE_SUPABASE_FUNCTION_URL ?? '') as string
+)
+  .trim()
+  .replace(/\/+$/, '');
 
 const API_KEY = (import.meta as Record<string, any>).env?.VITE_API_KEY || '';
 
