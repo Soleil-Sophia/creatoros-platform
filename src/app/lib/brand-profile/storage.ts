@@ -20,7 +20,7 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 }
 
 function normalizeString(value: unknown): string {
-  return typeof value === 'string' ? value : '';
+  return typeof value === 'string' ? value.trim() : '';
 }
 
 function getFieldValue(profile: BrandProfile, field: RequiredBrandProfileField): string {
