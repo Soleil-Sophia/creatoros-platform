@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Navbar } from '../components/navbar';
 import { Link } from 'react-router';
-import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
+import { ArrowRight, Lock, CheckCircle2 } from 'lucide-react';
 import {
   readBrandProfile,
   createVoiceLabel,

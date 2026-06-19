@@ -11,9 +11,11 @@ import {
   createVoiceLabel,
   getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
+import { generateContent, isConnectorConfigured } from '../lib/ai-connector/service';
 import { OUTPUT_TYPES } from '../../data/contentos';
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
+import type { GenerateContentResult } from '../lib/ai-connector/types';
 
 type SavedInputs = {
   offer: string;
@@ -107,6 +109,9 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   // Mocked generation feedback — shows "Generated {Label} ✓" in the output header
   // subtitle for a few seconds after the user clicks the Generate button.
   const [genStatus, setGenStatus] = useState<string | null>(null);
+  const [genLoading, setGenLoading] = useState(false);
+  const [genError, setGenError] = useState<string | null>(null);
+  const [generatedOutput, setGeneratedOutput] = useState<GenerateContentResult | null>(null);
 
   // Clear the generated banner if the user switches output type so the
   // confirmation never refers to a type that's no longer being shown.
@@ -114,16 +119,90 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     setGenStatus(null);
   }, [outputType]);
 
-  const handleGenerate = () => {
-    setHasOutput(true);
-    const label =
-      OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
-    setGenStatus(`Generated ${label} ✓`);
-    window.setTimeout(() => {
-      setGenStatus((current) =>
-        current === `Generated ${label} ✓` ? null : current
+  function getDisplayItems(type: string, generated: GenerateContentResult | null): string[] {
+    if (generated) {
+      switch (type) {
+        case 'hook-pack':
+          if (generated.hooks.length > 0) return generated.hooks;
+          break;
+        case 'short-script':
+          if (generated.scripts.length > 0) return generated.scripts;
+          break;
+        case 'caption-draft':
+          if (generated.captions.length > 0) return generated.captions;
+          break;
+        case 'content-brief': {
+          const items = [...generated.hooks.slice(0, 2), ...generated.scripts];
+          if (items.length > 0) return items;
+          break;
+        }
+        case 'repurposing-plan': {
+          const items = [...generated.captions, ...generated.hooks.slice(0, 2)];
+          if (items.length > 0) return items;
+          break;
+        }
+      }
+    }
+
+    return OUTPUT_MOCK[type]?.items ?? [];
+  }
+
+  const handleGenerate = async () => {
+    if (genLoading) return;
+
+    if (!isConnectorConfigured()) {
+      setGenError(null);
+      setGeneratedOutput(null);
+      setHasOutput(true);
+      const label =
+        OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
+      setGenStatus(`Generated ${label} ✓`);
+      window.setTimeout(() => {
+        setGenStatus((current) =>
+          current === `Generated ${label} ✓` ? null : current
+        );
+      }, 2500);
+      return;
+    }
+
+    setGenLoading(true);
+    setGenError(null);
+    setGeneratedOutput(null);
+    setHasOutput(false);
+
+    const profile = readBrandProfile();
+
+    try {
+      const result = await generateContent({
+        offer,
+        audience,
+        platform,
+        goal,
+        tone,
+        outputType,
+        brandProfile: profile ?? undefined,
+      });
+
+      setGeneratedOutput(result);
+      setHasOutput(true);
+
+      const label =
+        OUTPUT_TYPES.find((t) => t.id === outputType)?.label ?? 'Content';
+      setGenStatus(`Generated ${label} ✓`);
+      window.setTimeout(() => {
+        setGenStatus((current) =>
+          current === `Generated ${label} ✓` ? null : current
+        );
+      }, 2500);
+    } catch (error) {
+      setGeneratedOutput(null);
+      setHasOutput(false);
+      setGenError(
+        error instanceof Error ? error.message : 'Generation failed. Please try again.'
       );
-    }, 2500);
+    } finally {
+      setGenLoading(false);
+    }
   };
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved'>('idle');
   const saveResetTimerRef = useRef<number | null>(null);
@@ -145,6 +224,10 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     setTone('Conversational');
     setOutputType('hook-pack');
     setShowReuseBanner(false);
+    setHasOutput(false);
+    setGenStatus(null);
+    setGenError(null);
+    setGeneratedOutput(null);
     navigate('/app/content-os/generate', { replace: true, state: {} });
   };
   
@@ -168,7 +251,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     // only writes a single asset per save cycle.
     if (saveStatus !== 'idle') return;
     const mock = OUTPUT_MOCK[outputType];
-    if (!mock) return;
+    const displayItems = getDisplayItems(outputType, generatedOutput);
+    if (!mock || displayItems.length === 0) return;
     setSaveStatus('saving');
 
     const profile = readBrandProfile();
@@ -202,16 +286,16 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       id: generateAssetId(),
       type: outputType,
       title,
-      preview: mock.items[0] ?? '',
+      preview: displayItems[0] ?? '',
       platform,
       campaign: 'Generated',
       brandVoice,
       date: nowIso.slice(0, 10),
-      variants: mock.items.length,
+      variants: displayItems.length,
       status: 'ready',
       source: 'generated',
       createdAt: nowIso,
-      items: mock.items,
+      items: displayItems,
       inputs: { offer, audience, goal, tone, outputType },
       brandVoiceSnapshot,
     };
@@ -360,7 +444,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onOutputTypeChange={setOutputType}
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
-              generationStatus={genStatus}
+              generationStatus={genLoading ? 'Generating…' : genStatus}
               brandProfileStatus={brandProfileStatus}
               onOpenBrandOS={() => navigate('/app/brand-os/setup')}
             />
@@ -370,7 +454,81 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               className="flex-1 flex flex-col relative"
               style={{ background: '#0E0F14' }}
             >
-              {hasOutput ? (
+              {genLoading ? (
+                <div className="flex-1 flex items-center justify-center p-8">
+                  <div className="text-center max-w-md">
+                    <div
+                      className="w-20 h-20 rounded-[16px] flex items-center justify-center mx-auto mb-6"
+                      style={{
+                        background: 'linear-gradient(135deg, rgba(255, 191, 222, 0.15), rgba(218, 191, 255, 0.1))',
+                        border: '1px solid rgba(255, 191, 222, 0.2)',
+                      }}
+                    >
+                      <svg
+                        className="animate-spin"
+                        width="32"
+                        height="32"
+                        viewBox="0 0 32 32"
+                        fill="none"
+                        aria-hidden="true"
+                      >
+                        <circle cx="16" cy="16" r="12" stroke="rgba(255,191,222,0.2)" strokeWidth="3" />
+                        <path
+                          d="M16 4a12 12 0 0 1 12 12"
+                          stroke="#FFBFDE"
+                          strokeWidth="3"
+                          strokeLinecap="round"
+                        />
+                      </svg>
+                    </div>
+                    <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
+                      Generating Content
+                    </h3>
+                    <p style={{ fontSize: '14px', color: '#8B8F9E', lineHeight: 1.6 }}>
+                      {brandProfileStatus === 'complete'
+                        ? 'Applying your Brand Voice to the AI prompt…'
+                        : 'Building your content suite with AI…'}
+                    </p>
+                  </div>
+                </div>
+              ) : genError ? (
+                <div className="flex-1 flex items-center justify-center p-8">
+                  <div className="text-center max-w-md">
+                    <div
+                      className="w-20 h-20 rounded-[16px] flex items-center justify-center mx-auto mb-6"
+                      style={{
+                        background: 'rgba(255, 100, 100, 0.08)',
+                        border: '1px solid rgba(255, 100, 100, 0.2)',
+                      }}
+                    >
+                      <svg width="32" height="32" fill="none" viewBox="0 0 32 32">
+                        <path d="M16 10v8M16 22v2" stroke="#FF8080" strokeWidth="2.5" strokeLinecap="round" />
+                        <circle cx="16" cy="16" r="12" stroke="#FF8080" strokeWidth="2" />
+                      </svg>
+                    </div>
+                    <h3 style={{ fontSize: '18px', fontWeight: 600, color: '#F4F3F8', marginBottom: '8px' }}>
+                      Generation Failed
+                    </h3>
+                    <p style={{ fontSize: '13px', color: '#8B8F9E', lineHeight: 1.6, marginBottom: '20px' }}>
+                      {genError}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={handleGenerate}
+                      className="px-5 py-2 rounded-[10px] transition-all hover:opacity-90"
+                      style={{
+                        background: 'rgba(255, 191, 222, 0.12)',
+                        border: '1px solid rgba(255, 191, 222, 0.25)',
+                        color: '#FFBFDE',
+                        fontSize: '13px',
+                        fontWeight: 600,
+                      }}
+                    >
+                      Try Again
+                    </button>
+                  </div>
+                </div>
+              ) : hasOutput ? (
                 <>
                   {/* Output Header */}
                   <OutputWorkspaceHeader
@@ -392,6 +550,14 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
                   {/* Asset Output */}
                   <div className="flex-1 overflow-y-auto p-8">
+                    {(() => {
+                      const displayItems = getDisplayItems(outputType, generatedOutput);
+                      const wordCount = displayItems.reduce(
+                        (total, item) => total + item.split(/\s+/).filter(Boolean).length,
+                        0,
+                      );
+                      const itemCount = displayItems.length;
+                      return (
                     <AssetCard
                       type={
                         outputType === 'hook-pack' ? 'hooks'
@@ -399,7 +565,11 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                         : 'script'
                       }
                       title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
-                      subtitle={`${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`}
+                      subtitle={
+                        itemCount > 0
+                          ? `${itemCount} ${itemCount === 1 ? 'item' : 'items'} · ready to deploy`
+                          : `${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`
+                      }
                       accentColor="#FFBFDE"
                       icon={
                         <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
@@ -407,11 +577,13 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                           <path d="M11 3l3 3m0 0l-3 3m3-3H8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
                         </svg>
                       }
-                      items={OUTPUT_MOCK[outputType]?.items ?? []}
-                      wordCount={OUTPUT_MOCK[outputType]?.wordCount ?? 0}
+                      items={displayItems}
+                      wordCount={wordCount}
                       onSave={handleSaveToLibrary}
                       saveStatus={saveStatus}
                     />
+                      );
+                    })()}
                   </div>
                 </>
               ) : (
