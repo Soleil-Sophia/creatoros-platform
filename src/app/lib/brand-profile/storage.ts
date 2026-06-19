@@ -48,12 +48,28 @@ export function readBrandProfile(): BrandProfile | null {
     const parsed = JSON.parse(raw);
     if (!isPlainObject(parsed)) return null;
     const legacy = parsed as Record<string, unknown>;
+
+    const voiceTone = normalizeString(legacy.voiceTone ?? legacy.tone);
+    const voiceComplexity = normalizeString(legacy.voiceComplexity ?? legacy.complexity);
+    const voiceFormality = normalizeString(legacy.voiceFormality ?? legacy.formality);
+    const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy);
+
+    // Detect a v1 legacy profile: it was saved before `brandName` was introduced,
+    // so the key is absent entirely (undefined), not just empty.  When all four
+    // voice fields are present we backfill brandName from the saved voiceLabel (or
+    // the tone) so the migrated profile keeps its "complete" readiness status.
+    const isLegacyProfile = legacy.brandName === undefined;
+    const hasVoiceFields = !!(voiceTone && voiceComplexity && voiceFormality && voiceEnergy);
+    const brandName = isLegacyProfile && hasVoiceFields
+      ? (normalizeString(legacy.voiceLabel) || voiceTone)
+      : normalizeString(legacy.brandName);
+
     return {
-      brandName: normalizeString(legacy.brandName),
-      voiceTone: normalizeString(legacy.voiceTone ?? legacy.tone),
-      voiceComplexity: normalizeString(legacy.voiceComplexity ?? legacy.complexity),
-      voiceFormality: normalizeString(legacy.voiceFormality ?? legacy.formality),
-      voiceEnergy: normalizeString(legacy.voiceEnergy ?? legacy.energy),
+      brandName,
+      voiceTone,
+      voiceComplexity,
+      voiceFormality,
+      voiceEnergy,
       voiceLabel: normalizeString(legacy.voiceLabel) || undefined,
       updatedAt: normalizeString(legacy.updatedAt) || undefined,
     };
