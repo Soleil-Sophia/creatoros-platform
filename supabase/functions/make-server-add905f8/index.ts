@@ -41,7 +41,7 @@ async function requireAuth(c: any, next: any) {
   const apiKey = c.req.header("x-api-key");
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
-    c.set("userId", "frontend-shared");
+    c.set("userId", `api-key:${crypto.randomUUID()}`);
     c.set("userEmail", "frontend@creatoros.internal");
     c.set("allowPersistence", false);
     await next();
@@ -114,7 +114,11 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
   const allowPersistence = c.get("allowPersistence") === true;
-  const body = await c.req.json();
+  const rawBody = await c.req.json();
+  const body =
+    rawBody && typeof rawBody === "object"
+      ? (rawBody as Record<string, unknown>)
+      : {};
   const { offer, audience, platform, goal, tone, outputType } = body;
 
   if (!offer) return c.json({ error: "offer is required" }, 400);

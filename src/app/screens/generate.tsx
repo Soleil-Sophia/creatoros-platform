@@ -284,10 +284,11 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     // only writes a single asset per save cycle.
     if (saveStatus !== 'idle') return;
 
-    // Use real generated items when available, fall back to mock.
+    // Save only real generated output items.
+    if (!generatedOutput) return;
     const items = getDisplayItems(outputType, generatedOutput);
     const mock = OUTPUT_MOCK[outputType];
-    if (!items.length && !mock) return;
+    if (!items.length) return;
 
     setSaveStatus('saving');
 
@@ -318,7 +319,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     const rawTitle = titleSuffix ? `${typeLabel} — ${titleSuffix}` : typeLabel;
     const title = rawTitle.length > 80 ? `${rawTitle.slice(0, 77).trimEnd()}…` : rawTitle;
 
-    const displayItems = items.length > 0 ? items : (mock?.items ?? []);
+    const displayItems = items;
 
     const asset: SavedContentAsset = {
       id: generateAssetId(),
