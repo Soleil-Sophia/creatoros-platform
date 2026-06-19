@@ -60,7 +60,7 @@ async function requireAuth(c: any, next: any) {
   const apiKey = c.req.header("x-api-key");
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
-    c.set("userId", `api-key:${crypto.randomUUID()}`);
+    c.set("userId", "api-key:frontend");
     c.set("userEmail", "frontend@creatoros.internal");
     c.set("allowPersistence", false);
     await next();

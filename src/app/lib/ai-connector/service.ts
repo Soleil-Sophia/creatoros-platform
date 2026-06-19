@@ -10,6 +10,20 @@ export function isConnectorConfigured(): boolean {
   return API_KEY.trim().length > 0;
 }
 
+function fallbackErrorMessage(status: number): string {
+  switch (status) {
+    case 401:
+    case 403:
+      return 'Authentication failed. Check your VITE_API_KEY configuration and try again.';
+    case 429:
+      return 'The AI service is busy right now. Please wait a moment and try again.';
+    default:
+      return status >= 500
+        ? 'The AI service is temporarily unavailable. Please try again.'
+        : 'Generation failed. Please review your inputs and try again.';
+  }
+}
+
 export async function generateContent(
   params: GenerateContentParams,
 ): Promise<GenerateContentResult> {
@@ -53,7 +67,7 @@ export async function generateContent(
   }
 
   if (!res.ok) {
-    let errorMessage = `Generation failed (HTTP ${res.status}).`;
+    let errorMessage = fallbackErrorMessage(res.status);
     try {
       const body = await res.json();
       if (typeof body?.error === 'string') errorMessage = body.error;

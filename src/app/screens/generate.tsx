@@ -198,7 +198,9 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
       setGeneratedOutput(null);
       setHasOutput(false);
       setGenError(
-        error instanceof Error ? error.message : 'Generation failed. Please try again.'
+        error instanceof Error
+          ? error.message
+          : 'Generation failed. Check your connector configuration and try again.'
       );
     } finally {
       setGenLoading(false);
