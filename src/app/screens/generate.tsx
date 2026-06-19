@@ -10,14 +10,8 @@ import {
   readBrandProfile,
   createVoiceLabel,
   getBrandProfileStatus,
+  type BrandProfileStatus,
 } from '../lib/brand-profile/storage';
-import {
-  getBrandOSReadinessStatus,
-} from '../lib/brand-profile/service';
-import { OUTPUT_TYPES } from '../../data/contentos';
-import { saveAsset } from '../lib/content-library/storage';
-import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
-import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 import { generateContent, isConnectorConfigured } from '../lib/ai-connector/service';
 import type { GenerateContentResult } from '../lib/ai-connector/types';
 import { addGenerationHistoryEntry } from '../lib/ai-connector/history';
@@ -85,13 +79,13 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   // Brand profile (read-only handoff from BrandOS)
   const [brandProfile, setBrandProfile] = useState(() => readBrandProfile());
   const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
-  const [brandReadinessStatus, setBrandReadinessStatus] = useState<BrandOSReadinessStatus>('not_started');
+  const [brandReadinessStatus, setBrandReadinessStatus] = useState<BrandProfileStatus>('not_started');
 
   const brandProfileStatus = getBrandProfileStatus(brandProfile);
 
   const syncBrandReadiness = () => {
     const profile = readBrandProfile();
-    const readiness = getBrandOSReadinessStatus(profile);
+    const readiness = getBrandProfileStatus(profile);
     setBrandReadinessStatus(readiness);
     if (readiness === 'complete') {
       const nextLabel = profile?.voiceLabel?.trim() || (profile ? createVoiceLabel(profile) : '');

@@ -1,4 +1,4 @@
-import type { BrandProfile, BrandOSReadinessStatus } from './types';
+import type { BrandProfile } from './types';
 import { emptyBrandProfile } from './defaultBrandProfile';
 
 export const BRAND_PROFILE_STORAGE_KEY = 'creatoros-brand-profile-v1';
@@ -108,24 +108,6 @@ export function createVoiceLabel(profile: BrandProfile): string {
 
 export function isBrandProfileMeaningful(profile: BrandProfile | null | undefined): boolean {
   return getBrandProfileStatus(profile) !== 'not_started';
-}
-
-/**
- * Derives the BrandOS readiness status from a profile snapshot.
- *
- * - `not_started`  → no voice fields filled
- * - `in_progress`  → at least one but fewer than four fields filled
- * - `complete`     → all four fields (tone, complexity, formality, energy) filled
- */
-export function getBrandOSReadinessStatus(
-  profile: BrandProfile | null | undefined
-): BrandOSReadinessStatus {
-  if (!profile) return 'not_started';
-  const fields = [profile.tone, profile.complexity, profile.formality, profile.energy];
-  const filled = fields.filter((f) => f?.trim().length > 0).length;
-  if (filled === 0) return 'not_started';
-  if (filled === fields.length) return 'complete';
-  return 'in_progress';
 }
 
 // Re-export the empty shape so consumers can use a single import for initial state.

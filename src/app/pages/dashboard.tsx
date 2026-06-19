@@ -6,18 +6,15 @@ import {
   readBrandProfile,
   createVoiceLabel,
   getBrandProfileStatus,
+  type BrandProfileStatus,
 } from '../lib/brand-profile/storage';
-import {
-  getBrandOSReadinessStatus,
-} from '../lib/brand-profile/service';
-import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
 
 type LocalSystemState = {
   brandStatus: 'not_started' | 'in_progress' | 'complete';
   brandConnected: boolean;
-  brandReadinessStatus: BrandOSReadinessStatus;
+  brandReadinessStatus: BrandProfileStatus;
   brandVoiceLabel: string | null;
   brandUpdatedAt: string | null;
   savedAssetCount: number;

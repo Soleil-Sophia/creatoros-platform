@@ -9,7 +9,7 @@
  * call-site.
  */
 
-export type { BrandProfile, BrandOSReadinessStatus } from './types';
+export type { BrandProfile } from './types';
 
 export {
   BRAND_PROFILE_STORAGE_KEY,
@@ -18,6 +18,5 @@ export {
   clearBrandProfile,
   createVoiceLabel,
   isBrandProfileMeaningful,
-  getBrandOSReadinessStatus,
   emptyBrandProfile,
 } from './storage';
