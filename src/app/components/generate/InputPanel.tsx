@@ -340,7 +340,7 @@ export function InputPanel({
           aria-disabled={brandProfileStatus === 'not_started'}
           aria-label={
             brandProfileStatus === 'not_started'
-              ? 'Generate Content is disabled until BrandOS is complete'
+              ? 'Generate Content is disabled until you start your Brand Profile in BrandOS'
               : undefined
           }
           className="w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3"
