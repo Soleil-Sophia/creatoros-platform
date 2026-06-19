@@ -80,7 +80,8 @@ export function FinalCTA() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6">
-              <button 
+              <Link
+                to="/dashboard"
                 className="w-full sm:w-auto px-12 py-4 transition-all hover:opacity-90 shadow-xl relative overflow-hidden" 
                 style={{ 
                   background: 'linear-gradient(135deg, #DABFFF 0%, #E7C6F3 100%)', 
@@ -88,7 +89,9 @@ export function FinalCTA() {
                   borderRadius: '12px',
                   fontSize: '17px',
                   fontWeight: 600,
-                  boxShadow: '0 12px 32px rgba(255, 191, 222, 0.25)'
+                  boxShadow: '0 12px 32px rgba(255, 191, 222, 0.25)',
+                  textDecoration: 'none',
+                  display: 'inline-block'
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 h-px" style={{ background: 'rgba(255, 255, 255, 0.5)' }}></div>
