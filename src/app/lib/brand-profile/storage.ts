@@ -26,10 +26,10 @@ function coerceLegacyBrandProfile(value: unknown): BrandProfile | null {
     return null;
   }
   return {
-    tone: v.voiceTone,
-    complexity: v.voiceComplexity,
-    formality: v.voiceFormality,
-    energy: v.voiceEnergy,
+    tone: v.voiceTone as string,
+    complexity: v.voiceComplexity as string,
+    formality: v.voiceFormality as string,
+    energy: v.voiceEnergy as string,
     voiceLabel: typeof v.voiceLabel === 'string' ? v.voiceLabel : undefined,
     updatedAt: typeof v.updatedAt === 'string' ? v.updatedAt : undefined,
   };
