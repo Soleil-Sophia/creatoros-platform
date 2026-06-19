@@ -17,6 +17,7 @@ type InputPanelProps = {
   onGenerate: () => void;
   onClearAll: () => void;
   generationStatus?: string | null;
+  canGenerate?: boolean;
 };
 
 const fieldStyle = {
@@ -74,6 +75,7 @@ export function InputPanel({
   onGenerate,
   onClearAll,
   generationStatus,
+  canGenerate = true,
 }: InputPanelProps) {
   const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
   const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
@@ -322,14 +324,23 @@ export function InputPanel({
         <button
           type="button"
           onClick={onGenerate}
-          className="w-full py-4 rounded-[12px] transition-all hover:opacity-90 relative overflow-hidden mb-3"
+          disabled={!canGenerate}
+          className={`w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3 ${
+            canGenerate ? 'hover:opacity-90' : ''
+          }`}
           style={{
-            background: 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)',
-            color: '#0E0F14',
+            background: canGenerate
+              ? 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)'
+              : 'rgba(255, 255, 255, 0.08)',
+            color: canGenerate ? '#0E0F14' : '#8B8F9E',
             fontSize: '15px',
             fontWeight: 600,
-            boxShadow:
-              '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)',
+            boxShadow: canGenerate
+              ? '0 12px 32px rgba(255, 191, 222, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.4)'
+              : 'none',
+            border: canGenerate ? 'none' : '1px solid rgba(255, 255, 255, 0.12)',
+            cursor: canGenerate ? 'pointer' : 'not-allowed',
+            opacity: canGenerate ? 1 : 0.95,
           }}
         >
           <div
