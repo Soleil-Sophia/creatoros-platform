@@ -6,17 +6,11 @@ import { InputPanel } from '../components/generate/InputPanel';
 import { OutputWorkspaceHeader } from '../components/generate/OutputWorkspaceHeader';
 import { AssetCard } from '../components/generate/AssetCard';
 import { BrandVoiceChip } from '../components/shared';
-<<<<<<< HEAD
 import {
   readBrandProfile,
   createVoiceLabel,
   getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
-  getBrandOSReadinessStatus,
-} from '../lib/brand-profile/service';
-=======
-import { readBrandProfile, createVoiceLabel } from '../lib/brand-profile/storage';
->>>>>>> origin/main
 import { OUTPUT_TYPES } from '../../data/contentos';
 import { saveAsset } from '../lib/content-library/storage';
 import type { BrandVoiceSnapshot, SavedContentAsset } from '../lib/content-library/types';
@@ -82,7 +76,6 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
   );
 
   // Brand profile (read-only handoff from BrandOS)
-<<<<<<< HEAD
   const [brandProfile, setBrandProfile] = useState(() => readBrandProfile());
 
   const brandProfileStatus = getBrandProfileStatus(brandProfile);
@@ -90,28 +83,15 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     brandProfileStatus === 'complete' && brandProfile
       ? brandProfile.voiceLabel ?? createVoiceLabel(brandProfile)
       : null;
-=======
-  const [brandVoiceLabel, setBrandVoiceLabel] = useState<string | null>(null);
->>>>>>> origin/main
 
   // Hydrate brand profile once on mount. Only seeds the tone default —
   // does not override the user's tone after they change it, and does not
   // override a tone that was just restored from a saved Library asset.
   useEffect(() => {
-<<<<<<< HEAD
     const refresh = () => setBrandProfile(readBrandProfile());
     refresh();
     window.addEventListener('focus', refresh);
     return () => window.removeEventListener('focus', refresh);
-=======
-    const profile = readBrandProfile();
-    if (!profile) return;
-    if (profile.voiceLabel) setBrandVoiceLabel(profile.voiceLabel);
-    if (restoredInputs) return; // saved-asset reuse owns the tone
-    if (profile.tone && profile.tone.trim()) {
-      setTone((current) => (current === 'Conversational' ? profile.tone : current));
-    }
->>>>>>> origin/main
   }, []);
 
   useEffect(() => {
@@ -381,13 +361,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
               onGenerate={handleGenerate}
               onClearAll={handleClearAndStartFresh}
               generationStatus={genStatus}
-<<<<<<< HEAD
               brandProfileStatus={brandProfileStatus}
               onOpenBrandOS={() => navigate('/app/brand-os/setup')}
-              generationStatus={genLoading ? 'Generating…' : genStatus}
-              canGenerate={!generationBlocked && !genLoading}
-=======
->>>>>>> origin/main
             />
 
             {/* Output Workspace (Right 64%) */}
@@ -421,11 +396,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                       type={outputType}
                       title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
                       subtitle={`${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`}
-<<<<<<< HEAD
                       accentColor="rgba(255, 191, 222, 1)"
-=======
-                      accentColor="rgba(255, 191, 222"
->>>>>>> origin/main
                       icon={
                         <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
                           <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>

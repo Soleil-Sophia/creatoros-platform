@@ -4,18 +4,9 @@ import { Link } from 'react-router';
 import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
-<<<<<<< HEAD
   createVoiceLabel,
   getBrandProfileStatus,
 } from '../lib/brand-profile/storage';
-import {
-  getBrandOSReadinessStatus,
-} from '../lib/brand-profile/service';
-import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
-=======
-  isBrandProfileMeaningful,
-} from '../lib/brand-profile/storage';
->>>>>>> origin/main
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
 
@@ -32,27 +23,18 @@ type LocalSystemState = {
 
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
-<<<<<<< HEAD
   const brandStatus = getBrandProfileStatus(profile);
   const connected = brandStatus === 'complete';
-=======
-  const connected = isBrandProfileMeaningful(profile);
->>>>>>> origin/main
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>
     (a.createdAt ?? '') < (b.createdAt ?? '') ? 1 : -1
   );
   const runs = listRuns();
   return {
-<<<<<<< HEAD
     brandStatus,
+    brandConnected: connected,
     brandVoiceLabel: connected && profile ? profile.voiceLabel ?? createVoiceLabel(profile) : null,
     brandUpdatedAt: profile?.updatedAt ?? null,
-=======
-    brandConnected: connected,
-    brandVoiceLabel: connected ? profile?.voiceLabel ?? null : null,
-    brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
->>>>>>> origin/main
     savedAssetCount: assets.length,
     latestAsset: sortedAssets[0]
       ? { title: sortedAssets[0].title, createdAt: sortedAssets[0].createdAt }
@@ -155,11 +137,8 @@ const addOnModules = [
 
 export function DashboardPage() {
   const [state, setState] = useState<LocalSystemState>(() => ({
-<<<<<<< HEAD
     brandStatus: 'not_started',
-=======
     brandConnected: false,
->>>>>>> origin/main
     brandVoiceLabel: null,
     brandUpdatedAt: null,
     savedAssetCount: 0,
@@ -245,7 +224,6 @@ export function DashboardPage() {
               className="p-5 rounded-[14px]"
               style={{
                 background: '#171923',
-<<<<<<< HEAD
                 border: `1px solid ${
                   state.brandStatus === 'complete'
                     ? 'rgba(231, 198, 243, 0.25)'
@@ -253,16 +231,12 @@ export function DashboardPage() {
                     ? 'rgba(255, 191, 222, 0.18)'
                     : 'rgba(255, 255, 255, 0.06)'
                 }`,
-=======
-                border: `1px solid ${state.brandConnected ? 'rgba(231, 198, 243, 0.25)' : 'rgba(255, 255, 255, 0.06)'}`,
->>>>>>> origin/main
               }}
             >
               <div style={{ fontSize: '11px', fontWeight: 600, color: '#8B8F9E', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '8px' }}>
                 Brand Profile
               </div>
               <div className="flex items-center gap-2 mb-1">
-<<<<<<< HEAD
                 {state.brandStatus === 'complete' ? (
                   <>
                     <CheckCircle2 size={14} style={{ color: '#E7C6F3' }} />
@@ -272,26 +246,15 @@ export function DashboardPage() {
                   <>
                     <Clock size={14} style={{ color: '#FFBFDE' }} />
                     <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
-                {state.brandReadinessStatus === 'complete' && (
-=======
-                {state.brandConnected ? (
->>>>>>> origin/main
-                  <>
-                    <CheckCircle2 size={14} style={{ color: '#E7C6F3' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Connected</span>
                   </>
                 ) : (
                   <>
                     <Lock size={14} style={{ color: '#8B8F9E' }} />
-                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not connected</span>
+                    <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not Started</span>
                   </>
                 )}
               </div>
-<<<<<<< HEAD
               {state.brandStatus === 'complete' ? (
-=======
-              {state.brandConnected ? (
->>>>>>> origin/main
                 <>
                   <div style={{ fontSize: '13px', color: '#B4B8C7' }}>
                     Voice: <span style={{ color: '#F4F3F8', fontWeight: 500 }}>{state.brandVoiceLabel || '—'}</span>
