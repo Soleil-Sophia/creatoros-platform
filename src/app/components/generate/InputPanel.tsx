@@ -83,6 +83,7 @@ export function InputPanel({
   const meta = INPUT_META[outputType] ?? INPUT_META['hook-pack'];
   const currentType = OUTPUT_TYPES.find((t) => t.id === outputType);
   const helperId = `brand-profile-helper-${brandProfileStatus}`;
+  const canGenerate = brandProfileStatus !== 'not_started';
 
   return (
     <div
