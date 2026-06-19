@@ -30,10 +30,10 @@ export function readBrandProfile(): BrandProfile | null {
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
   const normalizedProfile: BrandProfile = {
     ...profile,
-    tone: profile.tone.trim(),
-    complexity: profile.complexity.trim(),
-    formality: profile.formality.trim(),
-    energy: profile.energy.trim(),
+    tone: profile.tone?.trim() ?? '',
+    complexity: profile.complexity?.trim() ?? '',
+    formality: profile.formality?.trim() ?? '',
+    energy: profile.energy?.trim() ?? '',
   };
   const next: BrandProfile = {
     ...normalizedProfile,
