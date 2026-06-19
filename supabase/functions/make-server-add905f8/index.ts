@@ -73,7 +73,11 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 // ─── Content Generation ───────────────────────────────────────────────────────
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
-  const { offer, audience, platform, goal, tone, outputType } = await c.req.json();
+  const rawBody = await c.req.json().catch(() => null);
+  if (!rawBody || typeof rawBody !== 'object' || Array.isArray(rawBody)) {
+    return c.json({ error: "Request body must be a JSON object" }, 400);
+  }
+  const { offer, audience, platform, goal, tone, outputType } = rawBody;
 
   if (!offer) return c.json({ error: "offer is required" }, 400);
 

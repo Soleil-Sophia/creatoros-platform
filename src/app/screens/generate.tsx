@@ -103,7 +103,7 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
   // UI state
   const [showReuseBanner, setShowReuseBanner] = useState(!!reuseAsset);
-  const [hasOutput, setHasOutput] = useState(true); // TODO: Set based on actual generation state
+  const [hasOutput, setHasOutput] = useState(!!reuseAsset);
   // Mocked generation feedback — shows "Generated {Label} ✓" in the output header
   // subtitle for a few seconds after the user clicks the Generate button.
   const [genStatus, setGenStatus] = useState<string | null>(null);
@@ -393,10 +393,14 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
                   {/* Asset Output */}
                   <div className="flex-1 overflow-y-auto p-8">
                     <AssetCard
-                      type={outputType}
+                      type={
+                        outputType === 'hook-pack' ? 'hooks'
+                        : outputType === 'caption-draft' ? 'captions'
+                        : 'script'
+                      }
                       title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
                       subtitle={`${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`}
-                      accentColor="rgba(255, 191, 222, 1)"
+                      accentColor="#FFBFDE"
                       icon={
                         <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
                           <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
