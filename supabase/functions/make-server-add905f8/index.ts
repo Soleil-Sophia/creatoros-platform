@@ -1,10 +1,30 @@
-import { Hono } from "npm:hono";
+import { Context, Hono } from "npm:hono";
 import { cors } from "npm:hono/cors";
 import { logger } from "npm:hono/logger";
 import { createClient } from "jsr:@supabase/supabase-js@2.49.8";
 import * as kv from "./kv_store.tsx";
 
 const app = new Hono();
+type JsonObject = Record<string, unknown>;
+
+function isJsonObject(value: unknown): value is JsonObject {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+async function getJsonObjectBody(c: Context) {
+  const body = await c.req.json().catch(() => null);
+  return isJsonObject(body) ? body : null;
+}
+
+function getString(value: unknown) {
+  return typeof value === "string" ? value : "";
+}
+
+function getStringArray(value: unknown) {
+  return Array.isArray(value)
+    ? value.filter((item): item is string => typeof item === "string" && item.length > 0)
+    : [];
+}
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
 app.use("*", logger(console.log));
@@ -56,7 +76,11 @@ app.get("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 
 app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
   const userId = c.get("userId");
-  const body = await c.req.json();
+  const body = await getJsonObjectBody(c);
+
+  if (!body) {
+    return c.json({ error: "Request body must be a JSON object" }, 400);
+  }
 
   if (!body.brandName) {
     return c.json({ error: "brandName is required" }, 400);
@@ -73,8 +97,8 @@ app.post("/make-server-add905f8/brand-profile", requireAuth, async (c) => {
 // ─── Content Generation ───────────────────────────────────────────────────────
 app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const userId = c.get("userId");
-  const rawBody = await c.req.json().catch(() => null);
-  if (!rawBody || typeof rawBody !== 'object' || Array.isArray(rawBody)) {
+  const rawBody = await getJsonObjectBody(c);
+  if (!rawBody) {
     return c.json({ error: "Request body must be a JSON object" }, 400);
   }
   const { offer, audience, platform, goal, tone, outputType } = rawBody;
@@ -94,17 +118,17 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const brandContext = brandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
-- Brand: ${brandProfile.brandName}
-- Mission: ${brandProfile.mission}
-- Voice Tone: ${brandProfile.voiceTone}
-- Voice Energy: ${brandProfile.voiceEnergy}
-- Complexity: ${brandProfile.voiceComplexity}
-- Formality: ${brandProfile.voiceFormality}
-- Do's: ${(brandProfile.voiceDos || []).join(", ")}
-- Don'ts: ${(brandProfile.voiceDonts || []).join(", ")}
-- Messaging Pillars: ${(brandProfile.messagingPillars || []).filter(Boolean).join(", ")}
-- Target Customer: ${brandProfile.targetCustomer}
-- Transformation Promise: ${brandProfile.transformation}
+- Brand: ${getString(brandProfile.brandName)}
+- Mission: ${getString(brandProfile.mission)}
+- Voice Tone: ${getString(brandProfile.voiceTone)}
+- Voice Energy: ${getString(brandProfile.voiceEnergy)}
+- Complexity: ${getString(brandProfile.voiceComplexity)}
+- Formality: ${getString(brandProfile.voiceFormality)}
+- Do's: ${voiceDos.join(", ")}
+- Don'ts: ${voiceDonts.join(", ")}
+- Messaging Pillars: ${messagingPillars.join(", ")}
+- Target Customer: ${getString(brandProfile.targetCustomer)}
+- Transformation Promise: ${getString(brandProfile.transformation)}
 
 Every output MUST reflect this brand identity. No generic content.` : "";
 
@@ -135,7 +159,7 @@ Rules:
 - 5 script sections for a 60–90 sec video or long post
 - 3 platform-specific captions: Instagram (emotional), LinkedIn (professional), X (punchy ≤280 chars)
 - Everything must be specific to the offer — no generic filler
-- ${brandProfile ? `Mirror ${brandProfile.brandName}'s exact voice` : "Be concrete and specific"}`;
+- ${brandProfile ? `Mirror ${getString(brandProfile.brandName)}'s exact voice` : "Be concrete and specific"}`;
 
   // OpenAI call
   const openaiKey = Deno.env.get("OPENAI_API_KEY");
