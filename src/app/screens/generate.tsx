@@ -625,31 +625,41 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
 
                   {/* Asset Output */}
                   <div className="flex-1 overflow-y-auto p-8">
-                    <AssetCard
-                      type={outputType as 'hooks' | 'script' | 'captions'}
-                      title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
-                      subtitle={(() => {
-                        const items = getDisplayItems(outputType, generatedOutput);
-                        const count = items.length;
-                        return count > 0
-                          ? `${count} ${count === 1 ? 'item' : 'items'} · ready to deploy`
-                          : `${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`;
-                      })()}
-                      accentColor="rgba(255, 191, 222"
-                      icon={
-                        <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
-                          <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                          <path d="M11 3l3 3m0 0l-3 3m3-3H8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-                        </svg>
-                      }
-                      items={getDisplayItems(outputType, generatedOutput)}
-                      wordCount={(() => {
-                        const items = getDisplayItems(outputType, generatedOutput);
-                        return items.reduce((acc, s) => acc + s.split(/\s+/).filter(Boolean).length, 0);
-                      })()}
-                      onSave={handleSaveToLibrary}
-                      saveStatus={saveStatus}
-                    />
+                    {(() => {
+                      const assetTypeMap: Record<string, 'hooks' | 'script' | 'captions'> = {
+                        'hook-pack': 'hooks',
+                        'short-script': 'script',
+                        'caption-draft': 'captions',
+                        'content-brief': 'hooks',
+                        'repurposing-plan': 'captions',
+                      };
+                      const cardType = assetTypeMap[outputType] ?? 'hooks';
+                      const displayItems = getDisplayItems(outputType, generatedOutput);
+                      const wordCount = displayItems.reduce((acc, s) => acc + s.split(/\s+/).filter(Boolean).length, 0);
+                      const count = displayItems.length;
+                      return (
+                        <AssetCard
+                          type={cardType}
+                          title={OUTPUT_MOCK[outputType]?.header.split(' — ')[0] ?? outputType}
+                          subtitle={
+                            count > 0
+                              ? `${count} ${count === 1 ? 'item' : 'items'} · ready to deploy`
+                              : `${OUTPUT_MOCK[outputType]?.itemLabel ?? ''} · ready to deploy`
+                          }
+                          accentColor="rgba(255, 191, 222"
+                          icon={
+                            <svg width="18" height="18" fill="none" viewBox="0 0 18 18">
+                              <path d="M3 9l3-3m0 0l3 3M6 6v8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M11 3l3 3m0 0l-3 3m3-3H8" stroke="#0E0F14" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          }
+                          items={displayItems}
+                          wordCount={wordCount}
+                          onSave={handleSaveToLibrary}
+                          saveStatus={saveStatus}
+                        />
+                      );
+                    })()}
                   </div>
                 </>
               ) : (
