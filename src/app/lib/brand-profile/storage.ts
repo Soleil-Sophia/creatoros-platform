@@ -14,15 +14,29 @@ function isBrandProfileShape(value: unknown): value is BrandProfile {
   );
 }
 
-function isLegacyBrandProfileShape(value: unknown): boolean {
-  if (!value || typeof value !== 'object') return false;
+function coerceLegacyBrandProfile(value: unknown): BrandProfile | null {
+  if (!value || typeof value !== 'object') return null;
   const v = value as Record<string, unknown>;
-  return (
-    typeof v.voiceTone === 'string' &&
-    typeof v.voiceComplexity === 'string' &&
-    typeof v.voiceFormality === 'string' &&
-    typeof v.voiceEnergy === 'string'
-  );
+  const tone = v.voiceTone;
+  const complexity = v.voiceComplexity;
+  const formality = v.voiceFormality;
+  const energy = v.voiceEnergy;
+  if (
+    typeof tone !== 'string' ||
+    typeof complexity !== 'string' ||
+    typeof formality !== 'string' ||
+    typeof energy !== 'string'
+  ) {
+    return null;
+  }
+  return {
+    tone,
+    complexity,
+    formality,
+    energy,
+    voiceLabel: typeof v.voiceLabel === 'string' ? v.voiceLabel : undefined,
+    updatedAt: typeof v.updatedAt === 'string' ? v.updatedAt : undefined,
+  };
 }
 
 export function readBrandProfile(): BrandProfile | null {
@@ -32,6 +46,7 @@ export function readBrandProfile(): BrandProfile | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (isBrandProfileShape(parsed)) return parsed;
+    return coerceLegacyBrandProfile(parsed);
     // Coerce legacy shape (voiceTone/voiceComplexity/voiceFormality/voiceEnergy) into
     // the current shape so existing users keep their BrandOS readiness after deploy.
     if (isLegacyBrandProfileShape(parsed)) {
