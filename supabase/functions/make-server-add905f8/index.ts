@@ -150,7 +150,7 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
   const brandContext = effectiveBrandProfile ? `
 
 BRAND VOICE & IDENTITY — apply to every output:
-${brandIdentity ? `- Brand: ${brandIdentity}
+${(effectiveBrandProfile.brandName ?? effectiveBrandProfile.voiceLabel) ? `- Brand: ${effectiveBrandProfile.brandName ?? effectiveBrandProfile.voiceLabel}
 ` : ''}- Mission: ${effectiveBrandProfile.mission ?? ''}
 - Voice Tone: ${effectiveBrandProfile.voiceTone ?? ''}
 - Voice Energy: ${effectiveBrandProfile.voiceEnergy ?? ''}
