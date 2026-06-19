@@ -97,7 +97,7 @@ export function Hero() {
                   borderRadius: '12px',
                   fontSize: '16px',
                   fontWeight: 600,
-                  boxShadow: '0 6px 20px rgba(255, 191, 222, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25)',
+                  boxShadow: '0 8px 24px rgba(255, 191, 222, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.3)',
                   textDecoration: 'none',
                   display: 'inline-block'
                 }}
@@ -129,12 +129,12 @@ export function Hero() {
           {/* Right: Premium OS Surface - Hero-Worthy Iconic Treatment */}
           <div className="relative lg:h-[700px] flex items-center justify-center">
             
-            {/* BACKGROUND - Subtle atmospheric glow (reduced milky effect) */}
+            {/* BACKGROUND - Controlled atmospheric foundation (less diffuse) */}
             <div 
-              className="absolute inset-0 rounded-[20px] blur-xl opacity-10"
+              className="absolute inset-0 rounded-[20px] blur-2xl opacity-25"
               style={{ 
                 background: 'linear-gradient(135deg, #DABFFF 0%, #FFBFDE 100%)',
-                transform: 'scale(0.7) translateY(40px)'
+                transform: 'scale(0.8) translateY(30px)'
               }}
             />
 

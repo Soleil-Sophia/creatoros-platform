@@ -4,15 +4,15 @@ import { Link } from 'react-router';
 import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
-  createVoiceLabel,
-  getBrandProfileStatus,
-} from '../lib/brand-profile/storage';
+  getBrandOSReadinessStatus,
+} from '../lib/brand-profile/service';
+import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';
 
 type LocalSystemState = {
-  brandStatus: 'not_started' | 'in_progress' | 'complete';
   brandConnected: boolean;
+  brandReadinessStatus: BrandOSReadinessStatus;
   brandVoiceLabel: string | null;
   brandUpdatedAt: string | null;
   savedAssetCount: number;
@@ -23,18 +23,18 @@ type LocalSystemState = {
 
 function readLocalSystemState(): LocalSystemState {
   const profile = readBrandProfile();
-  const brandStatus = getBrandProfileStatus(profile);
-  const connected = brandStatus === 'complete';
+  const readinessStatus = getBrandOSReadinessStatus(profile);
+  const connected = readinessStatus === 'complete';
   const assets = listSavedAssets();
   const sortedAssets = [...assets].sort((a, b) =>
     (a.createdAt ?? '') < (b.createdAt ?? '') ? 1 : -1
   );
   const runs = listRuns();
   return {
-    brandStatus,
     brandConnected: connected,
-    brandVoiceLabel: connected && profile ? profile.voiceLabel ?? createVoiceLabel(profile) : null,
-    brandUpdatedAt: profile?.updatedAt ?? null,
+    brandReadinessStatus: readinessStatus,
+    brandVoiceLabel: connected ? profile?.voiceLabel ?? null : null,
+    brandUpdatedAt: connected ? profile?.updatedAt ?? null : null,
     savedAssetCount: assets.length,
     latestAsset: sortedAssets[0]
       ? { title: sortedAssets[0].title, createdAt: sortedAssets[0].createdAt }
@@ -137,8 +137,8 @@ const addOnModules = [
 
 export function DashboardPage() {
   const [state, setState] = useState<LocalSystemState>(() => ({
-    brandStatus: 'not_started',
     brandConnected: false,
+    brandReadinessStatus: 'not_started',
     brandVoiceLabel: null,
     brandUpdatedAt: null,
     savedAssetCount: 0,
@@ -225,11 +225,11 @@ export function DashboardPage() {
               style={{
                 background: '#171923',
                 border: `1px solid ${
-                  state.brandStatus === 'complete'
-                    ? 'rgba(231, 198, 243, 0.25)'
-                    : state.brandStatus === 'in_progress'
-                    ? 'rgba(255, 191, 222, 0.18)'
-                    : 'rgba(255, 255, 255, 0.06)'
+                  state.brandReadinessStatus === 'complete'
+                    ? 'rgba(191, 255, 222, 0.25)'
+                    : state.brandReadinessStatus === 'in_progress'
+                      ? 'rgba(231, 198, 243, 0.25)'
+                      : 'rgba(255, 255, 255, 0.06)'
                 }`,
               }}
             >
@@ -237,24 +237,26 @@ export function DashboardPage() {
                 Brand Profile
               </div>
               <div className="flex items-center gap-2 mb-1">
-                {state.brandStatus === 'complete' ? (
+                {state.brandReadinessStatus === 'complete' && (
                   <>
-                    <CheckCircle2 size={14} style={{ color: '#E7C6F3' }} />
+                    <CheckCircle2 size={14} style={{ color: '#BFFFDE' }} />
                     <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>Complete</span>
                   </>
-                ) : state.brandStatus === 'in_progress' ? (
+                )}
+                {state.brandReadinessStatus === 'in_progress' && (
                   <>
-                    <Clock size={14} style={{ color: '#FFBFDE' }} />
+                    <Clock size={14} style={{ color: '#E7C6F3' }} />
                     <span style={{ fontSize: '15px', fontWeight: 600, color: '#F4F3F8' }}>In Progress</span>
                   </>
-                ) : (
+                )}
+                {state.brandReadinessStatus === 'not_started' && (
                   <>
                     <Lock size={14} style={{ color: '#8B8F9E' }} />
                     <span style={{ fontSize: '15px', fontWeight: 600, color: '#B4B8C7' }}>Not Started</span>
                   </>
                 )}
               </div>
-              {state.brandStatus === 'complete' ? (
+              {state.brandReadinessStatus !== 'not_started' ? (
                 <>
                   <div style={{ fontSize: '13px', color: '#B4B8C7' }}>
                     Voice: <span style={{ color: '#F4F3F8', fontWeight: 500 }}>{state.brandVoiceLabel || '—'}</span>
@@ -265,20 +267,9 @@ export function DashboardPage() {
                     </div>
                   )}
                 </>
-              ) : state.brandStatus === 'in_progress' ? (
-                <>
-                  <div style={{ fontSize: '13px', color: '#B4B8C7' }}>
-                    Your Brand Profile is incomplete. Content will still generate, but it may not fully reflect your brand voice.
-                  </div>
-                  {state.brandUpdatedAt && (
-                    <div style={{ fontSize: '12px', color: '#8B8F9E', marginTop: '4px' }}>
-                      Updated {formatDate(state.brandUpdatedAt)}
-                    </div>
-                  )}
-                </>
               ) : (
                 <div style={{ fontSize: '13px', color: '#8B8F9E' }}>
-                  Complete BrandOS to unlock brand-aware content generation.
+                  Set tone & voice in BrandOS to unlock handoff to ContentOS.
                 </div>
               )}
             </div>
