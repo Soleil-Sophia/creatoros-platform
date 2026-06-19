@@ -80,10 +80,10 @@ export function isBrandProfileMeaningful(profile: BrandProfile | null | undefine
 export function isBrandProfileComplete(profile: BrandProfile | null | undefined): boolean {
   if (!profile) return false;
   return Boolean(
-    profile.tone.trim() &&
-      profile.complexity.trim() &&
-      profile.formality.trim() &&
-      profile.energy.trim()
+    (profile.tone ?? '').trim() &&
+      (profile.complexity ?? '').trim() &&
+      (profile.formality ?? '').trim() &&
+      (profile.energy ?? '').trim()
   );
 }
 
