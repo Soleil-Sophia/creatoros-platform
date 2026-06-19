@@ -1,17 +1,43 @@
-import type { BrandProfile, BrandOSReadinessStatus } from './types';
+import type { BrandProfile } from './types';
 import { emptyBrandProfile } from './defaultBrandProfile';
 
 export const BRAND_PROFILE_STORAGE_KEY = 'creatoros-brand-profile-v1';
 
-function isBrandProfileShape(value: unknown): value is BrandProfile {
-  if (!value || typeof value !== 'object') return false;
-  const v = value as Record<string, unknown>;
-  return (
-    typeof v.tone === 'string' &&
-    typeof v.complexity === 'string' &&
-    typeof v.formality === 'string' &&
-    typeof v.energy === 'string'
-  );
+export const REQUIRED_BRAND_PROFILE_FIELDS = [
+  'brandName',
+  'voiceTone',
+  'voiceComplexity',
+  'voiceFormality',
+  'voiceEnergy',
+] as const;
+
+export type BrandProfileStatus = 'not_started' | 'in_progress' | 'complete';
+
+type RequiredBrandProfileField = (typeof REQUIRED_BRAND_PROFILE_FIELDS)[number];
+
+function isPlainObject(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
+}
+
+function normalizeString(value: unknown): string {
+  return typeof value === 'string' ? value : '';
+}
+
+function getFieldValue(profile: BrandProfile, field: RequiredBrandProfileField): string {
+  return profile[field].trim();
+}
+
+export function getBrandProfileStatus(profile: BrandProfile | null | undefined): BrandProfileStatus {
+  const filledCount = getFilledBrandProfileFieldCount(profile);
+
+  if (filledCount === 0) return 'not_started';
+  if (filledCount === REQUIRED_BRAND_PROFILE_FIELDS.length) return 'complete';
+  return 'in_progress';
+}
+
+export function getFilledBrandProfileFieldCount(profile: BrandProfile | null | undefined): number {
+  if (!profile) return 0;
+  return REQUIRED_BRAND_PROFILE_FIELDS.filter((field) => getFieldValue(profile, field)).length;
 }
 
 export function readBrandProfile(): BrandProfile | null {
@@ -20,8 +46,30 @@ export function readBrandProfile(): BrandProfile | null {
     const raw = window.localStorage.getItem(BRAND_PROFILE_STORAGE_KEY);
     if (!raw) return null;
     const parsed = JSON.parse(raw);
-    if (!isBrandProfileShape(parsed)) return null;
-    return parsed;
+    if (!isPlainObject(parsed)) return null;
+    const legacy = parsed as Record<string, unknown>;
+    const voiceTone = normalizeString(legacy.voiceTone ?? legacy.tone);
+    const voiceComplexity = normalizeString(legacy.voiceComplexity ?? legacy.complexity);
+    const voiceFormality = normalizeString(legacy.voiceFormality ?? legacy.formality);
+    const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy);
+    const voiceLabel = normalizeString(legacy.voiceLabel) || undefined;
+    let brandName = normalizeString(legacy.brandName);
+    // Legacy v1 profiles have no brandName. If the profile was otherwise fully
+    // configured (all four voice fields present), backfill brandName from the
+    // stored voiceLabel (falling back to voiceTone) so that migrated voices
+    // keep their 'complete' status.
+    if (!brandName && voiceTone && voiceComplexity && voiceFormality && voiceEnergy) {
+      brandName = voiceLabel ?? voiceTone;
+    }
+    return {
+      brandName,
+      voiceTone,
+      voiceComplexity,
+      voiceFormality,
+      voiceEnergy,
+      voiceLabel,
+      updatedAt: normalizeString(legacy.updatedAt) || undefined,
+    };
   } catch {
     return null;
   }
@@ -29,7 +77,11 @@ export function readBrandProfile(): BrandProfile | null {
 
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
   const next: BrandProfile = {
-    ...profile,
+    brandName: profile.brandName.trim(),
+    voiceTone: profile.voiceTone.trim(),
+    voiceComplexity: profile.voiceComplexity.trim(),
+    voiceFormality: profile.voiceFormality.trim(),
+    voiceEnergy: profile.voiceEnergy.trim(),
     voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
     updatedAt: new Date().toISOString(),
   };
@@ -56,9 +108,9 @@ export function clearBrandProfile(): void {
  * Prefers the tone, falls back to formality/energy, then to "Custom Voice".
  */
 export function createVoiceLabel(profile: BrandProfile): string {
-  const tone = profile.tone?.trim();
-  const formality = profile.formality?.trim();
-  const energy = profile.energy?.trim();
+  const tone = profile.voiceTone?.trim();
+  const formality = profile.voiceFormality?.trim();
+  const energy = profile.voiceEnergy?.trim();
 
   if (tone) return tone;
   if (formality && energy) return `${formality} · ${energy}`;
@@ -68,31 +120,7 @@ export function createVoiceLabel(profile: BrandProfile): string {
 }
 
 export function isBrandProfileMeaningful(profile: BrandProfile | null | undefined): boolean {
-  if (!profile) return false;
-  return Boolean(
-    profile.tone.trim() ||
-      profile.complexity.trim() ||
-      profile.formality.trim() ||
-      profile.energy.trim()
-  );
-}
-
-/**
- * Derives the BrandOS readiness status from a profile snapshot.
- *
- * - `not_started`  → no voice fields filled
- * - `in_progress`  → at least one but fewer than four fields filled
- * - `complete`     → all four fields (tone, complexity, formality, energy) filled
- */
-export function getBrandOSReadinessStatus(
-  profile: BrandProfile | null | undefined
-): BrandOSReadinessStatus {
-  if (!profile) return 'not_started';
-  const fields = [profile.tone, profile.complexity, profile.formality, profile.energy];
-  const filled = fields.filter((f) => f?.trim().length > 0).length;
-  if (filled === 0) return 'not_started';
-  if (filled === fields.length) return 'complete';
-  return 'in_progress';
+  return getBrandProfileStatus(profile) !== 'not_started';
 }
 
 // Re-export the empty shape so consumers can use a single import for initial state.
