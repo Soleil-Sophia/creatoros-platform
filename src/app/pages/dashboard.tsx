@@ -5,7 +5,7 @@ import { ArrowRight, Lock, CheckCircle2, Clock } from 'lucide-react';
 import {
   readBrandProfile,
   getBrandOSReadinessStatus,
-} from '../lib/brand-profile/storage';
+} from '../lib/brand-profile/service';
 import type { BrandOSReadinessStatus } from '../lib/brand-profile/types';
 import { listSavedAssets } from '../lib/content-library/storage';
 import { listRuns } from '../lib/authority-engine/storage';

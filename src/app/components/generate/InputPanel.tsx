@@ -325,7 +325,9 @@ export function InputPanel({
           type="button"
           onClick={onGenerate}
           disabled={!canGenerate}
-          className="w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3"
+          className={`w-full py-4 rounded-[12px] transition-all relative overflow-hidden mb-3 ${
+            canGenerate ? 'hover:opacity-90' : ''
+          }`}
           style={{
             background: canGenerate
               ? 'linear-gradient(135deg, #FFBFDE 0%, #E7C6F3 100%)'
