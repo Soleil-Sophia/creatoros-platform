@@ -78,6 +78,8 @@ function hasRequestBrandProfile(profile: ReturnType<typeof requestBrandProfile>)
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
   const apiKey = c.req.header("x-api-key");
+  // FRONTEND_API_KEY (server-side secret) must match the x-api-key header sent by the frontend
+  // (typically sourced from VITE_API_KEY). API-key auth bypasses user sessions and disables persistence.
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
     c.set("userId", "api-key:frontend");
@@ -169,15 +171,19 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
 
   // Load brand profile if available — prefer KV-stored profile, fall back to
   // request-supplied voice fields (for users who have only configured BrandOS locally).
+  // Skip the KV lookup for API-key auth requests since they cannot write a persisted
+  // brand profile, making the read unnecessary work on the hot path.
   let storedBrandProfile: ReturnType<typeof requestBrandProfile> | null = null;
-  try {
-    const rawProfile = await kv.get(`brand_profile:${userId}`);
-    if (isPlainObject(rawProfile)) {
-      const normalizedProfile = requestBrandProfile(rawProfile);
-      storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
+  if (allowPersistence) {
+    try {
+      const rawProfile = await kv.get(`brand_profile:${userId}`);
+      if (isPlainObject(rawProfile)) {
+        const normalizedProfile = requestBrandProfile(rawProfile);
+        storedBrandProfile = hasRequestBrandProfile(normalizedProfile) ? normalizedProfile : null;
+      }
+    } catch {
+      // ignore KV failures and fall back to request-supplied brand profile data
     }
-  } catch {
-    // ignore KV failures and fall back to request-supplied brand profile data
   }
 
   const requestProfile = requestBrandProfile(body);
