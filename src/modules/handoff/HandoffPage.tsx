@@ -30,6 +30,7 @@ export function HandoffPage() {
   );
 
   const passed = qualityGateScore >= 3.5;
+  const effectiveDecomposed = isDecomposed && passed;
   const distributionAssets = useMemo(
     () => generateMockDistributionAssets(coreAsset, launchIntent),
     [coreAsset, launchIntent],
@@ -65,7 +66,7 @@ export function HandoffPage() {
         </div>
       )}
 
-      <HandoffHeader assetId={coreAsset.id} isDecomposed={isDecomposed} />
+      <HandoffHeader assetId={coreAsset.id} isDecomposed={effectiveDecomposed} />
 
       <main className="mx-auto grid w-full max-w-[1600px] flex-1 grid-cols-1 items-start gap-6 px-4 py-6 md:px-6 lg:grid-cols-12">
         <CoreAssetPanel asset={coreAsset} onChange={setCoreAsset} wordCount={wordCount} />
@@ -79,7 +80,7 @@ export function HandoffPage() {
         <LaunchPackagePanel
           intent={launchIntent}
           onIntentChange={setLaunchIntent}
-          isDecomposed={isDecomposed}
+          isDecomposed={effectiveDecomposed}
           assets={distributionAssets}
           expandedCard={expandedCard}
           onCardToggle={setExpandedCard}
@@ -89,7 +90,7 @@ export function HandoffPage() {
       </main>
 
       <BottomActionBar
-        isDecomposed={isDecomposed}
+        isDecomposed={effectiveDecomposed}
         onExportMarkdown={() => exportMarkdown(coreAsset, launchIntent, qualityGateScore, distributionAssets)}
         onExportJson={() => exportJson(coreAsset, launchIntent, qualityGateScore, distributionAssets)}
         onTriggerToast={showToast}
