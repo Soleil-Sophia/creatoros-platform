@@ -58,4 +58,14 @@ export function clearRegistry(): void {
   byAssetId.clear();
 }
 
+/** Restore persisted entries into in-memory Maps without re-registering. */
+export function loadRegistryEntries(entries: RegistryEntry[]): void {
+  for (const entry of entries) {
+    if (byArtifactHash.has(entry.artifactHash)) continue;
+    byArtifactHash.set(entry.artifactHash, entry);
+    const history = byAssetId.get(entry.assetId) ?? [];
+    byAssetId.set(entry.assetId, [...history, entry]);
+  }
+}
+
 export { byAssetId as _assetIdIndex };
