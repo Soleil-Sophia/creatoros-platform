@@ -4,6 +4,10 @@ export type LineageEventType =
   | 'validated'
   | 'decomposed'
   | 'exported'
+  | 'asset_generated'
+  | 'launch_assigned'
+  | 'published'
+  | 'measured'
   | 'handoff';
 
 export interface LineageEvent {

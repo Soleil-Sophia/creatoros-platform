@@ -27,6 +27,7 @@ export interface ValidationSchema<T> {
 export interface ValidationReport {
   results: {
     blueprint_validity: 'pass' | 'fail';
+    fixture_validity: 'pass' | 'fail';
   };
   fails: string[];
   coverage: {
@@ -76,23 +77,24 @@ export function combineResults(...results: ValidationResult[]): ValidationResult
 }
 
 export function generateValidationReport<T>(
-  result: ValidationResult,
-  schema: ValidationSchema<T>,
+  bvResult: ValidationResult,
+  fvResult: ValidationResult,
+  _schema: ValidationSchema<T>,
   coverage?: { stateCoverage?: number; requiredPropCoverage?: number },
 ): ValidationReport {
-  const fails = result.violations.map((v) => v.ruleId ?? v.field);
-
-  const totalRules = schema.rules.length;
-  const passedRules = totalRules - result.violations.length;
-  const ruleFraction = totalRules > 0 ? passedRules / totalRules : 1;
+  const allFails = [
+    ...bvResult.violations.map((v) => v.ruleId ?? v.field),
+    ...fvResult.violations.map((v) => v.ruleId ?? v.field),
+  ];
 
   return {
     results: {
-      blueprint_validity: result.valid ? 'pass' : 'fail',
+      blueprint_validity: bvResult.valid ? 'pass' : 'fail',
+      fixture_validity: fvResult.valid ? 'pass' : 'fail',
     },
-    fails,
+    fails: allFails,
     coverage: {
-      stateCoverage: coverage?.stateCoverage ?? Math.round(ruleFraction * 100) / 100,
+      stateCoverage: coverage?.stateCoverage ?? 1,
       requiredPropCoverage: coverage?.requiredPropCoverage ?? 1,
     },
   };

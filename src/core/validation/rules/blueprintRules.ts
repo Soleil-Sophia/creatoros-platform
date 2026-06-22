@@ -3,7 +3,7 @@ import type { ValidationRule, ValidationSchema, ValidationViolation } from '../v
 
 export const BV_001: ValidationRule<Blueprint> = {
   id: 'BV-001',
-  description: 'Blueprint slug must be non-empty and kebab-case (lowercase letters, numbers, hyphens only)',
+  description: 'Blueprint slug must be non-empty and kebab-case',
   validate: (blueprint): ValidationViolation | null => {
     const kebabCase = /^[a-z0-9]+(-[a-z0-9]+)*$/;
     if (!blueprint.slug || !kebabCase.test(blueprint.slug)) {
@@ -52,7 +52,7 @@ export const BV_003: ValidationRule<Blueprint> = {
 
 export const BV_004: ValidationRule<Blueprint> = {
   id: 'BV-004',
-  description: 'All required fields must have a valid key (alphanumeric/hyphens/underscores) and a recognized type',
+  description: 'All required fields must have a valid key format and recognized type',
   validate: (blueprint): ValidationViolation | null => {
     const validKey = /^[a-z][a-z0-9_-]*$/;
     const validTypes = new Set(['text', 'multiline', 'select', 'date', 'number']);
@@ -62,7 +62,7 @@ export const BV_004: ValidationRule<Blueprint> = {
     if (invalid) {
       return {
         field: `fields.${invalid.key}`,
-        message: `BV-004: Required field "${invalid.key}" has an invalid key format or unrecognized type "${invalid.type}"`,
+        message: `BV-004: Required field "${invalid.key}" has invalid key format or unrecognized type "${invalid.type}"`,
         severity: 'error',
       };
     }
@@ -74,22 +74,73 @@ export const BV_005: ValidationRule<Blueprint> = {
   id: 'BV-005',
   description: 'No two fields may share the same key (state consistency)',
   validate: (blueprint): ValidationViolation | null => {
-    const keys = blueprint.fields.map((f) => f.key);
     const seen = new Set<string>();
-    for (const key of keys) {
-      if (seen.has(key)) {
+    for (const field of blueprint.fields) {
+      if (seen.has(field.key)) {
         return {
-          field: `fields.${key}`,
-          message: `BV-005: Duplicate field key "${key}" — each field key must be unique`,
+          field: `fields.${field.key}`,
+          message: `BV-005: Duplicate field key "${field.key}" — each field key must be unique`,
           severity: 'error',
         };
       }
-      seen.add(key);
+      seen.add(field.key);
+    }
+    return null;
+  },
+};
+
+export const BV_006: ValidationRule<Blueprint> = {
+  id: 'BV-006',
+  description: 'Blueprint must declare at least one state',
+  validate: (blueprint): ValidationViolation | null => {
+    if (!blueprint.states || blueprint.states.length === 0) {
+      return {
+        field: 'states',
+        message: 'BV-006: Blueprint must declare at least one state',
+        severity: 'error',
+      };
+    }
+    return null;
+  },
+};
+
+export const BV_007: ValidationRule<Blueprint> = {
+  id: 'BV-007',
+  description: 'Blueprint states must be unique — no duplicates allowed',
+  validate: (blueprint): ValidationViolation | null => {
+    const seen = new Set<string>();
+    for (const state of blueprint.states) {
+      if (seen.has(state)) {
+        return {
+          field: 'states',
+          message: `BV-007: Duplicate state "${state}" — each state must be unique`,
+          severity: 'error',
+        };
+      }
+      seen.add(state);
+    }
+    return null;
+  },
+};
+
+export const BV_008: ValidationRule<Blueprint> = {
+  id: 'BV-008',
+  description: 'All state names must be non-empty strings',
+  validate: (blueprint): ValidationViolation | null => {
+    const invalid = blueprint.states.find(
+      (s) => typeof s !== 'string' || s.trim().length === 0,
+    );
+    if (invalid !== undefined) {
+      return {
+        field: 'states',
+        message: `BV-008: State name "${String(invalid)}" is empty or invalid`,
+        severity: 'error',
+      };
     }
     return null;
   },
 };
 
 export const blueprintValidationSchema: ValidationSchema<Blueprint> = {
-  rules: [BV_001, BV_002, BV_003, BV_004, BV_005],
+  rules: [BV_001, BV_002, BV_003, BV_004, BV_005, BV_006, BV_007, BV_008],
 };
