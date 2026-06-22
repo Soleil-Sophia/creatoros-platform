@@ -48,12 +48,12 @@ export function readBrandProfile(): BrandProfile | null {
     const parsed = JSON.parse(raw);
     if (!isPlainObject(parsed)) return null;
     const legacy = parsed as Record<string, unknown>;
-    const voiceTone = normalizeString(legacy.voiceTone ?? legacy.tone);
-    const voiceComplexity = normalizeString(legacy.voiceComplexity ?? legacy.complexity);
-    const voiceFormality = normalizeString(legacy.voiceFormality ?? legacy.formality);
-    const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy);
-    const voiceLabel = normalizeString(legacy.voiceLabel) || undefined;
-    let brandName = normalizeString(legacy.brandName);
+    const voiceTone = normalizeString(legacy.voiceTone ?? legacy.tone).trim();
+    const voiceComplexity = normalizeString(legacy.voiceComplexity ?? legacy.complexity).trim();
+    const voiceFormality = normalizeString(legacy.voiceFormality ?? legacy.formality).trim();
+    const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy).trim();
+    const voiceLabel = normalizeString(legacy.voiceLabel).trim() || undefined;
+    let brandName = normalizeString(legacy.brandName).trim();
     // Legacy v1 profiles have no brandName. If the profile was otherwise fully
     // configured (all four voice fields present), backfill brandName from the
     // stored voiceLabel (falling back to voiceTone) so that migrated voices
