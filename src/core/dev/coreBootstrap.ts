@@ -5,19 +5,13 @@ import { blueprintValidationSchema } from '../validation/rules/blueprintRules';
 import { fixtureValidationSchema } from '../validation/rules/fixtureRules';
 import { hashBlueprint } from '../hashing';
 import { createLineageRecord, appendLineageEvent } from '../lineage';
-import { assetValidationSchema } from '../assets/assetValidation';
-import { instagramAssetValidationSchema, generateInstagramReport } from '../instagram/instagramAssetValidation';
 import { createBrandProfile } from '../brand/brandProfile';
 import { brandProfileValidationSchema } from '../brand/brandValidation';
-import { contentRequestValidationSchema } from '../content/contentRequestValidation';
 import { registryStore, registerAndPersist } from '../persistence/registryStore';
-import { assetStore, ASSET_STORE_KEY } from '../persistence/assetStore';
-import { registryEntryToLibraryAsset } from '../library/libraryMapper';
-import {
-  createContentGenerator,
-  isAIAvailable,
-  resolveGeneratorType,
-} from '../ai/generatorFactory';
+import { createContentGenerator, isAIAvailable, resolveGeneratorType } from '../ai/generatorFactory';
+import { evaluateAsset } from '../quality/contentEvaluator';
+import { generateQualityReport } from '../quality/evaluationReport';
+import type { ContentRequest } from '../content/contentRequest';
 
 export async function runCoreBootstrap(): Promise<void> {
   // ════════════════════════════════════════════════════════════════════════
@@ -60,7 +54,7 @@ export async function runCoreBootstrap(): Promise<void> {
   console.log('[CreatorOS Core] Compiler ready', {
     blueprint_validity: report.results.blueprint_validity,
     fixture_validity:   report.results.fixture_validity,
-    coverage, blueprintHash,
+    blueprintHash,
   });
 
   // ════════════════════════════════════════════════════════════════════════
@@ -74,18 +68,9 @@ export async function runCoreBootstrap(): Promise<void> {
     positioning: 'Systematic content production for creators',
   });
   validate(brandProfile, brandProfileValidationSchema);
-  console.log('[BrandOS] Profile loaded', { brandName: brandProfile.brandName, voice: brandProfile.voice });
-
-  const contentRequest = {
-    brandProfile,
-    topic:  'ContentOS',
-    intent: 'awareness' as const,
-    format: 'carousel'  as const,
-  };
-  validate(contentRequest, contentRequestValidationSchema);
 
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 3 — Persistence: Restore + Registry
+  //  SECTION 3 — Persistence restore + AI environment
   // ════════════════════════════════════════════════════════════════════════
 
   const restored = registryStore.restore();
@@ -94,92 +79,88 @@ export async function runCoreBootstrap(): Promise<void> {
     restored: restored.length,
   });
 
-  // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 4 — AI Engine (Sprint 11)
-  // ════════════════════════════════════════════════════════════════════════
-
-  // 4a — Environment status
   console.log('[AI Engine] Environment', {
     ai_available:     isAIAvailable(),
     active_generator: resolveGeneratorType({ useAI: true }),
   });
 
-  // 4b — DeterministicContentGenerator (always works, no API key)
-  const deterministicGen = createContentGenerator({ useAI: false });
-  const deterministicAsset = await deterministicGen.generate(contentRequest, blueprint, blueprintHash);
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 4 — Content Quality Evaluation (Sprint 12)
+  //  10 real ContentRequests × DeterministicContentGenerator
+  // ════════════════════════════════════════════════════════════════════════
 
-  const avResult = validate(
-    { id: deterministicAsset.assetId, title: deterministicAsset.title,
-      state: 'default' as const, blueprintId: blueprint.id,
-      blueprintHash, runId: deterministicAsset.runId, createdAt: deterministicAsset.createdAt },
-    assetValidationSchema,
+  const generator = createContentGenerator({ useAI: false });
+
+  const requests: ContentRequest[] = [
+    { brandProfile, topic: 'ContentOS',          intent: 'awareness',     format: 'carousel' },
+    { brandProfile, topic: 'BrandOS',             intent: 'conversion',    format: 'reel'     },
+    { brandProfile, topic: 'Consistency',         intent: 'consideration', format: 'story'    },
+    { brandProfile, topic: 'AI Tools',            intent: 'awareness',     format: 'carousel' },
+    { brandProfile, topic: 'Content Strategy',    intent: 'consideration', format: 'carousel' },
+    { brandProfile, topic: 'CreatorOS',           intent: 'conversion',    format: 'reel'     },
+    { brandProfile, topic: 'Brand Voice',         intent: 'awareness',     format: 'carousel' },
+    { brandProfile, topic: 'Solopreneur Systems', intent: 'awareness',     format: 'story'    },
+    { brandProfile, topic: 'Content Batching',    intent: 'consideration', format: 'carousel' },
+    { brandProfile, topic: 'Social Media ROI',    intent: 'conversion',    format: 'reel'     },
+  ];
+
+  const assets = await Promise.all(
+    requests.map((req) => generator.generate(req, blueprint, blueprintHash)),
   );
-  const iaResult = validate(deterministicAsset, instagramAssetValidationSchema);
-  const instagramReport = generateInstagramReport(iaResult, avResult);
 
-  console.log('[AI Engine] DeterministicContentGenerator', {
-    generatorType: deterministicGen.generatorType,
-    title:         deterministicAsset.title,
-    hook:          deterministicAsset.hook,
-    validation:    instagramReport.results,
+  // Register all assets
+  for (const asset of assets) {
+    registerAndPersist(asset);
+  }
+
+  // Evaluate all assets
+  const evaluations = assets.map((asset) => evaluateAsset(asset, brandProfile));
+
+  // Quality report
+  const qualityReport = generateQualityReport(evaluations);
+
+  console.log('[ContentQuality] Evaluation complete', {
+    totalAssets:          qualityReport.totalAssets,
+    averageScore:         qualityReport.averageScore,
+    gradeBreakdown:       qualityReport.gradeBreakdown,
+    templateHookCount:    qualityReport.templateHookCount,
+    placeholderBodyCount: qualityReport.placeholderBodyCount,
   });
 
-  // 4c — Factory with useAI: true → resolves based on environment
-  const autoGen = createContentGenerator({ useAI: true });
-  const autoAsset = await autoGen.generate(contentRequest, blueprint, blueprintHash);
-
-  console.log('[AI Engine] Factory (useAI: true)', {
-    resolved_generator: autoGen.generatorType,
-    ai_configured:      isAIAvailable(),
-    title:              autoAsset.title,
-    contract_identical: autoAsset.artifactHash === deterministicAsset.artifactHash,
+  console.log('[ContentQuality] Dimension scores', {
+    hookStrength:     Math.round(evaluations.reduce((s, e) => s + e.hookStrength.score, 0) / evaluations.length),
+    bodyCompleteness: Math.round(evaluations.reduce((s, e) => s + e.bodyCompleteness.score, 0) / evaluations.length),
+    ctaStrength:      Math.round(evaluations.reduce((s, e) => s + e.ctaStrength.score, 0) / evaluations.length),
+    formatFit:        Math.round(evaluations.reduce((s, e) => s + e.formatFit.score, 0) / evaluations.length),
   });
 
-  // 4d — Second request: different intent (conversion)
-  const contentRequest2 = { ...contentRequest, topic: 'BrandOS', intent: 'conversion' as const };
-  const conversionGen = createContentGenerator({ useAI: false });
-  const conversionAsset = await conversionGen.generate(contentRequest2, blueprint, blueprintHash);
-
-  console.log('[AI Engine] Conversion intent asset', {
-    generatorType: conversionGen.generatorType,
-    title:         conversionAsset.title,
-    hook:          conversionAsset.hook,
-    cta:           conversionAsset.cta,
+  console.log('[ContentQuality] Top / Weakest asset', {
+    top:     { title: qualityReport.topAsset.title,     score: qualityReport.topAsset.overallScore,     grade: qualityReport.topAsset.grade     },
+    weakest: { title: qualityReport.weakestAsset.title, score: qualityReport.weakestAsset.overallScore, grade: qualityReport.weakestAsset.grade },
   });
 
-  // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 5 — Registry + Persistence + Library (full loop)
-  // ════════════════════════════════════════════════════════════════════════
-
-  const entry1 = registerAndPersist(deterministicAsset);
-  const entry2 = registerAndPersist(conversionAsset);
-
-  const libraryAsset1 = registryEntryToLibraryAsset(entry1, brandProfile);
-  const libraryAsset2 = registryEntryToLibraryAsset(entry2, brandProfile);
-  assetStore.save(libraryAsset1);
-  assetStore.save(libraryAsset2);
-
-  console.log('[Full Loop] Registry + Persistence + Library', {
-    registered:       2,
-    asset_store_total: assetStore.count(),
-    asset_store_key:   ASSET_STORE_KEY,
+  console.log('[ContentQuality] Weakest vs Strongest dimension', {
+    weakest:   { dimension: qualityReport.weakestDimension.dimension,   avg: qualityReport.weakestDimension.averageScore,   passRate: `${Math.round(qualityReport.weakestDimension.passRate * 100)}%`   },
+    strongest: { dimension: qualityReport.strongestDimension.dimension, avg: qualityReport.strongestDimension.averageScore, passRate: `${Math.round(qualityReport.strongestDimension.passRate * 100)}%` },
   });
+
+  console.log('[ContentQuality] Findings', qualityReport.findings);
 
   // Lineage
   lineageRecord = appendLineageEvent(lineageRecord, {
-    eventType: 'asset_generated', actorId: autoGen.generatorType,
+    eventType: 'exported', actorId: 'quality-evaluator',
     timestamp: new Date().toISOString(),
-    metadata: { assetId: autoAsset.assetId, generator: autoGen.generatorType },
-  });
-  lineageRecord = appendLineageEvent(lineageRecord, {
-    eventType: 'exported', actorId: 'persistence',
-    timestamp: new Date().toISOString(),
-    metadata: { registryPersisted: 2, assetStoreSaved: 2 },
+    metadata: {
+      totalAssets:      qualityReport.totalAssets,
+      averageScore:     qualityReport.averageScore,
+      weakestDimension: qualityReport.weakestDimension.dimension,
+      finding:          qualityReport.findings[0] ?? '',
+    },
   });
 
-  console.log('[CreatorOS Core] Platform complete', {
-    lineage_events: lineageRecord.events.map((e) => e.eventType),
-    generator_contract: 'ContentRequest → InstagramAssetV1 (provider-agnostic)',
-    next: 'set VITE_API_KEY to activate OpenAIContentGenerator',
+  console.log('[CreatorOS Core] Sprint 12 complete', {
+    lineage_events:   lineageRecord.events.map((e) => e.eventType),
+    verdict:          `DeterministicGenerator avg ${qualityReport.averageScore}/100 — AI needed for body & hook variety`,
+    next:             'Sprint 13: activate OpenAIContentGenerator → target 75+',
   });
 }
