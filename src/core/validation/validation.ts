@@ -1,6 +1,7 @@
 export type ValidationSeverity = 'error' | 'warning' | 'info';
 
 export interface ValidationViolation {
+  ruleId?: string;
   field: string;
   message: string;
   severity: ValidationSeverity;
@@ -23,6 +24,16 @@ export interface ValidationSchema<T> {
   rules: ValidationRule<T>[];
 }
 
+export interface ValidationReport {
+  results: {
+    blueprint_validity: 'pass' | 'fail';
+  };
+  fails: string[];
+  coverage: {
+    stateCoverage: number;
+  };
+}
+
 export function validate<T>(
   value: T,
   schema: ValidationSchema<T>,
@@ -32,7 +43,7 @@ export function validate<T>(
   for (const rule of schema.rules) {
     const violation = rule.validate(value);
     if (violation !== null) {
-      violations.push(violation);
+      violations.push({ ruleId: rule.id, ...violation });
     }
   }
 
@@ -60,5 +71,26 @@ export function combineResults(...results: ValidationResult[]): ValidationResult
     score: Math.round(avgScore * 10) / 10,
     violations: allViolations,
     validatedAt: new Date().toISOString(),
+  };
+}
+
+export function generateValidationReport<T>(
+  result: ValidationResult,
+  schema: ValidationSchema<T>,
+): ValidationReport {
+  const fails = result.violations.map((v) => v.ruleId ?? v.field);
+  const stateCoverage =
+    schema.rules.length > 0
+      ? (schema.rules.length - result.violations.length) / schema.rules.length
+      : 1;
+
+  return {
+    results: {
+      blueprint_validity: result.valid ? 'pass' : 'fail',
+    },
+    fails,
+    coverage: {
+      stateCoverage: Math.round(stateCoverage * 100) / 100,
+    },
   };
 }

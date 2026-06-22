@@ -41,7 +41,10 @@ export function isDuplicate(incoming: HashResult, stored: HashResult[]): boolean
   return stored.some((h) => compareHashes(incoming, h));
 }
 
-export function hashBlueprint(blueprint: Blueprint): { blueprintHash: string } {
-  const result = hashContent({ text: JSON.stringify(blueprint) });
-  return { blueprintHash: result.digest };
+export function hashBlueprint(
+  blueprint: Blueprint,
+  algorithm?: HashAlgorithm,
+): { blueprintHash: string; algorithm: HashAlgorithm } {
+  const result = hashContent({ text: JSON.stringify(blueprint), algorithm });
+  return { blueprintHash: result.digest, algorithm: result.algorithm };
 }

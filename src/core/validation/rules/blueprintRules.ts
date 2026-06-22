@@ -50,6 +50,46 @@ export const BV_003: ValidationRule<Blueprint> = {
   },
 };
 
+export const BV_004: ValidationRule<Blueprint> = {
+  id: 'BV-004',
+  description: 'All required fields must have a valid key (alphanumeric/hyphens/underscores) and a recognized type',
+  validate: (blueprint): ValidationViolation | null => {
+    const validKey = /^[a-z][a-z0-9_-]*$/;
+    const validTypes = new Set(['text', 'multiline', 'select', 'date', 'number']);
+    const invalid = blueprint.fields
+      .filter((f) => f.required)
+      .find((f) => !validKey.test(f.key) || !validTypes.has(f.type));
+    if (invalid) {
+      return {
+        field: `fields.${invalid.key}`,
+        message: `BV-004: Required field "${invalid.key}" has an invalid key format or unrecognized type "${invalid.type}"`,
+        severity: 'error',
+      };
+    }
+    return null;
+  },
+};
+
+export const BV_005: ValidationRule<Blueprint> = {
+  id: 'BV-005',
+  description: 'No two fields may share the same key (state consistency)',
+  validate: (blueprint): ValidationViolation | null => {
+    const keys = blueprint.fields.map((f) => f.key);
+    const seen = new Set<string>();
+    for (const key of keys) {
+      if (seen.has(key)) {
+        return {
+          field: `fields.${key}`,
+          message: `BV-005: Duplicate field key "${key}" — each field key must be unique`,
+          severity: 'error',
+        };
+      }
+      seen.add(key);
+    }
+    return null;
+  },
+};
+
 export const blueprintValidationSchema: ValidationSchema<Blueprint> = {
-  rules: [BV_001, BV_002, BV_003],
+  rules: [BV_001, BV_002, BV_003, BV_004, BV_005],
 };

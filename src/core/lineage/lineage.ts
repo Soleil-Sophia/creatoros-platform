@@ -22,20 +22,46 @@ export interface LineageRecord {
   updatedAt: string;
 }
 
+const store = new Map<string, LineageRecord[]>();
+
 export function createLineageRecord(
-  _assetId: string,
-  _sourceModule: string,
+  assetId: string,
+  sourceModule: string,
 ): LineageRecord {
-  throw new Error('createLineageRecord: not yet implemented');
+  const now = new Date().toISOString();
+  const record: LineageRecord = {
+    assetId,
+    sourceModule,
+    events: [{ eventType: 'created', actorId: 'system', timestamp: now }],
+    createdAt: now,
+    updatedAt: now,
+  };
+  const chain = store.get(assetId) ?? [];
+  chain.push(record);
+  store.set(assetId, chain);
+  return record;
 }
 
 export function appendLineageEvent(
-  _record: LineageRecord,
-  _event: LineageEvent,
+  record: LineageRecord,
+  event: LineageEvent,
 ): LineageRecord {
-  throw new Error('appendLineageEvent: not yet implemented');
+  const updated: LineageRecord = {
+    ...record,
+    events: [...record.events, event],
+    updatedAt: new Date().toISOString(),
+  };
+  const chain = store.get(record.assetId) ?? [];
+  const idx = chain.findIndex((r) => r.createdAt === record.createdAt);
+  if (idx >= 0) {
+    chain[idx] = updated;
+  } else {
+    chain.push(updated);
+  }
+  store.set(record.assetId, chain);
+  return updated;
 }
 
-export function getLineageChain(_assetId: string): LineageRecord[] {
-  throw new Error('getLineageChain: not yet implemented');
+export function getLineageChain(assetId: string): LineageRecord[] {
+  return store.get(assetId) ?? [];
 }
