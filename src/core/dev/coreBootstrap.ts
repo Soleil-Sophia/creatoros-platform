@@ -7,17 +7,19 @@ import { hashBlueprint } from '../hashing';
 import { createLineageRecord, appendLineageEvent } from '../lineage';
 import { createBrandProfile } from '../brand/brandProfile';
 import { brandProfileValidationSchema } from '../brand/brandValidation';
-import { registryStore } from '../persistence/registryStore';
-import { isAIAvailable, resolveGeneratorType } from '../ai/generatorFactory';
-import { evaluateAsset } from '../quality/contentEvaluator';
+import { registryStore, registerAndPersist } from '../persistence/registryStore';
+import { isAIAvailable, resolveGeneratorType, createContentGenerator } from '../ai/generatorFactory';
 import { generateQualityReport } from '../quality/evaluationReport';
 import { runBenchmark } from '../benchmark/contentBenchmark';
 import { generateBenchmarkReport } from '../benchmark/benchmarkReport';
+import { evaluateAndTag } from '../intelligence/assetTagger';
+import { intelligenceStore } from '../intelligence/intelligenceStore';
+import { queryPatterns } from '../intelligence/intelligenceQuery';
 import type { ContentRequest } from '../content/contentRequest';
 
 export async function runCoreBootstrap(): Promise<void> {
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 1 — Compiler Verification (condensed)
+  //  SECTION 1 — Compiler Verification
   // ════════════════════════════════════════════════════════════════════════
 
   const blueprint = createBlueprint({
@@ -60,7 +62,7 @@ export async function runCoreBootstrap(): Promise<void> {
   });
 
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 2 — BrandOS Profile + Persistence restore
+  //  SECTION 2 — BrandOS + Persistence restore
   // ════════════════════════════════════════════════════════════════════════
 
   const brandProfile = createBrandProfile({
@@ -71,15 +73,16 @@ export async function runCoreBootstrap(): Promise<void> {
   });
   validate(brandProfile, brandProfileValidationSchema);
 
-  const restored = registryStore.restore();
-  console.log('[Persistence] Registry restored', {
-    provider: registryStore.providerName,
-    restored: restored.length,
+  const restoredRegistry = registryStore.restore();
+  const restoredIntelligence = intelligenceStore.restore();
+
+  console.log('[Persistence] Stores restored', {
+    registry:     restoredRegistry.length,
+    intelligence: restoredIntelligence.length,
   });
 
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 3 — Sprint 13: AI Benchmark
-  //  Same 10 ContentRequests × Deterministic + OpenAI (if available)
+  //  SECTION 3 — Generate 10 assets (deterministic)
   // ════════════════════════════════════════════════════════════════════════
 
   const requests: ContentRequest[] = [
@@ -95,89 +98,104 @@ export async function runCoreBootstrap(): Promise<void> {
     { brandProfile, topic: 'Social Media ROI',    intent: 'conversion',    format: 'reel'     },
   ];
 
-  console.log('[Benchmark] Starting Sprint 13 generator comparison', {
-    total_requests:    requests.length,
-    ai_available:      isAIAvailable(),
-    active_generator:  resolveGeneratorType({ useAI: true }),
+  const generator = createContentGenerator({ useAI: false });
+  const rawAssets = await Promise.all(
+    requests.map((req) => generator.generate(req, blueprint, blueprintHash)),
+  );
+
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 4 — Sprint 14: Content Intelligence Layer
+  //  Tag every asset with quality scores, persist to IntelligenceStore
+  // ════════════════════════════════════════════════════════════════════════
+
+  // evaluateAndTag(): evaluation runs, scores attach to asset.qualityMeta
+  const taggedAssets = rawAssets.map((asset) =>
+    evaluateAndTag(asset, brandProfile, 'deterministic'),
+  );
+
+  // Register in the asset registry (existing pipeline)
+  for (const asset of taggedAssets) {
+    registerAndPersist(asset);
+  }
+
+  // Push all tagged assets into the intelligence store (new Sprint 14 store)
+  intelligenceStore.pushAll(taggedAssets);
+
+  console.log('[Intelligence] Assets tagged + persisted', {
+    tagged:           taggedAssets.length,
+    intelligence_total: intelligenceStore.size,
+    sample_asset: {
+      title:        taggedAssets[0].title,
+      qualityScore: taggedAssets[0].qualityMeta?.qualityScore,
+      hookScore:    taggedAssets[0].qualityMeta?.hookScore,
+      bodyScore:    taggedAssets[0].qualityMeta?.bodyScore,
+      ctaScore:     taggedAssets[0].qualityMeta?.ctaScore,
+      grade:        taggedAssets[0].qualityMeta?.grade,
+      generatorType: taggedAssets[0].qualityMeta?.generatorType,
+    },
+  });
+
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 5 — Intelligence Queries (pattern analysis)
+  //  This is what "CreatorOS gets smarter with 1000 assets" looks like
+  // ════════════════════════════════════════════════════════════════════════
+
+  const allRecords = intelligenceStore.all();
+
+  // Query 1: All awareness assets
+  const awarenessPattern = queryPatterns(allRecords, { intent: 'awareness' });
+  // Query 2: All carousel assets
+  const carouselPattern  = queryPatterns(allRecords, { format: 'carousel' });
+  // Query 3: Best performing assets (score ≥ 60) — the threshold will move up as AI lands
+  const topPattern       = queryPatterns(allRecords, { minScore: 60, limit: 3 });
+  // Query 4: Conversion intent — where CTAs matter most
+  const conversionPattern = queryPatterns(allRecords, { intent: 'conversion' });
+
+  console.log('[Intelligence] Pattern queries', {
+    awareness_assets:    { matched: awarenessPattern.totalMatched,   avg: awarenessPattern.averageScore,   insight: awarenessPattern.insight   },
+    carousel_assets:     { matched: carouselPattern.totalMatched,    avg: carouselPattern.averageScore,    insight: carouselPattern.insight    },
+    top_performers:      { matched: topPattern.totalMatched,         avg: topPattern.averageScore,         titles:  topPattern.topRecords.map((r) => r.topic) },
+    conversion_assets:   { matched: conversionPattern.totalMatched,  avg: conversionPattern.averageScore,  insight: conversionPattern.insight  },
+  });
+
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 6 — Benchmark (Sprint 13 infrastructure, still pending AI)
+  // ════════════════════════════════════════════════════════════════════════
+
+  console.log('[Benchmark] Generator state', {
+    ai_available:     isAIAvailable(),
+    active_generator: resolveGeneratorType({ useAI: true }),
   });
 
   const benchmarkRun    = await runBenchmark(requests, blueprint, blueprintHash, brandProfile);
   const benchmarkReport = generateBenchmarkReport(benchmarkRun);
 
-  // Deterministic dimension baseline (Sprint 12 data)
   const detEvals = benchmarkRun.entries.map((e) => e.deterministicEval);
-  const detAvgDim = {
-    hookStrength:     Math.round(detEvals.reduce((s, e) => s + e.hookStrength.score,     0) / detEvals.length),
-    bodyCompleteness: Math.round(detEvals.reduce((s, e) => s + e.bodyCompleteness.score, 0) / detEvals.length),
-    ctaStrength:      Math.round(detEvals.reduce((s, e) => s + e.ctaStrength.score,      0) / detEvals.length),
-    formatFit:        Math.round(detEvals.reduce((s, e) => s + e.formatFit.score,        0) / detEvals.length),
-  };
+  const qualityReport = generateQualityReport(detEvals);
 
-  console.log('[Benchmark] Deterministic baseline', {
-    avg:        benchmarkReport.deterministicAvg,
-    dimensions: detAvgDim,
+  console.log('[Benchmark] Baseline + verdict', {
+    deterministicAvg: benchmarkReport.deterministicAvg,
+    openaiAvg:        benchmarkReport.openaiAvg ?? 'pending',
+    verdict:          benchmarkReport.verdict,
   });
 
-  if (benchmarkReport.aiAvailable && benchmarkReport.openaiAvg !== null) {
-    const aiEvals = benchmarkRun.entries
-      .map((e) => e.openaiEval)
-      .filter((e): e is NonNullable<typeof e> => e !== null);
-
-    const aiAvgDim = {
-      hookStrength:     Math.round(aiEvals.reduce((s, e) => s + e.hookStrength.score,     0) / aiEvals.length),
-      bodyCompleteness: Math.round(aiEvals.reduce((s, e) => s + e.bodyCompleteness.score, 0) / aiEvals.length),
-      ctaStrength:      Math.round(aiEvals.reduce((s, e) => s + e.ctaStrength.score,      0) / aiEvals.length),
-      formatFit:        Math.round(aiEvals.reduce((s, e) => s + e.formatFit.score,        0) / aiEvals.length),
-    };
-
-    console.log('[Benchmark] OpenAI results', {
-      avg:                 benchmarkReport.openaiAvg,
-      delta_vs_baseline:  `+${benchmarkReport.overallDelta}`,
-      dimensions:          aiAvgDim,
-      production_candidate: benchmarkReport.productionCandidate,
-    });
-
-    console.log('[Benchmark] Per-dimension delta (OpenAI − Deterministic)', {
-      hookStrength:     aiAvgDim.hookStrength     - detAvgDim.hookStrength,
-      bodyCompleteness: aiAvgDim.bodyCompleteness - detAvgDim.bodyCompleteness,
-      ctaStrength:      aiAvgDim.ctaStrength      - detAvgDim.ctaStrength,
-      formatFit:        aiAvgDim.formatFit        - detAvgDim.formatFit,
-    });
-
-  } else {
-    console.log('[Benchmark] OpenAI benchmark pending', {
-      status:         'VITE_API_KEY not set',
-      baseline:       `${benchmarkReport.deterministicAvg}/100`,
-      target:         `${benchmarkReport.targetScore}+`,
-      required_delta: `+${benchmarkReport.targetScore - benchmarkReport.deterministicAvg}`,
-    });
-  }
-
-  // Architectural decision logged
-  console.log('[Benchmark] Hybrid generator strategy', {
-    hook_body:     'AI generator (currently 45/100 → target 75+)',
-    cta_title:     'deterministic (100/100 — do not change)',
-    rationale:     'CTA already optimal; variability ≠ improvement',
-  });
-
-  console.log('[Benchmark] Verdict', { verdict: benchmarkReport.verdict });
-
-  // Full quality report (Sprint 12 dimensions re-confirmed)
-  const qualityReport = generateQualityReport(detEvals.map((e) => e));
+  // Lineage
   lineageRecord = appendLineageEvent(lineageRecord, {
-    eventType: 'exported', actorId: 'benchmark',
+    eventType: 'exported', actorId: 'intelligence-layer',
     timestamp: new Date().toISOString(),
     metadata: {
-      deterministicAvg:  benchmarkReport.deterministicAvg,
-      openaiAvg:         benchmarkReport.openaiAvg,
-      aiAvailable:       benchmarkReport.aiAvailable,
-      productionCandidate: benchmarkReport.productionCandidate,
-      weakestDimension:  qualityReport.weakestDimension.dimension,
+      taggedAssets:     taggedAssets.length,
+      intelligenceSize: intelligenceStore.size,
+      deterministicAvg: benchmarkReport.deterministicAvg,
+      openaiAvg:        benchmarkReport.openaiAvg,
+      weakestDimension: qualityReport.weakestDimension.dimension,
     },
   });
 
-  console.log('[CreatorOS Core] Platform complete', {
-    lineage_events:  lineageRecord.events.map((e) => e.eventType),
-    domains:         ['blueprint','validation','hashing','lineage','assets','instagram','brand','content','registry','library','persistence','ai','quality','benchmark'],
+  console.log('[CreatorOS Core] Sprint 14 complete', {
+    lineage_events: lineageRecord.events.map((e) => e.eventType),
+    domains:        15,
+    pipeline:       'generate → evaluateAndTag → registerAndPersist → intelligenceStore → queryPatterns',
+    question:       'Does CreatorOS get smarter with 1000 assets? Answer: yes — intelligenceStore accumulates.',
   });
 }
