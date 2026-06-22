@@ -12,13 +12,13 @@ import { createBrandProfile } from '../brand/brandProfile';
 import { brandProfileValidationSchema } from '../brand/brandValidation';
 import { contentRequestValidationSchema } from '../content/contentRequestValidation';
 import { createInstagramAssetFromContentRequest } from '../content/contentAdapter';
-import { registerAsset, getByArtifactHash } from '../registry/assetRegistry';
+import { registerAsset } from '../registry/assetRegistry';
 import { searchByIntent } from '../registry/assetSearch';
-import { getAssetVersionHistory } from '../registry/assetHistory';
+import { syncRegistryEntryToLibrary, getLibraryStats } from '../library/libraryAdapter';
 
 export function runCoreBootstrap(): void {
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 1 — Compiler Verification
+  //  SECTION 1 — Compiler Verification (condensed)
   // ════════════════════════════════════════════════════════════════════════
 
   const blueprint = createBlueprint({
@@ -56,7 +56,6 @@ export function runCoreBootstrap(): void {
   });
 
   console.log('[CreatorOS Core] Compiler ready', {
-    blueprint: blueprint.id,
     blueprint_validity: report.results.blueprint_validity,
     fixture_validity:   report.results.fixture_validity,
     coverage,
@@ -64,7 +63,7 @@ export function runCoreBootstrap(): void {
   });
 
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 2 — End-to-End Flow: BrandOS → ContentOS → InstagramAssetV1
+  //  SECTION 2 — E2E: BrandOS → ContentOS → InstagramAssetV1
   // ════════════════════════════════════════════════════════════════════════
 
   const brandProfile = createBrandProfile({
@@ -77,7 +76,6 @@ export function runCoreBootstrap(): void {
   console.log('[BrandOS] Profile loaded', {
     brandName: brandProfile.brandName,
     voice:     brandProfile.voice,
-    audience:  brandProfile.audience,
   });
 
   const contentRequest = {
@@ -94,17 +92,11 @@ export function runCoreBootstrap(): void {
   });
 
   const instagramAsset = createInstagramAssetFromContentRequest(
-    contentRequest,
-    blueprint,
-    blueprintHash,
+    contentRequest, blueprint, blueprintHash,
   );
-
   const avResult = validate(
-    {
-      id: instagramAsset.assetId, title: instagramAsset.title,
-      state: 'default' as const, blueprintId: blueprint.id,
-      blueprintHash, runId: instagramAsset.runId, createdAt: instagramAsset.createdAt,
-    },
+    { id: instagramAsset.assetId, title: instagramAsset.title, state: 'default' as const,
+      blueprintId: blueprint.id, blueprintHash, runId: instagramAsset.runId, createdAt: instagramAsset.createdAt },
     assetValidationSchema,
   );
   const iaResult = validate(instagramAsset, instagramAssetValidationSchema);
@@ -113,23 +105,14 @@ export function runCoreBootstrap(): void {
   console.log('[ContentOS] InstagramAsset generated', {
     title:         instagramAsset.title,
     hook:          instagramAsset.hook,
-    cta:           instagramAsset.cta,
     artifact_hash: instagramAsset.artifactHash,
   });
   console.log('[InstagramAssetV1] Validation passed', instagramReport.results);
-
-  lineageRecord = appendLineageEvent(lineageRecord, {
-    eventType: 'asset_generated',
-    actorId: 'contentos',
-    timestamp: new Date().toISOString(),
-    metadata: { assetId: instagramAsset.assetId, artifactHash: instagramAsset.artifactHash },
-  });
 
   // ════════════════════════════════════════════════════════════════════════
   //  SECTION 3 — Asset Registry
   // ════════════════════════════════════════════════════════════════════════
 
-  // Register the generated asset
   const entry = registerAsset(instagramAsset);
   console.log('[AssetRegistry] Asset registered', {
     asset_id:      entry.assetId,
@@ -138,51 +121,59 @@ export function runCoreBootstrap(): void {
     isDuplicate:   entry.isDuplicate,
   });
 
-  // Deduplication: try to register the same asset again
-  const duplicate = registerAsset(instagramAsset);
-  console.log('[AssetRegistry] Duplicate detected', {
-    artifact_hash: duplicate.artifactHash,
-    isDuplicate:   duplicate.isDuplicate,
-    skipped:       true,
-  });
-
-  // Register a second asset (different topic → different artifact_hash)
+  // Register a second asset (different content)
   const contentRequest2 = { ...contentRequest, topic: 'BrandOS', intent: 'conversion' as const };
   const instagramAsset2 = createInstagramAssetFromContentRequest(contentRequest2, blueprint, blueprintHash);
   const entry2 = registerAsset(instagramAsset2);
-  console.log('[AssetRegistry] Second asset registered', {
-    asset_id:      entry2.assetId,
-    artifact_hash: entry2.artifactHash,
-    version:       entry2.version,
-  });
 
-  // Search by intent
   const awarenessResults = searchByIntent('awareness');
   console.log('[AssetRegistry] Search by intent', {
     intent:  'awareness',
     results: awarenessResults.length,
-    titles:  awarenessResults.map((e) => e.asset.title),
   });
 
-  // Version history
-  const history = getAssetVersionHistory(instagramAsset.assetId);
-  console.log('[AssetRegistry] Version history', {
-    asset_id:       history?.assetId,
-    total_versions: history?.versions.length,
-    latest_version: history?.latestVersion,
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 4 — Registry ↔ ContentOS Library
+  // ════════════════════════════════════════════════════════════════════════
+
+  // Sync first asset
+  const sync1 = syncRegistryEntryToLibrary(entry, brandProfile);
+  console.log('[Library] Synced to ContentOS Library', {
+    id:          sync1.id,
+    synced:      sync1.synced,
+    isDuplicate: sync1.isDuplicate,
   });
 
-  // Final lineage
+  // Same asset again → duplicate guard
+  const sync1Again = syncRegistryEntryToLibrary(entry, brandProfile);
+  console.log('[Library] Duplicate skipped', {
+    artifact_hash: sync1Again.artifactHash,
+    isDuplicate:   sync1Again.isDuplicate,
+  });
+
+  // Sync second asset
+  const sync2 = syncRegistryEntryToLibrary(entry2, brandProfile);
+  console.log('[Library] Synced to ContentOS Library', {
+    id:          sync2.id,
+    synced:      sync2.synced,
+    isDuplicate: sync2.isDuplicate,
+  });
+
+  const stats = getLibraryStats();
+  console.log('[Library] Stats', {
+    total_in_library: stats.total,
+    storage_key:      stats.storageKey,
+  });
+
+  // Lineage close
   lineageRecord = appendLineageEvent(lineageRecord, {
     eventType: 'exported',
-    actorId:   'registry',
+    actorId:   'library',
     timestamp: new Date().toISOString(),
-    metadata:  { registeredEntries: 2, deduplicated: 1 },
+    metadata:  { syncedToLibrary: 2, duplicatesSkipped: 1 },
   });
 
-  console.log('[CreatorOS Core] Registry complete', {
+  console.log('[CreatorOS Core] Loop complete', {
     lineage_events: lineageRecord.events.map((e) => e.eventType),
-    total_assets:   2,
-    deduplicated:   1,
   });
 }

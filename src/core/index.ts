@@ -7,3 +7,4 @@ export * from './instagram';
 export * from './brand';
 export * from './content';
 export * from './registry';
+export * from './library';
