@@ -1,6 +1,10 @@
 export type InstagramChannel = 'instagram';
-export type InstagramFormat = 'reel' | 'carousel' | 'story' | 'post';
-export type InstagramIntent = 'awareness' | 'education' | 'conversion' | 'engagement';
+
+// IA-010: 'post' deliberately excluded — not a primary compiler target
+export type InstagramFormat = 'reel' | 'carousel' | 'story';
+
+// IA-011: 'engagement' excluded — too vague for compiler intent gate
+export type InstagramIntent = 'awareness' | 'consideration' | 'conversion';
 
 export interface InstagramAssetV1 {
   // ── Identity ──────────────────────────────────────────────────────────────
@@ -21,4 +25,12 @@ export interface InstagramAssetV1 {
   cta: string;
 
   createdAt: string;
+}
+
+export interface InstagramAssetValidationReport {
+  results: {
+    instagram_validity: 'pass' | 'fail';
+    asset_validity: 'pass' | 'fail';
+  };
+  fails: string[];
 }

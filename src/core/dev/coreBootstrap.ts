@@ -8,7 +8,10 @@ import { createLineageRecord, appendLineageEvent } from '../lineage';
 import { createAsset } from '../assets';
 import { assetValidationSchema } from '../assets/assetValidation';
 import { createInstagramAsset } from '../instagram/instagramAssetFactory';
-import { instagramAssetValidationSchema } from '../instagram/instagramAssetValidation';
+import {
+  instagramAssetValidationSchema,
+  generateInstagramReport,
+} from '../instagram/instagramAssetValidation';
 
 export function runCoreBootstrap(): void {
   // ── Blueprint ────────────────────────────────────────────────────────────
@@ -107,7 +110,7 @@ export function runCoreBootstrap(): void {
     'run_id':         asset.runId,
   });
 
-  // ── InstagramAssetV1 (Sprint 5B) ──────────────────────────────────────────
+  // ── InstagramAssetV1 (Sprint 5B / 6 hardened) ────────────────────────────
   const instagramAsset = createInstagramAsset({
     asset,
     format: 'reel',
@@ -119,6 +122,7 @@ export function runCoreBootstrap(): void {
   });
 
   const iaResult = validate(instagramAsset, instagramAssetValidationSchema);
+  const instagramReport = generateInstagramReport(iaResult, avResult);
 
   lineageRecord = appendLineageEvent(lineageRecord, {
     eventType: 'asset_generated',
@@ -140,8 +144,7 @@ export function runCoreBootstrap(): void {
     'channel':        instagramAsset.channel,
     'format':         instagramAsset.format,
     'intent':         instagramAsset.intent,
-    'hook':           instagramAsset.hook,
-    'cta':            instagramAsset.cta,
-    'valid':          iaResult.valid,
   });
+
+  console.log('[CreatorOS Core] Instagram validation report', instagramReport);
 }
