@@ -10,22 +10,16 @@ import { instagramAssetValidationSchema, generateInstagramReport } from '../inst
 import { createBrandProfile } from '../brand/brandProfile';
 import { brandProfileValidationSchema } from '../brand/brandValidation';
 import { contentRequestValidationSchema } from '../content/contentRequestValidation';
-import { createInstagramAssetFromContentRequest } from '../content/contentAdapter';
-import { searchByIntent } from '../registry/assetSearch';
-import { syncRegistryEntryToLibrary } from '../library/libraryAdapter';
-import {
-  registryStore,
-  registerAndPersist,
-  createMemoryRegistryStore,
-} from '../persistence/registryStore';
-import {
-  assetStore,
-  createMemoryAssetStore,
-  ASSET_STORE_KEY,
-} from '../persistence/assetStore';
+import { registryStore, registerAndPersist } from '../persistence/registryStore';
+import { assetStore, ASSET_STORE_KEY } from '../persistence/assetStore';
 import { registryEntryToLibraryAsset } from '../library/libraryMapper';
+import {
+  createContentGenerator,
+  isAIAvailable,
+  resolveGeneratorType,
+} from '../ai/generatorFactory';
 
-export function runCoreBootstrap(): void {
+export async function runCoreBootstrap(): Promise<void> {
   // ════════════════════════════════════════════════════════════════════════
   //  SECTION 1 — Compiler Verification (condensed)
   // ════════════════════════════════════════════════════════════════════════
@@ -70,7 +64,7 @@ export function runCoreBootstrap(): void {
   });
 
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 2 — E2E: BrandOS → ContentOS → InstagramAssetV1
+  //  SECTION 2 — BrandOS Profile
   // ════════════════════════════════════════════════════════════════════════
 
   const brandProfile = createBrandProfile({
@@ -90,113 +84,102 @@ export function runCoreBootstrap(): void {
   };
   validate(contentRequest, contentRequestValidationSchema);
 
-  const instagramAsset = createInstagramAssetFromContentRequest(contentRequest, blueprint, blueprintHash);
-  const avResult = validate(
-    { id: instagramAsset.assetId, title: instagramAsset.title, state: 'default' as const,
-      blueprintId: blueprint.id, blueprintHash, runId: instagramAsset.runId, createdAt: instagramAsset.createdAt },
-    assetValidationSchema,
-  );
-  const iaResult = validate(instagramAsset, instagramAssetValidationSchema);
-  const instagramReport = generateInstagramReport(iaResult, avResult);
-
-  console.log('[ContentOS] InstagramAsset generated', {
-    title: instagramAsset.title,
-    hook:  instagramAsset.hook,
-    artifact_hash: instagramAsset.artifactHash,
-  });
-  console.log('[InstagramAssetV1] Validation passed', instagramReport.results);
-
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 3 — Registry (in-memory, Sprint 8)
+  //  SECTION 3 — Persistence: Restore + Registry
   // ════════════════════════════════════════════════════════════════════════
 
-  const contentRequest2 = { ...contentRequest, topic: 'BrandOS', intent: 'conversion' as const };
-  const instagramAsset2 = createInstagramAssetFromContentRequest(contentRequest2, blueprint, blueprintHash);
-
-  const awarenessHits = searchByIntent('awareness');
-  console.log('[AssetRegistry] Search by intent', { intent: 'awareness', results: awarenessHits.length });
-
-  // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 4 — Library Sync (Sprint 9)
-  // ════════════════════════════════════════════════════════════════════════
-
-  lineageRecord = appendLineageEvent(lineageRecord, {
-    eventType: 'asset_generated', actorId: 'contentos',
-    timestamp: new Date().toISOString(),
-    metadata: { assetId: instagramAsset.assetId, artifactHash: instagramAsset.artifactHash },
-  });
-
-  // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 5 — Persistence Abstraction (Sprint 10)
-  // ════════════════════════════════════════════════════════════════════════
-
-  // 5a — Restore the Registry from localStorage (survives page reloads)
   const restored = registryStore.restore();
   console.log('[Persistence] Registry restored', {
-    provider:  registryStore.providerName,
-    restored:  restored.length,
-    storage_key: 'creatoros-asset-registry-v1',
+    provider: registryStore.providerName,
+    restored: restored.length,
   });
 
-  // 5b — Register + persist atomically
-  const entry1 = registerAndPersist(instagramAsset);
-  console.log('[Persistence] registerAndPersist()', {
-    artifact_hash: entry1.artifactHash,
-    isDuplicate:   entry1.isDuplicate,
-    persisted:     !entry1.isDuplicate,
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 4 — AI Engine (Sprint 11)
+  // ════════════════════════════════════════════════════════════════════════
+
+  // 4a — Environment status
+  console.log('[AI Engine] Environment', {
+    ai_available:     isAIAvailable(),
+    active_generator: resolveGeneratorType({ useAI: true }),
   });
 
-  const entry2 = registerAndPersist(instagramAsset2);
+  // 4b — DeterministicContentGenerator (always works, no API key)
+  const deterministicGen = createContentGenerator({ useAI: false });
+  const deterministicAsset = await deterministicGen.generate(contentRequest, blueprint, blueprintHash);
 
-  // Duplicate guard: same asset again → skipped
-  const duplicate = registerAndPersist(instagramAsset);
-  console.log('[Persistence] Duplicate guard', {
-    artifact_hash: duplicate.artifactHash,
-    isDuplicate:   duplicate.isDuplicate,
+  const avResult = validate(
+    { id: deterministicAsset.assetId, title: deterministicAsset.title,
+      state: 'default' as const, blueprintId: blueprint.id,
+      blueprintHash, runId: deterministicAsset.runId, createdAt: deterministicAsset.createdAt },
+    assetValidationSchema,
+  );
+  const iaResult = validate(deterministicAsset, instagramAssetValidationSchema);
+  const instagramReport = generateInstagramReport(iaResult, avResult);
+
+  console.log('[AI Engine] DeterministicContentGenerator', {
+    generatorType: deterministicGen.generatorType,
+    title:         deterministicAsset.title,
+    hook:          deterministicAsset.hook,
+    validation:    instagramReport.results,
   });
 
-  // 5c — AssetStore: StorageProvider-backed CRUD
+  // 4c — Factory with useAI: true → resolves based on environment
+  const autoGen = createContentGenerator({ useAI: true });
+  const autoAsset = await autoGen.generate(contentRequest, blueprint, blueprintHash);
+
+  console.log('[AI Engine] Factory (useAI: true)', {
+    resolved_generator: autoGen.generatorType,
+    ai_configured:      isAIAvailable(),
+    title:              autoAsset.title,
+    contract_identical: autoAsset.artifactHash === deterministicAsset.artifactHash,
+  });
+
+  // 4d — Second request: different intent (conversion)
+  const contentRequest2 = { ...contentRequest, topic: 'BrandOS', intent: 'conversion' as const };
+  const conversionGen = createContentGenerator({ useAI: false });
+  const conversionAsset = await conversionGen.generate(contentRequest2, blueprint, blueprintHash);
+
+  console.log('[AI Engine] Conversion intent asset', {
+    generatorType: conversionGen.generatorType,
+    title:         conversionAsset.title,
+    hook:          conversionAsset.hook,
+    cta:           conversionAsset.cta,
+  });
+
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 5 — Registry + Persistence + Library (full loop)
+  // ════════════════════════════════════════════════════════════════════════
+
+  const entry1 = registerAndPersist(deterministicAsset);
+  const entry2 = registerAndPersist(conversionAsset);
+
   const libraryAsset1 = registryEntryToLibraryAsset(entry1, brandProfile);
   const libraryAsset2 = registryEntryToLibraryAsset(entry2, brandProfile);
-
   assetStore.save(libraryAsset1);
   assetStore.save(libraryAsset2);
-  assetStore.save(libraryAsset1); // idempotent: same key → overwrites, no duplicate
 
-  console.log('[Persistence] AssetStore', {
-    provider:    assetStore.providerName,
-    total:       assetStore.count(),
-    storage_key: ASSET_STORE_KEY,
+  console.log('[Full Loop] Registry + Persistence + Library', {
+    registered:       2,
+    asset_store_total: assetStore.count(),
+    asset_store_key:   ASSET_STORE_KEY,
   });
 
-  // 5d — Provider swap: MemoryProvider (zero I/O, deterministic)
-  const memRegistryStore = createMemoryRegistryStore();
-  const memEntry = memRegistryStore.findByArtifactHash(entry1.artifactHash);
-
-  const memAssetStore = createMemoryAssetStore();
-  memAssetStore.save(libraryAsset1);
-  memAssetStore.save(libraryAsset2);
-
-  console.log('[Persistence] Provider swap → MemoryProvider', {
-    registry_provider: memRegistryStore.providerName,
-    asset_provider:    memAssetStore.providerName,
-    mem_asset_count:   memAssetStore.count(),
-    mem_entry_found:   memEntry !== null,   // true once localStorage has data
+  // Lineage
+  lineageRecord = appendLineageEvent(lineageRecord, {
+    eventType: 'asset_generated', actorId: autoGen.generatorType,
+    timestamp: new Date().toISOString(),
+    metadata: { assetId: autoAsset.assetId, generator: autoGen.generatorType },
   });
-
-  // 5e — Sync to legacy ContentOS Library (backward-compatible)
-  syncRegistryEntryToLibrary(entry1, brandProfile);
-  syncRegistryEntryToLibrary(entry2, brandProfile);
-
-  // Lineage close
   lineageRecord = appendLineageEvent(lineageRecord, {
     eventType: 'exported', actorId: 'persistence',
     timestamp: new Date().toISOString(),
     metadata: { registryPersisted: 2, assetStoreSaved: 2 },
   });
 
-  console.log('[CreatorOS Core] Loop complete', {
+  console.log('[CreatorOS Core] Platform complete', {
     lineage_events: lineageRecord.events.map((e) => e.eventType),
-    persistence:    'LocalStorage → Supabase-ready',
+    generator_contract: 'ContentRequest → InstagramAssetV1 (provider-agnostic)',
+    next: 'set VITE_API_KEY to activate OpenAIContentGenerator',
   });
 }
