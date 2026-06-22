@@ -46,11 +46,47 @@ fields:
       - down
       - neutral
 
+states:
+  - default
+  - loading
+  - empty
+  - error
+
+fixtures:
+  default:
+    title: Revenue
+    value: 12400
+    unit: "€"
+    label: vs last 30 days
+    trend: up
+  loading:
+    title: Revenue
+    value: ~
+    unit: "€"
+    label: Loading…
+    trend: neutral
+  empty:
+    title: Revenue
+    value: 0
+    unit: "€"
+    label: No data yet
+    trend: neutral
+  error:
+    title: Revenue
+    value: ~
+    unit: "€"
+    label: Failed to load
+    trend: neutral
+
 validation:
   rules:
     - BV-001
     - BV-002
     - BV-003
+    - BV-004
+    - BV-005
+    - FV-001
+    - FV-002
 
 lineage:
   sourceModule: core

@@ -31,6 +31,7 @@ export interface ValidationReport {
   fails: string[];
   coverage: {
     stateCoverage: number;
+    requiredPropCoverage: number;
   };
 }
 
@@ -77,12 +78,13 @@ export function combineResults(...results: ValidationResult[]): ValidationResult
 export function generateValidationReport<T>(
   result: ValidationResult,
   schema: ValidationSchema<T>,
+  coverage?: { stateCoverage?: number; requiredPropCoverage?: number },
 ): ValidationReport {
   const fails = result.violations.map((v) => v.ruleId ?? v.field);
-  const stateCoverage =
-    schema.rules.length > 0
-      ? (schema.rules.length - result.violations.length) / schema.rules.length
-      : 1;
+
+  const totalRules = schema.rules.length;
+  const passedRules = totalRules - result.violations.length;
+  const ruleFraction = totalRules > 0 ? passedRules / totalRules : 1;
 
   return {
     results: {
@@ -90,7 +92,8 @@ export function generateValidationReport<T>(
     },
     fails,
     coverage: {
-      stateCoverage: Math.round(stateCoverage * 100) / 100,
+      stateCoverage: coverage?.stateCoverage ?? Math.round(ruleFraction * 100) / 100,
+      requiredPropCoverage: coverage?.requiredPropCoverage ?? 1,
     },
   };
 }

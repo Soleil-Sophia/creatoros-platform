@@ -2,6 +2,10 @@ export type BlueprintId = string;
 
 export type BlueprintStatus = 'draft' | 'active' | 'deprecated';
 
+export type BlueprintState = 'default' | 'loading' | 'empty' | 'error';
+
+export type BlueprintFixtures = Partial<Record<BlueprintState, Record<string, unknown>>>;
+
 export interface BlueprintField {
   key: string;
   label: string;
@@ -14,6 +18,8 @@ export interface Blueprint {
   slug: string;
   version: number;
   status: BlueprintStatus;
+  states: BlueprintState[];
+  fixtures: BlueprintFixtures;
   fields: BlueprintField[];
   createdAt: string;
   updatedAt: string;

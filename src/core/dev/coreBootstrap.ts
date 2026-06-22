@@ -1,26 +1,35 @@
 import { createBlueprint } from '../blueprint';
-import { validate, generateValidationReport } from '../validation';
+import { calculateCoverage } from '../blueprint/coverage';
+import { validate, combineResults, generateValidationReport } from '../validation';
 import { blueprintValidationSchema } from '../validation/rules/blueprintRules';
+import { fixtureValidationSchema } from '../validation/rules/fixtureRules';
 import { hashBlueprint } from '../hashing';
 import { createLineageRecord, appendLineageEvent } from '../lineage';
 
 export function runCoreBootstrap(): void {
-  // ── Task 2: Blueprint ────────────────────────────────────────────────────
+  // ── Blueprint (with States + Fixtures) ──────────────────────────────────
   const blueprint = createBlueprint({
     slug: 'mini-kpi-card',
     version: 1,
     status: 'active',
+    states: ['default', 'loading', 'empty', 'error'],
+    fixtures: {
+      default: { title: 'Revenue', value: 12400, unit: '€', label: 'vs last 30 days', trend: 'up' },
+      loading: { title: 'Revenue', value: null, unit: '€', label: 'Loading…', trend: 'neutral' },
+      empty:   { title: 'Revenue', value: 0,    unit: '€', label: 'No data yet',    trend: 'neutral' },
+      error:   { title: 'Revenue', value: null, unit: '€', label: 'Failed to load', trend: 'neutral' },
+    },
     fields: [
-      { key: 'title', label: 'Card Title', type: 'text', required: true },
-      { key: 'value', label: 'KPI Value', type: 'number', required: true },
-      { key: 'unit', label: 'Unit', type: 'text', required: false },
-      { key: 'label', label: 'Metric Label', type: 'text', required: true },
-      { key: 'trend', label: 'Trend Direction', type: 'select', required: false },
+      { key: 'title', label: 'Card Title',      type: 'text',   required: true  },
+      { key: 'value', label: 'KPI Value',        type: 'number', required: true  },
+      { key: 'unit',  label: 'Unit',             type: 'text',   required: false },
+      { key: 'label', label: 'Metric Label',     type: 'text',   required: true  },
+      { key: 'trend', label: 'Trend Direction',  type: 'select', required: false },
     ],
   });
   console.log('[CreatorOS Core] Blueprint created', blueprint);
 
-  // ── Sprint 2C: Lineage record ────────────────────────────────────────────
+  // ── Lineage ──────────────────────────────────────────────────────────────
   let lineageRecord = createLineageRecord(blueprint.id, 'core');
   console.log('[CreatorOS Core] LineageRecord created', {
     assetId: lineageRecord.assetId,
@@ -28,11 +37,18 @@ export function runCoreBootstrap(): void {
     events: lineageRecord.events.map((e) => e.eventType),
   });
 
-  // ── Task 3: Validation (2A: BV-001 → BV-005) + 2B: structured report ────
-  const validationResult = validate(blueprint, blueprintValidationSchema);
-  const report = generateValidationReport(validationResult, blueprintValidationSchema);
+  // ── Validate Blueprint: BV-001..BV-005 ───────────────────────────────────
+  const bvResult = validate(blueprint, blueprintValidationSchema);
 
-  if (validationResult.valid) {
+  // ── Validate Fixtures: FV-001..FV-002 ────────────────────────────────────
+  const fvResult = validate(blueprint, fixtureValidationSchema);
+
+  // ── Combine + Coverage ───────────────────────────────────────────────────
+  const combined = combineResults(bvResult, fvResult);
+  const coverage = calculateCoverage(blueprint);
+  const report = generateValidationReport(combined, blueprintValidationSchema, coverage);
+
+  if (combined.valid) {
     console.log('[CreatorOS Core] Validation passed', report);
   } else {
     console.warn('[CreatorOS Core] Validation failed', report);
@@ -42,10 +58,10 @@ export function runCoreBootstrap(): void {
     eventType: 'validated',
     actorId: 'system',
     timestamp: new Date().toISOString(),
-    metadata: { valid: validationResult.valid, score: validationResult.score },
+    metadata: { valid: combined.valid, score: combined.score, coverage },
   });
 
-  // ── Task 4: Hash (algorithm-agnostic) ────────────────────────────────────
+  // ── Hash ─────────────────────────────────────────────────────────────────
   const { blueprintHash, algorithm } = hashBlueprint(blueprint);
   console.log('[CreatorOS Core] Blueprint hash generated', { blueprintHash, algorithm });
 
@@ -56,7 +72,7 @@ export function runCoreBootstrap(): void {
     metadata: { blueprintHash, algorithm },
   });
 
-  // ── Sprint 2C: Full event chain ──────────────────────────────────────────
+  // ── Lineage chain ────────────────────────────────────────────────────────
   console.log('[CreatorOS Core] Lineage chain', {
     assetId: lineageRecord.assetId,
     events: lineageRecord.events.map((e) => e.eventType),
