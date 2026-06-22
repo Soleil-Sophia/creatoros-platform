@@ -6,3 +6,4 @@ export * from './assets';
 export * from './instagram';
 export * from './brand';
 export * from './content';
+export * from './registry';

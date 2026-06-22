@@ -12,6 +12,9 @@ import { createBrandProfile } from '../brand/brandProfile';
 import { brandProfileValidationSchema } from '../brand/brandValidation';
 import { contentRequestValidationSchema } from '../content/contentRequestValidation';
 import { createInstagramAssetFromContentRequest } from '../content/contentAdapter';
+import { registerAsset, getByArtifactHash } from '../registry/assetRegistry';
+import { searchByIntent } from '../registry/assetSearch';
+import { getAssetVersionHistory } from '../registry/assetHistory';
 
 export function runCoreBootstrap(): void {
   // ════════════════════════════════════════════════════════════════════════
@@ -37,18 +40,13 @@ export function runCoreBootstrap(): void {
       { key: 'trend', label: 'Trend Direction', type: 'select', required: false },
     ],
   });
-  console.log('[CreatorOS Core] Blueprint created', { id: blueprint.id, states: blueprint.states });
 
   let lineageRecord = createLineageRecord(blueprint.id, 'core');
-
   const bvResult = validate(blueprint, blueprintValidationSchema);
   const fvResult = validate(blueprint, fixtureValidationSchema);
   const coverage = calculateCoverage(blueprint);
   const report   = generateValidationReport(bvResult, fvResult, blueprintValidationSchema, coverage);
-  console.log('[CreatorOS Core] Validation report', report);
-
-  const { blueprintHash, algorithm } = hashBlueprint(blueprint);
-  console.log('[CreatorOS Core] Blueprint hash generated', { blueprintHash, algorithm });
+  const { blueprintHash } = hashBlueprint(blueprint);
 
   lineageRecord = appendLineageEvent(lineageRecord, {
     eventType: 'validated',
@@ -57,82 +55,134 @@ export function runCoreBootstrap(): void {
     metadata: { bvValid: bvResult.valid, fvValid: fvResult.valid, coverage, blueprintHash },
   });
 
+  console.log('[CreatorOS Core] Compiler ready', {
+    blueprint: blueprint.id,
+    blueprint_validity: report.results.blueprint_validity,
+    fixture_validity:   report.results.fixture_validity,
+    coverage,
+    blueprintHash,
+  });
+
   // ════════════════════════════════════════════════════════════════════════
   //  SECTION 2 — End-to-End Flow: BrandOS → ContentOS → InstagramAssetV1
   // ════════════════════════════════════════════════════════════════════════
 
-  // Sprint 7A — BrandProfile
   const brandProfile = createBrandProfile({
     brandName:   'CreatorOS',
     voice:       'Motivational & Direct',
     audience:    'Solopreneurs and independent creators',
     positioning: 'Systematic content production for creators',
   });
-  const brpResult = validate(brandProfile, brandProfileValidationSchema);
+  validate(brandProfile, brandProfileValidationSchema);
   console.log('[BrandOS] Profile loaded', {
     brandName: brandProfile.brandName,
     voice:     brandProfile.voice,
     audience:  brandProfile.audience,
-    valid:     brpResult.valid,
   });
 
-  // Sprint 7B — ContentRequest
   const contentRequest = {
     brandProfile,
     topic:  'ContentOS',
     intent: 'awareness' as const,
-    format: 'carousel' as const,
+    format: 'carousel'  as const,
   };
-  const crResult = validate(contentRequest, contentRequestValidationSchema);
+  validate(contentRequest, contentRequestValidationSchema);
   console.log('[ContentOS] Request created', {
     topic:  contentRequest.topic,
     intent: contentRequest.intent,
     format: contentRequest.format,
-    valid:  crResult.valid,
   });
 
-  // Sprint 7C — ContentOS → InstagramAssetV1 Adapter
   const instagramAsset = createInstagramAssetFromContentRequest(
     contentRequest,
     blueprint,
     blueprintHash,
   );
-  console.log('[ContentOS] InstagramAsset generated', {
-    asset_id:      instagramAsset.assetId,
-    artifact_hash: instagramAsset.artifactHash,
-    title:         instagramAsset.title,
-    hook:          instagramAsset.hook,
-    cta:           instagramAsset.cta,
-  });
 
-  // IA Validation
   const avResult = validate(
-    { id: instagramAsset.assetId, title: instagramAsset.title, state: 'default', blueprintId: blueprint.id, blueprintHash, runId: instagramAsset.runId, createdAt: instagramAsset.createdAt },
+    {
+      id: instagramAsset.assetId, title: instagramAsset.title,
+      state: 'default' as const, blueprintId: blueprint.id,
+      blueprintHash, runId: instagramAsset.runId, createdAt: instagramAsset.createdAt,
+    },
     assetValidationSchema,
   );
   const iaResult = validate(instagramAsset, instagramAssetValidationSchema);
   const instagramReport = generateInstagramReport(iaResult, avResult);
-  console.log('[InstagramAssetV1] Validation passed', instagramReport);
 
-  // Lineage registration
+  console.log('[ContentOS] InstagramAsset generated', {
+    title:         instagramAsset.title,
+    hook:          instagramAsset.hook,
+    cta:           instagramAsset.cta,
+    artifact_hash: instagramAsset.artifactHash,
+  });
+  console.log('[InstagramAssetV1] Validation passed', instagramReport.results);
+
   lineageRecord = appendLineageEvent(lineageRecord, {
     eventType: 'asset_generated',
-    actorId:   'contentos',
+    actorId: 'contentos',
     timestamp: new Date().toISOString(),
-    metadata: {
-      assetId:       instagramAsset.assetId,
-      artifactHash:  instagramAsset.artifactHash,
-      channel:       instagramAsset.channel,
-      format:        instagramAsset.format,
-      intent:        instagramAsset.intent,
-    },
+    metadata: { assetId: instagramAsset.assetId, artifactHash: instagramAsset.artifactHash },
   });
 
-  console.log('[CreatorOS Core] Asset registered', {
-    asset_id:      instagramAsset.assetId,
-    blueprint_hash: instagramAsset.blueprintHash,
-    artifact_hash:  instagramAsset.artifactHash,
-    run_id:         instagramAsset.runId,
+  // ════════════════════════════════════════════════════════════════════════
+  //  SECTION 3 — Asset Registry
+  // ════════════════════════════════════════════════════════════════════════
+
+  // Register the generated asset
+  const entry = registerAsset(instagramAsset);
+  console.log('[AssetRegistry] Asset registered', {
+    asset_id:      entry.assetId,
+    artifact_hash: entry.artifactHash,
+    version:       entry.version,
+    isDuplicate:   entry.isDuplicate,
+  });
+
+  // Deduplication: try to register the same asset again
+  const duplicate = registerAsset(instagramAsset);
+  console.log('[AssetRegistry] Duplicate detected', {
+    artifact_hash: duplicate.artifactHash,
+    isDuplicate:   duplicate.isDuplicate,
+    skipped:       true,
+  });
+
+  // Register a second asset (different topic → different artifact_hash)
+  const contentRequest2 = { ...contentRequest, topic: 'BrandOS', intent: 'conversion' as const };
+  const instagramAsset2 = createInstagramAssetFromContentRequest(contentRequest2, blueprint, blueprintHash);
+  const entry2 = registerAsset(instagramAsset2);
+  console.log('[AssetRegistry] Second asset registered', {
+    asset_id:      entry2.assetId,
+    artifact_hash: entry2.artifactHash,
+    version:       entry2.version,
+  });
+
+  // Search by intent
+  const awarenessResults = searchByIntent('awareness');
+  console.log('[AssetRegistry] Search by intent', {
+    intent:  'awareness',
+    results: awarenessResults.length,
+    titles:  awarenessResults.map((e) => e.asset.title),
+  });
+
+  // Version history
+  const history = getAssetVersionHistory(instagramAsset.assetId);
+  console.log('[AssetRegistry] Version history', {
+    asset_id:       history?.assetId,
+    total_versions: history?.versions.length,
+    latest_version: history?.latestVersion,
+  });
+
+  // Final lineage
+  lineageRecord = appendLineageEvent(lineageRecord, {
+    eventType: 'exported',
+    actorId:   'registry',
+    timestamp: new Date().toISOString(),
+    metadata:  { registeredEntries: 2, deduplicated: 1 },
+  });
+
+  console.log('[CreatorOS Core] Registry complete', {
     lineage_events: lineageRecord.events.map((e) => e.eventType),
+    total_assets:   2,
+    deduplicated:   1,
   });
 }
