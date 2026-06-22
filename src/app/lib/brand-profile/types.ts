@@ -4,6 +4,10 @@ export type BrandProfile = {
   voiceComplexity: string;
   voiceFormality: string;
   voiceEnergy: string;
+  tone?: string;
+  complexity?: string;
+  formality?: string;
+  energy?: string;
   voiceLabel?: string;
   updatedAt?: string;
 };
