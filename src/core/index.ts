@@ -11,3 +11,4 @@ export * from './library';
 export * from './persistence';
 export * from './ai';
 export * from './quality';
+export * from './benchmark';

@@ -5,19 +5,15 @@ import type { InstagramAssetV1 } from '../instagram';
 import { createAsset } from '../assets';
 import { createInstagramAsset } from '../instagram/instagramAssetFactory';
 import { generateContent } from '../../app/lib/ai-connector/service';
-
-function deriveCta(intent: ContentRequest['intent']): string {
-  switch (intent) {
-    case 'awareness':     return 'Save this for later →';
-    case 'consideration': return 'Learn more in the link →';
-    case 'conversion':    return 'Get started today →';
-  }
-}
+import { deriveTitle, deriveHook, deriveBodySkeleton, deriveCta } from '../content/contentHelpers';
 
 // ─── OpenAIContentGenerator ───────────────────────────────────────────────────
-// Calls the Supabase AI function (via VITE_API_KEY).
-// Maps GenerateContentResult → InstagramAssetV1 using the same factory
-// that the deterministic generator uses — contract is identical.
+// Hybrid strategy (per Sprint 13 evaluation):
+//   Hook + Body → AI         (currently 45/100 → target 75+)
+//   Title + CTA → deterministic  (already 100/100 — don't touch)
+//
+// This means swapping to AI only improves the creative content;
+// structural quality (CTA, format, intent mapping) remains stable.
 
 export class OpenAIContentGenerator implements ContentGenerator {
   readonly generatorType = 'openai' as const;
@@ -43,23 +39,23 @@ export class OpenAIContentGenerator implements ContentGenerator {
       },
     });
 
-    // Graceful fallback: if AI returns empty arrays, use template values
-    const hook = result.hooks[0]
-      ?? `Most ${request.brandProfile.audience} don't know this about ${request.topic}.`;
-    const bodySkeleton = result.scripts[0]
-      ?? result.captions[0]
-      ?? `[${request.topic}]: The system for ${request.brandProfile.audience}.`;
-    const title = `${request.topic} — ${request.brandProfile.brandName}`;
+    // AI-generated: hook + body (the creative fields, currently scoring 45/100)
+    const hook = result.hooks[0] ?? deriveHook(request);
+    const bodySkeleton = result.scripts[0] ?? result.captions[0] ?? deriveBodySkeleton(request);
+
+    // Rule-based: title + cta (deterministic fields, already scoring 100/100)
+    const title = deriveTitle(request);
+    const cta   = deriveCta(request.intent);
 
     const asset = createAsset(blueprint, blueprintHash);
     return createInstagramAsset({
       asset,
-      format:       request.format,
-      intent:       request.intent,
+      format:  request.format,
+      intent:  request.intent,
       title,
       hook,
       bodySkeleton,
-      cta:          deriveCta(request.intent),
+      cta,
     });
   }
 }

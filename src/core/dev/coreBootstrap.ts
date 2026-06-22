@@ -7,10 +7,12 @@ import { hashBlueprint } from '../hashing';
 import { createLineageRecord, appendLineageEvent } from '../lineage';
 import { createBrandProfile } from '../brand/brandProfile';
 import { brandProfileValidationSchema } from '../brand/brandValidation';
-import { registryStore, registerAndPersist } from '../persistence/registryStore';
-import { createContentGenerator, isAIAvailable, resolveGeneratorType } from '../ai/generatorFactory';
+import { registryStore } from '../persistence/registryStore';
+import { isAIAvailable, resolveGeneratorType } from '../ai/generatorFactory';
 import { evaluateAsset } from '../quality/contentEvaluator';
 import { generateQualityReport } from '../quality/evaluationReport';
+import { runBenchmark } from '../benchmark/contentBenchmark';
+import { generateBenchmarkReport } from '../benchmark/benchmarkReport';
 import type { ContentRequest } from '../content/contentRequest';
 
 export async function runCoreBootstrap(): Promise<void> {
@@ -58,7 +60,7 @@ export async function runCoreBootstrap(): Promise<void> {
   });
 
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 2 — BrandOS Profile
+  //  SECTION 2 — BrandOS Profile + Persistence restore
   // ════════════════════════════════════════════════════════════════════════
 
   const brandProfile = createBrandProfile({
@@ -69,27 +71,16 @@ export async function runCoreBootstrap(): Promise<void> {
   });
   validate(brandProfile, brandProfileValidationSchema);
 
-  // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 3 — Persistence restore + AI environment
-  // ════════════════════════════════════════════════════════════════════════
-
   const restored = registryStore.restore();
   console.log('[Persistence] Registry restored', {
     provider: registryStore.providerName,
     restored: restored.length,
   });
 
-  console.log('[AI Engine] Environment', {
-    ai_available:     isAIAvailable(),
-    active_generator: resolveGeneratorType({ useAI: true }),
-  });
-
   // ════════════════════════════════════════════════════════════════════════
-  //  SECTION 4 — Content Quality Evaluation (Sprint 12)
-  //  10 real ContentRequests × DeterministicContentGenerator
+  //  SECTION 3 — Sprint 13: AI Benchmark
+  //  Same 10 ContentRequests × Deterministic + OpenAI (if available)
   // ════════════════════════════════════════════════════════════════════════
-
-  const generator = createContentGenerator({ useAI: false });
 
   const requests: ContentRequest[] = [
     { brandProfile, topic: 'ContentOS',          intent: 'awareness',     format: 'carousel' },
@@ -104,63 +95,89 @@ export async function runCoreBootstrap(): Promise<void> {
     { brandProfile, topic: 'Social Media ROI',    intent: 'conversion',    format: 'reel'     },
   ];
 
-  const assets = await Promise.all(
-    requests.map((req) => generator.generate(req, blueprint, blueprintHash)),
-  );
+  console.log('[Benchmark] Starting Sprint 13 generator comparison', {
+    total_requests:    requests.length,
+    ai_available:      isAIAvailable(),
+    active_generator:  resolveGeneratorType({ useAI: true }),
+  });
 
-  // Register all assets
-  for (const asset of assets) {
-    registerAndPersist(asset);
+  const benchmarkRun    = await runBenchmark(requests, blueprint, blueprintHash, brandProfile);
+  const benchmarkReport = generateBenchmarkReport(benchmarkRun);
+
+  // Deterministic dimension baseline (Sprint 12 data)
+  const detEvals = benchmarkRun.entries.map((e) => e.deterministicEval);
+  const detAvgDim = {
+    hookStrength:     Math.round(detEvals.reduce((s, e) => s + e.hookStrength.score,     0) / detEvals.length),
+    bodyCompleteness: Math.round(detEvals.reduce((s, e) => s + e.bodyCompleteness.score, 0) / detEvals.length),
+    ctaStrength:      Math.round(detEvals.reduce((s, e) => s + e.ctaStrength.score,      0) / detEvals.length),
+    formatFit:        Math.round(detEvals.reduce((s, e) => s + e.formatFit.score,        0) / detEvals.length),
+  };
+
+  console.log('[Benchmark] Deterministic baseline', {
+    avg:        benchmarkReport.deterministicAvg,
+    dimensions: detAvgDim,
+  });
+
+  if (benchmarkReport.aiAvailable && benchmarkReport.openaiAvg !== null) {
+    const aiEvals = benchmarkRun.entries
+      .map((e) => e.openaiEval)
+      .filter((e): e is NonNullable<typeof e> => e !== null);
+
+    const aiAvgDim = {
+      hookStrength:     Math.round(aiEvals.reduce((s, e) => s + e.hookStrength.score,     0) / aiEvals.length),
+      bodyCompleteness: Math.round(aiEvals.reduce((s, e) => s + e.bodyCompleteness.score, 0) / aiEvals.length),
+      ctaStrength:      Math.round(aiEvals.reduce((s, e) => s + e.ctaStrength.score,      0) / aiEvals.length),
+      formatFit:        Math.round(aiEvals.reduce((s, e) => s + e.formatFit.score,        0) / aiEvals.length),
+    };
+
+    console.log('[Benchmark] OpenAI results', {
+      avg:                 benchmarkReport.openaiAvg,
+      delta_vs_baseline:  `+${benchmarkReport.overallDelta}`,
+      dimensions:          aiAvgDim,
+      production_candidate: benchmarkReport.productionCandidate,
+    });
+
+    console.log('[Benchmark] Per-dimension delta (OpenAI − Deterministic)', {
+      hookStrength:     aiAvgDim.hookStrength     - detAvgDim.hookStrength,
+      bodyCompleteness: aiAvgDim.bodyCompleteness - detAvgDim.bodyCompleteness,
+      ctaStrength:      aiAvgDim.ctaStrength      - detAvgDim.ctaStrength,
+      formatFit:        aiAvgDim.formatFit        - detAvgDim.formatFit,
+    });
+
+  } else {
+    console.log('[Benchmark] OpenAI benchmark pending', {
+      status:         'VITE_API_KEY not set',
+      baseline:       `${benchmarkReport.deterministicAvg}/100`,
+      target:         `${benchmarkReport.targetScore}+`,
+      required_delta: `+${benchmarkReport.targetScore - benchmarkReport.deterministicAvg}`,
+    });
   }
 
-  // Evaluate all assets
-  const evaluations = assets.map((asset) => evaluateAsset(asset, brandProfile));
-
-  // Quality report
-  const qualityReport = generateQualityReport(evaluations);
-
-  console.log('[ContentQuality] Evaluation complete', {
-    totalAssets:          qualityReport.totalAssets,
-    averageScore:         qualityReport.averageScore,
-    gradeBreakdown:       qualityReport.gradeBreakdown,
-    templateHookCount:    qualityReport.templateHookCount,
-    placeholderBodyCount: qualityReport.placeholderBodyCount,
+  // Architectural decision logged
+  console.log('[Benchmark] Hybrid generator strategy', {
+    hook_body:     'AI generator (currently 45/100 → target 75+)',
+    cta_title:     'deterministic (100/100 — do not change)',
+    rationale:     'CTA already optimal; variability ≠ improvement',
   });
 
-  console.log('[ContentQuality] Dimension scores', {
-    hookStrength:     Math.round(evaluations.reduce((s, e) => s + e.hookStrength.score, 0) / evaluations.length),
-    bodyCompleteness: Math.round(evaluations.reduce((s, e) => s + e.bodyCompleteness.score, 0) / evaluations.length),
-    ctaStrength:      Math.round(evaluations.reduce((s, e) => s + e.ctaStrength.score, 0) / evaluations.length),
-    formatFit:        Math.round(evaluations.reduce((s, e) => s + e.formatFit.score, 0) / evaluations.length),
-  });
+  console.log('[Benchmark] Verdict', { verdict: benchmarkReport.verdict });
 
-  console.log('[ContentQuality] Top / Weakest asset', {
-    top:     { title: qualityReport.topAsset.title,     score: qualityReport.topAsset.overallScore,     grade: qualityReport.topAsset.grade     },
-    weakest: { title: qualityReport.weakestAsset.title, score: qualityReport.weakestAsset.overallScore, grade: qualityReport.weakestAsset.grade },
-  });
-
-  console.log('[ContentQuality] Weakest vs Strongest dimension', {
-    weakest:   { dimension: qualityReport.weakestDimension.dimension,   avg: qualityReport.weakestDimension.averageScore,   passRate: `${Math.round(qualityReport.weakestDimension.passRate * 100)}%`   },
-    strongest: { dimension: qualityReport.strongestDimension.dimension, avg: qualityReport.strongestDimension.averageScore, passRate: `${Math.round(qualityReport.strongestDimension.passRate * 100)}%` },
-  });
-
-  console.log('[ContentQuality] Findings', qualityReport.findings);
-
-  // Lineage
+  // Full quality report (Sprint 12 dimensions re-confirmed)
+  const qualityReport = generateQualityReport(detEvals.map((e) => e));
   lineageRecord = appendLineageEvent(lineageRecord, {
-    eventType: 'exported', actorId: 'quality-evaluator',
+    eventType: 'exported', actorId: 'benchmark',
     timestamp: new Date().toISOString(),
     metadata: {
-      totalAssets:      qualityReport.totalAssets,
-      averageScore:     qualityReport.averageScore,
-      weakestDimension: qualityReport.weakestDimension.dimension,
-      finding:          qualityReport.findings[0] ?? '',
+      deterministicAvg:  benchmarkReport.deterministicAvg,
+      openaiAvg:         benchmarkReport.openaiAvg,
+      aiAvailable:       benchmarkReport.aiAvailable,
+      productionCandidate: benchmarkReport.productionCandidate,
+      weakestDimension:  qualityReport.weakestDimension.dimension,
     },
   });
 
-  console.log('[CreatorOS Core] Sprint 12 complete', {
-    lineage_events:   lineageRecord.events.map((e) => e.eventType),
-    verdict:          `DeterministicGenerator avg ${qualityReport.averageScore}/100 — AI needed for body & hook variety`,
-    next:             'Sprint 13: activate OpenAIContentGenerator → target 75+',
+  console.log('[CreatorOS Core] Platform complete', {
+    lineage_events:  lineageRecord.events.map((e) => e.eventType),
+    domains:         ['blueprint','validation','hashing','lineage','assets','instagram','brand','content','registry','library','persistence','ai','quality','benchmark'],
   });
 }
