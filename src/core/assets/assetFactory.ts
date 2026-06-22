@@ -1,5 +1,6 @@
 import type { Blueprint, BlueprintState } from '../blueprint';
 import type { AssetV1 } from './asset';
+import { generateAssetId, generateRunId } from './identity';
 
 const registry = new Map<string, AssetV1>();
 
@@ -12,11 +13,12 @@ export function createAsset(
   const title = typeof fixture.title === 'string' ? fixture.title : blueprint.slug;
 
   const asset: AssetV1 = {
-    id: `asset_${blueprint.id}_${state}_${blueprintHash}`,
+    id: generateAssetId(blueprint.slug, state, blueprint.version),
     title,
     state,
     blueprintId: blueprint.id,
     blueprintHash,
+    runId: generateRunId(),
     createdAt: new Date().toISOString(),
   };
 

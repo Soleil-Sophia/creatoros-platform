@@ -63,11 +63,7 @@ export function runCoreBootstrap(): void {
     eventType: 'validated',
     actorId: 'system',
     timestamp: new Date().toISOString(),
-    metadata: {
-      bvValid: bvResult.valid,
-      fvValid: fvResult.valid,
-      coverage,
-    },
+    metadata: { bvValid: bvResult.valid, fvValid: fvResult.valid, coverage },
   });
 
   // ── Validation Report ─────────────────────────────────────────────────────
@@ -91,7 +87,7 @@ export function runCoreBootstrap(): void {
     events: lineageRecord.events.map((e) => e.eventType),
   });
 
-  // ── Asset (Sprint 4) ──────────────────────────────────────────────────────
+  // ── Asset (Sprint 5A — Identity Model) ───────────────────────────────────
   const asset = createAsset(blueprint, blueprintHash);
   const avResult = validate(asset, assetValidationSchema);
 
@@ -103,10 +99,10 @@ export function runCoreBootstrap(): void {
   });
 
   console.log('[CreatorOS Core] Asset created', {
-    id: asset.id,
-    title: asset.title,
-    state: asset.state,
-    blueprintHash: asset.blueprintHash,
-    valid: avResult.valid,
+    'asset_id':       asset.id,           // semantic — stable
+    'blueprint_hash': asset.blueprintHash, // changes with spec
+    'artifact_hash':  asset.artifactHash ?? '(pending — Sprint 5B)',
+    'run_id':         asset.runId,         // unique per execution
+    'valid':          avResult.valid,
   });
 }
