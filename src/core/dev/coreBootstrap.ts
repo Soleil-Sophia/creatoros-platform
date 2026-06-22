@@ -7,6 +7,8 @@ import { hashBlueprint } from '../hashing';
 import { createLineageRecord, appendLineageEvent } from '../lineage';
 import { createAsset } from '../assets';
 import { assetValidationSchema } from '../assets/assetValidation';
+import { createInstagramAsset } from '../instagram/instagramAssetFactory';
+import { instagramAssetValidationSchema } from '../instagram/instagramAssetValidation';
 
 export function runCoreBootstrap(): void {
   // ── Blueprint ────────────────────────────────────────────────────────────
@@ -87,7 +89,7 @@ export function runCoreBootstrap(): void {
     events: lineageRecord.events.map((e) => e.eventType),
   });
 
-  // ── Asset (Sprint 5A — Identity Model) ───────────────────────────────────
+  // ── AssetV1 ───────────────────────────────────────────────────────────────
   const asset = createAsset(blueprint, blueprintHash);
   const avResult = validate(asset, assetValidationSchema);
 
@@ -99,10 +101,47 @@ export function runCoreBootstrap(): void {
   });
 
   console.log('[CreatorOS Core] Asset created', {
-    'asset_id':       asset.id,           // semantic — stable
-    'blueprint_hash': asset.blueprintHash, // changes with spec
-    'artifact_hash':  asset.artifactHash ?? '(pending — Sprint 5B)',
-    'run_id':         asset.runId,         // unique per execution
-    'valid':          avResult.valid,
+    'asset_id':       asset.id,
+    'blueprint_hash': asset.blueprintHash,
+    'artifact_hash':  '(pending — computed at Instagram layer)',
+    'run_id':         asset.runId,
+  });
+
+  // ── InstagramAssetV1 (Sprint 5B) ──────────────────────────────────────────
+  const instagramAsset = createInstagramAsset({
+    asset,
+    format: 'reel',
+    intent: 'awareness',
+    title:        'Your Revenue at a Glance',
+    hook:         'Most creators don\'t track this number — do you?',
+    bodySkeleton: '[KPI]: {value}{unit} — {label}',
+    cta:          'Start tracking yours →',
+  });
+
+  const iaResult = validate(instagramAsset, instagramAssetValidationSchema);
+
+  lineageRecord = appendLineageEvent(lineageRecord, {
+    eventType: 'asset_generated',
+    actorId: 'system',
+    timestamp: new Date().toISOString(),
+    metadata: {
+      channel:       instagramAsset.channel,
+      format:        instagramAsset.format,
+      artifactHash:  instagramAsset.artifactHash,
+      valid:         iaResult.valid,
+    },
+  });
+
+  console.log('[CreatorOS Core] InstagramAssetV1 created', {
+    'asset_id':       instagramAsset.assetId,
+    'blueprint_hash': instagramAsset.blueprintHash,
+    'artifact_hash':  instagramAsset.artifactHash,
+    'run_id':         instagramAsset.runId,
+    'channel':        instagramAsset.channel,
+    'format':         instagramAsset.format,
+    'intent':         instagramAsset.intent,
+    'hook':           instagramAsset.hook,
+    'cta':            instagramAsset.cta,
+    'valid':          iaResult.valid,
   });
 }
