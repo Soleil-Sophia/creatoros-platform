@@ -4,3 +4,5 @@ export * from './validation';
 export * from './lineage';
 export * from './assets';
 export * from './instagram';
+export * from './brand';
+export * from './content';
