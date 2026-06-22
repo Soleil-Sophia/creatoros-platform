@@ -21,10 +21,20 @@ export interface Blueprint {
 
 export type CreateBlueprintInput = Omit<Blueprint, 'id' | 'createdAt' | 'updatedAt'>;
 
-export function createBlueprint(_input: CreateBlueprintInput): Blueprint {
-  throw new Error('createBlueprint: not yet implemented');
+const registry = new Map<BlueprintId, Blueprint>();
+
+export function createBlueprint(input: CreateBlueprintInput): Blueprint {
+  const now = new Date().toISOString();
+  const blueprint: Blueprint = {
+    ...input,
+    id: `bp_${input.slug}_v${input.version}`,
+    createdAt: now,
+    updatedAt: now,
+  };
+  registry.set(blueprint.id, blueprint);
+  return blueprint;
 }
 
-export function getBlueprintById(_id: BlueprintId): Blueprint | null {
-  throw new Error('getBlueprintById: not yet implemented');
+export function getBlueprintById(id: BlueprintId): Blueprint | null {
+  return registry.get(id) ?? null;
 }
