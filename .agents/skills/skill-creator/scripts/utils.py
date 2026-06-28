@@ -12,10 +12,13 @@ def _parse_frontmatter_value(value: str) -> str:
     cleaned = value.strip()
     if not cleaned:
         return ""
-    if (cleaned.startswith('"') and cleaned.endswith('"')) or (
+
+    is_quoted = (cleaned.startswith('"') and cleaned.endswith('"')) or (
         cleaned.startswith("'") and cleaned.endswith("'")
-    ):
-        cleaned = cleaned[1:-1].strip()
+    )
+    if is_quoted:
+        return cleaned[1:-1].strip()
+
     if cleaned.lower() in _NULL_LITERALS:
         return ""
     return cleaned
