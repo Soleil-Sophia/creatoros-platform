@@ -52,7 +52,7 @@ export function validate<T>(
       const message = error instanceof Error ? error.message : String(error);
       violations.push({
         ruleId: rule.id,
-        field: 'validation',
+        field: `rules.${rule.id}`,
         message: `${rule.id}: Rule execution failed - ${message}`,
         severity: 'error',
       });
