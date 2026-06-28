@@ -1,0 +1,93 @@
+id: bp_mini-kpi-card_v1
+slug: mini-kpi-card
+version: 1
+status: active
+
+meta:
+  displayName: Mini KPI Card
+  description: >
+    A minimal, single-metric display card for surfacing one key performance
+    indicator at a glance. First golden blueprint for CreatorOS Core V1.
+  category: ui-component
+  tags: [kpi, dashboard, analytics, core]
+
+fields:
+  - key: title
+    label: Card Title
+    type: text
+    required: true
+    hint: Short headline for the card (e.g. "Weekly Reach")
+
+  - key: value
+    label: KPI Value
+    type: number
+    required: true
+    hint: The primary numeric metric to display
+
+  - key: unit
+    label: Unit
+    type: text
+    required: false
+    hint: Unit suffix shown next to the value (e.g. "€", "%", "users")
+
+  - key: label
+    label: Metric Label
+    type: text
+    required: true
+    hint: Descriptive sub-label beneath the value (e.g. "vs last 30 days")
+
+  - key: trend
+    label: Trend Direction
+    type: select
+    required: false
+    hint: Optional directional indicator
+    options:
+      - up
+      - down
+      - neutral
+
+states:
+  - default
+  - loading
+  - empty
+  - error
+
+fixtures:
+  default:
+    title: Revenue
+    value: 12400
+    unit: "€"
+    label: vs last 30 days
+    trend: up
+  loading:
+    title: Revenue
+    value: ~
+    unit: "€"
+    label: Loading…
+    trend: neutral
+  empty:
+    title: Revenue
+    value: 0
+    unit: "€"
+    label: No data yet
+    trend: neutral
+  error:
+    title: Revenue
+    value: ~
+    unit: "€"
+    label: Failed to load
+    trend: neutral
+
+validation:
+  rules:
+    - BV-001
+    - BV-002
+    - BV-003
+    - BV-004
+    - BV-005
+    - FV-001
+    - FV-002
+
+lineage:
+  sourceModule: core
+  blueprintHash: ~

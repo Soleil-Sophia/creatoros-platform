@@ -51,6 +51,10 @@ localPort = 3000
 externalPort = 3003
 
 [[ports]]
+localPort = 3002
+externalPort = 6000
+
+[[ports]]
 localPort = 4173
 externalPort = 5000
 
@@ -95,3 +99,7 @@ VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhY
 
 [userenv.production]
 VITE_PLATFORM_URL = "https://creatorospage.replit.app/platform"
+
+[postMerge]
+path = "scripts/post-merge.sh"
+timeoutMs = 120000
