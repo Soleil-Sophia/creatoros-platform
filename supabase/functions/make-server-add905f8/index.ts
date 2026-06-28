@@ -255,7 +255,7 @@ Rules:
       "Authorization": `Bearer ${openaiKey}`,
     },
     body: JSON.stringify({
-      model: "gpt-4o-mini",
+      model: "gpt-5-mini",
       max_tokens: 1800,
       temperature: 0.72,
       response_format: { type: "json_object" }, // force JSON mode

@@ -9,6 +9,7 @@ import { ContentOSAppPage } from './pages/content-os-app';
 import { ContentOSLibraryPage } from './pages/content-os-library';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
 import { ContentOSApp } from '../modules/contentos/ContentOSApp';
+import { HandoffPage } from '../modules/handoff/HandoffPage';
 import { NotFoundPage } from './pages/not-found';
 import UserTest from './pages/user-test';
 import { AuthorityEngineScreen } from './screens/authority-engine/AuthorityEngineScreen';
@@ -36,6 +37,10 @@ export const router = createBrowserRouter([
   {
     path: '/modules/contentos/app',
     Component: ContentOSApp,
+  },
+  {
+    path: '/modules/contentos/handoff',
+    Component: HandoffPage,
   },
 
   // BrandOS — new slug (maps to existing page for now)
