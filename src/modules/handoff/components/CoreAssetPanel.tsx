@@ -13,6 +13,7 @@ export function CoreAssetPanel({ asset, onChange, wordCount }: CoreAssetPanelPro
         <div className="border-b border-[#27272A] pb-4">
           <h2 className="mb-1 font-mono text-xs uppercase tracking-widest text-[#71717A]">Source Core Asset</h2>
           <input
+            aria-label="Core Asset title"
             value={asset.title}
             onChange={(event) => onChange({ ...asset, title: event.target.value })}
             className="w-full border-none bg-transparent px-0 text-lg font-bold text-[#F4F4F5] focus:outline-none"

@@ -1,5 +1,9 @@
 import type { CoreAsset, DistributionAsset, LaunchIntent } from '../types';
 
+function sanitizeFilename(name: string): string {
+  return name.replace(/[^a-zA-Z0-9_\-]/g, '_');
+}
+
 function downloadFile(filename: string, content: string, type: string) {
   const blob = new Blob([content], { type });
   const url = URL.createObjectURL(blob);
@@ -15,13 +19,13 @@ function downloadFile(filename: string, content: string, type: string) {
 export function exportMarkdown(coreAsset: CoreAsset, intent: LaunchIntent, score: number, assets: DistributionAsset[]) {
   const lines = [
     '---',
-    `asset_id: "${coreAsset.id}"`,
-    `title: "${coreAsset.title}"`,
-    `theme: "${coreAsset.theme}"`,
-    `target_launch_date: "${intent.target_launch_date}"`,
-    `launch_goal: "${intent.launch_goal}"`,
-    `conversion_goal: "${intent.conversion_goal}"`,
-    `primary_cta: "${intent.primary_cta}"`,
+    `asset_id: ${JSON.stringify(coreAsset.id)}`,
+    `title: ${JSON.stringify(coreAsset.title)}`,
+    `theme: ${JSON.stringify(coreAsset.theme)}`,
+    `target_launch_date: ${JSON.stringify(intent.target_launch_date)}`,
+    `launch_goal: ${JSON.stringify(intent.launch_goal)}`,
+    `conversion_goal: ${JSON.stringify(intent.conversion_goal)}`,
+    `primary_cta: ${JSON.stringify(intent.primary_cta)}`,
     `quality_gate_score: ${score}`,
     '---',
     '',
@@ -45,7 +49,7 @@ export function exportMarkdown(coreAsset: CoreAsset, intent: LaunchIntent, score
     lines.push('', `## Channel: ${asset.channel}`, `Format: ${asset.format}`, `Goal: ${asset.goal}`, `CTA: ${asset.cta}`, '', asset.content_markdown, '', '---');
   });
 
-  downloadFile(`creatoros_launch_package_${coreAsset.id}.md`, lines.join('\n'), 'text/markdown;charset=utf-8');
+  downloadFile(`creatoros_launch_package_${sanitizeFilename(coreAsset.id)}.md`, lines.join('\n'), 'text/markdown;charset=utf-8');
 }
 
 export function exportJson(coreAsset: CoreAsset, intent: LaunchIntent, score: number, assets: DistributionAsset[]) {
@@ -60,7 +64,7 @@ export function exportJson(coreAsset: CoreAsset, intent: LaunchIntent, score: nu
   };
 
   downloadFile(
-    `creatoros_launch_package_${coreAsset.id}.json`,
+    `creatoros_launch_package_${sanitizeFilename(coreAsset.id)}.json`,
     JSON.stringify(payload, null, 2),
     'application/json;charset=utf-8',
   );

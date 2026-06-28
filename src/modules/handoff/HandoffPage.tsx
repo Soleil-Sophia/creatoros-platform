@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useRef, useMemo, useState } from 'react';
 import { BottomActionBar } from './components/BottomActionBar';
 import { CoreAssetPanel } from './components/CoreAssetPanel';
 import { HandoffHeader } from './components/HandoffHeader';
@@ -14,6 +14,8 @@ export function HandoffPage() {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
   const [expandedCard, setExpandedCard] = useState<number | null>(0);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+  const copiedTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
 
   const wordCount = coreAsset.body_markdown.split(/\s+/).filter(Boolean).length;
   const thesisLongEnough = coreAsset.core_thesis.length >= 50;
@@ -31,13 +33,19 @@ export function HandoffPage() {
 
   const passed = qualityGateScore >= 3.5;
   const distributionAssets = useMemo(
-    () => generateMockDistributionAssets(coreAsset, launchIntent),
-    [coreAsset, launchIntent],
+    () => (isDecomposed ? generateMockDistributionAssets(coreAsset, launchIntent) : []),
+    [isDecomposed, coreAsset, launchIntent],
   );
 
   function showToast(message: string) {
     setToastMessage(message);
-    window.setTimeout(() => setToastMessage(null), 2600);
+    if (toastTimerRef.current !== null) {
+      window.clearTimeout(toastTimerRef.current);
+    }
+    toastTimerRef.current = window.setTimeout(() => {
+      setToastMessage(null);
+      toastTimerRef.current = null;
+    }, 2600);
   }
 
   function handleDecompose() {
@@ -50,10 +58,20 @@ export function HandoffPage() {
   }
 
   async function handleCopy(text: string, index: number) {
-    await navigator.clipboard.writeText(text);
-    setCopiedIndex(index);
-    window.setTimeout(() => setCopiedIndex(null), 2000);
-    showToast('Copied to clipboard.');
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopiedIndex(index);
+      if (copiedTimerRef.current !== null) {
+        window.clearTimeout(copiedTimerRef.current);
+      }
+      copiedTimerRef.current = window.setTimeout(() => {
+        setCopiedIndex(null);
+        copiedTimerRef.current = null;
+      }, 2000);
+      showToast('Copied to clipboard.');
+    } catch {
+      showToast('Failed to copy to clipboard.');
+    }
   }
 
   return (

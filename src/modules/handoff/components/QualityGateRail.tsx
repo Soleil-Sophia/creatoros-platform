@@ -53,7 +53,7 @@ export function QualityGateRail({ score, passed, checks, isDecomposed, onDecompo
             disabled={!passed}
             className={passed ? 'w-full rounded-xl bg-[#F4F4F5] px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-black shadow-lg shadow-black/30 transition-colors hover:bg-[#D6B56D]' : 'w-full cursor-not-allowed rounded-xl border border-[#27272A] bg-[#18181B] px-4 py-3 font-mono text-xs font-bold uppercase tracking-wider text-[#71717A]'}
           >
-            {isDecomposed ? 'Regenerate' : 'Decompose'}
+            Decompose
           </button>
           <div className="mt-2 text-center font-mono text-[9px] text-[#71717A]">TARGET: LAUNCHOS</div>
         </div>

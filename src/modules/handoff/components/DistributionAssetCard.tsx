@@ -14,6 +14,8 @@ export function DistributionAssetCard({ asset, isExpanded, onToggle, onCopy, isC
       <button
         type="button"
         onClick={onToggle}
+        aria-expanded={isExpanded}
+        aria-controls={`asset-content-${asset.id}`}
         className="flex w-full cursor-pointer select-none items-center justify-between bg-[#111113] p-4 text-left"
       >
         <div className="flex items-center gap-3">
@@ -32,7 +34,7 @@ export function DistributionAssetCard({ asset, isExpanded, onToggle, onCopy, isC
       </button>
 
       {isExpanded && (
-        <div className="flex flex-col gap-3 border-t border-[#27272A] bg-[#050507]/40 p-4">
+        <div id={`asset-content-${asset.id}`} className="flex flex-col gap-3 border-t border-[#27272A] bg-[#050507]/40 p-4">
           <div className="grid grid-cols-1 gap-2 rounded-lg border border-[#27272A] bg-[#111113] p-2.5 font-mono text-[10px] text-[#71717A] sm:grid-cols-2">
             <div>
               <span className="block font-bold text-zinc-600">TARGET DATE:</span>
