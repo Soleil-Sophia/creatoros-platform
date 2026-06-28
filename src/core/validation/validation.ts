@@ -43,9 +43,19 @@ export function validate<T>(
   const violations: ValidationViolation[] = [];
 
   for (const rule of schema.rules) {
-    const violation = rule.validate(value);
-    if (violation !== null) {
-      violations.push({ ruleId: rule.id, ...violation });
+    try {
+      const violation = rule.validate(value);
+      if (violation !== null) {
+        violations.push({ ruleId: rule.id, ...violation });
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      violations.push({
+        ruleId: rule.id,
+        field: 'validation',
+        message: `${rule.id}: Rule execution failed - ${message}`,
+        severity: 'error',
+      });
     }
   }
 
