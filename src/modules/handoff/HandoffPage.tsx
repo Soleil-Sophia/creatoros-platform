@@ -1,4 +1,4 @@
-import { useRef, useMemo, useState } from 'react';
+import { useRef, useMemo, useState, useEffect } from 'react';
 import { BottomActionBar } from './components/BottomActionBar';
 import { CoreAssetPanel } from './components/CoreAssetPanel';
 import { HandoffHeader } from './components/HandoffHeader';
@@ -16,6 +16,17 @@ export function HandoffPage() {
   const [toastMessage, setToastMessage] = useState<string | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
   const copiedTimerRef = useRef<ReturnType<typeof window.setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current !== null) {
+        window.clearTimeout(toastTimerRef.current);
+      }
+      if (copiedTimerRef.current !== null) {
+        window.clearTimeout(copiedTimerRef.current);
+      }
+    };
+  }, []);
 
   const wordCount = coreAsset.body_markdown.split(/\s+/).filter(Boolean).length;
   const thesisLongEnough = coreAsset.core_thesis.length >= 50;
@@ -92,7 +103,6 @@ export function HandoffPage() {
           score={qualityGateScore}
           passed={passed}
           checks={{ thesisLongEnough, wordCountPassed, hasSubpoints, cleanVoice, ctaDefined }}
-          isDecomposed={isDecomposed}
           onDecompose={handleDecompose}
         />
         <LaunchPackagePanel
