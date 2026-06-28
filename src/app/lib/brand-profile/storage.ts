@@ -14,17 +14,76 @@ export const REQUIRED_BRAND_PROFILE_FIELDS = [
 export type BrandProfileStatus = 'not_started' | 'in_progress' | 'complete';
 
 type RequiredBrandProfileField = (typeof REQUIRED_BRAND_PROFILE_FIELDS)[number];
+type BrandProfileFieldMap = Record<RequiredBrandProfileField, string[]>;
+
+const BRAND_PROFILE_FIELD_ALIASES: BrandProfileFieldMap = {
+  brandName: ['brandName', 'brand_name'],
+  voiceTone: ['voiceTone', 'tone', 'voice_tone'],
+  voiceComplexity: ['voiceComplexity', 'complexity', 'voice_complexity'],
+  voiceFormality: ['voiceFormality', 'formality', 'voice_formality'],
+  voiceEnergy: ['voiceEnergy', 'energy', 'voice_energy'],
+};
 
 function isPlainObject(value: unknown): value is Record<string, unknown> {
   return Boolean(value && typeof value === 'object' && !Array.isArray(value));
 }
 
-function normalizeString(value: unknown): string {
-  return typeof value === 'string' ? value : '';
+function getFirstNonEmptyString(profile: Record<string, unknown>, ...keys: string[]): string {
+  for (const key of keys) {
+    const value = profile[key];
+    if (typeof value !== 'string') continue;
+    const trimmed = value.trim();
+    if (trimmed) return trimmed;
+  }
+  return '';
+}
+
+function getMigratedBrandName(
+  voiceTone: string,
+  voiceComplexity: string,
+  voiceFormality: string,
+  voiceEnergy: string,
+  voiceLabel?: string
+): string {
+  if (voiceTone && voiceComplexity && voiceFormality && voiceEnergy) {
+    return voiceLabel ?? voiceTone;
+  }
+  return '';
 }
 
 function getFieldValue(profile: BrandProfile, field: RequiredBrandProfileField): string {
-  return profile[field].trim();
+  for (const key of BRAND_PROFILE_FIELD_ALIASES[field]) {
+    const value = profile[key as keyof BrandProfile];
+    if (typeof value !== 'string') continue;
+    const trimmed = value.trim();
+    if (trimmed) return trimmed;
+  }
+  return '';
+}
+
+function normalizeStoredProfile(profile: Record<string, unknown>): BrandProfile {
+  const voiceTone = getFirstNonEmptyString(profile, 'voiceTone', 'tone', 'voice_tone');
+  const voiceComplexity = getFirstNonEmptyString(profile, 'voiceComplexity', 'complexity', 'voice_complexity');
+  const voiceFormality = getFirstNonEmptyString(profile, 'voiceFormality', 'formality', 'voice_formality');
+  const voiceEnergy = getFirstNonEmptyString(profile, 'voiceEnergy', 'energy', 'voice_energy');
+  const voiceLabel = getFirstNonEmptyString(profile, 'voiceLabel', 'voice_label') || undefined;
+  const brandName =
+    getFirstNonEmptyString(profile, 'brandName', 'brand_name') ||
+    getMigratedBrandName(voiceTone, voiceComplexity, voiceFormality, voiceEnergy, voiceLabel);
+  const updatedAt = getFirstNonEmptyString(profile, 'updatedAt') || undefined;
+
+  const next: BrandProfile = {
+    brandName,
+    voiceTone,
+    voiceComplexity,
+    voiceFormality,
+    voiceEnergy,
+  };
+
+  if (voiceLabel) next.voiceLabel = voiceLabel;
+  if (updatedAt) next.updatedAt = updatedAt;
+
+  return next;
 }
 
 export function getBrandProfileStatus(profile: BrandProfile | null | undefined): BrandProfileStatus {
@@ -47,42 +106,17 @@ export function readBrandProfile(): BrandProfile | null {
     if (!raw) return null;
     const parsed = JSON.parse(raw);
     if (!isPlainObject(parsed)) return null;
-    const legacy = parsed as Record<string, unknown>;
-    const voiceTone = normalizeString(legacy.voiceTone ?? legacy.tone);
-    const voiceComplexity = normalizeString(legacy.voiceComplexity ?? legacy.complexity);
-    const voiceFormality = normalizeString(legacy.voiceFormality ?? legacy.formality);
-    const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy);
-    const voiceLabel = normalizeString(legacy.voiceLabel) || undefined;
-    let brandName = normalizeString(legacy.brandName);
-    // Legacy v1 profiles have no brandName. If the profile was otherwise fully
-    // configured (all four voice fields present), backfill brandName from the
-    // stored voiceLabel (falling back to voiceTone) so that migrated voices
-    // keep their 'complete' status.
-    if (!brandName && voiceTone && voiceComplexity && voiceFormality && voiceEnergy) {
-      brandName = voiceLabel ?? voiceTone;
-    }
-    return {
-      brandName,
-      voiceTone,
-      voiceComplexity,
-      voiceFormality,
-      voiceEnergy,
-      voiceLabel,
-      updatedAt: normalizeString(legacy.updatedAt) || undefined,
-    };
+    return normalizeStoredProfile(parsed);
   } catch {
     return null;
   }
 }
 
 export function writeBrandProfile(profile: BrandProfile): BrandProfile {
+  const normalized = normalizeStoredProfile(profile);
   const next: BrandProfile = {
-    brandName: profile.brandName.trim(),
-    voiceTone: profile.voiceTone.trim(),
-    voiceComplexity: profile.voiceComplexity.trim(),
-    voiceFormality: profile.voiceFormality.trim(),
-    voiceEnergy: profile.voiceEnergy.trim(),
-    voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
+    ...normalized,
+    voiceLabel: profile.voiceLabel?.trim() || normalized.voiceLabel || createVoiceLabel(normalized),
     updatedAt: new Date().toISOString(),
   };
   if (typeof window === 'undefined') return next;
@@ -108,9 +142,9 @@ export function clearBrandProfile(): void {
  * Prefers the tone, falls back to formality/energy, then to "Custom Voice".
  */
 export function createVoiceLabel(profile: BrandProfile): string {
-  const tone = profile.voiceTone?.trim();
-  const formality = profile.voiceFormality?.trim();
-  const energy = profile.voiceEnergy?.trim();
+  const tone = getFirstNonEmptyString(profile, 'voiceTone', 'tone', 'voice_tone');
+  const formality = getFirstNonEmptyString(profile, 'voiceFormality', 'formality', 'voice_formality');
+  const energy = getFirstNonEmptyString(profile, 'voiceEnergy', 'energy', 'voice_energy');
 
   if (tone) return tone;
   if (formality && energy) return `${formality} · ${energy}`;
@@ -124,13 +158,7 @@ export function isBrandProfileMeaningful(profile: BrandProfile | null | undefine
 }
 
 export function isBrandProfileComplete(profile: BrandProfile | null | undefined): boolean {
-  if (!profile) return false;
-  return Boolean(
-    (profile.tone ?? '').trim() &&
-      (profile.complexity ?? '').trim() &&
-      (profile.formality ?? '').trim() &&
-      (profile.energy ?? '').trim()
-  );
+  return getBrandProfileStatus(profile) === 'complete';
 }
 
 // Re-export the empty shape so consumers can use a single import for initial state.

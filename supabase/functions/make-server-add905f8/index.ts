@@ -17,13 +17,64 @@ async function getJsonObjectBody(c: Context) {
 }
 
 function getString(value: unknown) {
-  return typeof value === "string" ? value : "";
+  return typeof value === "string" ? value.trim() : "";
 }
 
 function getStringArray(value: unknown) {
   return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === "string" && item.length > 0)
+    ? value
+        .filter((item): item is string => typeof item === "string")
+        .map((item) => item.trim())
+        .filter((item) => item.length > 0)
     : [];
+}
+
+function buildPromptLine(label: string, value: unknown): string | null {
+  const stringValue = getString(value);
+  return stringValue ? `- ${label}: ${stringValue}` : null;
+}
+
+function buildPromptList(label: string, value: unknown): string | null {
+  const items = getStringArray(value);
+  return items.length ? `- ${label}: ${items.join(", ")}` : null;
+}
+
+function getFirstNonEmptyString(record: JsonObject, ...keys: string[]): string {
+  for (const key of keys) {
+    const value = getString(record[key]);
+    if (value) return value;
+  }
+  return "";
+}
+
+function getFirstNonEmptyArray(record: JsonObject, ...keys: string[]): string[] {
+  for (const key of keys) {
+    const items = getStringArray(record[key]);
+    if (items.length) return items;
+  }
+  return [];
+}
+
+function buildBrandContext(record: JsonObject, brandName: string): string {
+  const brandLines = [
+    buildPromptLine("Brand", brandName),
+    buildPromptLine("Mission", getFirstNonEmptyString(record, "mission")),
+    buildPromptLine("Voice Tone", getFirstNonEmptyString(record, "voiceTone", "tone", "voice_tone")),
+    buildPromptLine("Voice Energy", getFirstNonEmptyString(record, "voiceEnergy", "energy", "voice_energy")),
+    buildPromptLine("Complexity", getFirstNonEmptyString(record, "voiceComplexity", "complexity", "voice_complexity")),
+    buildPromptLine("Formality", getFirstNonEmptyString(record, "voiceFormality", "formality", "voice_formality")),
+    buildPromptList("Do's", getFirstNonEmptyArray(record, "voiceDos", "voice_dos")),
+    buildPromptList("Don'ts", getFirstNonEmptyArray(record, "voiceDonts", "voice_donts")),
+    buildPromptList("Messaging Pillars", getFirstNonEmptyArray(record, "messagingPillars", "messaging_pillars")),
+    buildPromptLine("Target Customer", getFirstNonEmptyString(record, "targetCustomer", "target_customer")),
+    buildPromptLine("Transformation Promise", getFirstNonEmptyString(record, "transformation")),
+  ]
+    .filter((line): line is string => Boolean(line))
+    .join("\n");
+
+  return brandLines
+    ? `\n\nBRAND VOICE & IDENTITY — apply to every output:\n${brandLines}\n\nEvery output MUST reflect this brand identity. No generic content.`
+    : "";
 }
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
@@ -38,18 +89,6 @@ app.use("/*", cors({
 
 // ─── Auth Middleware ──────────────────────────────────────────────────────────
 async function requireAuth(c: any, next: any) {
-  // API key auth — lightweight alternative for frontend direct access.
-  // Set FRONTEND_API_KEY in Supabase Edge Function secrets and VITE_API_KEY in the
-  // frontend environment to enable this path without Supabase user sessions.
-  const apiKey = c.req.header("x-api-key");
-  const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
-  if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
-    c.set("userId", `api-key:${crypto.randomUUID()}`);
-    c.set("userEmail", "frontend@creatoros.internal");
-    await next();
-    return;
-  }
-
   // JWT auth — standard Supabase user session.
   const authHeader = c.req.header("Authorization");
   if (!authHeader?.startsWith("Bearer ")) {
@@ -115,43 +154,51 @@ app.post("/make-server-add905f8/content/generate", requireAuth, async (c) => {
     rawBody && typeof rawBody === "object" && !Array.isArray(rawBody)
       ? (rawBody as Record<string, unknown>)
       : {};
-  const { offer, audience, platform, goal, tone, outputType } = body;
+  const offer = getString(body.offer);
+  const audience = getString(body.audience);
+  const platform = getString(body.platform);
+  const goal = getString(body.goal);
+  const tone = getString(body.tone);
+  const outputType = getString(body.outputType);
 
   if (!offer) return c.json({ error: "offer is required" }, 400);
 
   // Load brand profile if available — prefer KV-stored profile, fall back to
   // request-supplied voice fields (for users who have only configured BrandOS locally).
-  let brandProfile: any = null;
+  let brandProfile: JsonObject | null = null;
   try { brandProfile = await kv.get(`brand_profile:${userId}`); } catch { /* ok */ }
-  if (!brandProfile || typeof brandProfile !== "object") {
+  if (!isJsonObject(brandProfile)) {
     // Fall back to any brand profile fields forwarded in the request body.
-    const requestVoice: Record<string, string | undefined> = {
-      brandName: typeof body.brandName === "string" ? body.brandName.trim() || undefined : undefined,
-      voiceTone: typeof body.voiceTone === "string" ? body.voiceTone.trim() || undefined : undefined,
-      voiceComplexity: typeof body.voiceComplexity === "string" ? body.voiceComplexity.trim() || undefined : undefined,
-      voiceFormality: typeof body.voiceFormality === "string" ? body.voiceFormality.trim() || undefined : undefined,
-      voiceEnergy: typeof body.voiceEnergy === "string" ? body.voiceEnergy.trim() || undefined : undefined,
+    const requestVoice: JsonObject = {
+      brandName: getFirstNonEmptyString(body, "brandName", "brand_name") || undefined,
+      voiceTone: getFirstNonEmptyString(body, "voiceTone", "tone", "voice_tone") || undefined,
+      voiceComplexity: getFirstNonEmptyString(body, "voiceComplexity", "complexity", "voice_complexity") || undefined,
+      voiceFormality: getFirstNonEmptyString(body, "voiceFormality", "formality", "voice_formality") || undefined,
+      voiceEnergy: getFirstNonEmptyString(body, "voiceEnergy", "energy", "voice_energy") || undefined,
+      voiceLabel: getFirstNonEmptyString(body, "voiceLabel", "voice_label") || undefined,
+      mission: getFirstNonEmptyString(body, "mission") || undefined,
+      targetCustomer: getFirstNonEmptyString(body, "targetCustomer", "target_customer") || undefined,
+      transformation: getFirstNonEmptyString(body, "transformation") || undefined,
+      voiceDos: getFirstNonEmptyArray(body, "voiceDos", "voice_dos"),
+      voiceDonts: getFirstNonEmptyArray(body, "voiceDonts", "voice_donts"),
+      messagingPillars: getFirstNonEmptyArray(body, "messagingPillars", "messaging_pillars"),
     };
-    brandProfile = Object.values(requestVoice).some((v) => v !== undefined) ? requestVoice : null;
+    brandProfile = Object.values(requestVoice).some((v) => {
+      if (Array.isArray(v)) return v.length > 0;
+      return v !== undefined && v !== null && `${v}`.trim().length > 0;
+    })
+      ? requestVoice
+      : null;
   }
 
+  const brandProfileRecord = brandProfile ?? {};
+  const brandName =
+    getFirstNonEmptyString(brandProfileRecord, "brandName", "brand_name") ||
+    getFirstNonEmptyString(brandProfileRecord, "voiceLabel", "voice_label") ||
+    getFirstNonEmptyString(brandProfileRecord, "voiceTone", "tone", "voice_tone");
+
   // Build brand context block
-  const brandContext = brandProfile ? `
-
-BRAND VOICE & IDENTITY — apply to every output:
-- Brand: ${getString(brandProfile.brandName)}
-- Mission: ${getString(brandProfile.mission)}
-- Voice Tone: ${getString(brandProfile.voiceTone)}
-- Voice Energy: ${getString(brandProfile.voiceEnergy)}
-- Complexity: ${getString(brandProfile.voiceComplexity)}
-- Formality: ${getString(brandProfile.voiceFormality)}
-- Do's: ${voiceDos.join(", ")}
-- Don'ts: ${voiceDonts.join(", ")}
-- Messaging Pillars: ${messagingPillars.join(", ")}
-- Target Customer: ${getString(brandProfile.targetCustomer)}
-- Transformation Promise: ${getString(brandProfile.transformation)}
-
-Every output MUST reflect this brand identity. No generic content.` : "";
+  const brandContext = brandProfile ? buildBrandContext(brandProfileRecord, brandName) : "";
 
   const systemPrompt = `You are an expert content strategist for creators and solo entrepreneurs.
 You generate structured, high-quality content assets — not generic AI filler.
@@ -180,7 +227,7 @@ Rules:
 - 5 script sections for a 60–90 sec video or long post
 - 3 platform-specific captions: Instagram (emotional), LinkedIn (professional), X (punchy ≤280 chars)
 - Everything must be specific to the offer — no generic filler
-- ${brandProfile ? `Mirror ${getString(brandProfile.brandName)}'s exact voice` : "Be concrete and specific"}`;
+- ${brandName ? `Mirror ${brandName}'s exact voice` : "Be concrete and specific"}`;
 
   // OpenAI call
   const openaiKey = Deno.env.get("OPENAI_API_KEY");
@@ -224,15 +271,22 @@ Rules:
     console.error("JSON parse error:", e, "raw:", rawContent);
   }
 
+  const hooks = getStringArray(parsed.hooks);
+  const scripts = getStringArray(parsed.scripts);
+  const captions = getStringArray(parsed.captions);
+  if (!hooks.length && !scripts.length && !captions.length) {
+    return c.json({ error: "AI returned no content" }, 502);
+  }
+
   // Build & persist asset
   const assetId = crypto.randomUUID();
   const asset = {
     id: assetId,
     input: { offer, audience, platform, goal, tone, outputType },
-    hooks: parsed.hooks || [],
-    scripts: parsed.scripts || [],
-    captions: parsed.captions || [],
-    brandName: brandProfile?.brandName ?? null,
+    hooks,
+    scripts,
+    captions,
+    brandName: brandName || null,
     createdAt: new Date().toISOString(),
   };
 
