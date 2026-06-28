@@ -3,7 +3,6 @@
 from pathlib import Path
 
 
-<<<<<<< HEAD
 _DEFAULT_DESCRIPTION = "No description provided."
 _NULL_LITERALS = {"null", "~"}
 
@@ -25,8 +24,6 @@ def _parse_frontmatter_value(value: str) -> str:
     return cleaned
 
 
-=======
->>>>>>> origin/main
 def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
     """Parse a SKILL.md file, returning (name, description, full_content).
     
@@ -71,19 +68,6 @@ def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
                 description = _parse_frontmatter_value(value)
         i += 1
 
-<<<<<<< HEAD
     parsed_name = name.strip() or skill_path.name.strip() or "unnamed-skill"
     parsed_description = description.strip() or _DEFAULT_DESCRIPTION
     return parsed_name, parsed_description, content
-=======
-    # Provide safe placeholder values for empty fields to ensure valid agent configs
-    if not name or not name.strip():
-        # Try to derive from skill directory name, fallback to placeholder
-        skill_dir_name = skill_path.name if skill_path.is_dir() else skill_path.parent.name
-        name = skill_dir_name if skill_dir_name else "Untitled Skill"
-    
-    if not description or not description.strip():
-        description = "Skill description pending"
-
-    return name.strip(), description.strip(), content
->>>>>>> origin/main
