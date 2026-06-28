@@ -91,7 +91,6 @@ export function HandoffPage() {
           score={qualityGateScore}
           passed={passed}
           checks={{ thesisLongEnough, wordCountPassed, hasSubpoints, cleanVoice, ctaDefined }}
-          isDecomposed={isDecomposed}
           onDecompose={handleDecompose}
         />
         <LaunchPackagePanel
