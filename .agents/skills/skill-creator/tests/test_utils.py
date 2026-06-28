@@ -1,7 +1,8 @@
+import shutil
+import sys
 import tempfile
 import unittest
 from pathlib import Path
-import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from scripts.utils import parse_skill_md
@@ -10,6 +11,7 @@ from scripts.utils import parse_skill_md
 class ParseSkillMdTests(unittest.TestCase):
     def _write_skill(self, frontmatter: str) -> Path:
         tmp_dir = Path(tempfile.mkdtemp(prefix="skill-creator-test-"))
+        self.addCleanup(shutil.rmtree, tmp_dir, ignore_errors=True)
         skill_dir = tmp_dir / "example-skill"
         skill_dir.mkdir()
         (skill_dir / "SKILL.md").write_text(frontmatter + "\n# Body\n")
