@@ -3,29 +3,12 @@
 from pathlib import Path
 
 
-_DEFAULT_DESCRIPTION = "No description provided."
-_NULL_LITERALS = {"null", "~"}
-
-
-def _parse_frontmatter_value(value: str) -> str:
-    """Parse a frontmatter scalar value, treating YAML null literals as empty."""
-    cleaned = value.strip()
-    if not cleaned:
-        return ""
-
-    is_quoted = (cleaned.startswith('"') and cleaned.endswith('"')) or (
-        cleaned.startswith("'") and cleaned.endswith("'")
-    )
-    if is_quoted:
-        return cleaned[1:-1].strip()
-
-    if cleaned.lower() in _NULL_LITERALS:
-        return ""
-    return cleaned
-
-
 def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
-    """Parse a SKILL.md file, returning (name, description, full_content)."""
+    """Parse a SKILL.md file, returning (name, description, full_content).
+    
+    Provides safe placeholder values for empty name and description fields
+    to ensure valid agent configs that can be merged without errors.
+    """
     content = (skill_path / "SKILL.md").read_text()
     lines = content.split("\n")
 
@@ -64,6 +47,13 @@ def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
                 description = _parse_frontmatter_value(value)
         i += 1
 
-    parsed_name = name.strip() or skill_path.name.strip() or "unnamed-skill"
-    parsed_description = description.strip() or _DEFAULT_DESCRIPTION
-    return parsed_name, parsed_description, content
+    # Provide safe placeholder values for empty fields to ensure valid agent configs
+    if not name or not name.strip():
+        # Try to derive from skill directory name, fallback to placeholder
+        skill_dir_name = skill_path.name if skill_path.is_dir() else skill_path.parent.name
+        name = skill_dir_name if skill_dir_name else "Untitled Skill"
+    
+    if not description or not description.strip():
+        description = "Skill description pending"
+
+    return name.strip(), description.strip(), content
