@@ -7,9 +7,28 @@ _DEFAULT_DESCRIPTION = "No description provided."
 _NULL_LITERALS = {"null", "~"}
 
 
+def _strip_inline_comment(value: str) -> str:
+    """Strip YAML inline comments while preserving quoted content."""
+    in_single = False
+    in_double = False
+    for i, char in enumerate(value):
+        if char == "'" and not in_double:
+            in_single = not in_single
+        elif char == '"' and not in_single:
+            in_double = not in_double
+        elif char == "#" and not in_single and not in_double:
+            if i == 0 or value[i - 1].isspace():
+                return value[:i].rstrip()
+    return value
+
+
 def _parse_frontmatter_value(value: str) -> str:
     """Parse a frontmatter scalar value, treating YAML null literals as empty."""
     cleaned = value.strip()
+    if not cleaned:
+        return ""
+
+    cleaned = _strip_inline_comment(cleaned)
     if not cleaned:
         return ""
 

@@ -35,6 +35,24 @@ class ParseSkillMdTests(unittest.TestCase):
         self.assertEqual(name, "example-skill")
         self.assertEqual(description, "No description provided.")
 
+    def test_defaults_when_name_and_description_are_commented_null(self) -> None:
+        skill_dir = self._write_skill(
+            "---\nname: null # filled later\ndescription: ~ # TODO\n---"
+        )
+        name, description, _ = parse_skill_md(skill_dir)
+
+        self.assertEqual(name, "example-skill")
+        self.assertEqual(description, "No description provided.")
+
+    def test_preserves_quoted_null_literals(self) -> None:
+        skill_dir = self._write_skill(
+            "---\nname: \"null\"\ndescription: \"~\"\n---"
+        )
+        name, description, _ = parse_skill_md(skill_dir)
+
+        self.assertEqual(name, "null")
+        self.assertEqual(description, "~")
+
     def test_preserves_non_empty_values(self) -> None:
         skill_dir = self._write_skill(
             "---\nname: my-skill\ndescription: useful skill\n---"
