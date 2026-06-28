@@ -4,7 +4,6 @@ interface QualityGateRailProps {
   score: number;
   passed: boolean;
   checks: QualityGateChecks;
-  isDecomposed: boolean;
   onDecompose: () => void;
 }
 
@@ -16,7 +15,7 @@ const CHECK_LABELS: Array<[keyof QualityGateChecks, string]> = [
   ['ctaDefined', 'Unified CTA'],
 ];
 
-export function QualityGateRail({ score, passed, checks, isDecomposed, onDecompose }: QualityGateRailProps) {
+export function QualityGateRail({ score, passed, checks, onDecompose }: QualityGateRailProps) {
   return (
     <aside className="flex flex-col gap-5 lg:col-span-2">
       <div className="flex flex-col gap-6 rounded-2xl border border-[#27272A] bg-[#111113] p-5 shadow-xl">
