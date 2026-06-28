@@ -3,6 +3,26 @@
 from pathlib import Path
 
 
+_DEFAULT_DESCRIPTION = "No description provided."
+_NULL_LITERALS = {"null", "~"}
+
+
+def _parse_frontmatter_value(value: str) -> str:
+    """Parse a frontmatter scalar value, treating YAML null literals as empty."""
+    cleaned = value.strip()
+    if not cleaned:
+        return ""
+
+    is_quoted = (cleaned.startswith('"') and cleaned.endswith('"')) or (
+        cleaned.startswith("'") and cleaned.endswith("'")
+    )
+    if is_quoted:
+        return cleaned[1:-1].strip()
+
+    if cleaned.lower() in _NULL_LITERALS:
+        return ""
+    return cleaned
+
 
 def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
     """Parse a SKILL.md file, returning (name, description, full_content)."""
@@ -28,7 +48,7 @@ def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
     while i < len(frontmatter_lines):
         line = frontmatter_lines[i]
         if line.startswith("name:"):
-            name = line[len("name:"):].strip().strip('"').strip("'")
+            name = _parse_frontmatter_value(line[len("name:"):])
         elif line.startswith("description:"):
             value = line[len("description:"):].strip()
             # Handle YAML multiline indicators (>, |, >-, |-)
@@ -41,7 +61,9 @@ def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
                 description = " ".join(continuation_lines)
                 continue
             else:
-                description = value.strip('"').strip("'")
+                description = _parse_frontmatter_value(value)
         i += 1
 
-    return name, description, content
+    parsed_name = name.strip() or skill_path.name.strip() or "unnamed-skill"
+    parsed_description = description.strip() or _DEFAULT_DESCRIPTION
+    return parsed_name, parsed_description, content
