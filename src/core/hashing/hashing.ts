@@ -1,6 +1,6 @@
 import type { Blueprint } from '../blueprint';
 
-export type HashAlgorithm = 'sha256' | 'xxhash64';
+export type HashAlgorithm = 'djb2';
 
 export interface HashResult {
   digest: string;
@@ -24,7 +24,7 @@ function djb2(str: string): string {
 }
 
 export function hashContent(content: HashableContent): HashResult {
-  const algorithm: HashAlgorithm = content.algorithm ?? 'xxhash64';
+  const algorithm: HashAlgorithm = content.algorithm ?? 'djb2';
   return {
     digest: djb2(content.text),
     algorithm,
