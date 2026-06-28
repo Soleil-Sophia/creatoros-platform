@@ -31,7 +31,7 @@ def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
     while i < len(frontmatter_lines):
         line = frontmatter_lines[i]
         if line.startswith("name:"):
-            name = line[len("name:"):].strip().strip('"').strip("'")
+            name = _parse_frontmatter_value(line[len("name:"):])
         elif line.startswith("description:"):
             value = line[len("description:"):].strip()
             # Handle YAML multiline indicators (>, |, >-, |-)
@@ -44,7 +44,7 @@ def parse_skill_md(skill_path: Path) -> tuple[str, str, str]:
                 description = " ".join(continuation_lines)
                 continue
             else:
-                description = value.strip('"').strip("'")
+                description = _parse_frontmatter_value(value)
         i += 1
 
     # Provide safe placeholder values for empty fields to ensure valid agent configs
