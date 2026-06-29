@@ -46,6 +46,7 @@ type FeatureItem = {
   title: string;
   description: string;
   icon?: string;
+  comingSoon?: boolean;
 };
 
 type ModuleFeatureGridProps = {
@@ -97,53 +98,102 @@ export function ModuleFeatureGrid({
           )}
         </div>
 
-        {/* Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-          {items.map((item, idx) => (
-            <div
-              key={idx}
-              className="rounded-[16px] p-6 group"
-              style={{
-                background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
-                border: '1px solid rgba(255, 255, 255, 0.06)',
-                transition: 'border-color 0.2s, box-shadow 0.2s',
-              }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = `${accent}30`;
-                (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 32px ${accent}10`;
-              }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.borderColor = 'rgba(255, 255, 255, 0.06)';
-                (e.currentTarget as HTMLElement).style.boxShadow = 'none';
-              }}
-            >
-              {/* Icon */}
+        {/* Bento Grid — first card hero-sized, rest standard */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 lg:grid-rows-[auto_auto] gap-5 auto-rows-fr">
+          {items.map((item, idx) => {
+            const isHero = idx === 0;
+            return (
               <div
-                className="w-10 h-10 rounded-lg flex items-center justify-center mb-4"
+                key={idx}
+                className={`rounded-[16px] p-6 group relative overflow-hidden ${
+                  isHero ? 'md:col-span-2 lg:col-span-2 lg:row-span-2 lg:p-8' : ''
+                }`}
                 style={{
-                  background: `${accent}14`,
-                  border: `1px solid ${accent}20`,
-                  color: accent,
+                  background: isHero
+                    ? `linear-gradient(135deg, #232634 0%, #171923 100%)`
+                    : 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',
+                  border: isHero
+                    ? `1px solid ${accent}25`
+                    : '1px solid rgba(255, 255, 255, 0.06)',
+                  boxShadow: isHero ? `0 12px 40px ${accent}10` : 'none',
+                  transition: 'border-color 0.2s, box-shadow 0.2s',
+                }}
+                onMouseEnter={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = `${accent}40`;
+                  (e.currentTarget as HTMLElement).style.boxShadow = `0 8px 32px ${accent}18`;
+                }}
+                onMouseLeave={(e) => {
+                  (e.currentTarget as HTMLElement).style.borderColor = isHero
+                    ? `${accent}25`
+                    : 'rgba(255, 255, 255, 0.06)';
+                  (e.currentTarget as HTMLElement).style.boxShadow = isHero
+                    ? `0 12px 40px ${accent}10`
+                    : 'none';
                 }}
               >
-                {ICONS[item.icon ?? 'default'] ?? ICONS.default}
-              </div>
+                {isHero && (
+                  <div
+                    className="absolute top-0 left-0 right-0 h-px"
+                    style={{
+                      background: `linear-gradient(90deg, transparent, ${accent}80, transparent)`,
+                    }}
+                  />
+                )}
 
-              <h3
-                style={{
-                  fontSize: '16px',
-                  fontWeight: 600,
-                  color: '#F4F3F8',
-                  marginBottom: '8px',
-                }}
-              >
-                {item.title}
-              </h3>
-              <p style={{ fontSize: '14px', color: '#B4B8C7', lineHeight: 1.6 }}>
-                {item.description}
-              </p>
-            </div>
-          ))}
+                <div className="flex items-start justify-between mb-4">
+                  <div
+                    className={`${isHero ? 'w-12 h-12' : 'w-10 h-10'} rounded-lg flex items-center justify-center`}
+                    style={{
+                      background: `${accent}14`,
+                      border: `1px solid ${accent}20`,
+                      color: accent,
+                    }}
+                  >
+                    {ICONS[item.icon ?? 'default'] ?? ICONS.default}
+                  </div>
+
+                  {item.comingSoon && (
+                    <span
+                      className="rounded-full px-2.5 py-1"
+                      style={{
+                        fontSize: '10px',
+                        fontWeight: 600,
+                        color: '#8B8F9E',
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.1em',
+                        background: 'rgba(255, 255, 255, 0.04)',
+                        border: '1px solid rgba(255, 255, 255, 0.08)',
+                      }}
+                    >
+                      Coming
+                    </span>
+                  )}
+                </div>
+
+                <h3
+                  style={{
+                    fontSize: isHero ? '22px' : '16px',
+                    fontWeight: 600,
+                    color: '#F4F3F8',
+                    marginBottom: '8px',
+                    letterSpacing: isHero ? '-0.01em' : 0,
+                  }}
+                >
+                  {item.title}
+                </h3>
+                <p
+                  style={{
+                    fontSize: isHero ? '15px' : '14px',
+                    color: '#B4B8C7',
+                    lineHeight: 1.6,
+                    maxWidth: isHero ? '440px' : undefined,
+                  }}
+                >
+                  {item.description}
+                </p>
+              </div>
+            );
+          })}
         </div>
       </div>
     </section>
