@@ -43,32 +43,29 @@ export function ModuleHero({
       />
 
       <div className="relative max-w-[1200px] mx-auto px-6 lg:px-12">
-        {/* Eyebrow row */}
-        <div className="flex items-center gap-3 mb-6 flex-wrap">
-          <div
-            className="flex items-center gap-2 px-3 py-1.5 rounded-lg"
-            style={{ background: `${accent}14`, border: `1px solid ${accent}30` }}
-          >
+        {/* Status strip — single line, dot-separated */}
+        <div
+          className="inline-flex items-center gap-3 mb-8 px-4 py-2 rounded-full flex-wrap"
+          style={{
+            background: 'rgba(255, 255, 255, 0.03)',
+            border: '1px solid rgba(255, 255, 255, 0.06)',
+          }}
+        >
             <span
               style={{
                 fontSize: '11px',
                 fontWeight: 700,
                 color: accent,
                 textTransform: 'uppercase',
-                letterSpacing: '0.1em',
+                letterSpacing: '0.14em',
               }}
             >
               Module {number}
             </span>
-          </div>
 
-          <div
-            className="flex items-center gap-1.5 px-2.5 py-1 rounded-md"
-            style={{
-              background: isActive ? 'rgba(34, 197, 94, 0.08)' : 'rgba(255, 255, 255, 0.04)',
-              border: isActive ? '1px solid rgba(34, 197, 94, 0.2)' : '1px solid rgba(255, 255, 255, 0.06)',
-            }}
-          >
+          <span style={{ color: '#3A3D4A', fontSize: '11px' }}>•</span>
+
+          <div className="inline-flex items-center gap-1.5">
             {isActive && (
               <div
                 className="w-1.5 h-1.5 rounded-full"
@@ -81,14 +78,21 @@ export function ModuleHero({
                 fontWeight: 600,
                 color: isActive ? '#22c55e' : '#8B8F9E',
                 textTransform: 'uppercase',
-                letterSpacing: '0.08em',
+                letterSpacing: '0.1em',
               }}
             >
               {STATUS_LABELS[module.status] ?? module.status}
             </span>
           </div>
 
-          {tagline && <span style={{ fontSize: '14px', color: '#8B8F9E' }}>{tagline}</span>}
+          {tagline && (
+            <>
+              <span style={{ color: '#3A3D4A', fontSize: '11px' }}>•</span>
+              <span style={{ fontSize: '12px', color: '#B4B8C7', letterSpacing: '0.02em' }}>
+                {tagline}
+              </span>
+            </>
+          )}
         </div>
 
         {/* Title */}
