@@ -81,6 +81,7 @@ async function requireAuth(c: any, next: any) {
   // FRONTEND_API_KEY (server-side secret) must match the x-api-key header sent by the frontend
   // (typically sourced from VITE_API_KEY). API-key auth bypasses user sessions and disables persistence.
   const expectedApiKey = Deno.env.get("FRONTEND_API_KEY");
+  // Frontend API-key auth expects VITE_API_KEY -> x-api-key to match FRONTEND_API_KEY and disables persistence.
   if (apiKey && expectedApiKey && apiKey === expectedApiKey) {
     c.set("userId", "api-key:frontend");
     c.set("userEmail", "frontend@creatoros.internal");
