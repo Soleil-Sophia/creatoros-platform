@@ -176,7 +176,7 @@ export function EcosystemPreview() {
                       fontWeight: 600
                     }}
                   >
-                    Launch Content OS
+                    Launch {module.name}
                   </button>
                 ) : (
                   <div className="mt-2 flex items-center gap-2">
