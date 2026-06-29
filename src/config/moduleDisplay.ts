@@ -16,7 +16,7 @@ export const moduleDisplay: Record<string, ModuleDisplayMeta> = {
     number: '02',
     tagline: 'Voice & Identity Foundation',
     accent: '#E7C6F3',
-    features: ['Brand Identity Foundation', 'Voice Parameters', 'Messaging Framework', 'Identity Lock'],
+    features: ['Voice Parameters', 'Tone Configuration', 'Messaging Framework', 'Identity Lock'],
   },
   launchos: {
     number: '03',

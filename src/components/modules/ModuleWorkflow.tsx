@@ -59,10 +59,7 @@ export function ModuleWorkflow({
           {/* Connector line */}
           <div
             className="absolute left-[31px] top-0 bottom-0 w-px hidden md:block"
-            style={{
-              background: `linear-gradient(180deg, transparent, ${accent}25 12%, ${accent}45 50%, ${accent}25 88%, transparent)`,
-              boxShadow: `0 0 12px ${accent}20`,
-            }}
+            style={{ background: 'linear-gradient(180deg, transparent, rgba(255,255,255,0.06) 20%, rgba(255,255,255,0.06) 80%, transparent)' }}
           />
 
           <div className="space-y-6">

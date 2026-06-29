@@ -119,21 +119,6 @@ export function ModuleCTA({
           </div>
         </div>
       </div>
-
-      {/* Closing stage — separates CTA from Footer */}
-      <div
-        className="relative mt-20 lg:mt-28 h-px max-w-[1200px] mx-auto"
-        style={{
-          background: `linear-gradient(90deg, transparent, ${accent}30 50%, transparent)`,
-        }}
-      />
-      <div
-        className="relative mx-auto max-w-[120px] mt-8 h-1.5 rounded-full"
-        style={{
-          background: `radial-gradient(ellipse at center, ${accent}40, transparent 70%)`,
-          filter: 'blur(2px)',
-        }}
-      />
     </section>
   );
 }
