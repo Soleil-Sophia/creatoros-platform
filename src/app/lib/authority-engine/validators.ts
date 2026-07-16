@@ -39,7 +39,7 @@ function hasUnsafeClaim(text: string): boolean {
 function isValidPlatformFormat(asset: ContentAsset): boolean {
   switch (asset.platform) {
     case 'X':
-      // Threads: numbered tweets, each line under ~280 chars
+      // X (formerly Twitter): numbered tweet thread, each line under ~280 chars
       return /\d\//.test(asset.body) && asset.body.split('\n').every((l) => l.length <= 320);
     case 'TikTok':
     case 'Reels':
