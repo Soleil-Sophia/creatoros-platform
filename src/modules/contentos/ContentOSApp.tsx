@@ -2,11 +2,12 @@ import { useState } from 'react';
 import { Link } from 'react-router';
 import { GenerateScreen } from '../../app/screens/generate';
 import { LibraryScreen } from '../../app/screens/library';
+import { ContentOSWorkflow } from '../../app/components/contentos-production/ContentOSWorkflow';
 import { getModule } from '../../config/modules';
 import { getDisplayMeta } from '../../config/moduleDisplay';
 import { contentOSData, OUTPUT_TYPES } from '../../data/contentos';
 
-type Tab = 'overview' | 'generate' | 'library';
+type Tab = 'workflow' | 'overview' | 'generate' | 'library';
 
 const module = getModule('contentos')!;
 const { accent } = getDisplayMeta('contentos');
@@ -248,9 +249,10 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
 }
 
 export function ContentOSApp() {
-  const [activeTab, setActiveTab] = useState<Tab>('overview');
+  const [activeTab, setActiveTab] = useState<Tab>('workflow');
 
   const tabs: { id: Tab; label: string }[] = [
+    { id: 'workflow', label: 'Workflow' },
     { id: 'overview', label: 'Overview' },
     { id: 'generate', label: 'Generate' },
     { id: 'library', label: 'Library' },
@@ -383,6 +385,7 @@ export function ContentOSApp() {
 
       {/* Tab Content */}
       <div className="flex-1 min-h-0 flex flex-col">
+        {activeTab === 'workflow' && <ContentOSWorkflow />}
         {activeTab === 'overview' && <OverviewTab onTabChange={setActiveTab} />}
         {activeTab === 'generate' && <GenerateScreen showTopbar={false} />}
         {activeTab === 'library' && <LibraryScreen showTopbar={false} />}
