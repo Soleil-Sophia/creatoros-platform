@@ -1,18 +1,20 @@
+import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router';
-import { HomePage } from './pages/home';
-import { DashboardPage } from './pages/dashboard';
-import { ModulesPage } from './pages/modules';
-import { BrandOSProductPage } from './pages/brand-os-product';
-import { BrandOSAppPage } from './pages/brand-os-app';
-import { ContentOSProductPage } from './pages/content-os-product';
-import { ContentOSAppPage } from './pages/content-os-app';
-import { ContentOSLibraryPage } from './pages/content-os-library';
-import { ContentOSPage } from '../modules/contentos/ContentOSPage';
-import { ContentOSApp } from '../modules/contentos/ContentOSApp';
-import { HandoffPage } from '../modules/handoff/HandoffPage';
-import { NotFoundPage } from './pages/not-found';
-import UserTest from './pages/user-test';
-import { AuthorityEngineScreen } from './screens/authority-engine/AuthorityEngineScreen';
+
+const HomePage = lazy(() => import('./pages/home').then((module) => ({ default: module.HomePage })));
+const DashboardPage = lazy(() => import('./pages/dashboard').then((module) => ({ default: module.DashboardPage })));
+const ModulesPage = lazy(() => import('./pages/modules').then((module) => ({ default: module.ModulesPage })));
+const BrandOSProductPage = lazy(() => import('./pages/brand-os-product').then((module) => ({ default: module.BrandOSProductPage })));
+const BrandOSAppPage = lazy(() => import('./pages/brand-os-app').then((module) => ({ default: module.BrandOSAppPage })));
+const ContentOSProductPage = lazy(() => import('./pages/content-os-product').then((module) => ({ default: module.ContentOSProductPage })));
+const ContentOSAppPage = lazy(() => import('./pages/content-os-app').then((module) => ({ default: module.ContentOSAppPage })));
+const ContentOSLibraryPage = lazy(() => import('./pages/content-os-library').then((module) => ({ default: module.ContentOSLibraryPage })));
+const ContentOSPage = lazy(() => import('../modules/contentos/ContentOSPage').then((module) => ({ default: module.ContentOSPage })));
+const ContentOSApp = lazy(() => import('../modules/contentos/ContentOSApp').then((module) => ({ default: module.ContentOSApp })));
+const HandoffPage = lazy(() => import('../modules/handoff/HandoffPage').then((module) => ({ default: module.HandoffPage })));
+const NotFoundPage = lazy(() => import('./pages/not-found').then((module) => ({ default: module.NotFoundPage })));
+const UserTest = lazy(() => import('./pages/user-test'));
+const AuthorityEngineScreen = lazy(() => import('./screens/authority-engine/AuthorityEngineScreen').then((module) => ({ default: module.AuthorityEngineScreen })));
 
 export const router = createBrowserRouter([
   {
