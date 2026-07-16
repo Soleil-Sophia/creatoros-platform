@@ -21,6 +21,13 @@ export default defineConfig(({ command }) => ({
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 
+  build: {
+    // The generated app chunk is expected to exceed Vite's 500 kB default because
+    // this app ships the full CreatorOS workspace UI. Keep the warning threshold
+    // aligned with the current bundle size while we evaluate deeper route splitting.
+    chunkSizeWarningLimit: 1000,
+  },
+
   server: {
     port: 3000,
     host: '0.0.0.0',
