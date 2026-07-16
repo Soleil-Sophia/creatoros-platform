@@ -4,7 +4,8 @@
 
 export interface StorageProvider<T> {
   get(key: string): T | null;
-  set(key: string, value: T): void;
+  /** Returns true if the write completed, false if it could not be completed. */
+  set(key: string, value: T): boolean;
   delete(key: string): void;
   list(): T[];
   clear(): void;
@@ -39,14 +40,16 @@ export class LocalStorageProvider<T> implements StorageProvider<T> {
     }
   }
 
-  private writeAll(map: Map<string, T>): void {
-    if (typeof window === 'undefined') return;
+  private writeAll(map: Map<string, T>): boolean {
+    if (typeof window === 'undefined') return false;
     try {
       const obj: Record<string, T> = {};
       for (const [k, v] of map) obj[k] = v;
       window.localStorage.setItem(this.storageKey, JSON.stringify(obj));
+      return true;
     } catch {
-      // quota / serialization error — swallow
+      // quota / serialization error — reported to the caller, not swallowed
+      return false;
     }
   }
 
@@ -54,10 +57,10 @@ export class LocalStorageProvider<T> implements StorageProvider<T> {
     return this.readAll().get(key) ?? null;
   }
 
-  set(key: string, value: T): void {
+  set(key: string, value: T): boolean {
     const map = this.readAll();
     map.set(key, value);
-    this.writeAll(map);
+    return this.writeAll(map);
   }
 
   delete(key: string): void {
@@ -84,7 +87,7 @@ export class MemoryProvider<T> implements StorageProvider<T> {
   private readonly store = new Map<string, T>();
 
   get(key: string): T | null   { return this.store.get(key) ?? null; }
-  set(key: string, value: T)   { this.store.set(key, value); }
+  set(key: string, value: T)   { this.store.set(key, value); return true; }
   delete(key: string)          { this.store.delete(key); }
   list(): T[]                  { return Array.from(this.store.values()); }
   clear()                      { this.store.clear(); }

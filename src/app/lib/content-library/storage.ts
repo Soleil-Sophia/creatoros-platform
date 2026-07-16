@@ -36,12 +36,16 @@ function safeRead(): SavedContentAsset[] {
   }
 }
 
-function safeWrite(assets: SavedContentAsset[]): void {
-  if (typeof window === 'undefined') return;
+function safeWrite(assets: SavedContentAsset[]): boolean {
+  if (typeof window === 'undefined') return false;
   try {
     window.localStorage.setItem(CONTENT_LIBRARY_STORAGE_KEY, JSON.stringify(assets));
+    return true;
   } catch {
-    // quota or serialization error — swallow; UI will reflect state on next load
+    // quota or serialization error — reported to the caller, not swallowed.
+    // Existing callers that ignore this return value keep their prior
+    // behavior unchanged (they never see this signal).
+    return false;
   }
 }
 
@@ -49,11 +53,11 @@ export function listSavedAssets(): SavedContentAsset[] {
   return safeRead().sort((a, b) => (a.createdAt < b.createdAt ? 1 : -1));
 }
 
-export function saveAsset(asset: SavedContentAsset): SavedContentAsset {
+export function saveAsset(asset: SavedContentAsset): { asset: SavedContentAsset; persisted: boolean } {
   const all = safeRead();
   all.unshift(asset);
-  safeWrite(all);
-  return asset;
+  const persisted = safeWrite(all);
+  return { asset, persisted };
 }
 
 export function deleteSavedAsset(id: string): void {

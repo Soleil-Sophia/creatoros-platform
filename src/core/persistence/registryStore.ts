@@ -15,11 +15,10 @@ export class RegistryStore {
 
   get providerName(): string { return this.provider.providerName; }
 
-  /** Persist an already-registered entry. */
-  save(entry: RegistryEntry): void {
-    if (!entry.isDuplicate) {
-      this.provider.set(entry.artifactHash, entry);
-    }
+  /** Persist an already-registered entry. Returns true if persisted or already satisfied. */
+  save(entry: RegistryEntry): boolean {
+    if (entry.isDuplicate) return true;
+    return this.provider.set(entry.artifactHash, entry);
   }
 
   /** Load all persisted entries and restore the in-memory Registry. */
@@ -51,13 +50,13 @@ export const registryStore = new RegistryStore(
 export function registerAndPersist(
   asset: InstagramAssetV1,
   store: RegistryStore = registryStore,
-): RegistryEntry {
+): { entry: RegistryEntry; persisted: boolean } {
   const existing = store.findByArtifactHash(asset.artifactHash);
-  if (existing) return { ...existing, isDuplicate: true };
+  if (existing) return { entry: { ...existing, isDuplicate: true }, persisted: true };
 
   const entry = registerAsset(asset);
-  store.save(entry);
-  return entry;
+  const persisted = store.save(entry);
+  return { entry, persisted };
 }
 
 // ─── Test helper: ephemeral MemoryProvider-backed store ──────────────────────

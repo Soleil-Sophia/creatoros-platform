@@ -229,7 +229,7 @@ export function saveProductionAsset(
   const finalAsset = rebuildAndEvaluate(editable, brand);
 
   // 1) Registry (in-memory + LocalStorage via registryStore)
-  const entry = registerAndPersist(finalAsset);
+  const { entry, persisted: registryPersisted } = registerAndPersist(finalAsset);
 
   // 2) AssetStore — map to SavedContentAsset shape (uses artifactHash as id)
   const libraryAsset = registryEntryToLibraryAsset(entry, brand);
@@ -245,10 +245,22 @@ export function saveProductionAsset(
       extras.visualNotes,
     ].filter(Boolean),
   };
-  assetStore.save(enriched);
+  const { persisted: assetStorePersisted } = assetStore.save(enriched);
 
   // 3) Legacy Content Library (the v1 list the Library screen reads)
   const sync = syncRegistryEntryToLibrary(entry, brand);
+
+  const failedLayers: string[] = [];
+  if (!registryPersisted) failedLayers.push('registry');
+  if (!assetStorePersisted) failedLayers.push('asset store');
+  // sync.synced is false both on a real write failure and on the pre-existing
+  // "already in library" no-op path (isDuplicate: true) -- only the former is
+  // an actual failure.
+  if (!sync.synced && !sync.isDuplicate) failedLayers.push('content library');
+
+  if (failedLayers.length > 0) {
+    throw new Error(`Failed to save: ${failedLayers.join(', ')} could not be persisted.`);
+  }
 
   return {
     libraryId: sync.id,
