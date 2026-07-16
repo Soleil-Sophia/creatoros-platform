@@ -40,7 +40,7 @@ function isValidPlatformFormat(asset: ContentAsset): boolean {
   switch (asset.platform) {
     case 'X':
       // X (formerly Twitter): numbered tweet thread, each line under ~280 chars
-      return /\d\//.test(asset.body) && asset.body.split('\n').every((l) => l.length <= 320);
+      return /\d\//.test(asset.body) && asset.body.split('\n').every((l) => l.length <= 280);
     case 'TikTok':
     case 'Reels':
       // Script should have timing markers
