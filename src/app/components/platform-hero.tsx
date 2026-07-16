@@ -588,4 +588,3 @@ export function PlatformHero() {
     </section>
   );
 }
-___BEGIN___COMMAND_DONE_MARKER___0
