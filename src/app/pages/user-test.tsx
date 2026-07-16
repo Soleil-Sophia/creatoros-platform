@@ -15,10 +15,14 @@ Bitte erst anschauen, dann kurz antworten:
 
 Link: https://deine-domain.com/test`;
 
-  const handleCopy = () => {
-    navigator.clipboard.writeText(testMessage);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(testMessage);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      // clipboard unavailable (non-secure context or permission denied)
+    }
   };
 
   return (
