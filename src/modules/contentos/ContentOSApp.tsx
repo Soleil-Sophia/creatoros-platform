@@ -161,7 +161,7 @@ function OverviewTab({ onTabChange }: { onTabChange: (tab: Tab) => void }) {
             {OUTPUT_TYPES.map((ot, idx) => (
               <button
                 key={ot.id}
-                onClick={() => {}}
+                onClick={() => onTabChange('generate')}
                 className="rounded-[12px] p-4 text-left transition-all"
                 style={{
                   background: 'linear-gradient(135deg, #1F2230 0%, #171923 100%)',

@@ -377,6 +377,7 @@ export function BrandOSAppPage() {
           {/* Next Step Button */}
           <div className="mt-10 flex items-center justify-between">
             <button
+              onClick={handleSave}
               className="px-6 py-3 rounded-lg transition-all hover:opacity-90"
               style={{
                 background: 'rgba(255, 255, 255, 0.05)',
