@@ -3,11 +3,11 @@ import { Copy, Check } from 'lucide-react';
 
 export default function UserTest() {
   const [copied, setCopied] = useState(false);
-  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const copyTimerRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   useEffect(() => {
     return () => {
-      if (copyTimerRef.current !== null) clearTimeout(copyTimerRef.current);
+      clearTimeout(copyTimerRef.current);
     };
   }, []);
 
@@ -26,9 +26,7 @@ Link: https://deine-domain.com/test`;
     try {
       await navigator.clipboard.writeText(testMessage);
       setCopied(true);
-      if (copyTimerRef.current !== null) {
-        clearTimeout(copyTimerRef.current);
-      }
+      clearTimeout(copyTimerRef.current);
       copyTimerRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       // clipboard unavailable (non-secure context or permission denied)
