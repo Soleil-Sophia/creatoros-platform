@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Copy, Check } from 'lucide-react';
 
 export default function UserTest() {
@@ -28,6 +28,14 @@ Link: https://deine-domain.com/test`;
       // clipboard unavailable (non-secure context or permission denied)
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (copyTimerRef.current !== null) {
+        clearTimeout(copyTimerRef.current);
+      }
+    };
+  }, []);
 
   return (
     <div style={{ background: '#0E0F14', minHeight: '100vh', paddingBottom: '80px' }}>
