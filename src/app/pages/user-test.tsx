@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Copy, Check } from 'lucide-react';
 
 export default function UserTest() {
   const [copied, setCopied] = useState(false);
+  const copyTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   const testMessage = `Hey — ich teste gerade eine Landingpage und brauche 60 Sekunden ehrliches Feedback.
 Bitte erst anschauen, dann kurz antworten:
@@ -19,7 +20,8 @@ Link: https://deine-domain.com/test`;
     try {
       await navigator.clipboard.writeText(testMessage);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      clearTimeout(copyTimeoutRef.current);
+      copyTimeoutRef.current = setTimeout(() => setCopied(false), 2000);
     } catch {
       // clipboard unavailable (non-secure context or permission denied)
     }
