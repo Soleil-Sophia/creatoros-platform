@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import {
   ArrowLeft, ArrowRight, Check, Save, Download, CircleCheckBig, Circle, Sparkles, Copy,
 } from 'lucide-react';
@@ -37,6 +37,7 @@ const PHASES: { id: PhaseId; number: string; name: string; tagline: string }[] =
 ];
 
 export function BrandOSAppPage() {
+  const navigate = useNavigate();
   const [profile, setProfile] = useState<BrandProfileExtended>(emptyBrandProfileExtended);
   const [activePhase, setActivePhase] = useState<PhaseId>('identity');
   const [savedAt, setSavedAt] = useState<string | null>(null);
@@ -261,20 +262,19 @@ export function BrandOSAppPage() {
                   Save & Continue <ArrowRight size={16} />
                 </button>
               ) : (
-                <Link
-                  to="/app/content-os/generate"
-                  className="px-6 py-3 rounded-lg transition-all hover:opacity-90 inline-flex items-center gap-2"
+                <button
+                  onClick={() => { save(); navigate('/app/content-os/generate'); }}
+                  className="px-6 py-3 rounded-lg transition-all hover:opacity-90 flex items-center gap-2"
                   style={{
                     background: `linear-gradient(135deg, ${ACCENT} 0%, #DABFFF 100%)`,
                     color: '#0E0F14',
                     fontSize: '15px',
                     fontWeight: 600,
                     boxShadow: `0 4px 16px ${ACCENT}40`,
-                    textDecoration: 'none',
                   }}
                 >
                   Continue to Messaging Framework <ArrowRight size={16} />
-                </Link>
+                </button>
               )}
             </div>
           </main>
