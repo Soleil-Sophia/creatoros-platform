@@ -29,9 +29,9 @@ export function syncRegistryEntryToLibrary(
   }
 
   const libraryAsset = registryEntryToLibraryAsset(entry, brandProfile);
-  saveAsset(libraryAsset);
+  const { persisted } = saveAsset(libraryAsset);
 
-  return { synced: true, isDuplicate: false, artifactHash, id: libraryAsset.id };
+  return { synced: persisted, isDuplicate: false, artifactHash, id: libraryAsset.id };
 }
 
 export function getLibraryStats(): { total: number; storageKey: string } {

@@ -15,9 +15,9 @@ export class AssetStore {
 
   get providerName(): string { return this.provider.providerName; }
 
-  save(asset: SavedContentAsset): SavedContentAsset {
-    this.provider.set(asset.id, asset);
-    return asset;
+  save(asset: SavedContentAsset): { asset: SavedContentAsset; persisted: boolean } {
+    const persisted = this.provider.set(asset.id, asset);
+    return { asset, persisted };
   }
 
   list(): SavedContentAsset[] {
