@@ -52,6 +52,7 @@ export const modules: CreatorOSModule[] = [
       'Structure launches, coordinate rollouts, and orchestrate focused content phases across platforms with clear timing and goals.',
     routes: {
       overview: '/modules/launchos',
+      app: '/modules/launchos/app',
     },
   },
   {
