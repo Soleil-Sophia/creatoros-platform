@@ -86,6 +86,10 @@ export const router = createBrowserRouter([
     path: '/app/content-os/library',
     Component: ContentOSLibraryPage,
   },
+  {
+    path: '/modules/launch-os',
+    Component: LaunchOSAppPage,
+  },
 
   {
     path: '/test',
