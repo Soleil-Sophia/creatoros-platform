@@ -15,7 +15,6 @@ export function DistributionAssetCard({ asset, isExpanded, onToggle, onCopy, isC
         type="button"
         onClick={onToggle}
         aria-expanded={isExpanded}
-        aria-controls={`asset-content-${asset.id}`}
         className="flex w-full cursor-pointer select-none items-center justify-between bg-[#111113] p-4 text-left"
       >
         <div className="flex items-center gap-3">
