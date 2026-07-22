@@ -1,0 +1,22 @@
+{
+  "$schema": "https://openapi.vercel.sh/microfrontends.json",
+  "applications": {
+    "creatoros-platform": {
+      "packageName": "@figma/my-make-file",
+      "development": {
+        "fallback": "creatoros-platform-lxst.vercel.app"
+      }
+    },
+    "creatoros-platform-ovuh": {
+      "packageName": "@figma/my-make-file",
+      "development": {
+        "fallback": "creatoros-platform-ovuh-lxst.vercel.app"
+      },
+      "routing": [
+        {
+          "paths": ["/platform", "/platform/:path*"]
+        }
+      ]
+    }
+  }
+}
