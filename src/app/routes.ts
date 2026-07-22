@@ -7,6 +7,7 @@ import { BrandOSAppPage } from './pages/brand-os-app';
 import { ContentOSProductPage } from './pages/content-os-product';
 import { ContentOSAppPage } from './pages/content-os-app';
 import { ContentOSLibraryPage } from './pages/content-os-library';
+import { LaunchOSAppPage } from './pages/launch-os-app';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
 import { ContentOSApp } from '../modules/contentos/ContentOSApp';
 import { HandoffPage } from '../modules/handoff/HandoffPage';
@@ -51,6 +52,17 @@ export const router = createBrowserRouter([
   {
     path: '/modules/brandos/app',
     Component: BrandOSAppPage,
+  },
+
+  // LaunchOS — implementation route. Overview temporarily resolves to the
+  // same workflow until a separate product page is intentionally designed.
+  {
+    path: '/modules/launchos',
+    Component: LaunchOSAppPage,
+  },
+  {
+    path: '/modules/launchos/app',
+    Component: LaunchOSAppPage,
   },
 
   // --- Legacy routes (preserved for backwards compat) ---
