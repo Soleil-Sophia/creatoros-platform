@@ -1,363 +1,202 @@
 # CreatorOS
 
-**A modular creator platform with a clear core workflow and optional add-on modules.**
+**A living creator lifecycle system by LXST SYSTEMS.**
 
-Each tool works independently — but together, they create a real operating system for systematic content production.
+CreatorOS connects creator identity, content production, launch planning, operations, measurement, and improvement in one continuous system.
 
----
-
-## 🚨 CURRENT STATUS (April 2026)
-
-### What's Built ✅
-- **BrandOS UI** — 6-step brand setup flow (local state only)
-- **ContentOS UI** — Generate + Library interface (mock data + localStorage)
-- **Marketing Pages** — Landing, Dashboard, Modules overview
-
-### What's Missing ❌
-- **NO Backend** — No auth, no database, no persistence
-- **NO AI Integration** — ContentOS uses placeholder data
-- **NO Module Integration** — BrandOS and ContentOS don't communicate
-- **5 Modules Are Docs Only** — LaunchOS, ManagementOS, AnalyticsOS, CommunityOS, ResearchOS
-
-### Reality Check
-**Users can fill out forms, but can't actually use the product.**
-
-**Next Priority:** [MVP-1 Build Plan](/docs/MVP1-ACTION-PLAN.md) — Make BrandOS → ContentOS work as real integrated system (4 weeks)
-
----
-
-## 🚀 Quick Start
-
-```bash
-# Install dependencies
-pnpm install
-
-# Start development server
-pnpm dev
-
-# Open http://localhost:5173
+```text
+BrandOS → ContentOS → LaunchOS → ManagementOS → AnalyticsOS → Feedback
 ```
 
----
-
-## 📚 Documentation
-
-### **NEW: Product Documentation** 📖
-Complete product architecture, module specifications, and strategic documentation:
-
-- **[/docs/README.md](./docs/README.md)** - Documentation Overview & Navigation
-- **[/docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Complete System Architecture (START HERE)
-- **[/docs/BRANDOS-DEFINITION.md](./docs/BRANDOS-DEFINITION.md)** - Brand OS Module Specification
-- **[/docs/CONTENTOS-DEFINITION.md](./docs/CONTENTOS-DEFINITION.md)** - Content OS Module Specification
-- **[/docs/CHANGELOG.md](./docs/CHANGELOG.md)** - Product Version History
-
-### Technical Documentation
-- **[QUICK_START.md](./QUICK_START.md)** - Get started in 5 minutes
-- **[DOCUMENTATION.md](./DOCUMENTATION.md)** - Complete technical overview
-- **[API_REFERENCE.md](./API_REFERENCE.md)** - Component props & APIs
-- **[TECHNICAL_REFERENCE.md](./TECHNICAL_REFERENCE.md)** - Configuration, troubleshooting
-- **[COMPONENT_CATALOG.md](./COMPONENT_CATALOG.md)** - All 113+ components documented
-
-### Component-Specific
-- `/src/app/components/shared/README.md` - Shared UI Primitives
-- `/src/app/components/generate/README.md` - Generate Screen
-- `/src/app/components/library/README.md` - Library Screen
+The product is not measured by how many modules exist. Its value comes from preserving context as work moves through the creator lifecycle.
 
 ---
 
-## 🏗️ Product Architecture
+## Current Status — July 2026
 
-### Core Workflow (Recommended Path)
-The core modules that create the main creator workflow. Each is standalone, but strongest together.
+**Active program:** CreatorOS Stabilization Sprint 1  
+**Canonical repository:** `Soleil-Sophia/creatoros-platform`  
+**Production branch:** `main`
 
-| # | Module | Status | Description |
-|---|--------|--------|-------------|
-| **01** | **Brand OS** | ✅ Active | Voice & Identity Foundation |
-| **02** | **Content OS** | ✅ Active | Structured Content Generation |
-| **03** | **Launch OS** | 🚧 Coming Q2 2026 | Rollout & Coordination |
-| **04** | **Management OS** | 🚧 Coming Q2 2026 | Scheduling & Execution |
-| **05** | **Analytics OS** | 🚧 Coming Q3 2026 | Performance Intelligence |
+| Capability | Current truthful status |
+|---|---|
+| BrandOS | Implemented; extended profile and ContentOS context handoff require final sprint verification |
+| ContentOS | Implemented and routed; production workflow, library persistence, and handoff validation are active sprint work |
+| LaunchOS | Planner, storage, workflow UI, page, and routes exist; lifecycle integration is being validated |
+| ManagementOS | Migration source only; not part of Stabilization Sprint 1 |
+| AnalyticsOS | Migration source only; not part of Stabilization Sprint 1 |
+| Authority Engine | Labs / internal |
+| CommunityOS | Planned / deferred |
+| General ResearchOS | Not part of CreatorOS; general knowledge and research belong to SOREYA |
+| Authentication and user isolation | Not proven; required before public self-service beta |
+| Production cloud persistence | Not proven for the complete lifecycle; browser-local persistence is the current closed-beta baseline under validation |
 
-### Add-on Modules (Optional Extensions)
-Not part of the core flow, but equally valuable when needed.
-
-| # | Module | Status | Description |
-|---|--------|--------|-------------|
-| **06** | **Community OS** | 📋 Planned | Audience Relationship Management |
-| **07** | **Research OS** | 📋 Planned | Audience & Market Intelligence |
-
----
-
-## ✨ Core Features
-
-### 1. Dashboard (`/dashboard`)
-Personalized creator system overview:
-- Core Workflow progress visualization
-- Add-on module recommendations
-- Direct launch buttons for active modules
-- Visual workflow connectors
-
-### 2. Modules Page (`/modules`)
-Explore all modules with 3-tab navigation:
-- **Core Workflow** - Recommended path
-- **Add-on Modules** - Optional extensions
-- **All Modules** - Complete overview
-
-### 3. Brand OS (`/app/brand-os/setup`)
-Strategic brand foundation:
-- Define brand voice, tone, and messaging
-- Structure audience & positioning
-- Create reusable brand profile
-- Export to Content OS
-
-### 4. Content OS (`/app/content-os/generate` + `/library`)
-Structured content generation:
-- **Generate:** Input → Hooks + Scripts + Captions
-- **Library:** Asset management & organization
-- Brand voice consistency
-- Platform-specific outputs
+CreatorOS is suitable for an internal preview and is being prepared for a possible **closed beta**. It is not yet approved as a public self-service beta.
 
 ---
 
-## 🎨 Design Philosophy
+## See the Current Platform
 
-### Core Principles
-- **Architectural Spatial Design** - Strong foreground/midground/background separation
-- **Controlled Accents** - Pink/Purple accents on max 10% of surface
-- **Premium Quality** - Sharp edges, controlled lighting, no soft SaaS patterns
-- **Functional Precision** - Real tools, not facades
+Stable production alias following the latest successful deployment of canonical `main`:
 
-### Design System
-```
-Base Colors:  #0E0F14 (deep), #171923 (mid), #1F2230 (elevated)
-Accents:      #E7C6F3 (Brand OS), #FFBFDE (Content OS), #DABFFF (Campaign/Research)
-Typography:   Manrope (headings 700), Inter (body 400/500/600)
-Shadows:      Layered with inset highlights
-Radius:       20px → 16px → 12px → 8px → 6px
-```
+**https://creatoros-platform-git-main-lxst.vercel.app/platform/**
+
+Deployment and preview rules are documented in [`docs/PLATFORM-ACCESS.md`](./docs/PLATFORM-ACCESS.md).
 
 ---
 
-## 🗂️ Project Structure
+## Canonical Product Model
 
+### Lifecycle
+
+```text
+Identity → Create → Launch → Operate → Measure → Improve → Identity
 ```
-/docs/                  # Product documentation (NEW)
-├── ARCHITECTURE.md     # System architecture
-├── BRANDOS-DEFINITION.md
-├── CONTENTOS-DEFINITION.md
-└── CHANGELOG.md
 
-/src/app/
-├── pages/              # 7 pages (home, dashboard, modules, products, apps)
-├── screens/            # 2 screens (generate, library)
-├── components/
-│   ├── shared/         # 6 shared primitives ⭐
-│   ├── generate/       # 6 generate components
-│   ├── library/        # 14 library components
-│   ├── ui/             # 70+ shadcn components
-│   └── [marketing]     # navbar, hero, footer, etc.
-└── routes.ts           # React Router config
+### Module responsibilities
 
-/src/styles/
-├── theme.css           # CSS Variables & design tokens
-├── tailwind.css        # Tailwind v4 imports
-└── fonts.css           # Manrope + Inter
-```
+| Lifecycle stage | Module | Responsibility |
+|---|---|---|
+| Identity | BrandOS | Brand identity, audience, positioning, voice, and messaging context |
+| Create | ContentOS | Brand-aware structured content assets and reusable library records |
+| Launch | LaunchOS | Campaign sequence, timing, channels, and launch-plan persistence |
+| Operate | ManagementOS | Tasks, publishing, ownership, deadlines, and execution evidence |
+| Measure | AnalyticsOS | Performance signals, evidence, interpretation, and next actions |
+| Improve | Feedback layer | Human-approved learning routed back to the stage able to act on it |
+
+### Core architecture promise
+
+> Context should travel farther than the user has to repeat it.
+
+Modules are distinct boundaries, not isolated islands. Cross-module exchange must use explicit, validated contracts.
 
 ---
 
-## 🛠️ Tech Stack
+## CreatorOS Stabilization Sprint 1
 
-### Core
-- **React** 19 - UI library
-- **TypeScript** 5.7.3 - Type safety
-- **Vite** 6.0.7 - Build tool
-- **React Router** 7.1.1 - Routing (Data Mode)
-- **Tailwind CSS** v4 alpha - Styling
+### Objective
 
-### Backend
-- **Supabase** - Database, Auth, Storage
-- **Edge Functions** - Hono web server
-- **KV Store** - Key-value data persistence
+Prove the first honest lifecycle slice:
 
-### UI Libraries
-- **Radix UI** - Accessible primitives
-- **Vaul** - Drawer component
-- **Lucide React** - Icons
-- **Sonner** - Toast notifications
+```text
+BrandOS → ContentOS → LaunchOS
+```
+
+### Required gate
+
+1. Create or load a Brand Profile.
+2. Confirm ContentOS loads the same brand context.
+3. Create an editable content asset.
+4. Save it to the canonical Content Library.
+5. Continue from ContentOS to LaunchOS.
+6. Confirm the saved asset is selectable in LaunchOS.
+7. Create and save a launch plan.
+8. Reload and recover the plan at the declared persistence level.
+9. Record the exact commit, deployment, test evidence, and known limitations.
+
+LaunchOS remains unpromoted until this gate is complete.
+
+See [`docs/STABILIZATION-SPRINT-1.md`](./docs/STABILIZATION-SPRINT-1.md) and [`docs/PRODUCT-MAP.md`](./docs/PRODUCT-MAP.md).
 
 ---
 
-## 🎯 Navigation Flow
+## Documentation Authority
 
-```
-Homepage (/)
-  ↓
-Dashboard (/dashboard)
-  ↓
-Modules Overview (/modules) [with tabs: Core | Add-ons | All]
-  ↓
-Module Product Page (/modules/{module-name})
-  ↓
-Module App (/app/{module-name}/{view})
-```
+Start here:
 
-### Example Flow
-```
-1. Landing Page (/)
-2. Dashboard (/dashboard) — See workflow status
-3. Brand OS Product (/modules/brand-os)
-4. Brand OS Setup (/app/brand-os/setup) — Define brand
-5. Content OS Product (/modules/content-os)
-6. Content OS Generate (/app/content-os/generate) — Create content
-7. Content OS Library (/app/content-os/library) — Manage assets
-```
+- [`docs/CONSTITUTION.md`](./docs/CONSTITUTION.md) — non-negotiable governance
+- [`docs/CREATOROS-PRODUCT-PHILOSOPHY.md`](./docs/CREATOROS-PRODUCT-PHILOSOPHY.md) — why the product exists
+- [`docs/LIFECYCLE-ARCHITECTURE.md`](./docs/LIFECYCLE-ARCHITECTURE.md) — lifecycle and contract architecture
+- [`docs/REPOSITORY-GOVERNANCE.md`](./docs/REPOSITORY-GOVERNANCE.md) — repository roles
+- [`docs/STABILIZATION-PLAN.md`](./docs/STABILIZATION-PLAN.md) — consolidation program
+- [`docs/CAPABILITY-INVENTORY.md`](./docs/CAPABILITY-INVENTORY.md) — evidence-oriented current-state audit
+- [`docs/PRODUCT-MAP.md`](./docs/PRODUCT-MAP.md) — current product map and next gates
+- [`docs/PLATFORM-ACCESS.md`](./docs/PLATFORM-ACCESS.md) — production and preview access
+- [`docs/DOCUMENTATION-POLICY.md`](./docs/DOCUMENTATION-POLICY.md) — documentation completion rules
+
+When older documents conflict with verified code or the documents above, treat them as historical until explicitly revalidated.
 
 ---
 
-## 📦 Installation
+## Repository Governance
 
-### Prerequisites
+| Repository | Role |
+|---|---|
+| `Soleil-Sophia/creatoros-platform` | **Canonical product repository** |
+| `Soleil-Sophia/creatoros-insight` | Migration source; no independent product expansion |
+| older CreatorOS repositories | Legacy reference pending archive or explicit classification |
+
+GitHub `main` is the source of truth. Lovable and Replit are development or preview environments and do not independently define release state.
+
+---
+
+## Quick Start
+
+### Requirements
+
 - Node.js 18+
-- pnpm (recommended) or npm
+- pnpm
 
-### Setup
 ```bash
-# Clone repository
-git clone [repository-url]
-cd creator-os
-
-# Install dependencies
+git clone https://github.com/Soleil-Sophia/creatoros-platform.git
+cd creatoros-platform
 pnpm install
-
-# Start dev server
 pnpm dev
-
-# Build for production
-pnpm build
-
-# Preview production build
-pnpm preview
 ```
 
----
+The Vite application is mounted with the `/platform/` base path in deployed environments.
 
-## 🧪 Development
+### Validation commands
 
-### Common Commands
 ```bash
-pnpm dev          # Start dev server
-pnpm build        # Build for production
-pnpm preview      # Preview production build
-pnpm typecheck    # TypeScript check
+pnpm build
+pnpm typecheck
 ```
 
-### Coding Standards
-- ✅ Use shared primitives from `/components/shared/`
-- ✅ Use CSS variables from `theme.css`
-- ✅ Follow radius system (20/16/12/8/6px)
-- ✅ Maintain 10% accent rule
-- ✅ TypeScript for all new code
-- ✅ Update `/docs/` when changing architecture
-
-### Module Development Rules
-Every new module must fulfill **3 criteria:**
-1. **Standalone Value** - Works independently
-2. **Clear System Position** - Defined scope & purpose
-3. **Clean Integration** - Can exchange data with other modules
-
-**If a module doesn't fulfill these, it doesn't belong in the system.**
+Existing tests and CI coverage are being reconciled during Stabilization Sprint 1. Never claim a gate passed unless the exact command or browser workflow was executed against an identifiable commit.
 
 ---
 
-## 📊 Project Statistics
+## Tech Stack
 
-- **Total Components**: 113+
-- **Pages**: 7
-- **Screens**: 2
-- **Core Modules**: 4 (2 active, 2 coming soon)
-- **Add-on Modules**: 2 (planned)
-- **Shared Primitives**: 6
-- **Total Lines**: ~18,000+
-- **Documentation Pages**: 9
-
----
-
-## 🚦 Development Roadmap
-
-### Phase 1 (Current — MVP) ✅
-- Brand OS Setup Flow
-- Content OS Generate + Library
-- Dashboard with Core Workflow
-- Modules Page with Tabs
-- 3-Level Information Architecture
-
-### Phase 2 (Q2 2026)
-- Launch OS Launch (formerly Campaign OS)
-- Management OS Launch
-- Analytics OS Launch
-- Multi-Brand Profile Support
-- Cross-Module Integration
-
-### Phase 3 (Q3 2026)
-- Community OS
-- Research OS
-- Team Access & Collaboration
-- Export & Integration Features
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Tailwind CSS
+- Radix UI / shadcn-style components
+- Lucide React
+- Vercel deployments
+- Supabase dependencies and infrastructure exist, but production lifecycle usage must be proven before being described as active cloud persistence
 
 ---
 
-## 🎯 Key Concepts
+## Development Rules
 
-### What CreatorOS IS:
-- Modular creator platform
-- Systematic workflow with clear core path
-- Production environment for structured content work
-- Integration layer between strategy and execution
+Every meaningful change must answer:
 
-### What CreatorOS is NOT:
-- Social media scheduler
-- Pure design tool
-- Complete marketing suite
-- Generic SaaS dashboard
+1. Which lifecycle stage and module own it?
+2. Which contract, route, persistence behavior, or product state changes?
+3. What evidence validates it?
+4. Which documentation must change in the same pull request?
 
-### Critical Rule:
-**Every new feature must clearly belong to an existing module or justify a new module with full scope.**
+A feature is not complete until code, tests or validation evidence, README where affected, module/architecture documentation, product map, and release notes agree.
 
----
+Do not:
 
-## 🌟 Highlights
-
-- ✅ **Modular Architecture** - Core + Add-ons system
-- ✅ **3-Level IA** - Dashboard → Modules → Apps
-- ✅ **Brand → Content Flow** - Systematic consistency
-- ✅ **113+ Components** - Fully documented
-- ✅ **Dark Premium Design** - Architectural spatial hierarchy
-- ✅ **Type-Safe Routing** - React Router Data Mode
-- ✅ **Modern Stack** - React 19, Vite 6, Tailwind v4
+- create parallel CreatorOS repositories,
+- mark modules active from file presence alone,
+- present local persistence as cloud sync,
+- add generic research features that belong to SOREYA,
+- merge architecture changes without a decision record,
+- use visual polish to hide incomplete functionality.
 
 ---
 
-## 📝 License
+## License
 
-Proprietary - All Rights Reserved
-
----
-
-## 📞 Support
-
-### Product Documentation
-- **Architecture:** [/docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md)
-- **Brand OS:** [/docs/BRANDOS-DEFINITION.md](./docs/BRANDOS-DEFINITION.md)
-- **Content OS:** [/docs/CONTENTOS-DEFINITION.md](./docs/CONTENTOS-DEFINITION.md)
-
-### Technical Documentation
-- **Quick Start:** [QUICK_START.md](./QUICK_START.md)
-- **Complete Docs:** [DOCUMENTATION.md](./DOCUMENTATION.md)
-- **API Reference:** [API_REFERENCE.md](./API_REFERENCE.md)
+Proprietary — All Rights Reserved.
 
 ---
 
-**Built with precision. Designed for creators. Structured for scale.**
-
-Version 2.0 | April 2026
+**Built with precision. Designed as a lifecycle. Structured to learn.**
