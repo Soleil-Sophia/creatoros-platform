@@ -23,6 +23,7 @@ export {
   saveImplementationRecord,
   saveObservationRecord,
 } from './outcomes';
+export { createIntelligenceLearningRecommendation } from './intelligenceLearning';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -47,3 +48,4 @@ export type { BrandToneRecommendationValue } from './factories';
 export type { BrandOSCanonicalPreview } from './brandosApply';
 export type { BrandOSRevisionRecord } from './brandosRevisionHistory';
 export type { ImplementationRecord, ObservationOutcome, ObservationRecord } from './outcomes';
+export type { IntelligenceLearningValue } from './intelligenceLearning';

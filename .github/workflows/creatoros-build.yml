@@ -12,6 +12,7 @@ on:
       - feat/decision-engine-v1
       - feat/decision-engine-brandos-canonical-apply
       - feat/decision-history-brandos-revisions
+      - feat/decision-implementation-observation
   workflow_dispatch:
 
 permissions:
