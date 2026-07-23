@@ -10,6 +10,7 @@ on:
       - feat/creatoros-recommendation-generator-handoff
       - feat/creatoros-contextual-guide-layer
       - feat/decision-engine-v1
+      - feat/decision-engine-brandos-canonical-apply
   workflow_dispatch:
 
 permissions:
