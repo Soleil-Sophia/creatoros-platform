@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { Link } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 import { readBrandProfile } from '../lib/brand-profile/storage';
 import {
   adaptBrandProfileToPlaybook,
@@ -25,12 +25,7 @@ const panelStyle = {
   boxShadow: '0 20px 60px rgba(0,0,0,0.35)',
 } as const;
 
-function Field({
-  label,
-  value,
-  onChange,
-  placeholder,
-}: {
+function Field({ label, value, onChange, placeholder }: {
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -39,17 +34,18 @@ function Field({
   return (
     <label style={{ display: 'grid', gap: 7 }}>
       <span style={{ color: '#A8ABBA', fontSize: 12, fontWeight: 600 }}>{label}</span>
-      <input
-        value={value}
-        onChange={(event) => onChange(event.target.value)}
-        placeholder={placeholder}
-        style={fieldStyle}
-      />
+      <input value={value} onChange={(event) => onChange(event.target.value)} placeholder={placeholder} style={fieldStyle} />
     </label>
   );
 }
 
-function RecommendationView({ recommendation }: { recommendation: ContentRecommendation }) {
+function RecommendationView({
+  recommendation,
+  onContinue,
+}: {
+  recommendation: ContentRecommendation;
+  onContinue: () => void;
+}) {
   const passed = recommendation.brandPolicyCheck.status === 'passed';
 
   return (
@@ -60,25 +56,10 @@ function RecommendationView({ recommendation }: { recommendation: ContentRecomme
             <div style={{ color: '#DABFFF', fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase' }}>
               Next Best Content Action
             </div>
-            <h2 style={{ color: '#FFFFFF', fontSize: 26, lineHeight: 1.2, margin: '10px 0 8px' }}>
-              {recommendation.hook}
-            </h2>
-            <p style={{ color: '#B9BBC7', fontSize: 15, lineHeight: 1.65, margin: 0 }}>
-              {recommendation.coreMessage}
-            </p>
+            <h2 style={{ color: '#FFFFFF', fontSize: 26, lineHeight: 1.2, margin: '10px 0 8px' }}>{recommendation.hook}</h2>
+            <p style={{ color: '#B9BBC7', fontSize: 15, lineHeight: 1.65, margin: 0 }}>{recommendation.coreMessage}</p>
           </div>
-          <div
-            style={{
-              borderRadius: 999,
-              padding: '8px 12px',
-              whiteSpace: 'nowrap',
-              border: `1px solid ${passed ? 'rgba(122,255,185,0.28)' : 'rgba(255,190,120,0.3)'}`,
-              background: passed ? 'rgba(122,255,185,0.08)' : 'rgba(255,190,120,0.08)',
-              color: passed ? '#83F3B7' : '#FFC27A',
-              fontSize: 12,
-              fontWeight: 700,
-            }}
-          >
+          <div style={{ borderRadius: 999, padding: '8px 12px', whiteSpace: 'nowrap', border: `1px solid ${passed ? 'rgba(122,255,185,0.28)' : 'rgba(255,190,120,0.3)'}`, background: passed ? 'rgba(122,255,185,0.08)' : 'rgba(255,190,120,0.08)', color: passed ? '#83F3B7' : '#FFC27A', fontSize: 12, fontWeight: 700 }}>
             {passed ? 'Policy Passed' : 'Needs Review'}
           </div>
         </div>
@@ -107,9 +88,7 @@ function RecommendationView({ recommendation }: { recommendation: ContentRecomme
       <section style={{ ...panelStyle, padding: 22 }}>
         <h3 style={{ color: '#F4F3F8', fontSize: 16, margin: '0 0 14px' }}>Visual direction</h3>
         <div style={{ display: 'grid', gap: 9 }}>
-          {recommendation.visualDirection.map((direction) => (
-            <div key={direction} style={{ color: '#B9BBC7', fontSize: 14 }}>• {direction}</div>
-          ))}
+          {recommendation.visualDirection.map((direction) => <div key={direction} style={{ color: '#B9BBC7', fontSize: 14 }}>• {direction}</div>)}
         </div>
       </section>
 
@@ -124,9 +103,7 @@ function RecommendationView({ recommendation }: { recommendation: ContentRecomme
       <section style={{ ...panelStyle, padding: 22 }}>
         <h3 style={{ color: '#F4F3F8', fontSize: 16, margin: '0 0 14px' }}>Why this recommendation</h3>
         <div style={{ display: 'grid', gap: 9 }}>
-          {recommendation.reasoning.map((reason) => (
-            <div key={reason} style={{ color: '#B9BBC7', fontSize: 14 }}>• {reason}</div>
-          ))}
+          {recommendation.reasoning.map((reason) => <div key={reason} style={{ color: '#B9BBC7', fontSize: 14 }}>• {reason}</div>)}
         </div>
       </section>
 
@@ -138,11 +115,16 @@ function RecommendationView({ recommendation }: { recommendation: ContentRecomme
           <div><strong style={{ color: '#F4F3F8' }}>Rule:</strong> {recommendation.measurementPlan.targetRule}</div>
         </div>
       </section>
+
+      <button type="button" onClick={onContinue} style={{ border: '1px solid rgba(255,191,222,0.35)', background: 'linear-gradient(135deg, rgba(255,191,222,0.24), rgba(218,191,255,0.2))', color: '#FFFFFF', borderRadius: 14, padding: '15px 18px', fontWeight: 700, cursor: 'pointer' }}>
+        Continue to content generation →
+      </button>
     </div>
   );
 }
 
 export function CreatorOSCreatePage() {
+  const navigate = useNavigate();
   const profile = useMemo(() => readBrandProfile(), []);
   const [offer, setOffer] = useState('CreatorOS Platform');
   const [audience, setAudience] = useState('creator-led service businesses');
@@ -152,11 +134,37 @@ export function CreatorOSCreatePage() {
   const [outputType, setOutputType] = useState('short-script');
   const [recommendation, setRecommendation] = useState<ContentRecommendation | null>(null);
 
+  const inputs = { offer, audience, goal, tone, platform, outputType };
+
   const generateRecommendation = () => {
-    const inputs = { offer, audience, goal, tone, platform, outputType };
     const playbook = adaptBrandProfileToPlaybook(profile, inputs);
     const context = adaptLegacyInputsToRequestContext(inputs);
     setRecommendation(buildContentRecommendation(playbook, context));
+  };
+
+  const continueToGenerator = () => {
+    if (!recommendation) return;
+
+    navigate('/app/content-os/generate', {
+      state: {
+        reuseAsset: {
+          id: 'creatoros-recommendation-handoff',
+          type: 'plan',
+          title: 'CreatorOS Next Best Content Action',
+          preview: recommendation.coreMessage,
+          platform,
+          campaign: 'CreatorOS Recommendation',
+          brandVoice: tone,
+          date: new Date().toISOString().slice(0, 10),
+          variants: 1,
+          status: 'ready',
+          source: 'generated',
+          outputType,
+          inputs: { offer, audience, goal, tone, outputType },
+          creatorRecommendation: recommendation,
+        },
+      },
+    });
   };
 
   return (
@@ -164,25 +172,17 @@ export function CreatorOSCreatePage() {
       <div style={{ maxWidth: 1440, margin: '0 auto' }}>
         <header style={{ display: 'flex', justifyContent: 'space-between', gap: 24, alignItems: 'flex-start', marginBottom: 28 }}>
           <div>
-            <div style={{ color: '#FFBFDE', fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-              CreatorOS · Creator Intelligence
-            </div>
+            <div style={{ color: '#FFBFDE', fontSize: 12, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase' }}>CreatorOS · Creator Intelligence</div>
             <h1 style={{ fontSize: 34, margin: '10px 0 8px' }}>Create the next best content action</h1>
-            <p style={{ color: '#9296A8', margin: 0, maxWidth: 760, lineHeight: 1.6 }}>
-              Uses the existing BrandOS profile and your request context to produce a deterministic, explainable recommendation.
-            </p>
+            <p style={{ color: '#9296A8', margin: 0, maxWidth: 760, lineHeight: 1.6 }}>Uses the existing BrandOS profile and your request context to produce a deterministic, explainable recommendation.</p>
           </div>
-          <Link to="/modules/brandos/app" style={{ color: '#DABFFF', textDecoration: 'none', fontSize: 13 }}>
-            Open BrandOS →
-          </Link>
+          <Link to="/modules/brandos/app" style={{ color: '#DABFFF', textDecoration: 'none', fontSize: 13 }}>Open BrandOS →</Link>
         </header>
 
         <div style={{ display: 'grid', gridTemplateColumns: '360px minmax(0, 1fr)', gap: 22, alignItems: 'start' }}>
           <aside style={{ ...panelStyle, padding: 22, position: 'sticky', top: 24 }}>
             <div style={{ color: '#FFFFFF', fontWeight: 700, marginBottom: 4 }}>Request context</div>
-            <div style={{ color: '#777B8D', fontSize: 12, marginBottom: 20 }}>
-              Brand: {profile?.brandName || 'No saved BrandOS profile'}
-            </div>
+            <div style={{ color: '#777B8D', fontSize: 12, marginBottom: 20 }}>Brand: {profile?.brandName || 'No saved BrandOS profile'}</div>
             <div style={{ display: 'grid', gap: 15 }}>
               <Field label="Offer" value={offer} onChange={setOffer} placeholder="What are you selling?" />
               <Field label="Audience" value={audience} onChange={setAudience} placeholder="Who should this reach?" />
@@ -197,42 +197,22 @@ export function CreatorOSCreatePage() {
               <label style={{ display: 'grid', gap: 7 }}>
                 <span style={{ color: '#A8ABBA', fontSize: 12, fontWeight: 600 }}>Format preference</span>
                 <select value={outputType} onChange={(event) => setOutputType(event.target.value)} style={fieldStyle}>
-                  <option value="short-script">Short script</option>
-                  <option value="hook-pack">Hook pack</option>
-                  <option value="caption-draft">Text post</option>
-                  <option value="content-brief">Long-form brief</option>
-                  <option value="repurposing-plan">Carousel / repurposing</option>
+                  <option value="short-script">Short script</option><option value="hook-pack">Hook pack</option><option value="caption-draft">Text post</option><option value="content-brief">Long-form brief</option><option value="repurposing-plan">Carousel / repurposing</option>
                 </select>
               </label>
-              <button
-                type="button"
-                onClick={generateRecommendation}
-                style={{
-                  border: '1px solid rgba(255,191,222,0.3)',
-                  background: 'linear-gradient(135deg, rgba(255,191,222,0.2), rgba(218,191,255,0.16))',
-                  color: '#FFFFFF',
-                  borderRadius: 12,
-                  padding: '13px 16px',
-                  fontWeight: 700,
-                  cursor: 'pointer',
-                }}
-              >
+              <button type="button" onClick={generateRecommendation} style={{ border: '1px solid rgba(255,191,222,0.3)', background: 'linear-gradient(135deg, rgba(255,191,222,0.2), rgba(218,191,255,0.16))', color: '#FFFFFF', borderRadius: 12, padding: '13px 16px', fontWeight: 700, cursor: 'pointer' }}>
                 Generate recommendation
               </button>
             </div>
           </aside>
 
           <section>
-            {recommendation ? (
-              <RecommendationView recommendation={recommendation} />
-            ) : (
+            {recommendation ? <RecommendationView recommendation={recommendation} onContinue={continueToGenerator} /> : (
               <div style={{ ...panelStyle, minHeight: 520, display: 'grid', placeItems: 'center', padding: 40, textAlign: 'center' }}>
                 <div style={{ maxWidth: 500 }}>
                   <div style={{ fontSize: 42, marginBottom: 18 }}>✦</div>
                   <h2 style={{ fontSize: 24, margin: '0 0 10px' }}>Ready for the first recommendation</h2>
-                  <p style={{ color: '#8B8F9E', lineHeight: 1.65, margin: 0 }}>
-                    CreatorOS will combine BrandOS context with the selected business goal, channel, and format to recommend the next content action.
-                  </p>
+                  <p style={{ color: '#8B8F9E', lineHeight: 1.65, margin: 0 }}>CreatorOS will combine BrandOS context with the selected business goal, channel, and format to recommend the next content action.</p>
                 </div>
               </div>
             )}
