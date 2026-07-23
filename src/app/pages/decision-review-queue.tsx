@@ -18,10 +18,13 @@ export function DecisionReviewQueuePage() {
   const [refreshTick, setRefreshTick] = useState(0);
   const [reasonById, setReasonById] = useState<Record<string, string>>({});
 
-  const recommendations = useMemo(
-    () => listRecommendations().filter((item) => item.status === 'in_review' || item.status === 'recommended'),
-    [refreshTick],
+  const allRecommendations = useMemo(() => listRecommendations(), [refreshTick]);
+  const recommendations = allRecommendations.filter(
+    (item) => item.status === 'in_review' || item.status === 'recommended',
   );
+  const approvedBrandOSCount = allRecommendations.filter(
+    (item) => item.status === 'approved' && item.targetOS === 'BrandOS',
+  ).length;
 
   const decide = (
     recommendation: PlatformRecommendation,
@@ -50,14 +53,25 @@ export function DecisionReviewQueuePage() {
   return (
     <main style={{ minHeight: '100vh', background: '#0E0F14', color: '#F4F3F8', padding: 32 }}>
       <div style={{ maxWidth: 1180, margin: '0 auto' }}>
-        <header style={{ marginBottom: 28 }}>
-          <div style={{ color: '#DABFFF', fontSize: 12, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
-            Decision Engine · Review Queue
+        <header style={{ display: 'flex', justifyContent: 'space-between', gap: 24, alignItems: 'flex-start', marginBottom: 28 }}>
+          <div>
+            <div style={{ color: '#DABFFF', fontSize: 12, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>
+              Decision Engine · Review Queue
+            </div>
+            <h1 style={{ fontSize: 34, margin: '10px 0 8px' }}>Recommendations awaiting a human decision</h1>
+            <p style={{ color: '#9296A8', margin: 0, maxWidth: 760, lineHeight: 1.65 }}>
+              Review the reason, evidence, confidence, and proposed change. Approval records the decision but does not silently overwrite canonical OS data.
+            </p>
           </div>
-          <h1 style={{ fontSize: 34, margin: '10px 0 8px' }}>Recommendations awaiting a human decision</h1>
-          <p style={{ color: '#9296A8', margin: 0, maxWidth: 760, lineHeight: 1.65 }}>
-            Review the reason, evidence, confidence, and proposed change. Approval records the decision but does not silently overwrite canonical OS data.
-          </p>
+
+          {approvedBrandOSCount > 0 && (
+            <a
+              href="/platform/decisions/apply/brandos"
+              style={{ borderRadius: 11, border: '1px solid rgba(122,255,185,0.24)', background: 'rgba(122,255,185,0.07)', color: '#83F3B7', padding: '10px 13px', fontSize: 12, fontWeight: 800, textDecoration: 'none', whiteSpace: 'nowrap' }}
+            >
+              {approvedBrandOSCount} approved BrandOS change{approvedBrandOSCount === 1 ? '' : 's'} →
+            </a>
+          )}
         </header>
 
         {recommendations.length === 0 ? (

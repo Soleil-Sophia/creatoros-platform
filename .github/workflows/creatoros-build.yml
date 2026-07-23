@@ -9,6 +9,7 @@ on:
       - feat/creatoros-visible-recommendation-slice
       - feat/creatoros-recommendation-generator-handoff
       - feat/creatoros-contextual-guide-layer
+      - feat/decision-engine-v1
   workflow_dispatch:
 
 permissions:

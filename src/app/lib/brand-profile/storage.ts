@@ -23,13 +23,18 @@ function normalizeString(value: unknown): string {
   return typeof value === 'string' ? value : '';
 }
 
+function normalizePositiveInteger(value: unknown): number | undefined {
+  return typeof value === 'number' && Number.isInteger(value) && value > 0
+    ? value
+    : undefined;
+}
+
 function getFieldValue(profile: BrandProfile, field: RequiredBrandProfileField): string {
   return profile[field].trim();
 }
 
 export function getBrandProfileStatus(profile: BrandProfile | null | undefined): BrandProfileStatus {
   const filledCount = getFilledBrandProfileFieldCount(profile);
-
   if (filledCount === 0) return 'not_started';
   if (filledCount === REQUIRED_BRAND_PROFILE_FIELDS.length) return 'complete';
   return 'in_progress';
@@ -54,13 +59,11 @@ export function readBrandProfile(): BrandProfile | null {
     const voiceEnergy = normalizeString(legacy.voiceEnergy ?? legacy.energy).trim();
     const voiceLabel = normalizeString(legacy.voiceLabel).trim() || undefined;
     let brandName = normalizeString(legacy.brandName).trim();
-    // Legacy v1 profiles have no brandName. If the profile was otherwise fully
-    // configured (all four voice fields present), backfill brandName from the
-    // stored voiceLabel (falling back to voiceTone) so that migrated voices
-    // keep their 'complete' status.
+
     if (!brandName && voiceTone && voiceComplexity && voiceFormality && voiceEnergy) {
       brandName = voiceLabel ?? voiceTone;
     }
+
     return {
       brandName,
       voiceTone,
@@ -69,6 +72,11 @@ export function readBrandProfile(): BrandProfile | null {
       voiceEnergy,
       voiceLabel,
       updatedAt: normalizeString(legacy.updatedAt) || undefined,
+      canonicalRevision: normalizePositiveInteger(legacy.canonicalRevision),
+      canonicalSourceRecommendationId:
+        normalizeString(legacy.canonicalSourceRecommendationId) || undefined,
+      canonicalApprovedAt: normalizeString(legacy.canonicalApprovedAt) || undefined,
+      canonicalApprovedBy: normalizeString(legacy.canonicalApprovedBy) || undefined,
     };
   } catch {
     return null;
@@ -84,12 +92,17 @@ export function writeBrandProfile(profile: BrandProfile): BrandProfile {
     voiceEnergy: profile.voiceEnergy.trim(),
     voiceLabel: profile.voiceLabel ?? createVoiceLabel(profile),
     updatedAt: new Date().toISOString(),
+    canonicalRevision: profile.canonicalRevision,
+    canonicalSourceRecommendationId: profile.canonicalSourceRecommendationId,
+    canonicalApprovedAt: profile.canonicalApprovedAt,
+    canonicalApprovedBy: profile.canonicalApprovedBy,
   };
+
   if (typeof window === 'undefined') return next;
   try {
     window.localStorage.setItem(BRAND_PROFILE_STORAGE_KEY, JSON.stringify(next));
   } catch {
-    // quota / serialization — swallow; caller still gets the in-memory value
+    // quota / serialization — caller still receives the in-memory value
   }
   return next;
 }
@@ -103,15 +116,10 @@ export function clearBrandProfile(): void {
   }
 }
 
-/**
- * Produce a short, human-friendly label for the saved brand voice.
- * Prefers the tone, falls back to formality/energy, then to "Custom Voice".
- */
 export function createVoiceLabel(profile: BrandProfile): string {
   const tone = profile.voiceTone?.trim();
   const formality = profile.voiceFormality?.trim();
   const energy = profile.voiceEnergy?.trim();
-
   if (tone) return tone;
   if (formality && energy) return `${formality} · ${energy}`;
   if (formality) return formality;
@@ -127,5 +135,4 @@ export function isBrandProfileComplete(profile: BrandProfile | null | undefined)
   return getBrandProfileStatus(profile) === 'complete';
 }
 
-// Re-export the empty shape so consumers can use a single import for initial state.
 export { emptyBrandProfile };
