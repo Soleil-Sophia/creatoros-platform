@@ -9,6 +9,7 @@ import { ContentOSProductPage } from './pages/content-os-product';
 import { ContentOSAppPage } from './pages/content-os-app';
 import { ContentOSLibraryPage } from './pages/content-os-library';
 import { CreatorOSCreatePage } from './pages/creator-os-create';
+import { DecisionHistoryPage } from './pages/decision-history';
 import { DecisionReviewQueuePage } from './pages/decision-review-queue';
 import { LaunchOSAppPage } from './pages/launch-os-app';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
@@ -29,6 +30,7 @@ export const router = createBrowserRouter([
   // Shared Decision Engine surfaces. This is not yet DecisionOS.
   { path: '/decisions/review', Component: DecisionReviewQueuePage },
   { path: '/decisions/apply/brandos', Component: BrandOSCanonicalApplyPage },
+  { path: '/decisions/history', Component: DecisionHistoryPage },
 
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
