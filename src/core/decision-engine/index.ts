@@ -2,6 +2,8 @@ export {
   decideRecommendation,
   editRecommendation,
   markRecommendationCanonical,
+  markRecommendationImplemented,
+  markRecommendationObserved,
   submitRecommendation,
 } from './engine';
 export {
@@ -13,6 +15,14 @@ export {
   listBrandOSRevisionRecords,
   saveBrandOSRevisionRecord,
 } from './brandosRevisionHistory';
+export {
+  createImplementationRecord,
+  createObservationRecord,
+  listImplementationRecords,
+  listObservationRecords,
+  saveImplementationRecord,
+  saveObservationRecord,
+} from './outcomes';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -36,3 +46,4 @@ export type {
 export type { BrandToneRecommendationValue } from './factories';
 export type { BrandOSCanonicalPreview } from './brandosApply';
 export type { BrandOSRevisionRecord } from './brandosRevisionHistory';
+export type { ImplementationRecord, ObservationOutcome, ObservationRecord } from './outcomes';

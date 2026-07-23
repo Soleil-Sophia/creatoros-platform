@@ -11,6 +11,7 @@ on:
       - feat/creatoros-contextual-guide-layer
       - feat/decision-engine-v1
       - feat/decision-engine-brandos-canonical-apply
+      - feat/decision-history-brandos-revisions
   workflow_dispatch:
 
 permissions:
