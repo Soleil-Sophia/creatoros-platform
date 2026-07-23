@@ -260,7 +260,8 @@ export function GenerateScreen({ showTopbar = true }: { showTopbar?: boolean } =
     const profile = readBrandProfile();
     const nowIso = new Date().toISOString();
 
-    const brandVoiceSnapshot: BrandVoiceSnapshot | null = profile
+    const brandProfileStatus = getBrandProfileStatus(profile);
+    const brandVoiceSnapshot: BrandVoiceSnapshot | null = brandProfileStatus !== 'not_started' && profile
       ? {
           voiceTone: profile.voiceTone ?? '',
           voiceComplexity: profile.voiceComplexity ?? '',
