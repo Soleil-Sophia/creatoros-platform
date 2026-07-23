@@ -110,3 +110,24 @@ export function editRecommendation<TValue>(
     ],
   };
 }
+
+export function markRecommendationCanonical<TValue>(
+  recommendation: PlatformRecommendation<TValue>,
+  actor: string,
+  reason: string,
+  canonicalizedAt: string,
+): PlatformRecommendation<TValue> {
+  if (recommendation.status !== 'approved') {
+    throw new Error(`Cannot canonicalize recommendation from status ${recommendation.status}.`);
+  }
+
+  return {
+    ...recommendation,
+    status: 'canonical',
+    updatedAt: canonicalizedAt,
+    history: [
+      ...recommendation.history,
+      createHistoryEntry('canonicalized', actor, reason, canonicalizedAt),
+    ],
+  };
+}
