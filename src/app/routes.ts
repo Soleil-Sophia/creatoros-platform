@@ -4,6 +4,7 @@ import { DashboardPage } from './pages/dashboard';
 import { ModulesPage } from './pages/modules';
 import { BrandOSProductPage } from './pages/brand-os-product';
 import { BrandOSAppPage } from './pages/brand-os-app';
+import { BrandOSCanonicalApplyPage } from './pages/brandos-canonical-apply';
 import { ContentOSProductPage } from './pages/content-os-product';
 import { ContentOSAppPage } from './pages/content-os-app';
 import { ContentOSLibraryPage } from './pages/content-os-library';
@@ -25,8 +26,9 @@ export const router = createBrowserRouter([
   { path: '/creatoros/create', Component: CreatorOSCreatePage },
   { path: '/app/creatoros/create', Component: CreatorOSCreatePage },
 
-  // Shared Decision Engine review surface. This is not yet DecisionOS.
+  // Shared Decision Engine surfaces. This is not yet DecisionOS.
   { path: '/decisions/review', Component: DecisionReviewQueuePage },
+  { path: '/decisions/apply/brandos', Component: BrandOSCanonicalApplyPage },
 
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
