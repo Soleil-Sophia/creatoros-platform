@@ -12,6 +12,7 @@ import { CreatorOSCreatePage } from './pages/creator-os-create';
 import { DecisionHistoryPage } from './pages/decision-history';
 import { DecisionOutcomesPage } from './pages/decision-outcomes';
 import { DecisionReviewQueuePage } from './pages/decision-review-queue';
+import { IntelligenceLearningPage } from './pages/intelligence-learning';
 import { LaunchOSAppPage } from './pages/launch-os-app';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
 import { ContentOSApp } from '../modules/contentos/ContentOSApp';
@@ -32,6 +33,7 @@ export const router = createBrowserRouter([
   { path: '/decisions/apply/brandos', Component: BrandOSCanonicalApplyPage },
   { path: '/decisions/outcomes', Component: DecisionOutcomesPage },
   { path: '/decisions/history', Component: DecisionHistoryPage },
+  { path: '/intelligence/learning', Component: IntelligenceLearningPage },
 
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
