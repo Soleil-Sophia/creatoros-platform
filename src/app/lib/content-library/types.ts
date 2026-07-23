@@ -1,3 +1,5 @@
+import type { CreatorRecommendationSnapshot } from './recommendationSnapshot';
+
 export type BrandVoiceSnapshot = {
   voiceTone: string;
   voiceComplexity: string;
@@ -30,4 +32,5 @@ export type SavedContentAsset = {
     outputType: string;
   };
   brandVoiceSnapshot: BrandVoiceSnapshot | null;
+  creatorRecommendationSnapshot?: CreatorRecommendationSnapshot;
 };

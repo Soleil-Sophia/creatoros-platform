@@ -1,6 +1,39 @@
+import type { ContentRecommendation } from '../../../core/creator-intelligence/types';
+import { createCreatorRecommendationSnapshot } from './recommendationSnapshot';
 import type { SavedContentAsset } from './types';
 
 export const CONTENT_LIBRARY_STORAGE_KEY = 'creatoros-content-library-v1';
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value && typeof value === 'object' && !Array.isArray(value));
+}
+
+function isContentRecommendation(value: unknown): value is ContentRecommendation {
+  if (!isRecord(value)) return false;
+  return (
+    typeof value.hook === 'string' &&
+    typeof value.coreMessage === 'string' &&
+    typeof value.cta === 'string' &&
+    typeof value.confidence === 'string' &&
+    Array.isArray(value.contentStructure) &&
+    Array.isArray(value.reasoning) &&
+    isRecord(value.brandPolicyCheck) &&
+    isRecord(value.measurementPlan)
+  );
+}
+
+function readRecommendationFromNavigationState(): ContentRecommendation | null {
+  if (typeof window === 'undefined') return null;
+
+  const state = window.history.state;
+  if (!isRecord(state)) return null;
+
+  const routerState = isRecord(state.usr) ? state.usr : state;
+  const reuseAsset = isRecord(routerState.reuseAsset) ? routerState.reuseAsset : null;
+  const recommendation = reuseAsset?.creatorRecommendation;
+
+  return isContentRecommendation(recommendation) ? recommendation : null;
+}
 
 function isSavedContentAsset(value: unknown): value is SavedContentAsset {
   if (!value || typeof value !== 'object') return false;
@@ -54,10 +87,21 @@ export function listSavedAssets(): SavedContentAsset[] {
 }
 
 export function saveAsset(asset: SavedContentAsset): { asset: SavedContentAsset; persisted: boolean } {
+  const recommendation = readRecommendationFromNavigationState();
+  const assetWithContext: SavedContentAsset = recommendation && !asset.creatorRecommendationSnapshot
+    ? {
+        ...asset,
+        creatorRecommendationSnapshot: createCreatorRecommendationSnapshot(
+          recommendation,
+          asset.createdAt || new Date().toISOString(),
+        ),
+      }
+    : asset;
+
   const all = safeRead();
-  all.unshift(asset);
+  all.unshift(assetWithContext);
   const persisted = safeWrite(all);
-  return { asset, persisted };
+  return { asset: assetWithContext, persisted };
 }
 
 export function deleteSavedAsset(id: string): void {
