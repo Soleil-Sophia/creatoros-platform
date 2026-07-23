@@ -40,10 +40,7 @@ export function submitRecommendation<TValue>(
     ...recommendation,
     status: 'in_review',
     updatedAt: submittedAt,
-    history: [
-      ...recommendation.history,
-      createHistoryEntry('submitted', actor, undefined, submittedAt),
-    ],
+    history: [...recommendation.history, createHistoryEntry('submitted', actor, undefined, submittedAt)],
   };
 }
 
@@ -68,10 +65,7 @@ export function decideRecommendation<TValue>(
     decisionReason: reason,
     deferredUntil: action === 'defer' ? deferredUntil : undefined,
     updatedAt: decidedAt,
-    history: [
-      ...recommendation.history,
-      createHistoryEntry(action, actor, reason, decidedAt),
-    ],
+    history: [...recommendation.history, createHistoryEntry(action, actor, reason, decidedAt)],
   };
 
   const decision: DecisionRecord = {
@@ -104,10 +98,7 @@ export function editRecommendation<TValue>(
     changes,
     status: 'in_review',
     updatedAt: editedAt,
-    history: [
-      ...recommendation.history,
-      createHistoryEntry('edited', actor, reason, editedAt),
-    ],
+    history: [...recommendation.history, createHistoryEntry('edited', actor, reason, editedAt)],
   };
 }
 
@@ -125,9 +116,42 @@ export function markRecommendationCanonical<TValue>(
     ...recommendation,
     status: 'canonical',
     updatedAt: canonicalizedAt,
-    history: [
-      ...recommendation.history,
-      createHistoryEntry('canonicalized', actor, reason, canonicalizedAt),
-    ],
+    history: [...recommendation.history, createHistoryEntry('canonicalized', actor, reason, canonicalizedAt)],
+  };
+}
+
+export function markRecommendationImplemented<TValue>(
+  recommendation: PlatformRecommendation<TValue>,
+  actor: string,
+  reason: string,
+  implementedAt: string,
+): PlatformRecommendation<TValue> {
+  if (recommendation.status !== 'canonical') {
+    throw new Error(`Cannot mark recommendation implemented from status ${recommendation.status}.`);
+  }
+
+  return {
+    ...recommendation,
+    status: 'implemented',
+    updatedAt: implementedAt,
+    history: [...recommendation.history, createHistoryEntry('implemented', actor, reason, implementedAt)],
+  };
+}
+
+export function markRecommendationObserved<TValue>(
+  recommendation: PlatformRecommendation<TValue>,
+  actor: string,
+  reason: string,
+  observedAt: string,
+): PlatformRecommendation<TValue> {
+  if (recommendation.status !== 'implemented') {
+    throw new Error(`Cannot observe recommendation from status ${recommendation.status}.`);
+  }
+
+  return {
+    ...recommendation,
+    status: 'observed',
+    updatedAt: observedAt,
+    history: [...recommendation.history, createHistoryEntry('observed', actor, reason, observedAt)],
   };
 }
