@@ -8,6 +8,11 @@ export {
   applyApprovedBrandToneRecommendation,
   previewBrandToneCanonicalApply,
 } from './brandosApply';
+export {
+  createBrandOSRevisionRecord,
+  listBrandOSRevisionRecords,
+  saveBrandOSRevisionRecord,
+} from './brandosRevisionHistory';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -30,3 +35,4 @@ export type {
 } from './types';
 export type { BrandToneRecommendationValue } from './factories';
 export type { BrandOSCanonicalPreview } from './brandosApply';
+export type { BrandOSRevisionRecord } from './brandosRevisionHistory';
