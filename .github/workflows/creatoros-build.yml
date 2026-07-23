@@ -7,6 +7,8 @@ on:
       - architecture/creatoros-os-family-migration
       - feat/creatoros-next-best-content-action-core
       - feat/creatoros-visible-recommendation-slice
+      - feat/creatoros-recommendation-generator-handoff
+      - feat/creatoros-contextual-guide-layer
   workflow_dispatch:
 
 permissions:
