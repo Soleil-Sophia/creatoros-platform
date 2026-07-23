@@ -1,6 +1,21 @@
-export { decideRecommendation, editRecommendation, submitRecommendation } from './engine';
+export {
+  decideRecommendation,
+  editRecommendation,
+  markRecommendationCanonical,
+  submitRecommendation,
+} from './engine';
+export {
+  applyApprovedBrandToneRecommendation,
+  previewBrandToneCanonicalApply,
+} from './brandosApply';
 export { createBrandToneRecommendation } from './factories';
-export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
+export {
+  getRecommendation,
+  listDecisionRecords,
+  listRecommendations,
+  saveDecisionRecord,
+  saveRecommendation,
+} from './storage';
 export type {
   DecisionAction,
   DecisionConfidence,
@@ -14,3 +29,4 @@ export type {
   RecommendationStatus,
 } from './types';
 export type { BrandToneRecommendationValue } from './factories';
+export type { BrandOSCanonicalPreview } from './brandosApply';
