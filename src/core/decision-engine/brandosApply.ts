@@ -1,5 +1,9 @@
 import { readBrandProfile, writeBrandProfile } from '../../app/lib/brand-profile/storage';
 import type { BrandProfile } from '../../app/lib/brand-profile/types';
+import {
+  createBrandOSRevisionRecord,
+  saveBrandOSRevisionRecord,
+} from './brandosRevisionHistory';
 import type { BrandToneRecommendationValue } from './factories';
 import type { PlatformRecommendation } from './types';
 
@@ -72,5 +76,20 @@ export function applyApprovedBrandToneRecommendation(
   recommendation: PlatformRecommendation,
 ): BrandProfile {
   const preview = previewBrandToneCanonicalApply(recommendation);
-  return writeBrandProfile(preview.proposed);
+  const appliedAt = new Date().toISOString();
+  const canonical = writeBrandProfile({
+    ...preview.proposed,
+    updatedAt: appliedAt,
+  });
+
+  saveBrandOSRevisionRecord(createBrandOSRevisionRecord({
+    recommendationId: recommendation.id,
+    previous: preview.current,
+    canonical,
+    appliedAt,
+    appliedBy: recommendation.reviewedBy ?? 'Current User',
+    reason: recommendation.decisionReason ?? recommendation.reason,
+  }));
+
+  return canonical;
 }
