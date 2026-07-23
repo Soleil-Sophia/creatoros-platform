@@ -7,6 +7,7 @@ import { BrandOSAppPage } from './pages/brand-os-app';
 import { ContentOSProductPage } from './pages/content-os-product';
 import { ContentOSAppPage } from './pages/content-os-app';
 import { ContentOSLibraryPage } from './pages/content-os-library';
+import { CreatorOSCreatePage } from './pages/creator-os-create';
 import { LaunchOSAppPage } from './pages/launch-os-app';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
 import { ContentOSApp } from '../modules/contentos/ContentOSApp';
@@ -28,6 +29,16 @@ export const router = createBrowserRouter([
   {
     path: '/modules',
     Component: ModulesPage,
+  },
+
+  // CreatorOS — first visible Next Best Content Action vertical slice.
+  {
+    path: '/creatoros/create',
+    Component: CreatorOSCreatePage,
+  },
+  {
+    path: '/app/creatoros/create',
+    Component: CreatorOSCreatePage,
   },
 
   // --- New clean routes ---
