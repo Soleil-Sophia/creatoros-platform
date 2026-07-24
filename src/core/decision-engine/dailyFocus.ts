@@ -19,12 +19,10 @@ export interface DecisionDailyFocusItem {
 const severityScore = { critical: 100, warning: 60, info: 30 } as const;
 const signalScore = {
   overdue: 30,
-  governance_review_overdue: 29,
   governance_rollback_review: 28,
   critical: 25,
   manual_blocker: 22,
   dependency_blocker: 20,
-  governance_review_due: 19,
   governance_monitoring: 18,
   governance_inconclusive: 17,
   awaiting_review: 15,
@@ -40,11 +38,9 @@ function suggestedAction(signal: DecisionAttentionSignal): string {
     case 'dependency_blocker': return 'Advance the unresolved prerequisite decision first.';
     case 'awaiting_review': return 'Review the recommendation and record a human decision.';
     case 'dependency_resolved': return 'Resume the newly unblocked work item.';
-    case 'governance_monitoring': return 'Record before-and-after evidence for the active canonical scoring revision.';
+    case 'governance_monitoring': return 'Complete the required scoring governance monitoring or scheduled review checkpoint.';
     case 'governance_inconclusive': return 'Review the evidence limitations and define the next monitoring window.';
-    case 'governance_rollback_review': return 'Review the controlled rollback recommendation and record a human decision.';
-    case 'governance_review_due': return 'Complete the scheduled governance checkpoint before its due date.';
-    case 'governance_review_overdue': return 'Complete the overdue governance checkpoint and document the outcome.';
+    case 'governance_rollback_review': return 'Review the controlled rollback path or overdue governance checkpoint and record a human decision.';
   }
 }
 
@@ -56,11 +52,9 @@ function rationaleFor(signal: DecisionAttentionSignal, recommendation: PlatformR
   if (signal.type === 'dependency_blocker') rationale.push('one or more prerequisite decisions remain unresolved');
   if (signal.type === 'awaiting_review') rationale.push('progress requires an explicit human decision');
   if (signal.type === 'dependency_resolved') rationale.push('prerequisites are resolved and work is actionable again');
-  if (signal.type === 'governance_monitoring') rationale.push('an active canonical scoring revision has no post-apply observation');
+  if (signal.type === 'governance_monitoring') rationale.push('scoring governance monitoring or a scheduled review checkpoint requires attention');
   if (signal.type === 'governance_inconclusive') rationale.push('post-apply evidence is not sufficient for a maintain or rollback decision');
-  if (signal.type === 'governance_rollback_review') rationale.push('post-apply monitoring recommends explicit rollback review');
-  if (signal.type === 'governance_review_due') rationale.push('a scheduled scoring governance checkpoint is due within three days');
-  if (signal.type === 'governance_review_overdue') rationale.push('a scheduled scoring governance checkpoint is overdue');
+  if (signal.type === 'governance_rollback_review') rationale.push('rollback review or an overdue governance checkpoint requires explicit human attention');
   if (canonicalAdjustment !== 0) rationale.push(`canonical ${canonicalAdjustment > 0 ? '+' : ''}${canonicalAdjustment}-point adjustment for ${signal.type.replaceAll('_', ' ')}`);
   return rationale;
 }
