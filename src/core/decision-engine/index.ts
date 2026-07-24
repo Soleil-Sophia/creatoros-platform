@@ -55,6 +55,12 @@ export {
   snoozeDecisionAttentionSignal,
 } from './attentionState';
 export { deriveDecisionDailyFocus } from './dailyFocus';
+export {
+  clearDecisionFocusPlan,
+  createFocusPlanItems,
+  getDecisionFocusPlan,
+  saveDecisionFocusPlan,
+} from './focusPlan';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -86,3 +92,4 @@ export type { DecisionDependency } from './dependencies';
 export type { AttentionSeverity, AttentionSignalType, DecisionAttentionSignal } from './attention';
 export type { AttentionDisposition, DecisionAttentionState } from './attentionState';
 export type { DecisionDailyFocusItem } from './dailyFocus';
+export type { DecisionFocusPlan, DecisionFocusPlanItem } from './focusPlan';
