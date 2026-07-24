@@ -32,6 +32,7 @@ import { DecisionReviewQueuePage } from './pages/decision-review-queue';
 import { IntelligenceFocusExperimentOutcomesPage } from './pages/intelligence-focus-experiment-outcomes';
 import { IntelligenceFocusLearningPage } from './pages/intelligence-focus-learning';
 import { IntelligenceLearningPage } from './pages/intelligence-learning';
+import { IntelligenceScoringObservationLearningPage } from './pages/intelligence-scoring-observation-learning';
 import { LaunchOSAppPage } from './pages/launch-os-app';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
 import { ContentOSApp } from '../modules/contentos/ContentOSApp';
@@ -70,6 +71,7 @@ export const router = createBrowserRouter([
   { path: '/intelligence/learning', Component: IntelligenceLearningPage },
   { path: '/intelligence/focus-learning', Component: IntelligenceFocusLearningPage },
   { path: '/intelligence/focus-experiment-outcomes', Component: IntelligenceFocusExperimentOutcomesPage },
+  { path: '/intelligence/focus-scoring-observations', Component: IntelligenceScoringObservationLearningPage },
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
   { path: '/modules/contentos/handoff', Component: HandoffPage },
