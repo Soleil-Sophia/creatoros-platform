@@ -46,6 +46,14 @@ export {
   saveDecisionDependency,
 } from './dependencies';
 export { deriveDecisionAttentionSignals } from './attention';
+export {
+  acknowledgeDecisionAttentionSignal,
+  clearDecisionAttentionState,
+  getDecisionAttentionState,
+  isDecisionAttentionSignalVisible,
+  listDecisionAttentionStates,
+  snoozeDecisionAttentionSignal,
+} from './attentionState';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -75,3 +83,4 @@ export type { IntelligencePatternLearningValue, ObservationPattern } from './int
 export type { DecisionOperationalMetadata, OperationalUrgency } from './operationalMetadata';
 export type { DecisionDependency } from './dependencies';
 export type { AttentionSeverity, AttentionSignalType, DecisionAttentionSignal } from './attention';
+export type { AttentionDisposition, DecisionAttentionState } from './attentionState';
