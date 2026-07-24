@@ -1,5 +1,6 @@
 import { deriveDecisionAttentionSignals } from './attention';
 import { getDecisionAttentionState, isDecisionAttentionSignalVisible } from './attentionState';
+import { getCanonicalFocusSignalAdjustment } from './focusScoringCanonical';
 import type { DecisionAttentionSignal } from './attention';
 import type { PlatformRecommendation } from './types';
 
@@ -54,7 +55,11 @@ function suggestedAction(signal: DecisionAttentionSignal): string {
   }
 }
 
-function rationaleFor(signal: DecisionAttentionSignal, recommendation: PlatformRecommendation): string[] {
+function rationaleFor(
+  signal: DecisionAttentionSignal,
+  recommendation: PlatformRecommendation,
+  canonicalAdjustment: number,
+): string[] {
   const rationale = [
     `${signal.severity} attention severity`,
     `${recommendation.priority} recommendation priority`,
@@ -66,6 +71,9 @@ function rationaleFor(signal: DecisionAttentionSignal, recommendation: PlatformR
   if (signal.type === 'dependency_blocker') rationale.push('one or more prerequisite decisions remain unresolved');
   if (signal.type === 'awaiting_review') rationale.push('progress requires an explicit human decision');
   if (signal.type === 'dependency_resolved') rationale.push('prerequisites are resolved and work is actionable again');
+  if (canonicalAdjustment !== 0) {
+    rationale.push(`canonical ${canonicalAdjustment > 0 ? '+' : ''}${canonicalAdjustment}-point adjustment for ${signal.type.replaceAll('_', ' ')}`);
+  }
 
   return rationale;
 }
@@ -83,11 +91,12 @@ export function deriveDecisionDailyFocus(
     .map((signal) => {
       const recommendation = recommendationById.get(signal.recommendationId);
       if (!recommendation) return null;
-
+      const canonicalAdjustment = getCanonicalFocusSignalAdjustment(signal.type);
       const score =
         severityScore[signal.severity] +
         signalScore[signal.type] +
-        recommendationPriorityScore[recommendation.priority];
+        recommendationPriorityScore[recommendation.priority] +
+        canonicalAdjustment;
 
       return {
         rank: 0,
@@ -96,7 +105,7 @@ export function deriveDecisionDailyFocus(
         targetOS: recommendation.targetOS,
         signal,
         score,
-        rationale: rationaleFor(signal, recommendation),
+        rationale: rationaleFor(signal, recommendation, canonicalAdjustment),
         suggestedAction: suggestedAction(signal),
         actionHref: signal.actionHref,
       } satisfies DecisionDailyFocusItem;

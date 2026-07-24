@@ -29,6 +29,7 @@ on:
       - feat/intelligenceos-focus-learning
       - feat/decisionos-focus-experiments
       - feat/decisionos-focus-experiment-measurement
+      - feat/intelligenceos-focus-experiment-recommendations
   workflow_dispatch:
 
 permissions:
