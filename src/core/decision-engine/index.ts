@@ -61,6 +61,13 @@ export {
   getDecisionFocusPlan,
   saveDecisionFocusPlan,
 } from './focusPlan';
+export {
+  closeDecisionFocusDay,
+  getDecisionFocusDayClose,
+  getDecisionFocusExecutionItem,
+  listDecisionFocusExecutionItems,
+  updateDecisionFocusExecutionItem,
+} from './focusExecution';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -93,3 +100,4 @@ export type { AttentionSeverity, AttentionSignalType, DecisionAttentionSignal } 
 export type { AttentionDisposition, DecisionAttentionState } from './attentionState';
 export type { DecisionDailyFocusItem } from './dailyFocus';
 export type { DecisionFocusPlan, DecisionFocusPlanItem } from './focusPlan';
+export type { DecisionFocusDayClose, DecisionFocusExecutionItem, FocusExecutionStatus } from './focusExecution';

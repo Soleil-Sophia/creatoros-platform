@@ -23,6 +23,7 @@ on:
       - feat/decisionos-attention-center
       - feat/decisionos-attention-state
       - feat/decisionos-daily-focus
+      - feat/decisionos-human-focus-plan
   workflow_dispatch:
 
 permissions:
