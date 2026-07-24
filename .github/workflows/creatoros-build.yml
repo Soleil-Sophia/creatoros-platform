@@ -31,6 +31,7 @@ on:
       - feat/decisionos-focus-experiment-measurement
       - feat/intelligenceos-focus-experiment-recommendations
       - feat/decisionos-focus-scoring-controlled-apply
+      - feat/decisionos-focus-scoring-post-apply-monitoring
   workflow_dispatch:
 
 permissions:
