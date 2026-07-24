@@ -19,6 +19,7 @@ on:
       - feat/decisionos-operational-metadata
       - feat/decisionos-decision-detail
       - feat/decisionos-dependencies
+      - feat/decisionos-dependency-work-sync
   workflow_dispatch:
 
 permissions:
