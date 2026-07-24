@@ -37,6 +37,7 @@ on:
       - feat/decisionos-scoring-governance-review-cadence
       - feat/decisionos-scoring-review-followup-recommendations
       - feat/decisionos-scoring-followup-resolution-tracking
+      - feat/decisionos-scoring-resolution-evidence-verification
   workflow_dispatch:
 
 permissions:
