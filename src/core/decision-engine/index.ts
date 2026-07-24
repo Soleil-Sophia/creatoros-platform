@@ -35,6 +35,16 @@ export {
   listDecisionOperationalMetadata,
   saveDecisionOperationalMetadata,
 } from './operationalMetadata';
+export {
+  createDecisionDependency,
+  deleteDecisionDependency,
+  getBlockedDependents,
+  getBlockingDependencies,
+  getUnresolvedBlockingDependencies,
+  isDependencyResolved,
+  listDecisionDependencies,
+  saveDecisionDependency,
+} from './dependencies';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -62,3 +72,4 @@ export type { ImplementationRecord, ObservationOutcome, ObservationRecord } from
 export type { IntelligenceLearningValue } from './intelligenceLearning';
 export type { IntelligencePatternLearningValue, ObservationPattern } from './intelligencePatterns';
 export type { DecisionOperationalMetadata, OperationalUrgency } from './operationalMetadata';
+export type { DecisionDependency } from './dependencies';
