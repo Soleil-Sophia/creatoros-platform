@@ -54,6 +54,7 @@ export {
   listDecisionAttentionStates,
   snoozeDecisionAttentionSignal,
 } from './attentionState';
+export { deriveDecisionDailyFocus } from './dailyFocus';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -84,3 +85,4 @@ export type { DecisionOperationalMetadata, OperationalUrgency } from './operatio
 export type { DecisionDependency } from './dependencies';
 export type { AttentionSeverity, AttentionSignalType, DecisionAttentionSignal } from './attention';
 export type { AttentionDisposition, DecisionAttentionState } from './attentionState';
+export type { DecisionDailyFocusItem } from './dailyFocus';
