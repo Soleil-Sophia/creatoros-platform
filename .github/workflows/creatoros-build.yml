@@ -14,6 +14,7 @@ on:
       - feat/decision-history-brandos-revisions
       - feat/decision-implementation-observation
       - feat/intelligenceos-learning-recommendations
+      - feat/intelligenceos-pattern-aggregation
   workflow_dispatch:
 
 permissions:
