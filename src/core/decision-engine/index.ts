@@ -26,6 +26,7 @@ export { createFocusExperimentOutcomeRecommendation, hasOpenFocusExperimentRecom
 export { applyFocusScoringCanonicalRecommendation, getCanonicalFocusScoringConfig, getCanonicalFocusSignalAdjustment, listFocusScoringRevisionRecords, previewFocusScoringCanonicalApply, rollbackFocusScoringRevision } from './focusScoringCanonical';
 export { createFocusScoringMonitoringRecommendation, hasOpenFocusScoringMonitoringRecommendation, listFocusScoringMonitoringMeasurements, listFocusScoringMonitoringObservations, recordFocusScoringMonitoringMeasurement, recordFocusScoringMonitoringObservation, summarizeFocusScoringMonitoring } from './focusScoringMonitoring';
 export { deriveFocusScoringGovernanceLedger } from './focusScoringGovernanceLedger';
+export { completeFocusScoringReview, getFocusScoringReviewCadenceStatus, getOpenFocusScoringReviewCadence, listFocusScoringReviewCadenceRecords, scheduleFocusScoringReview } from './focusScoringReviewCadence';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -50,3 +51,4 @@ export type { FocusExperimentRecommendationValue } from './focusExperimentRecomm
 export type { CanonicalFocusScoringConfig, FocusScoringApplyPreview, FocusScoringRevisionRecord } from './focusScoringCanonical';
 export type { FocusScoringMonitoringMeasurement, FocusScoringMonitoringObservation, FocusScoringMonitoringOutcome, FocusScoringMonitoringPhase, FocusScoringMonitoringRecommendationValue } from './focusScoringMonitoring';
 export type { FocusScoringGovernanceHealth, FocusScoringGovernanceLedgerEntry } from './focusScoringGovernanceLedger';
+export type { FocusScoringReviewCadenceRecord, FocusScoringReviewCadenceStatus } from './focusScoringReviewCadence';
