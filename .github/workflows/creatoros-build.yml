@@ -39,6 +39,7 @@ on:
       - feat/decisionos-scoring-followup-resolution-tracking
       - feat/decisionos-scoring-resolution-evidence-verification
       - feat/decisionos-verified-resolution-implementation
+      - feat/decisionos-implemented-resolution-observation
   workflow_dispatch:
 
 permissions:
