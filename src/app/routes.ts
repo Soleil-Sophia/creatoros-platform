@@ -12,6 +12,7 @@ import { CreatorOSCreatePage } from './pages/creator-os-create';
 import { DecisionHistoryPage } from './pages/decision-history';
 import { DecisionOutcomesPage } from './pages/decision-outcomes';
 import { DecisionOSOverviewPage } from './pages/decisionos-overview';
+import { DecisionOSWorkQueuePage } from './pages/decisionos-work-queue';
 import { DecisionReviewQueuePage } from './pages/decision-review-queue';
 import { IntelligenceLearningPage } from './pages/intelligence-learning';
 import { LaunchOSAppPage } from './pages/launch-os-app';
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
 
   // DecisionOS coordinates the shared Decision Engine surfaces.
   { path: '/decisionos', Component: DecisionOSOverviewPage },
+  { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
   { path: '/decisions/review', Component: DecisionReviewQueuePage },
   { path: '/decisions/apply/brandos', Component: BrandOSCanonicalApplyPage },
   { path: '/decisions/outcomes', Component: DecisionOutcomesPage },
