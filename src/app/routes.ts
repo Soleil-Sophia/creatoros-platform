@@ -22,6 +22,7 @@ import { DecisionOSScoringFollowupResolutionsPage } from './pages/decisionos-sco
 import { DecisionOSVerifiedResolutionImplementationPage } from './pages/decisionos-verified-resolution-implementation';
 import { DecisionOSImplementedResolutionObservationPage } from './pages/decisionos-implemented-resolution-observation';
 import { DecisionOSScoringLearningActionPlansPage } from './pages/decisionos-scoring-learning-action-plans';
+import { DecisionOSLearningActionEvidencePage } from './pages/decisionos-learning-action-evidence';
 import { DecisionOSScoringGovernanceLedgerPage } from './pages/decisionos-scoring-governance-ledger';
 import { DecisionOSScoringGovernanceReviewCadencePage } from './pages/decisionos-scoring-governance-review-cadence';
 import { DecisionOSDecisionDetailPage } from './pages/decisionos-decision-detail';
@@ -61,6 +62,7 @@ export const router = createBrowserRouter([
   { path: '/decisionos/focus/scoring/resolutions/implementation', Component: DecisionOSVerifiedResolutionImplementationPage },
   { path: '/decisionos/focus/scoring/resolutions/observation', Component: DecisionOSImplementedResolutionObservationPage },
   { path: '/decisionos/focus/scoring/learning-actions', Component: DecisionOSScoringLearningActionPlansPage },
+  { path: '/decisionos/focus/scoring/learning-actions/evidence', Component: DecisionOSLearningActionEvidencePage },
   { path: '/decisionos/attention', Component: DecisionOSAttentionCenterPage },
   { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
   { path: '/decisionos/dependencies', Component: DecisionOSDependenciesPage },

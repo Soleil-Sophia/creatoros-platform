@@ -35,6 +35,7 @@ export { previewFocusScoringResolutionObservation, recordFocusScoringResolutionO
 export { createFocusScoringObservationLearningRecommendation, hasOpenFocusScoringObservationLearningRecommendation } from './focusScoringObservationLearning';
 export { closeFocusScoringLearningActionPlan, createFocusScoringLearningActionPlan, getFocusScoringObservationLearningValue, getOpenFocusScoringLearningActionPlan, listFocusScoringLearningActionPlans, startFocusScoringLearningActionPlan } from './focusScoringLearningActionPlan';
 export { deriveFocusScoringLearningActionPlanSignals, getFocusScoringLearningActionTiming } from './focusScoringLearningActionAlerts';
+export { getLatestFocusScoringLearningActionVerification, listFocusScoringLearningActionEvidence, listFocusScoringLearningActionVerifications, previewFocusScoringLearningActionVerification, recordFocusScoringLearningActionEvidence, verifyFocusScoringLearningActionPlan } from './focusScoringLearningActionEvidence';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -68,3 +69,4 @@ export type { FocusScoringResolutionObservationPreview } from './focusScoringRes
 export type { FocusScoringObservationLearningAction, FocusScoringObservationLearningValue } from './focusScoringObservationLearning';
 export type { FocusScoringLearningActionPlanRecord, FocusScoringLearningActionPlanStatus } from './focusScoringLearningActionPlan';
 export type { FocusScoringLearningActionTiming } from './focusScoringLearningActionAlerts';
+export type { FocusScoringLearningActionEvidenceRecord, FocusScoringLearningActionEvidenceType, FocusScoringLearningActionVerificationOutcome, FocusScoringLearningActionVerificationPreview, FocusScoringLearningActionVerificationRecord } from './focusScoringLearningActionEvidence';
