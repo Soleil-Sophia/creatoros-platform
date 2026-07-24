@@ -20,6 +20,14 @@ export { clearDecisionFocusPlan, createFocusPlanItems, getDecisionFocusPlan, lis
 export { closeDecisionFocusDay, getDecisionFocusDayClose, getDecisionFocusExecutionItem, listAllDecisionFocusExecutionItems, listDecisionFocusDayCloses, listDecisionFocusExecutionItems, updateDecisionFocusExecutionItem } from './focusExecution';
 export { deriveDecisionFocusHistory, summarizeDecisionFocusHistory } from './focusHistory';
 export { createFocusLearningRecommendation, deriveFocusLearningPatterns, hasOpenFocusLearningRecommendation } from './focusIntelligence';
+export {
+  activateFocusScoringExperiment,
+  closeFocusScoringExperiment,
+  createFocusScoringExperiment,
+  deriveExperimentalDecisionDailyFocus,
+  getActiveFocusScoringExperiment,
+  listFocusScoringExperiments,
+} from './focusExperiments';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -38,3 +46,4 @@ export type { DecisionFocusPlan, DecisionFocusPlanItem } from './focusPlan';
 export type { DecisionFocusDayClose, DecisionFocusExecutionItem, FocusExecutionStatus } from './focusExecution';
 export type { DecisionFocusHistoryDay, DecisionFocusHistoryItem, DecisionFocusHistorySummary } from './focusHistory';
 export type { FocusLearningPattern, FocusLearningPatternType, FocusLearningRecommendationValue } from './focusIntelligence';
+export type { ExperimentalFocusItem, FocusExperimentStatus, FocusScoringExperiment } from './focusExperiments';
