@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 import {
   getDecisionOperationalMetadata,
+  getUnresolvedBlockingDependencies,
   isOperationallyOverdue,
   listRecommendations,
   saveDecisionOperationalMetadata,
 } from '../../core/decision-engine';
 import type {
+  DecisionDependency,
   DecisionOperationalMetadata,
   OperationalUrgency,
   PlatformRecommendation,
@@ -29,6 +31,12 @@ type DraftState = {
   blockerReason: string;
 };
 
+type QueueRow = {
+  recommendation: PlatformRecommendation;
+  metadata: DecisionOperationalMetadata | null;
+  dependencyBlockers: DecisionDependency[];
+};
+
 function toDraft(metadata: DecisionOperationalMetadata | null): DraftState {
   return {
     owner: metadata?.owner || '',
@@ -47,27 +55,34 @@ function urgencyRank(urgency: OperationalUrgency): number {
 export function DecisionOSWorkQueuePage() {
   const [refreshTick, setRefreshTick] = useState(0);
   const [drafts, setDrafts] = useState<Record<string, DraftState>>({});
-  const [filter, setFilter] = useState<'all' | 'blocked' | 'overdue' | 'unassigned'>('all');
+  const [filter, setFilter] = useState<'all' | 'blocked' | 'dependency' | 'overdue' | 'unassigned'>('all');
 
+  const allRecommendations = useMemo(() => listRecommendations(), [refreshTick]);
   const recommendations = useMemo(
-    () => listRecommendations().filter((item) => !terminalStatuses.has(item.status)),
-    [refreshTick],
+    () => allRecommendations.filter((item) => !terminalStatuses.has(item.status)),
+    [allRecommendations],
+  );
+  const recommendationById = useMemo(
+    () => new Map(allRecommendations.map((item) => [item.id, item])),
+    [allRecommendations],
   );
 
-  const rows = useMemo(() => recommendations.map((recommendation) => ({
+  const rows = useMemo<QueueRow[]>(() => recommendations.map((recommendation) => ({
     recommendation,
     metadata: getDecisionOperationalMetadata(recommendation.id),
+    dependencyBlockers: getUnresolvedBlockingDependencies(recommendation.id, allRecommendations),
   })).sort((a, b) => {
-    const aMetadata = a.metadata;
-    const bMetadata = b.metadata;
-    if (aMetadata?.isBlocked !== bMetadata?.isBlocked) return aMetadata?.isBlocked ? -1 : 1;
-    const urgencyDifference = urgencyRank(bMetadata?.urgency || 'normal') - urgencyRank(aMetadata?.urgency || 'normal');
+    const aBlocked = Boolean(a.metadata?.isBlocked || a.dependencyBlockers.length > 0);
+    const bBlocked = Boolean(b.metadata?.isBlocked || b.dependencyBlockers.length > 0);
+    if (aBlocked !== bBlocked) return aBlocked ? -1 : 1;
+    const urgencyDifference = urgencyRank(b.metadata?.urgency || 'normal') - urgencyRank(a.metadata?.urgency || 'normal');
     if (urgencyDifference !== 0) return urgencyDifference;
     return a.recommendation.updatedAt < b.recommendation.updatedAt ? 1 : -1;
-  }), [recommendations]);
+  }), [recommendations, allRecommendations]);
 
-  const filteredRows = rows.filter(({ metadata }) => {
-    if (filter === 'blocked') return metadata?.isBlocked;
+  const filteredRows = rows.filter(({ metadata, dependencyBlockers }) => {
+    if (filter === 'blocked') return Boolean(metadata?.isBlocked || dependencyBlockers.length > 0);
+    if (filter === 'dependency') return dependencyBlockers.length > 0;
     if (filter === 'overdue') return metadata ? isOperationallyOverdue(metadata) : false;
     if (filter === 'unassigned') return !metadata?.owner;
     return true;
@@ -100,7 +115,8 @@ export function DecisionOSWorkQueuePage() {
 
   const counts = {
     total: rows.length,
-    blocked: rows.filter((item) => item.metadata?.isBlocked).length,
+    blocked: rows.filter((item) => item.metadata?.isBlocked || item.dependencyBlockers.length > 0).length,
+    dependency: rows.filter((item) => item.dependencyBlockers.length > 0).length,
     overdue: rows.filter((item) => item.metadata && isOperationallyOverdue(item.metadata)).length,
     unassigned: rows.filter((item) => !item.metadata?.owner).length,
   };
@@ -112,17 +128,18 @@ export function DecisionOSWorkQueuePage() {
           <div>
             <div style={{ color: '#DABFFF', fontSize: 12, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>DecisionOS · Work Queue</div>
             <h1 style={{ fontSize: 35, margin: '10px 0 8px' }}>Who owns the next step?</h1>
-            <p style={{ color: '#9296A8', margin: 0, maxWidth: 800, lineHeight: 1.65 }}>
-              Assign owners, due dates, urgency, blockers, and the next operational action without changing the underlying recommendation or governance status.
+            <p style={{ color: '#9296A8', margin: 0, maxWidth: 820, lineHeight: 1.65 }}>
+              Manual blockers and unresolved decision dependencies are shown separately. Dependency blockers disappear automatically when all prerequisite recommendations are resolved.
             </p>
           </div>
           <a href="/platform/decisionos" style={{ color: '#DABFFF', fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>← DecisionOS Overview</a>
         </header>
 
-        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(4, minmax(0, 1fr))', gap: 11, marginBottom: 18 }}>
+        <section style={{ display: 'grid', gridTemplateColumns: 'repeat(5, minmax(0, 1fr))', gap: 11, marginBottom: 18 }}>
           {([
             ['all', 'Active work', counts.total],
-            ['blocked', 'Blocked', counts.blocked],
+            ['blocked', 'All blocked', counts.blocked],
+            ['dependency', 'Dependency blocked', counts.dependency],
             ['overdue', 'Overdue', counts.overdue],
             ['unassigned', 'Unassigned', counts.unassigned],
           ] as const).map(([value, label, count]) => (
@@ -140,7 +157,7 @@ export function DecisionOSWorkQueuePage() {
           </section>
         ) : (
           <div style={{ display: 'grid', gap: 14 }}>
-            {filteredRows.map(({ recommendation, metadata }) => {
+            {filteredRows.map(({ recommendation, metadata, dependencyBlockers }) => {
               const draft = drafts[recommendation.id] || toDraft(metadata);
               const overdue = metadata ? isOperationallyOverdue(metadata) : false;
               return (
@@ -148,14 +165,33 @@ export function DecisionOSWorkQueuePage() {
                   <div style={{ display: 'flex', justifyContent: 'space-between', gap: 18, alignItems: 'flex-start' }}>
                     <div>
                       <div style={{ color: '#FFBFDE', fontSize: 10, fontWeight: 800, letterSpacing: '0.08em', textTransform: 'uppercase' }}>{recommendation.targetOS} · {recommendation.status}</div>
-                      <h2 style={{ margin: '7px 0 5px', fontSize: 19 }}>{recommendation.title}</h2>
+                      <h2 style={{ margin: '7px 0 5px', fontSize: 19 }}>
+                        <a href={`/platform/decisionos/decision/${recommendation.id}`} style={{ color: 'inherit', textDecoration: 'none' }}>{recommendation.title}</a>
+                      </h2>
                       <p style={{ color: '#AEB1BE', margin: 0, fontSize: 13, lineHeight: 1.55 }}>{recommendation.summary}</p>
                     </div>
                     <div style={{ textAlign: 'right', fontSize: 11 }}>
-                      {metadata?.isBlocked && <div style={{ color: '#FF8FA3', fontWeight: 800 }}>Blocked</div>}
+                      {dependencyBlockers.length > 0 && <div style={{ color: '#DABFFF', fontWeight: 800 }}>Dependency blocked</div>}
+                      {metadata?.isBlocked && <div style={{ color: '#FF8FA3', fontWeight: 800, marginTop: 4 }}>Manually blocked</div>}
                       {overdue && <div style={{ color: '#FFD37A', fontWeight: 800, marginTop: 4 }}>Overdue</div>}
                     </div>
                   </div>
+
+                  {dependencyBlockers.length > 0 && (
+                    <div style={{ marginTop: 14, borderRadius: 12, border: '1px solid rgba(218,191,255,0.18)', background: 'rgba(218,191,255,0.04)', padding: 12 }}>
+                      <div style={{ color: '#DABFFF', fontSize: 10, fontWeight: 800, letterSpacing: '0.07em', textTransform: 'uppercase' }}>Waiting on prerequisites</div>
+                      <div style={{ display: 'grid', gap: 7, marginTop: 8 }}>
+                        {dependencyBlockers.map((dependency) => {
+                          const blocker = recommendationById.get(dependency.blockerRecommendationId);
+                          return (
+                            <a key={dependency.id} href={`/platform/decisionos/decision/${dependency.blockerRecommendationId}`} style={{ color: '#D7D9E2', fontSize: 12, textDecoration: 'none' }}>
+                              {blocker?.title || 'Missing prerequisite'} · {blocker?.status || 'unknown'}{dependency.reason ? ` — ${dependency.reason}` : ''}
+                            </a>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
 
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 170px 150px', gap: 10, marginTop: 16 }}>
                     <input value={draft.owner} onChange={(event) => updateDraft(recommendation, { owner: event.target.value })} placeholder="Owner" style={{ borderRadius: 10, border: '1px solid rgba(255,255,255,0.09)', background: 'rgba(0,0,0,0.16)', color: '#F4F3F8', padding: 11 }} />
@@ -172,11 +208,11 @@ export function DecisionOSWorkQueuePage() {
 
                   <label style={{ display: 'flex', alignItems: 'center', gap: 8, color: '#B9BBC7', fontSize: 12, marginTop: 10 }}>
                     <input type="checkbox" checked={draft.isBlocked} onChange={(event) => updateDraft(recommendation, { isBlocked: event.target.checked })} />
-                    This work item is blocked
+                    Add a separate manual blocker
                   </label>
 
                   {draft.isBlocked && (
-                    <textarea value={draft.blockerReason} onChange={(event) => updateDraft(recommendation, { blockerReason: event.target.value })} placeholder="What is blocking progress?" style={{ width: '100%', minHeight: 58, marginTop: 9, borderRadius: 10, border: '1px solid rgba(255,143,163,0.18)', background: 'rgba(255,143,163,0.035)', color: '#F4F3F8', padding: 11, resize: 'vertical' }} />
+                    <textarea value={draft.blockerReason} onChange={(event) => updateDraft(recommendation, { blockerReason: event.target.value })} placeholder="What is manually blocking progress?" style={{ width: '100%', minHeight: 58, marginTop: 9, borderRadius: 10, border: '1px solid rgba(255,143,163,0.18)', background: 'rgba(255,143,163,0.035)', color: '#F4F3F8', padding: 11, resize: 'vertical' }} />
                   )}
 
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, marginTop: 12 }}>
