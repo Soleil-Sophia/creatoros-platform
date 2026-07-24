@@ -17,6 +17,7 @@ import { DecisionOSFocusExperimentMeasurementPage } from './pages/decisionos-foc
 import { DecisionOSFocusExperimentsPage } from './pages/decisionos-focus-experiments';
 import { DecisionOSFocusHistoryPage } from './pages/decisionos-focus-history';
 import { DecisionOSFocusScoringApplyPage } from './pages/decisionos-focus-scoring-apply';
+import { DecisionOSFocusScoringMonitoringPage } from './pages/decisionos-focus-scoring-monitoring';
 import { DecisionOSDecisionDetailPage } from './pages/decisionos-decision-detail';
 import { DecisionOSDependenciesPage } from './pages/decisionos-dependencies';
 import { DecisionOSOverviewPage } from './pages/decisionos-overview';
@@ -46,6 +47,7 @@ export const router = createBrowserRouter([
   { path: '/decisionos/focus/experiments', Component: DecisionOSFocusExperimentsPage },
   { path: '/decisionos/focus/experiments/measure', Component: DecisionOSFocusExperimentMeasurementPage },
   { path: '/decisionos/focus/scoring/apply', Component: DecisionOSFocusScoringApplyPage },
+  { path: '/decisionos/focus/scoring/monitor', Component: DecisionOSFocusScoringMonitoringPage },
   { path: '/decisionos/attention', Component: DecisionOSAttentionCenterPage },
   { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
   { path: '/decisionos/dependencies', Component: DecisionOSDependenciesPage },
