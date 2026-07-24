@@ -17,6 +17,7 @@ on:
       - feat/intelligenceos-pattern-aggregation
       - feat/decisionos-functional-overview
       - feat/decisionos-operational-metadata
+      - feat/decisionos-decision-detail
   workflow_dispatch:
 
 permissions:
