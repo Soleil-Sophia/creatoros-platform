@@ -34,6 +34,7 @@ on:
       - feat/decisionos-focus-scoring-post-apply-monitoring
       - feat/decisionos-scoring-governance-ledger
       - feat/decisionos-scoring-governance-alerts
+      - feat/decisionos-scoring-governance-review-cadence
   workflow_dispatch:
 
 permissions:
