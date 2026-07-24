@@ -32,6 +32,7 @@ on:
       - feat/intelligenceos-focus-experiment-recommendations
       - feat/decisionos-focus-scoring-controlled-apply
       - feat/decisionos-focus-scoring-post-apply-monitoring
+      - feat/decisionos-scoring-governance-ledger
   workflow_dispatch:
 
 permissions:
