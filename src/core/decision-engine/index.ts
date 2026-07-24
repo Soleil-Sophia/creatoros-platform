@@ -33,6 +33,7 @@ export { getLatestFocusScoringResolutionVerification, listFocusScoringResolution
 export { canonicalizeVerifiedFocusScoringResolution, previewFocusScoringResolutionImplementation, recordVerifiedFocusScoringResolutionImplementation } from './focusScoringResolutionImplementation';
 export { previewFocusScoringResolutionObservation, recordFocusScoringResolutionObservation } from './focusScoringResolutionObservation';
 export { createFocusScoringObservationLearningRecommendation, hasOpenFocusScoringObservationLearningRecommendation } from './focusScoringObservationLearning';
+export { closeFocusScoringLearningActionPlan, createFocusScoringLearningActionPlan, getFocusScoringObservationLearningValue, getOpenFocusScoringLearningActionPlan, listFocusScoringLearningActionPlans, startFocusScoringLearningActionPlan } from './focusScoringLearningActionPlan';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -64,3 +65,4 @@ export type { FocusScoringResolutionEvidenceRecord, FocusScoringResolutionEviden
 export type { FocusScoringResolutionImplementationPreview } from './focusScoringResolutionImplementation';
 export type { FocusScoringResolutionObservationPreview } from './focusScoringResolutionObservation';
 export type { FocusScoringObservationLearningAction, FocusScoringObservationLearningValue } from './focusScoringObservationLearning';
+export type { FocusScoringLearningActionPlanRecord, FocusScoringLearningActionPlanStatus } from './focusScoringLearningActionPlan';
