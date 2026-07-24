@@ -42,6 +42,7 @@ on:
       - feat/decisionos-implemented-resolution-observation
       - feat/intelligenceos-scoring-observation-learning
       - feat/decisionos-scoring-learning-action-plans
+      - feat/decisionos-scoring-learning-action-alerts
   workflow_dispatch:
 
 permissions:
