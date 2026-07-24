@@ -25,6 +25,7 @@ on:
       - feat/decisionos-daily-focus
       - feat/decisionos-human-focus-plan
       - feat/decisionos-focus-execution
+      - feat/decisionos-focus-history
   workflow_dispatch:
 
 permissions:

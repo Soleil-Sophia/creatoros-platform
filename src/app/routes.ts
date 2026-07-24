@@ -20,6 +20,7 @@ import { DecisionOSOverviewPage } from './pages/decisionos-overview';
 import { DecisionOSRecordsPage } from './pages/decisionos-records';
 import { DecisionOSWorkQueuePage } from './pages/decisionos-work-queue';
 import { DecisionReviewQueuePage } from './pages/decision-review-queue';
+import { IntelligenceFocusLearningPage } from './pages/intelligence-focus-learning';
 import { IntelligenceLearningPage } from './pages/intelligence-learning';
 import { LaunchOSAppPage } from './pages/launch-os-app';
 import { ContentOSPage } from '../modules/contentos/ContentOSPage';
@@ -48,6 +49,7 @@ export const router = createBrowserRouter([
   { path: '/decisions/outcomes', Component: DecisionOutcomesPage },
   { path: '/decisions/history', Component: DecisionHistoryPage },
   { path: '/intelligence/learning', Component: IntelligenceLearningPage },
+  { path: '/intelligence/focus-learning', Component: IntelligenceFocusLearningPage },
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
   { path: '/modules/contentos/handoff', Component: HandoffPage },
