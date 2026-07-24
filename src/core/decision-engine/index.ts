@@ -28,6 +28,13 @@ export {
   getActiveFocusScoringExperiment,
   listFocusScoringExperiments,
 } from './focusExperiments';
+export {
+  listFocusExperimentMeasurements,
+  listFocusExperimentObservations,
+  recordFocusExperimentMeasurement,
+  recordFocusExperimentObservation,
+  summarizeFocusExperimentMeasurements,
+} from './focusExperimentMeasurement';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -47,3 +54,4 @@ export type { DecisionFocusDayClose, DecisionFocusExecutionItem, FocusExecutionS
 export type { DecisionFocusHistoryDay, DecisionFocusHistoryItem, DecisionFocusHistorySummary } from './focusHistory';
 export type { FocusLearningPattern, FocusLearningPatternType, FocusLearningRecommendationValue } from './focusIntelligence';
 export type { ExperimentalFocusItem, FocusExperimentStatus, FocusScoringExperiment } from './focusExperiments';
+export type { FocusExperimentMeasurement, FocusExperimentMeasurementPhase, FocusExperimentObservation, FocusExperimentObservationOutcome } from './focusExperimentMeasurement';
