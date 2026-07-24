@@ -13,6 +13,7 @@ import { DecisionHistoryPage } from './pages/decision-history';
 import { DecisionOutcomesPage } from './pages/decision-outcomes';
 import { DecisionOSAttentionCenterPage } from './pages/decisionos-attention-center';
 import { DecisionOSDailyFocusPage } from './pages/decisionos-daily-focus';
+import { DecisionOSFocusExperimentsPage } from './pages/decisionos-focus-experiments';
 import { DecisionOSFocusHistoryPage } from './pages/decisionos-focus-history';
 import { DecisionOSDecisionDetailPage } from './pages/decisionos-decision-detail';
 import { DecisionOSDependenciesPage } from './pages/decisionos-dependencies';
@@ -39,6 +40,7 @@ export const router = createBrowserRouter([
   { path: '/decisionos', Component: DecisionOSOverviewPage },
   { path: '/decisionos/focus', Component: DecisionOSDailyFocusPage },
   { path: '/decisionos/focus/history', Component: DecisionOSFocusHistoryPage },
+  { path: '/decisionos/focus/experiments', Component: DecisionOSFocusExperimentsPage },
   { path: '/decisionos/attention', Component: DecisionOSAttentionCenterPage },
   { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
   { path: '/decisionos/dependencies', Component: DecisionOSDependenciesPage },
