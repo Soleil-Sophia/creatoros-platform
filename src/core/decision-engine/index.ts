@@ -27,6 +27,7 @@ export { applyFocusScoringCanonicalRecommendation, getCanonicalFocusScoringConfi
 export { createFocusScoringMonitoringRecommendation, hasOpenFocusScoringMonitoringRecommendation, listFocusScoringMonitoringMeasurements, listFocusScoringMonitoringObservations, recordFocusScoringMonitoringMeasurement, recordFocusScoringMonitoringObservation, summarizeFocusScoringMonitoring } from './focusScoringMonitoring';
 export { deriveFocusScoringGovernanceLedger } from './focusScoringGovernanceLedger';
 export { completeFocusScoringReview, getFocusScoringReviewCadenceStatus, getOpenFocusScoringReviewCadence, listFocusScoringReviewCadenceRecords, scheduleFocusScoringReview } from './focusScoringReviewCadence';
+export { createFocusScoringReviewFollowupRecommendation, hasOpenFocusScoringReviewFollowup } from './focusScoringReviewFollowup';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -52,3 +53,4 @@ export type { CanonicalFocusScoringConfig, FocusScoringApplyPreview, FocusScorin
 export type { FocusScoringMonitoringMeasurement, FocusScoringMonitoringObservation, FocusScoringMonitoringOutcome, FocusScoringMonitoringPhase, FocusScoringMonitoringRecommendationValue } from './focusScoringMonitoring';
 export type { FocusScoringGovernanceHealth, FocusScoringGovernanceLedgerEntry } from './focusScoringGovernanceLedger';
 export type { FocusScoringReviewCadenceRecord, FocusScoringReviewCadenceStatus } from './focusScoringReviewCadence';
+export type { FocusScoringReviewFollowupOutcome, FocusScoringReviewFollowupValue } from './focusScoringReviewFollowup';
