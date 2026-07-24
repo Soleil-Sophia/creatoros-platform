@@ -18,6 +18,7 @@ on:
       - feat/decisionos-functional-overview
       - feat/decisionos-operational-metadata
       - feat/decisionos-decision-detail
+      - feat/decisionos-dependencies
   workflow_dispatch:
 
 permissions:
