@@ -22,6 +22,7 @@ import { DecisionOSOverviewPage } from './pages/decisionos-overview';
 import { DecisionOSRecordsPage } from './pages/decisionos-records';
 import { DecisionOSWorkQueuePage } from './pages/decisionos-work-queue';
 import { DecisionReviewQueuePage } from './pages/decision-review-queue';
+import { IntelligenceFocusExperimentOutcomesPage } from './pages/intelligence-focus-experiment-outcomes';
 import { IntelligenceFocusLearningPage } from './pages/intelligence-focus-learning';
 import { IntelligenceLearningPage } from './pages/intelligence-learning';
 import { LaunchOSAppPage } from './pages/launch-os-app';
@@ -54,6 +55,7 @@ export const router = createBrowserRouter([
   { path: '/decisions/history', Component: DecisionHistoryPage },
   { path: '/intelligence/learning', Component: IntelligenceLearningPage },
   { path: '/intelligence/focus-learning', Component: IntelligenceFocusLearningPage },
+  { path: '/intelligence/focus-experiment-outcomes', Component: IntelligenceFocusExperimentOutcomesPage },
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
   { path: '/modules/contentos/handoff', Component: HandoffPage },
