@@ -26,6 +26,7 @@ on:
       - feat/decisionos-human-focus-plan
       - feat/decisionos-focus-execution
       - feat/decisionos-focus-history
+      - feat/intelligenceos-focus-learning
   workflow_dispatch:
 
 permissions:
