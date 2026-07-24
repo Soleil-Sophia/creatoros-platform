@@ -21,6 +21,7 @@ on:
       - feat/decisionos-dependencies
       - feat/decisionos-dependency-work-sync
       - feat/decisionos-attention-center
+      - feat/decisionos-attention-state
   workflow_dispatch:
 
 permissions:
