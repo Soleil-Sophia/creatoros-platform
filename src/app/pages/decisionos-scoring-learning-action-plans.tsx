@@ -95,7 +95,10 @@ export function DecisionOSScoringLearningActionPlansPage() {
             <h1 style={{ fontSize: 36, margin: '10px 0 8px' }}>Turn approved learning into a responsible next action</h1>
             <p style={{ color: '#9296A8', margin: 0, maxWidth: 900, lineHeight: 1.65 }}>Approval permits planning. Starting the plan records execution intent. The actual measurement, monitoring, review or rollback work remains inside its existing governed workspace.</p>
           </div>
-          <a href="/platform/intelligence/focus-scoring-observations" style={{ color: '#DABFFF', fontSize: 12, textDecoration: 'none' }}>← IntelligenceOS learning</a>
+          <div style={{ display: 'grid', gap: 8, textAlign: 'right' }}>
+            <a href="/platform/decisionos/focus/scoring/learning-actions/evidence" style={{ color: '#E5D2FF', fontSize: 12, textDecoration: 'none' }}>Evidence & verification →</a>
+            <a href="/platform/intelligence/focus-scoring-observations" style={{ color: '#DABFFF', fontSize: 12, textDecoration: 'none' }}>← IntelligenceOS learning</a>
+          </div>
         </header>
 
         <section style={{ ...panelStyle, padding: 20, marginBottom: 18 }}>
