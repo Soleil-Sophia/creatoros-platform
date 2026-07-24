@@ -1,5 +1,6 @@
 import { getUnresolvedBlockingDependencies, listDecisionDependencies } from './dependencies';
 import { deriveFocusScoringGovernanceLedger } from './focusScoringGovernanceLedger';
+import { deriveFocusScoringLearningActionPlanSignals } from './focusScoringLearningActionAlerts';
 import { deriveFocusScoringReviewCadenceSignals } from './focusScoringReviewAlerts';
 import { getDecisionOperationalMetadata, isOperationallyOverdue } from './operationalMetadata';
 import type { PlatformRecommendation } from './types';
@@ -13,7 +14,9 @@ export type AttentionSignalType =
   | 'awaiting_review'
   | 'governance_monitoring'
   | 'governance_inconclusive'
-  | 'governance_rollback_review';
+  | 'governance_rollback_review'
+  | 'learning_action_due_soon'
+  | 'learning_action_overdue';
 
 export type AttentionSeverity = 'info' | 'warning' | 'critical';
 
@@ -58,6 +61,7 @@ export function deriveDecisionAttentionSignals(recommendations: PlatformRecommen
     if (entry.health === 'rollback_review_recommended') signals.push(signal(recommendation, 'governance_rollback_review', 'critical', 'Controlled rollback review required', `Monitoring recommends reviewing a rollback of revision ${entry.revision.revision} from ${entry.revision.appliedAdjustment} to ${entry.revision.previousAdjustment} points. No rollback has been applied automatically.`, 'Review rollback path', '/platform/decisionos/focus/scoring/apply', entry.monitoringObservation?.observedAt || entry.revision.createdAt));
   }
   signals.push(...deriveFocusScoringReviewCadenceSignals(recommendations));
+  signals.push(...deriveFocusScoringLearningActionPlanSignals(recommendations));
   const severityRank: Record<AttentionSeverity, number> = { critical: 3, warning: 2, info: 1 };
   return signals.sort((a, b) => severityRank[b.severity] - severityRank[a.severity]);
 }

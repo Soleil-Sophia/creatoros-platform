@@ -18,11 +18,13 @@ export interface DecisionDailyFocusItem {
 
 const severityScore = { critical: 100, warning: 60, info: 30 } as const;
 const signalScore = {
+  learning_action_overdue: 32,
   overdue: 30,
   governance_rollback_review: 28,
   critical: 25,
   manual_blocker: 22,
   dependency_blocker: 20,
+  learning_action_due_soon: 19,
   governance_monitoring: 18,
   governance_inconclusive: 17,
   awaiting_review: 15,
@@ -41,6 +43,8 @@ function suggestedAction(signal: DecisionAttentionSignal): string {
     case 'governance_monitoring': return 'Complete the required scoring governance monitoring or scheduled review checkpoint.';
     case 'governance_inconclusive': return 'Review the evidence limitations and define the next monitoring window.';
     case 'governance_rollback_review': return 'Review the controlled rollback path or overdue governance checkpoint and record a human decision.';
+    case 'learning_action_due_soon': return 'Confirm the action-plan owner and begin or complete the planned governed step before the target date.';
+    case 'learning_action_overdue': return 'Open the learning action plan, re-plan it explicitly or complete the overdue governed step.';
   }
 }
 
@@ -55,6 +59,8 @@ function rationaleFor(signal: DecisionAttentionSignal, recommendation: PlatformR
   if (signal.type === 'governance_monitoring') rationale.push('scoring governance monitoring or a scheduled review checkpoint requires attention');
   if (signal.type === 'governance_inconclusive') rationale.push('post-apply evidence is not sufficient for a maintain or rollback decision');
   if (signal.type === 'governance_rollback_review') rationale.push('rollback review or an overdue governance checkpoint requires explicit human attention');
+  if (signal.type === 'learning_action_due_soon') rationale.push('an approved learning action has a target date within three days');
+  if (signal.type === 'learning_action_overdue') rationale.push('an approved learning action remains open after its target date');
   if (canonicalAdjustment !== 0) rationale.push(`canonical ${canonicalAdjustment > 0 ? '+' : ''}${canonicalAdjustment}-point adjustment for ${signal.type.replaceAll('_', ' ')}`);
   return rationale;
 }
