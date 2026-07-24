@@ -18,6 +18,7 @@ import { DecisionOSFocusExperimentsPage } from './pages/decisionos-focus-experim
 import { DecisionOSFocusHistoryPage } from './pages/decisionos-focus-history';
 import { DecisionOSFocusScoringApplyPage } from './pages/decisionos-focus-scoring-apply';
 import { DecisionOSFocusScoringMonitoringPage } from './pages/decisionos-focus-scoring-monitoring';
+import { DecisionOSScoringFollowupResolutionsPage } from './pages/decisionos-scoring-followup-resolutions';
 import { DecisionOSScoringGovernanceLedgerPage } from './pages/decisionos-scoring-governance-ledger';
 import { DecisionOSScoringGovernanceReviewCadencePage } from './pages/decisionos-scoring-governance-review-cadence';
 import { DecisionOSDecisionDetailPage } from './pages/decisionos-decision-detail';
@@ -52,6 +53,7 @@ export const router = createBrowserRouter([
   { path: '/decisionos/focus/scoring/monitor', Component: DecisionOSFocusScoringMonitoringPage },
   { path: '/decisionos/focus/scoring/ledger', Component: DecisionOSScoringGovernanceLedgerPage },
   { path: '/decisionos/focus/scoring/reviews', Component: DecisionOSScoringGovernanceReviewCadencePage },
+  { path: '/decisionos/focus/scoring/resolutions', Component: DecisionOSScoringFollowupResolutionsPage },
   { path: '/decisionos/attention', Component: DecisionOSAttentionCenterPage },
   { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
   { path: '/decisionos/dependencies', Component: DecisionOSDependenciesPage },
