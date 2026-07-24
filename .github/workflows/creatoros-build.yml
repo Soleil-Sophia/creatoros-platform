@@ -22,6 +22,7 @@ on:
       - feat/decisionos-dependency-work-sync
       - feat/decisionos-attention-center
       - feat/decisionos-attention-state
+      - feat/decisionos-daily-focus
   workflow_dispatch:
 
 permissions:
