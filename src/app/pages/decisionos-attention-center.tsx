@@ -30,6 +30,9 @@ const typeLabel: Record<AttentionSignalType, string> = {
   dependency_blocker: 'Dependency blocker',
   dependency_resolved: 'Dependency resolved',
   awaiting_review: 'Awaiting review',
+  governance_monitoring: 'Governance monitoring',
+  governance_inconclusive: 'Inconclusive governance evidence',
+  governance_rollback_review: 'Rollback review',
 };
 
 function snoozeUntil(hours: number): string {
@@ -86,7 +89,7 @@ export function DecisionOSAttentionCenterPage() {
             <div style={{ color: '#DABFFF', fontSize: 12, fontWeight: 800, letterSpacing: '0.1em', textTransform: 'uppercase' }}>DecisionOS · Attention Center</div>
             <h1 style={{ fontSize: 35, margin: '10px 0 8px' }}>What needs attention now?</h1>
             <p style={{ color: '#9296A8', margin: 0, maxWidth: 800, lineHeight: 1.65 }}>
-              Derived signals from recommendations, deadlines, blockers, dependencies, and review state. Acknowledging or snoozing changes only this attention view — never the underlying governance record.
+              Derived signals from recommendations, deadlines, blockers, dependencies, review state, and scoring governance. Acknowledging or snoozing changes only this attention view — never the underlying governance record.
             </p>
           </div>
           <a href="/platform/decisionos" style={{ color: '#DABFFF', fontSize: 12, textDecoration: 'none', whiteSpace: 'nowrap' }}>← DecisionOS Overview</a>
@@ -166,7 +169,7 @@ export function DecisionOSAttentionCenterPage() {
         )}
 
         <div style={{ ...panelStyle, marginTop: 18, padding: 16, color: '#777B8D', fontSize: 11, lineHeight: 1.6 }}>
-          Acknowledge and Snooze are personal attention controls, not resolution actions. A signal is truly resolved only when its underlying deadline, blocker, dependency, urgency, or review condition changes.
+          Acknowledge and Snooze are personal attention controls, not resolution actions. A signal is truly resolved only when its underlying deadline, blocker, dependency, review condition, or scoring-governance state changes.
         </div>
       </div>
     </main>
