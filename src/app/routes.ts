@@ -13,6 +13,7 @@ import { DecisionHistoryPage } from './pages/decision-history';
 import { DecisionOutcomesPage } from './pages/decision-outcomes';
 import { DecisionOSDecisionDetailPage } from './pages/decisionos-decision-detail';
 import { DecisionOSOverviewPage } from './pages/decisionos-overview';
+import { DecisionOSRecordsPage } from './pages/decisionos-records';
 import { DecisionOSWorkQueuePage } from './pages/decisionos-work-queue';
 import { DecisionReviewQueuePage } from './pages/decision-review-queue';
 import { IntelligenceLearningPage } from './pages/intelligence-learning';
@@ -34,6 +35,7 @@ export const router = createBrowserRouter([
   // DecisionOS coordinates the shared Decision Engine surfaces.
   { path: '/decisionos', Component: DecisionOSOverviewPage },
   { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
+  { path: '/decisionos/records', Component: DecisionOSRecordsPage },
   { path: '/decisionos/decision/:recommendationId', Component: DecisionOSDecisionDetailPage },
   { path: '/decisions/review', Component: DecisionReviewQueuePage },
   { path: '/decisions/apply/brandos', Component: BrandOSCanonicalApplyPage },
