@@ -20,22 +20,10 @@ export { clearDecisionFocusPlan, createFocusPlanItems, getDecisionFocusPlan, lis
 export { closeDecisionFocusDay, getDecisionFocusDayClose, getDecisionFocusExecutionItem, listAllDecisionFocusExecutionItems, listDecisionFocusDayCloses, listDecisionFocusExecutionItems, updateDecisionFocusExecutionItem } from './focusExecution';
 export { deriveDecisionFocusHistory, summarizeDecisionFocusHistory } from './focusHistory';
 export { createFocusLearningRecommendation, deriveFocusLearningPatterns, hasOpenFocusLearningRecommendation } from './focusIntelligence';
-export {
-  activateFocusScoringExperiment,
-  closeFocusScoringExperiment,
-  createFocusScoringExperiment,
-  deriveExperimentalDecisionDailyFocus,
-  getActiveFocusScoringExperiment,
-  listFocusScoringExperiments,
-} from './focusExperiments';
-export {
-  listFocusExperimentMeasurements,
-  listFocusExperimentObservations,
-  recordFocusExperimentMeasurement,
-  recordFocusExperimentObservation,
-  summarizeFocusExperimentMeasurements,
-} from './focusExperimentMeasurement';
+export { activateFocusScoringExperiment, closeFocusScoringExperiment, createFocusScoringExperiment, deriveExperimentalDecisionDailyFocus, getActiveFocusScoringExperiment, listFocusScoringExperiments } from './focusExperiments';
+export { listFocusExperimentMeasurements, listFocusExperimentObservations, recordFocusExperimentMeasurement, recordFocusExperimentObservation, summarizeFocusExperimentMeasurements } from './focusExperimentMeasurement';
 export { createFocusExperimentOutcomeRecommendation, hasOpenFocusExperimentRecommendation } from './focusExperimentRecommendations';
+export { applyFocusScoringCanonicalRecommendation, getCanonicalFocusScoringConfig, getCanonicalFocusSignalAdjustment, listFocusScoringRevisionRecords, previewFocusScoringCanonicalApply, rollbackFocusScoringRevision } from './focusScoringCanonical';
 export { createBrandToneRecommendation } from './factories';
 export { getRecommendation, listDecisionRecords, listRecommendations, saveDecisionRecord, saveRecommendation } from './storage';
 export type { DecisionAction, DecisionConfidence, DecisionEvidence, DecisionHistoryEntry, DecisionOrigin, DecisionRecord, DecisionTargetOS, PlatformRecommendation, RecommendationChange, RecommendationStatus } from './types';
@@ -57,3 +45,4 @@ export type { FocusLearningPattern, FocusLearningPatternType, FocusLearningRecom
 export type { ExperimentalFocusItem, FocusExperimentStatus, FocusScoringExperiment } from './focusExperiments';
 export type { FocusExperimentMeasurement, FocusExperimentMeasurementPhase, FocusExperimentObservation, FocusExperimentObservationOutcome } from './focusExperimentMeasurement';
 export type { FocusExperimentRecommendationValue } from './focusExperimentRecommendations';
+export type { CanonicalFocusScoringConfig, FocusScoringApplyPreview, FocusScoringRevisionRecord } from './focusScoringCanonical';
