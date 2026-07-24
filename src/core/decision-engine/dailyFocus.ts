@@ -24,9 +24,12 @@ const severityScore = {
 
 const signalScore = {
   overdue: 30,
+  governance_rollback_review: 28,
   critical: 25,
   manual_blocker: 22,
   dependency_blocker: 20,
+  governance_monitoring: 18,
+  governance_inconclusive: 17,
   awaiting_review: 15,
   dependency_resolved: 10,
 } as const;
@@ -52,6 +55,12 @@ function suggestedAction(signal: DecisionAttentionSignal): string {
       return 'Review the recommendation and record a human decision.';
     case 'dependency_resolved':
       return 'Resume the newly unblocked work item.';
+    case 'governance_monitoring':
+      return 'Record before-and-after evidence for the active canonical scoring revision.';
+    case 'governance_inconclusive':
+      return 'Review the evidence limitations and define the next monitoring window.';
+    case 'governance_rollback_review':
+      return 'Review the controlled rollback recommendation and record a human decision.';
   }
 }
 
@@ -71,6 +80,9 @@ function rationaleFor(
   if (signal.type === 'dependency_blocker') rationale.push('one or more prerequisite decisions remain unresolved');
   if (signal.type === 'awaiting_review') rationale.push('progress requires an explicit human decision');
   if (signal.type === 'dependency_resolved') rationale.push('prerequisites are resolved and work is actionable again');
+  if (signal.type === 'governance_monitoring') rationale.push('an active canonical scoring revision has no post-apply observation');
+  if (signal.type === 'governance_inconclusive') rationale.push('post-apply evidence is not sufficient for a maintain or rollback decision');
+  if (signal.type === 'governance_rollback_review') rationale.push('post-apply monitoring recommends explicit rollback review');
   if (canonicalAdjustment !== 0) {
     rationale.push(`canonical ${canonicalAdjustment > 0 ? '+' : ''}${canonicalAdjustment}-point adjustment for ${signal.type.replaceAll('_', ' ')}`);
   }
