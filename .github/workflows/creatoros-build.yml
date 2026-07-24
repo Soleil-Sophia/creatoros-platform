@@ -33,6 +33,7 @@ on:
       - feat/decisionos-focus-scoring-controlled-apply
       - feat/decisionos-focus-scoring-post-apply-monitoring
       - feat/decisionos-scoring-governance-ledger
+      - feat/decisionos-scoring-governance-alerts
   workflow_dispatch:
 
 permissions:
