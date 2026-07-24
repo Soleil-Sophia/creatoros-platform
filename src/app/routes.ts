@@ -13,6 +13,7 @@ import { DecisionHistoryPage } from './pages/decision-history';
 import { DecisionOutcomesPage } from './pages/decision-outcomes';
 import { DecisionOSAttentionCenterPage } from './pages/decisionos-attention-center';
 import { DecisionOSDailyFocusPage } from './pages/decisionos-daily-focus';
+import { DecisionOSFocusHistoryPage } from './pages/decisionos-focus-history';
 import { DecisionOSDecisionDetailPage } from './pages/decisionos-decision-detail';
 import { DecisionOSDependenciesPage } from './pages/decisionos-dependencies';
 import { DecisionOSOverviewPage } from './pages/decisionos-overview';
@@ -34,10 +35,9 @@ export const router = createBrowserRouter([
   { path: '/modules', Component: ModulesPage },
   { path: '/creatoros/create', Component: CreatorOSCreatePage },
   { path: '/app/creatoros/create', Component: CreatorOSCreatePage },
-
-  // DecisionOS coordinates the shared Decision Engine surfaces.
   { path: '/decisionos', Component: DecisionOSOverviewPage },
   { path: '/decisionos/focus', Component: DecisionOSDailyFocusPage },
+  { path: '/decisionos/focus/history', Component: DecisionOSFocusHistoryPage },
   { path: '/decisionos/attention', Component: DecisionOSAttentionCenterPage },
   { path: '/decisionos/work', Component: DecisionOSWorkQueuePage },
   { path: '/decisionos/dependencies', Component: DecisionOSDependenciesPage },
@@ -48,7 +48,6 @@ export const router = createBrowserRouter([
   { path: '/decisions/outcomes', Component: DecisionOutcomesPage },
   { path: '/decisions/history', Component: DecisionHistoryPage },
   { path: '/intelligence/learning', Component: IntelligenceLearningPage },
-
   { path: '/modules/contentos', Component: ContentOSPage },
   { path: '/modules/contentos/app', Component: ContentOSApp },
   { path: '/modules/contentos/handoff', Component: HandoffPage },
@@ -65,6 +64,4 @@ export const router = createBrowserRouter([
   { path: '/test', Component: UserTest },
   { path: '/app/labs/authority-engine', Component: AuthorityEngineScreen },
   { path: '*', Component: NotFoundPage },
-], {
-  basename: '/platform',
-});
+], { basename: '/platform' });

@@ -54,6 +54,14 @@ function writeStore(store: FocusExecutionStore): void {
   window.localStorage.setItem(FOCUS_EXECUTION_KEY, JSON.stringify(store));
 }
 
+export function listAllDecisionFocusExecutionItems(): DecisionFocusExecutionItem[] {
+  return readStore().items.sort((a, b) => (a.date < b.date ? 1 : a.updatedAt < b.updatedAt ? 1 : -1));
+}
+
+export function listDecisionFocusDayCloses(): DecisionFocusDayClose[] {
+  return readStore().dayCloses.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 export function listDecisionFocusExecutionItems(date = new Date()): DecisionFocusExecutionItem[] {
   const key = localDateKey(date);
   return readStore().items.filter((item) => item.date === key);
