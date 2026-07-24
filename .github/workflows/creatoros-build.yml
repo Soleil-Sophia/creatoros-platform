@@ -43,6 +43,7 @@ on:
       - feat/intelligenceos-scoring-observation-learning
       - feat/decisionos-scoring-learning-action-plans
       - feat/decisionos-scoring-learning-action-alerts
+      - feat/decisionos-learning-action-evidence-verification
   workflow_dispatch:
 
 permissions:
