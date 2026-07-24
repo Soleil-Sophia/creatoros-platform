@@ -29,6 +29,12 @@ export {
   createPatternLearningRecommendation,
   hasOpenLearningRecommendation,
 } from './intelligencePatterns';
+export {
+  getDecisionOperationalMetadata,
+  isOperationallyOverdue,
+  listDecisionOperationalMetadata,
+  saveDecisionOperationalMetadata,
+} from './operationalMetadata';
 export { createBrandToneRecommendation } from './factories';
 export {
   getRecommendation,
@@ -55,3 +61,4 @@ export type { BrandOSRevisionRecord } from './brandosRevisionHistory';
 export type { ImplementationRecord, ObservationOutcome, ObservationRecord } from './outcomes';
 export type { IntelligenceLearningValue } from './intelligenceLearning';
 export type { IntelligencePatternLearningValue, ObservationPattern } from './intelligencePatterns';
+export type { DecisionOperationalMetadata, OperationalUrgency } from './operationalMetadata';
