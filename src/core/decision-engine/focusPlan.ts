@@ -45,6 +45,10 @@ function writeAll(plans: DecisionFocusPlan[]): void {
   window.localStorage.setItem(FOCUS_PLAN_KEY, JSON.stringify(plans));
 }
 
+export function listDecisionFocusPlans(): DecisionFocusPlan[] {
+  return readAll().sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
 export function getDecisionFocusPlan(date = new Date()): DecisionFocusPlan | null {
   const key = localDateKey(date);
   return readAll().find((plan) => plan.date === key) ?? null;
