@@ -40,6 +40,7 @@ on:
       - feat/decisionos-scoring-resolution-evidence-verification
       - feat/decisionos-verified-resolution-implementation
       - feat/decisionos-implemented-resolution-observation
+      - feat/intelligenceos-scoring-observation-learning
   workflow_dispatch:
 
 permissions:
